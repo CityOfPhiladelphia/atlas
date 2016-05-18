@@ -1,0 +1,57 @@
+APP = (function () {
+    var map;
+    
+    return {
+        init: function () {
+            var CITY_HALL = [39.952388, -75.163596];
+            map = L.map('map', {
+               zoomControl: false,
+            //   measureControl: true,
+            });
+            map.setView(CITY_HALL, 16);
+            
+            // Basemaps
+            var baseMapLight = L.esri.tiledMapLayer({
+                url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer"
+                // url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer"
+            });
+            var baseMapDark = L.esri.tiledMapLayer({
+                url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Slate/MapServer"
+            });
+            var baseMapImagery2015 = L.esri.tiledMapLayer({
+                url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer"
+            });
+            baseMapLight.addTo(map);
+            
+            // Overlays
+            var overlayZoning = L.esri.tiledMapLayer({
+                url: 'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer'
+            });
+            
+            var baseLayers = {
+                'Light':        baseMapLight,
+                'Dark':         baseMapDark,
+                'Imagery 2015': baseMapImagery2015,
+            };
+            var overlays = {
+                'Zoning':   overlayZoning,
+                // 'Land Use': landUse,
+            };
+            
+            // Controls
+            L.control.layers(baseLayers, overlays, {position: 'topright'}).addTo(map);
+            var measureControl = new L.Control.Measure({position: 'topright'});
+            measureControl.addTo(map);
+            new L.Control.Zoom({position: 'topright'}).addTo(map);
+            
+            
+        },
+    };
+})();
+
+$(function () {
+    APP.init();
+});
+
+
+// https://api.tiles.mapbox.com/v4/mapbox.streets/11/1024/681.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw
