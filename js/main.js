@@ -25,7 +25,10 @@ APP = (function () {
             
             // Overlays
             var overlayZoning = L.esri.tiledMapLayer({
-                url: 'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer'
+                url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer'
+            });
+            var overlayPwdParcels = L.esri.featureLayer({
+                url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0'
             });
             
             var baseLayers = {
@@ -34,7 +37,8 @@ APP = (function () {
                 'Imagery 2015': baseMapImagery2015,
             };
             var overlays = {
-                'Zoning':   overlayZoning,
+                'Zoning':       overlayZoning,
+                'PWD Parcels':  overlayPwdParcels,
                 // 'Land Use': landUse,
             };
             
