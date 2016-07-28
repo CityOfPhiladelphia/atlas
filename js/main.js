@@ -48,7 +48,25 @@ APP = (function () {
             measureControl.addTo(map);
             new L.Control.Zoom({position: 'topright'}).addTo(map);
             
+            // TEMP: just for mockup. Listen for clicks on data row link.
+            $('.data-row-link').click(function (e) {
+                e.preventDefault()
+                $dataRow = $(this).next();
+                $('.data-row:visible').slideUp(350)
+                if (!$dataRow.is(':visible')) $(this).next().slideDown(350)
+            });
             
+            // Make ext links open in new window
+            $('a').each(function() {
+               var a = new RegExp('/' + window.location.host + '/');
+               if(!a.test(this.href)) {
+                   $(this).click(function(event) {
+                       event.preventDefault();
+                       event.stopPropagation();
+                       window.open(this.href, '_blank');
+                   });
+               }
+            });
         },
     };
 })();

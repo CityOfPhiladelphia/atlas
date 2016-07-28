@@ -48,6 +48,27 @@ header.site-header > .row:last-of-type {
     padding-right: 30px;
 }
 
+.data-row {
+    padding: 10px;
+    margin-bottom: 10px;
+    display: none;
+}
+
+.data-row table th, .data-row table td {
+    font-size: 15px;
+}
+
+.data-row table tr th {
+    text-align: left;
+    vertical-align: top;
+}
+
 #map {
     height: 100%;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }

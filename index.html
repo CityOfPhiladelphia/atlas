@@ -39,14 +39,80 @@
             
             <div id="container" class="row collapse">
                 <!--LEFT PANEL-->
-                <div id="data-panel" class="large-8 columns">
+                <div id="data-panel" class="large-12 columns">
                     <h1>1234 MARKET ST</h1>
                     <div id="data-row-list">
                         <a class="data-row-link" href="/#/property/"><span class="data-row-link-icon flaticon-house"></span>Property Details</a>
-                        <a class="data-row-link" href="/#/land-records/"><span class="data-row-link-icon flaticon-copy"></span>Land Records</a>
-                        <a class="data-row-link" href="/#/property/"><span class="data-row-link-icon flaticon-house"></span>Trash + Recycling</a>
-                        <a class="data-row-link" href="/#/property/"><span class="data-row-link-icon flaticon-correct"></span>Voting + Government</a>
+                        <div class="data-row">
+                            <table>
+                                <tr>
+                                    <th>Account #</th>
+                                    <td>883309000</td>
+                                </tr>
+                                <tr>
+                                    <th>Owner</th>
+                                    <td>SEPTA</td>
+                                </tr>
+                                <tr>
+                                    <th>Assessed Value</th>
+                                    <td>$87,813,900</td>
+                                </tr>
+                                <tr>
+                                    <th>Assessment Year</th>
+                                    <td>2016</td>
+                                </tr>
+                                <tr>
+                                    <th>Sale Price</th>
+                                    <td>$10</td>
+                                </tr>
+                                <tr>
+                                    <th>Sale Date</th>
+                                    <td>9/17/1993</td>
+                                </tr>
+                            </table>
+                            <a href="http://property.phila.gov/?p=883309000" class="external">See more details at Property Search</a>
+                        </div>
                         <a class="data-row-link" href="/#/zoning/"><span class="data-row-link-icon flaticon-industrial-zone"></span>Zoning</a>
+                        <div class="data-row">
+                            <table>
+                                <tr>
+                                    <th>Zoning</th>
+                                    <td>CMX5: Commercial/Commercial Mixed-Use</td>
+                                </tr>
+                                <tr>
+                                    <th>Land Use</th>
+                                    <td>Commercial/Mixed-Use</td>
+                                </tr>
+                                <tr>
+                                    <th>Permits + Appeals</th>
+                                    <td>
+                                        <ul>
+                                            <li><a>ENV-2016-1540-CUP</a></li>
+                                            <li><a>ZA-2016-1541-XB-DEV</a></li>
+                                            <li><a>ZBA-2016-1541-DMP</a></li>
+                                            <li><a>SPA-2016-1542-HP</a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                            <a href="http://www.phila.gov/zoningarchive/" class="external">See more at the Zoning Archive</a>
+                        </div>
+                        <a class="data-row-link" href="/#/trash/"><span class="data-row-link-icon flaticon-house"></span>Trash + Recycling</a>
+                        <div class="data-row">
+                            <table>
+                                <tr>
+                                    <th>Trash/Recycle Day</th>
+                                    <td>Tues</td>
+                                </tr>
+                                <tr>
+                                    <th>Reycling Rate</th>
+                                    <td>28%</td>
+                                </tr>
+                            </table>
+                            <a href="http://www.philadelphiastreets.com/" class="external">See more at the Streets Department</a>
+                        </div>
+                        <a class="data-row-link" href="/#/land-records/"><span class="data-row-link-icon flaticon-copy"></span>Land Records</a>
+                        <a class="data-row-link" href="/#/property/"><span class="data-row-link-icon flaticon-correct"></span>Voting + Government</a>
                         <a class="data-row-link" href="/#/licenses-and-inspections/"><span class="data-row-link-icon flaticon-hard-hat"></span>Licenses + Inspections</a>
                         <a class="data-row-link" href="/#/311/"><span class="data-row-link-icon flaticon-telephone"></span>311</a>
                         
@@ -54,7 +120,7 @@
                 </div>
                 
                 <!--RIGHT PANEL-->
-                <div class="large-16 columns" style="height: 100%">
+                <div class="large-12 columns" style="height: 100%">
                     <div id="map"></div>
                 </div>
             </div>
