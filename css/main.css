@@ -2,6 +2,19 @@ header.site-header > .row:last-of-type {
     background: #2176d2;
 }
 
+#search-container {
+    float: right;
+}
+
+#search-input {
+    float: left;
+    width: 400px;
+}
+
+#search-button {
+    height: 2.78571rem;
+}
+
 #container {
     /*height: 100%;*/
     position: absolute;
