@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
-        <title>Atlas | phila.gov</title>
+        <title>Betsy | phila.gov</title>
         <link rel='icon' type='image/x-icon' href="//cityofphiladelphia.github.io/patterns/images/favicon.ico">
         <meta name="description" content="">
     
@@ -30,7 +30,7 @@
                   </a>
                   <div class="page-title-container">
                     <a href="#/">
-                      <h1 class="page-title">Atlas</h1>
+                      <h1 class="page-title">Betsy</h1>
                     </a>
                   </div>
                   <div id="search-container">
@@ -40,42 +40,49 @@
                 </div>
               </div>
             </header>
+
             
             <div id="container" class="row collapse">
                 <!--LEFT PANEL-->
                 <div id="data-panel" class="large-12 columns">
-                    <h1>188 WHARTON ST</h1>
+                  <div id="addressModal" class="reveal" data-reveal aria-labelledby="modal-title" aria-hidden="true" role="dialog">
+                  <h1 id="addressModal-title">Select Address</h1>
+                  <ul id="addressList"></ul>
+                  <button class="close-button" data-close aria-label="Close modal" type="button"></button>
+                  </div>
+
+                    <h1><span data-hook="street_address">Find An Address</span></h1>
                     <div id="data-row-list">
-                        <a class="data-row-link" href="/#/property/"><span class="data-row-link-icon flaticon-house"></span>Property Details</a>
-                        <div class="data-row">
+                        <a class="data-row-link" href="/#/property/" id="opaTrig"><span class="data-row-link-icon flaticon-house"></span>Property Details</a>
+                        <div class="data-row" id="opaDataRow">
                             <table>
                                 <tr>
                                     <th>Account #</th>
-                                    <td>011001100</td>
+                                    <td data-hook="opa_account_num"></td>
                                 </tr>
                                 <tr>
                                     <th>Owner</th>
-                                    <td>KREWSON MARY LOU</td>
+                                    <td data-hook="property-owners"></td>
                                 </tr>
                                 <tr>
                                     <th>Assessed Value (2017)</th>
-                                    <td>$220,100</td>
+                                    <td data-hook="assessed-value2017"></td>
                                 </tr>
                                 <tr>
                                     <th>Sale Date</th>
-                                    <td>2/27/2006</td>
+                                    <td data-hook="sales-date"></td>
                                 </tr>
                                 <tr>
                                     <th>Sale Price</th>
-                                    <td>$212,000</td>
+                                    <td data-hook="sales-price"></td>
                                 </tr>
                                 <tr>
                                     <th>Land Area</th>
-                                    <td>1,500 sq ft</td>
+                                    <td data-hook="land-area"></td>
                                 </tr>
                                 <tr>
                                     <th>Improvement Area</th>
-                                    <td>1,785 sq ft</td>
+                                    <td data-hook="improvement-area"></td>
                                 </tr>
                             </table>
                             <a href="http://property.phila.gov/?p=011001100" class="external">See more at Property Search</a>
@@ -85,7 +92,8 @@
                             <table>
                                 <tr>
                                     <th>Zoning</th>
-                                    <td>RSA5: Residential/Residential Mixed-Use</td>
+									<td data-hook="zoning"></td>
+                                    <!--<td data-hook="zoning">RSA5: Residential/Residential Mixed-Use</td>-->
                                 </tr>
                                 <tr>
                                     <th>Land Use</th>
@@ -110,11 +118,11 @@
                             <table>
                                 <tr>
                                     <th>Trash/Recycle Day</th>
-                                    <td>Tues</td>
+                                    <td data-hook="rubbish_recycle_day">Tues</td>
                                 </tr>
                                 <tr>
                                     <th>Recycling Rate</th>
-                                    <td>28%</td>
+                                    <td data-hook="recycling_diversion_rate">28%</td>
                                 </tr>
                             </table>
                             <a href="http://www.philadelphiastreets.com/" class="external">See more at the Streets Department</a>
@@ -124,15 +132,15 @@
                             <table>
                                 <tr>
                                     <th>Elementary School</th>
-                                    <td>McCall</td>
+                                    <td data-hook="elementary_school">McCall</td>
                                 </tr>
                                 <tr>
                                     <th>Middle School</th>
-                                    <td>McCall</td>
+                                    <td data-hook="middle_school">McCall</td>
                                 </tr>
                                 <tr>
                                     <th>High School</th>
-                                    <td>Franklin</td>
+                                    <td data-hook="high_school">Franklin</td>
                                 </tr>
                             </table>
                             <a href="http://www.phila.k12.pa.us/" class="external">See more at the School District of Philadelphia</a>
@@ -168,6 +176,19 @@
                         <a class="data-row-link" href="/#/land-records/"><span class="data-row-link-icon flaticon-copy"></span>Land Records</a>
                         <a class="data-row-link" href="/#/voting/"><span class="data-row-link-icon flaticon-correct"></span>Voting + Government</a>
                         <a class="data-row-link" href="/#/licenses-and-inspections/"><span class="data-row-link-icon flaticon-hard-hat"></span>Licenses + Inspections</a>
+                        <div class="data-row">
+                            <table>
+                                <tr>
+                                    <th>ID</th>
+                                    <td data-hook="li_address_key"></td>
+                                </tr>
+                                <tr>
+                                    <th>Licenses</th>
+                                    <td id="LIPermits"></td>
+                                </tr>
+                            </table>
+                            <a href="http://www.phila.gov/li/Pages/default.aspx" class="external">See more at Philadelphia Licenses & Inspections</a>
+                        </div>
                         <a class="data-row-link" href="/#/311/"><span class="data-row-link-icon flaticon-telephone"></span>311</a>
                     </div>
                 </div>
@@ -186,6 +207,9 @@
         <script src="https://cdn.jsdelivr.net/leaflet/1.0.0-beta.2/leaflet.js"></script>
         <script src="//cdn.jsdelivr.net/leaflet.esri/2.0.0-beta.8/esri-leaflet.js"></script>
         <script src="//ljagis.github.io/leaflet-measure/leaflet-measure.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.14/proj4-src.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+        <!--<script src="https://raw.github.com/mapbox/leaflet-knn/master/leaflet-knn.min.js"></script>-->
         <script src="js/main.js"></script>
     </body>
 </html>
