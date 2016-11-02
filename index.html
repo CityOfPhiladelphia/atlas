@@ -44,7 +44,7 @@
             <div id="container" class="row collapse">
                 <!--LEFT PANEL-->
                 <div id="data-panel" class="large-12 columns">
-                    <h1 id="data-panel-title">&nbsp;</h1>
+                    <h1 id="data-panel-title">Learn more about an address.</h1>
                     <div id="data-row-list">
                         <!--BASIC INFO-->
                         <a id="data-row-link-basic-info" class="data-row-link" href="/#/basic-info"><span class="data-row-link-icon flaticon-copy"></span>Basic Info</a>
@@ -100,20 +100,65 @@
                         <!--L & I-->
                         <a class="data-row-link" href="/#/licenses-and-inspections/"><span class="data-row-link-icon flaticon-hard-hat"></span>Licenses + Inspections</a>
                         <div class="data-row">
-                            <table>
-                                <tr>
-                                    <th>Permits</th>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th>Inspections</th>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th>Violations</th>
-                                    <td></td>
-                                </tr>
-                            </table>
+                            <div id="li-section-permits" class="li-section">
+                                <h4 class="topic-subsection-title">Permits<span class="li-count"></span></h3>
+                                <table id="li-table-permits" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            
+                            <div id="li-section-appeals" class="li-section">
+                                <h4 class="topic-subsection-title">Appeals<span class="li-count"></span></h3>
+                                <table id="li-table-appeals" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            
+                            <div id="li-section-inspections" class="li-section">
+                                <h4 class="topic-subsection-title">Inspections<span class="li-count"></span></h3>
+                                <table id="li-table-inspections" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            
+                            <div id="li-section-violations" class="li-section">
+                                <h4 class="topic-subsection-title">Violations<span class="li-count"></span></h3>
+                                <table id="li-table-violations" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
                         </div>
                         
                         <!--<a class="data-row-link" href="/#/zoning/"><span class="data-row-link-icon flaticon-industrial-zone"></span>Zoning</a>

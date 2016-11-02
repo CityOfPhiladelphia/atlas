@@ -1,18 +1,79 @@
+/* global L, _, $ */
+
 var app = (function ()
 {
+  // debug stuff
   var DEBUG = true,
-      map;
+      DEBUG_ADDRESS = '1234 market st';
+  
+  var map;
   
   return {
+    config: {
+      // l&i config, denormalized by section for convenience
+      li: {
+        socrataIds: {
+          'permits':          'uukf-7jf3',
+          'appeals':          '3tq7-6fj4',
+          'inspections':      'fypy-ek77',
+          'violations':       'cctq-fx48',
+        },
+        // maps internal names to socrata fields. conveniently, these all have
+        // (essentially) the same set of fields so the names can be consistent.
+        // (id, date, description, status)
+        fieldMap: {
+          'permits': {
+            'id':                 'permitnumber',
+            'date':               'permitissuedate',
+            'description':        'permitdescription',
+            'status':             'status',
+          },
+          'appeals': {
+            'id':                 'appealkey',
+            'date':               'processeddate',
+            'description':        'appealgrounds',
+            'status':             'decision',
+          },
+          'inspections': {
+            'id':                 'apinspkey',
+            'date':               'inspectioncompleted',
+            'description':        'inspectiondescription',
+            'status':             'inspectionstatus',
+          },
+          'violations': {
+            'id':                 'apfailkey',
+            'date':               'violationdate',
+            'description':        'violationdescription',
+            'status':             'status',
+          },
+        },
+        // for sorting l&i records
+        // dateFields: {
+        //   'permits':          'permitissuedate',
+        //   'appeals':          'processeddate',
+        //   'inspections':      'inspectioncompleted',
+        //   'violations':       'violationdate',
+        // },
+        recordLimit: 5,
+        // these are the columns to show in each l&i section (using mapped
+        // field names)
+        // displayFields: {
+        //   'permits':          ['issuedDate', 'id', 'description', 'status'],
+        //   'appeals':          ['processedDate', 'id', 'grounds', 'decision'],
+        //   'inspections':      ['completedDate', 'id', 'description', 'status'],
+        //   'violations':       ['recordedDate', 'id', 'description', 'status'],
+        // },
+        displayFields:        ['date', 'id', 'description', 'status',],
+      },
+    },
+    
     // global app state
     state: {},
     
     // start app
     init: function ()
     {
-      if (DEBUG) {
-        $('#search-input').val('1234 market st');
-      }
+      DEBUG && $('#search-input').val(DEBUG_ADDRESS);
       
       var CITY_HALL = [39.952388, -75.163596];
       map = L.map('map', {
@@ -62,7 +123,7 @@ var app = (function ()
       // TEMP: just for mockup. Listen for clicks on data row link.
       $('.data-row-link').click(function (e) {
         e.preventDefault();
-        $dataRow = $(this).next();
+        var $dataRow = $(this).next();
         $('.data-row:visible').slideUp(350);
         if (!$dataRow.is(':visible')) $(this).next().slideDown(350);
       });
@@ -93,9 +154,16 @@ var app = (function ()
       // display loading
       $('#data-panel-title').text('Loading...');
       
-      // TODO close active tab, clear out displayed vals
+      // clean up UI from last search
+      // TODO make this a function
+      $('.li-see-more-link').remove();
       
+      // clear out relevant state objects
+      _.forEach(['ais', 'opa', 'li'], function (stateProp) {
+        app.state[stateProp] = undefined;
+      });
       
+      // fire off ais
       $.ajax({
         url: url,
         success: app.didGetAisResult,
@@ -108,8 +176,8 @@ var app = (function ()
     // takes a topic (formerly "data row") name and activates the corresponding
     // section in the data panel
     activateTopic: function (topic) {
-      e.preventDefault();
-      $dataRow = $(this).next();
+      // e.preventDefault();
+      var $dataRow = $(this).next();
       $('.data-row:visible').slideUp(350);
       if (!$dataRow.is(':visible')) $(this).next().slideDown(350);
     },
@@ -152,6 +220,35 @@ var app = (function ()
       });
       
       // l&i
+      app.state.li = {};
+      var liAddressKey = aisProps.li_address_key,
+          liDeferreds;
+      // create an array of Deferred objects for each l&i request
+      liDeferreds =_.map(app.config.li.socrataIds, function (liSocrataId, liStateKey) {
+            var url = '//data.phila.gov/resource/' + liSocrataId + '.json',
+                params = {addresskey: liAddressKey};
+            return $.ajax({
+              url: url,
+              data: params,
+              success: function (data) {
+                app.state.li[liStateKey] = data;
+                
+                // check for complete results
+                var liStateKeys = Object.keys(app.config.li.socrataIds),
+                    shouldContinue = _.every(_.map(liStateKeys, function (liStateKey) {
+                      return app.state.li[liStateKey];
+                    }));
+                if (shouldContinue) app.didGetAllLiResults();
+              },
+              error: function (err) {
+                console.log('li error', err);
+              },
+            });
+          });
+      // fire deferreds
+      // this is nice and  elegant but the callback is firing before the 
+      // individual callbacks have completed. commenting out for now.
+      // $.when(liDeferreds).then(app.didGetAllLiResults);
     },
     
     // takes an object of divId => text and renders
@@ -204,6 +301,73 @@ var app = (function ()
       // TODO update prop search link
     },
     
+    didGetAllLiResults: function ()
+    {
+      var stateKeys = Object.keys(app.config.li.socrataIds),
+          displayFields = app.config.li.displayFields,
+          liState = app.state.li,
+          fieldMap = app.config.li.fieldMap,
+          recordLimit = app.config.li.recordLimit;
+      
+      // loop over sections ("state keys")
+      _.forEach(stateKeys, function (stateKey) {
+        console.log('state key', stateKey);
+        var items = liState[stateKey],
+            dateField = app.config.li.fieldMap[stateKey].date,
+            rowsHtml = '';
+        
+        // sort by date
+        var itemsSorted = _.orderBy(items, dateField, ['desc']);
+        
+        // limit
+        var itemsLimited = itemsSorted.slice(0, recordLimit);
+        
+        // loop over rows
+        _.forEach(itemsLimited, function (item) {
+          var rowHtml = '';
+          
+          // loop over columns
+          _.forEach(displayFields, function (displayField) {
+            // de-map field
+            var sourceField = fieldMap[stateKey][displayField],
+            // get value
+                val = item[sourceField] || '';
+            // add column
+            rowHtml += '<td>' + val + '</td>';
+          });
+          
+          // add row
+          rowHtml = '<tr>' + rowHtml + '</tr>';
+          rowsHtml += rowHtml;
+        });
+      
+        console.log('rows for ' + stateKey, rowsHtml);
+        
+        // set table content
+        var $liSectionTable = $('#li-table-' + stateKey);
+        console.log('sectiontable', $liSectionTable);
+        $liSectionTable.find('tbody').html(rowsHtml);
+        console.log('tbody', $liSectionTable.find('tbody'));
+        
+        // update count
+        var count = items.length,
+            countText = ' (' + count + ')',
+            $liCount = $('#li-section-' + stateKey + ' > .topic-subsection-title > .li-count');
+        $liCount.text(countText);
+        
+        // add "see more" link, if there are rows not shown
+        if (count > recordLimit) {
+          var remainingCount = count - recordLimit,
+              plural = remainingCount > 1,
+              resourceNoun = plural ? stateKey : stateKey.slice(0, -1),
+              seeMoreText = 'See ' + remainingCount + ' older ' + resourceNoun,
+              seeMoreUrl = 'http://li.phila.gov/#summary?address=1234+market+st',
+              seeMoreHtml = '<a class="external li-see-more-link" href="' + seeMoreUrl + '">' + seeMoreText + '</a>',
+              $seeMoreLink = $(seeMoreHtml);
+          $liSectionTable.after($seeMoreLink);
+        }
+      });
+    },
   };
 })();
 
