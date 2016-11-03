@@ -4,12 +4,16 @@ var app = (function ()
 {
   // debug stuff
   var DEBUG = true,
-      DEBUG_ADDRESS = '1234 market st';
-  
+      DEBUG_ADDRESS = '300 broad st';
+
   var map;
-  
+
   return {
     config: {
+      ais: {
+        url: '//api.phila.gov/ais/v1/addresses/',
+        gatekeeperKey: '35ae5b7bf8f0ff2613134935ce6b4c1e',
+      },
       // l&i config, denormalized by section for convenience
       li: {
         socrataIds: {
@@ -65,16 +69,19 @@ var app = (function ()
         // },
         displayFields:        ['date', 'id', 'description', 'status',],
       },
+      map: {
+        parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0',
+      }
     },
-    
+
     // global app state
     state: {},
-    
+
     // start app
     init: function ()
     {
       DEBUG && $('#search-input').val(DEBUG_ADDRESS);
-      
+
       // TEMP: just for mockup. Listen for clicks on data row link.
       $('.data-row-link').click(function (e) {
         e.preventDefault();
@@ -82,7 +89,7 @@ var app = (function ()
         $('.data-row:visible').slideUp(350);
         if (!$dataRow.is(':visible')) $(this).next().slideDown(350);
       });
-      
+
       // Make ext links open in new window
       $('a').each(function() {
          var a = new RegExp('/' + window.location.host + '/');
@@ -94,40 +101,105 @@ var app = (function ()
            });
          }
       });
-      
+
       // listen for search
       $('#search-button').click(app.search);
       $('#search-input').keypress(function (e) {
         if (e.which === 13) app.search();
       });
     },
-    
+
     search: function () {
-      var val = $('#search-input').val(),
-          url = '//api.phila.gov/ais/v1/addresses/' + encodeURIComponent(val);
-      
+      var val = $('#search-input').val();
+
       // display loading
       $('#data-panel-title').text('Loading...');
-      
+
       // clean up UI from last search
       // TODO make this a function
       $('.li-see-more-link').remove();
-      
+
       // clear out relevant state objects
       _.forEach(['ais', 'opa', 'li'], function (stateProp) {
         app.state[stateProp] = undefined;
       });
-      
+
       // fire off ais
+      app.getAis(val, app.didGetAisResult);
+    },
+
+    getAis: function (address) {
+      var url = app.config.ais.url + encodeURIComponent(address),
+          params = {gatekeeperKey: app.config.ais.gatekeeperKey};
       $.ajax({
         url: url,
-        success: app.didGetAisResult,
+        data: params,
+        success: function (data) {
+          app.state.ais = data;
+          // if more than one address result, show a modal
+          if (data.features.length > 1) app.showMultipleAisResultModal();
+          else {
+            app.state.selectedAddress = data.features[0].properties.street_address;
+            app.didGetAisResult();
+          }
+        },
         error: function (err) {
           console.log('ais error', err);
         },
       });
     },
-    
+
+    showMultipleAisResultModal: function (callback) {
+      var data = app.state.ais;
+
+      // construct modal dom element
+      for (i = 0; i < data.features.length; i++) {
+        $('#addressList').append('<li><a href="#" number='+i+'><span class="tab">'+data.features[i].properties.street_address+'</span></a></li>')
+      }
+      $('#addressModal').foundation('open');
+
+      // called after user selects address
+      $('#addressModal a').click(function () {
+        $('#search-input').val($(this).text())
+        $('#addressModal').foundation('close');
+        $('#addressList').empty()
+
+        // store selected address in state
+        var selectedIndex = $(this).attr('number');
+            selectedAddressObj = data.features[selectedIndex],
+            selectedAddress = selectedAddressObj.properties.street_address;
+        app.state.selectedAddress = selectedAddress;
+        app.didGetAisResult();
+        // app.map.didSelectAddress();
+
+        // write to history
+        // var params = {'address': selectedAddress}
+        // var queryStringParams = app.util.serializeQueryStringParams(params)
+        // history.replaceState(null, null, '?' + queryStringParams)
+
+
+        // if (!app.state.map.clickedOnMap) {
+        //     //console.log('it routed to clickedonmap false')
+        //     app.map.getGeomFromLatLon(latlon);
+        // } else {
+        //     //console.log('it routed to straight to flipCoords')
+        //     app.map.flipCoords(app.state.map.curFeatGeo);
+        // }
+
+        // TODO render topics
+
+        // TODO update history
+        // app.util.history()
+
+        // finish
+
+        // draw polygon
+        // app.map.drawPolygon(app.state.map.curFeatGeo)
+        // app.map.drawParcel();
+
+      });
+    },
+
     // takes a topic (formerly "data row") name and activates the corresponding
     // section in the data panel
     activateTopic: function (topic) {
@@ -136,32 +208,41 @@ var app = (function ()
       $('.data-row:visible').slideUp(350);
       if (!$dataRow.is(':visible')) $(this).next().slideDown(350);
     },
-    
-    didGetAisResult: function (data) {
+
+    didGetAisResult: function () {
       // set app state
-      app.state.ais = data;
-      
+      // app.state.ais = data;
+      var data = app.state.ais;
+
       // get values
-      var obj = data.features[0],
-          props = obj.properties,
+      var selectedAddress = app.state.selectedAddress,
+          obj;
+      if (selectedAddress) {
+        obj = _.filter(data.features, {properties: {street_address: selectedAddress}})[0];
+      }
+      else obj = data.features[0]
+      var props = obj.properties,
           streetAddress = props.street_address;
-      
+
       // make mailing address
       var mailingAddress = streetAddress + '<br>PHILADELPHIA, PA ' + props.zip_code;
       if (props.zip_4) mailingAddress += '-' + props.zip_4;
-      
+
       // render ais data
       $('#data-panel-title').text(streetAddress);
       $('#basic-info-mailing-address').html(mailingAddress);
       $('#basic-info-street-code').text(data.features[0].properties.street_code);
-      
+
       // show basic info
       $('#data-row-link-basic-info').click();
-      
+
+      // render map for this address
+      if (selectedAddress) app.map.renderAisResult(obj);
+
       // get topics
       app.getTopics(props);
     },
-    
+
     // initiates requests to topic APIs (OPA, L&I, etc.)
     getTopics: function (aisProps) {
       // opa
@@ -173,7 +254,7 @@ var app = (function ()
           console.log('opa error', err);
         },
       });
-      
+
       // l&i
       app.state.li = {};
       var liAddressKey = aisProps.li_address_key,
@@ -187,7 +268,7 @@ var app = (function ()
               data: params,
               success: function (data) {
                 app.state.li[liStateKey] = data;
-                
+
                 // check for complete results
                 var liStateKeys = Object.keys(app.config.li.socrataIds),
                     shouldContinue = _.every(_.map(liStateKeys, function (liStateKey) {
@@ -201,32 +282,31 @@ var app = (function ()
             });
           });
       // fire deferreds
-      // this is nice and  elegant but the callback is firing before the 
+      // this is nice and  elegant but the callback is firing before the
       // individual callbacks have completed. commenting out for now.
       // $.when(liDeferreds).then(app.didGetAllLiResults);
     },
-    
+
     // takes an object of divId => text and renders
     renderDivs: function (valMap) {
       _.forEach(valMap, function (val, divId) {
         $('#' + divId).text(val);
       });
     },
-    
+
     didGetOpaResult: function (data)
     {
       // this is a POC, so let's populate some divs by hand ¯\_(ツ)_/¯
-      console.log('got opa', data);
-      
+
       var props = data[0];
-      
+
       // concat owners
       var owners = [props.owner_1];
       if (props.owner_2) owners.push(props.owner_2);
       var ownersJoined = owners.join(', ');
-      
+
       // OLD METHOD: map div ids to prop keys
-      
+
       // // div id => prop key
       // var fieldMap = {
       //   'property-account-num':   'parcel_number',
@@ -234,12 +314,12 @@ var app = (function ()
       //   'property-sale-price':    'sale_price',
       //   'property-value':         'market_value',
       // };
-      
+
       // // make dict of vals to render
       // var vals = _.mapValues(fieldMap, function (propKey) {
       //   return props[propKey]
       // });
-      
+
       // NEW METHOD: do this manually, because some vals have to be handled manually
       var vals = {
         'property-account-num':         props.parcel_number,
@@ -250,12 +330,12 @@ var app = (function ()
         'property-land-area':           props.total_livable_area,
         'property-improvement-area':    props.total_area,
       };
-      
+
       app.renderDivs(vals);
-      
+
       // TODO update prop search link
     },
-    
+
     didGetAllLiResults: function ()
     {
       var stateKeys = Object.keys(app.config.li.socrataIds),
@@ -263,24 +343,23 @@ var app = (function ()
           liState = app.state.li,
           fieldMap = app.config.li.fieldMap,
           recordLimit = app.config.li.recordLimit;
-      
+
       // loop over sections ("state keys")
       _.forEach(stateKeys, function (stateKey) {
-        console.log('state key', stateKey);
         var items = liState[stateKey],
             dateField = app.config.li.fieldMap[stateKey].date,
             rowsHtml = '';
-        
+
         // sort by date
         var itemsSorted = _.orderBy(items, dateField, ['desc']);
-        
+
         // limit
         var itemsLimited = itemsSorted.slice(0, recordLimit);
-        
+
         // loop over rows
         _.forEach(itemsLimited, function (item) {
           var rowHtml = '';
-          
+
           // loop over columns
           _.forEach(displayFields, function (displayField) {
             // de-map field
@@ -290,26 +369,23 @@ var app = (function ()
             // add column
             rowHtml += '<td>' + val + '</td>';
           });
-          
+
           // add row
           rowHtml = '<tr>' + rowHtml + '</tr>';
           rowsHtml += rowHtml;
         });
-      
-        console.log('rows for ' + stateKey, rowsHtml);
-        
+
+
         // set table content
         var $liSectionTable = $('#li-table-' + stateKey);
-        console.log('sectiontable', $liSectionTable);
         $liSectionTable.find('tbody').html(rowsHtml);
-        console.log('tbody', $liSectionTable.find('tbody'));
-        
+
         // update count
         var count = items.length,
             countText = ' (' + count + ')',
             $liCount = $('#li-section-' + stateKey + ' > .topic-subsection-title > .li-count');
         $liCount.text(countText);
-        
+
         // add "see more" link, if there are rows not shown
         if (count > recordLimit) {
           var remainingCount = count - recordLimit,
