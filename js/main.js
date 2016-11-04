@@ -71,6 +71,9 @@ var app = (function ()
       },
       map: {
         parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0',
+      },
+      pictometry: {
+        pictometryUrl: '//192.168.104.182/philapictometry/ipa.php',
       }
     },
 

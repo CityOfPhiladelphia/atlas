@@ -80,12 +80,13 @@ app.map = (function ()
 
       $('#pict-button').on('click', function(e){
         e.preventDefault();
-        app.gis.theLeafletZoom = _map.getZoom();
-        app.gis.theCenter = _map.getCenter();
-        app.gis.theX = app.gis.theCenter.lng
-        app.gis.theY = app.gis.theCenter.lat
-        //alert(theCenter);
-        window.open('http://192.168.104.182/philapictometry/ipa.php?lat=' + app.gis.theY + '&lon=' + app.gis.theX + '&zoom=' + (app.gis.theLeafletZoom + 1))
+        app.map.theLeafletZoom = _map.getZoom();
+        app.map.theCenter = _map.getCenter();
+        app.map.theX = app.map.theCenter.lng;
+        app.map.theY = app.map.theCenter.lat;
+        app.map.thePictUrl = app.config.pictometry.pictometryUrl + '?lat=' + app.map.theY + '&lon=' + app.map.theX + '&zoom=' + (app.map.theLeafletZoom + 1);
+        window.open(app.map.thePictUrl, app.config.pictometry.pictometryUrl);
+        return false
       })
     }, // end of initMap
 

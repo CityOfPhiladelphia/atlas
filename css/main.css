@@ -15,6 +15,14 @@ header.site-header > .row:last-of-type {
     height: 2.78571rem;
 }
 
+#theLinkButtons {
+    float: right;
+}
+
+#pict-button {
+    height: 2.78571rem;
+}
+
 #container {
     /*height: 100%;*/
     position: absolute;
