@@ -78,6 +78,7 @@ app.map = (function ()
       // one of 2 ways to call AIS
       _map.on('click', app.map.didClickMap);
 
+      // make "Obilque Imagery" button open Pictometry window
       $('#pict-button').on('click', function(e){
         e.preventDefault();
         app.map.theLeafletZoom = _map.getZoom();
@@ -87,7 +88,31 @@ app.map = (function ()
         app.map.thePictUrl = app.config.pictometry.pictometryUrl + '?lat=' + app.map.theY + '&lon=' + app.map.theX + '&zoom=' + (app.map.theLeafletZoom + 1);
         window.open(app.map.thePictUrl, app.config.pictometry.pictometryUrl);
         return false
+      });
+
+      // if map moves, reload Pictometry
+      _map.on('dragend', function(){
+        console.log('map was dragged');
+        app.map.theCenter = _map.getCenter();
+        app.map.theX = app.map.theCenter.lng;
+        app.map.theY = app.map.theCenter.lat;
+        localStorage.setItem('theX', app.map.theX)
+        localStorage.setItem('theY', app.map.theY)
+      });
+
+      if(localStorage.getItem('theX')){
+        var theX = localStorage.getItem('theX');
+        console.log('got theX ' +  theX);
+      } else {
+        console.log('there is no theX');
+      }
+
+      _map.on('zoomend', function(){
+        console.log('map was zoomed');
+        app.map.theLeafletZoom = _map.getZoom();
+        localStorage.setItem('theLeafletZoom', app.map.theLeafletZoom)
       })
+
     }, // end of initMap
 
     renderAisResult: function (obj) {
