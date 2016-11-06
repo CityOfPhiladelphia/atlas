@@ -1,14 +1,5 @@
 /* global app, L */
-/*
-$(window).bind('storage', function (e) {
-      console.log('LocalStorage changed')
-     app.state.theX = localStorage.theX
-     app.state.theY = localStorage.theY
-     app.state.theZoom = localStorage.theZoom
-     var newLoc = [app.state.theY, app.state.theX];
-     _map.setView(newLoc, app.state.theZoom);
-});
-*/
+
 app.map = (function ()
 {
   // the leaflet map object
@@ -87,62 +78,21 @@ app.map = (function ()
       // one of 2 ways to call AIS
       _map.on('click', app.map.didClickMap);
 
-      app.state.theZoom = _map.getZoom();
-      app.state.theCenter = _map.getCenter();
-      app.state.theX = app.state.theCenter.lng;
-      app.state.theY = app.state.theCenter.lat;
-      localStorage.setItem('theZoom', app.state.theZoom);
-      localStorage.setItem('theX', app.state.theX);
-      localStorage.setItem('theY', app.state.theY);
-      localStorage.setItem('cycloX', app.state.theX);
-      localStorage.setItem('cycloY', app.state.theY);
-      localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
+      // set map state and localStorage on init, drag, dragend, and zoom
+      app.map.LSinit();
 
-      //MOVED THIS TO MAIN.JS
-      // make "Obilque Imagery" button open Pictometry window
-      /*$('#pict-button').on('click', function(e){
-        e.preventDefault();
-        window.open(app.config.pictometry.pictometryUrl, app.config.pictometry.pictometryUrl);
-        return false
-      });*/
-
-      // while map is dragged, constantly reset center in localStorage
-      // this will move Pictometry with it, but not Cyclomedia
       _map.on('drag', function(){
-        //console.log('map was dragged');
-        app.state.theZoom = _map.getZoom();
-        app.state.theCenter = _map.getCenter();
-        app.state.theX = app.state.theCenter.lng;
-        app.state.theY = app.state.theCenter.lat;
-        localStorage.setItem('theZoom', app.state.theZoom)
-        localStorage.setItem('theX', app.state.theX)
-        localStorage.setItem('theY', app.state.theY)
+        app.map.LSdrag();
       });
 
-      // when map is finished being dragged, 1 more time reset
-      // the center in localStorage
-      // this will move Pictometry AND Cyclomedia
       _map.on('dragend', function(){
-        //console.log('map was dragged');
-        app.state.theZoom = _map.getZoom();
-        app.state.theCenter = _map.getCenter();
-        app.state.theX = app.state.theCenter.lng;
-        app.state.theY = app.state.theCenter.lat;
-        localStorage.setItem('theZoom', app.state.theZoom)
-        localStorage.setItem('theX', app.state.theX)
-        localStorage.setItem('theY', app.state.theY)
-        localStorage.setItem('cycloX', app.state.theX)
-        localStorage.setItem('cycloY', app.state.theY)
-        localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
+        app.map.LSdragend();
       });
 
-      // when map is zoomed, reset zoom in localStorage
-      // this will re-zoom Pictometry also
       _map.on('zoomend', function(){
-        console.log('map was zoomed');
-        app.state.theZoom = _map.getZoom();
-        localStorage.setItem('theZoom', app.state.theZoom)
+        app.map.LSzoomend();
       })
+
     }, // end of initMap
 
     renderAisResult: function (obj) {
@@ -210,7 +160,9 @@ app.map = (function ()
       // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
       // if (app.state.map.shouldPan) {
         // latlon = new L.LatLng(thelatlon[0], thelatlon[1]);
-        _map.setView(parcelCentroid, 18);
+      _map.setView(parcelCentroid, 18);
+      // set new state and localStorage
+      app.map.LSinit();
       // }
 
       // add to map
@@ -227,18 +179,52 @@ app.map = (function ()
       });
     },
 
-    //function drawPolygon(geoObj){
-    // drawPolygon : function(geoObj, thelatlon) {
-    //   app.data.gis.layerGroup.clearLayers()
-    //   if (app.state.moveMode == true){  // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
-    //     latlon = new L.LatLng(thelatlon[0],thelatlon[1])
-    //     _map.setView(latlon, 20)
-    //   }
-    //   app.data.gis.layerGroup.addLayer(L.polygon([geoObj], {
-    //     color: 'blue',
-    //     weight: 2
-    //   }))
-    // } // end of drawPolygon
+    // LocalStorage functions
+    // on init, put center and zoom in LocalStorage, in case
+    // Pictometry or Cyclomedia are used
+    LSinit: function() {
+      app.state.theZoom = _map.getZoom();
+      app.state.theCenter = _map.getCenter();
+      app.state.theX = app.state.theCenter.lng;
+      app.state.theY = app.state.theCenter.lat;
+      localStorage.setItem('theZoom', app.state.theZoom);
+      localStorage.setItem('theX', app.state.theX);
+      localStorage.setItem('theY', app.state.theY);
+      localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
+      localStorage.setItem('cycloX', app.state.theX);
+      localStorage.setItem('cycloY', app.state.theY);
+    },
+
+    // while map is dragged, constantly reset center in localStorage
+    // this will move Pictometry with it, but not Cyclomedia
+    LSdrag: function() {
+      app.state.theCenter = _map.getCenter();
+      app.state.theX = app.state.theCenter.lng;
+      app.state.theY = app.state.theCenter.lat;
+      localStorage.setItem('theX', app.state.theX);
+      localStorage.setItem('theY', app.state.theY);
+    },
+
+    // when map is finished being dragged, 1 more time reset
+    // the center in localStorage
+    // this will move Pictometry AND Cyclomedia
+    LSdragend: function() {
+      app.state.theCenter = _map.getCenter();
+      app.state.theX = app.state.theCenter.lng;
+      app.state.theY = app.state.theCenter.lat;
+      localStorage.setItem('theX', app.state.theX);
+      localStorage.setItem('theY', app.state.theY);
+      localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
+      localStorage.setItem('cycloX', app.state.theX);
+      localStorage.setItem('cycloY', app.state.theY);
+    },
+
+    // when map is zoomed, reset zoom in localStorage
+    // this will re-zoom Pictometry also
+    LSzoomend: function() {
+      app.state.theZoom = _map.getZoom();
+      localStorage.setItem('theZoom', app.state.theZoom);
+    },
 
   }; // end of return
 })();
