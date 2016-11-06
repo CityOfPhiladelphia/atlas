@@ -1,5 +1,10 @@
 /* global L, _, $ */
 
+$(window).bind('storage', function (e) {
+     console.log(e.originalEvent.key, e.originalEvent.newValue);
+});
+
+
 var app = (function ()
 {
   // debug stuff
@@ -74,6 +79,9 @@ var app = (function ()
       },
       pictometry: {
         pictometryUrl: 'http://192.168.104.182/philapictometry/ipa.php',
+      },
+      cyclomedia: {
+        cyclomediaUrl: 'http://192.168.104.182/philacyclo/',
       }
     },
 
@@ -109,6 +117,20 @@ var app = (function ()
       $('#search-button').click(app.search);
       $('#search-input').keypress(function (e) {
         if (e.which === 13) app.search();
+      });
+
+      // make "Obilque Imagery" button open Pictometry window
+      $('#pict-button').on('click', function(e){
+        e.preventDefault();
+        window.open(app.config.pictometry.pictometryUrl, app.config.pictometry.pictometryUrl);
+        return false
+      });
+
+      // make "Street View" button open Cyclomedia window
+      $('#cyclo-button').on('click', function(e){
+        e.preventDefault();
+        window.open(app.config.cyclomedia.cyclomediaUrl, app.config.cyclomedia.cyclomediaUrl);
+        return false
       });
     },
 

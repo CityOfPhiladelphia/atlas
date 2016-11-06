@@ -1,5 +1,14 @@
 /* global app, L */
-
+/*
+$(window).bind('storage', function (e) {
+      console.log('LocalStorage changed')
+     app.state.theX = localStorage.theX
+     app.state.theY = localStorage.theY
+     app.state.theZoom = localStorage.theZoom
+     var newLoc = [app.state.theY, app.state.theX];
+     _map.setView(newLoc, app.state.theZoom);
+});
+*/
 app.map = (function ()
 {
   // the leaflet map object
@@ -78,41 +87,62 @@ app.map = (function ()
       // one of 2 ways to call AIS
       _map.on('click', app.map.didClickMap);
 
+      app.state.theZoom = _map.getZoom();
+      app.state.theCenter = _map.getCenter();
+      app.state.theX = app.state.theCenter.lng;
+      app.state.theY = app.state.theCenter.lat;
+      localStorage.setItem('theZoom', app.state.theZoom);
+      localStorage.setItem('theX', app.state.theX);
+      localStorage.setItem('theY', app.state.theY);
+      localStorage.setItem('cycloX', app.state.theX);
+      localStorage.setItem('cycloY', app.state.theY);
+      localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
+
+      //MOVED THIS TO MAIN.JS
       // make "Obilque Imagery" button open Pictometry window
-      $('#pict-button').on('click', function(e){
+      /*$('#pict-button').on('click', function(e){
         e.preventDefault();
-        app.map.theLeafletZoom = _map.getZoom();
-        app.map.theCenter = _map.getCenter();
-        app.map.theX = app.map.theCenter.lng;
-        app.map.theY = app.map.theCenter.lat;
-        app.map.thePictUrl = app.config.pictometry.pictometryUrl + '?lat=' + app.map.theY + '&lon=' + app.map.theX + '&zoom=' + (app.map.theLeafletZoom + 1);
-        window.open(app.map.thePictUrl, app.config.pictometry.pictometryUrl);
+        window.open(app.config.pictometry.pictometryUrl, app.config.pictometry.pictometryUrl);
         return false
+      });*/
+
+      // while map is dragged, constantly reset center in localStorage
+      // this will move Pictometry with it, but not Cyclomedia
+      _map.on('drag', function(){
+        //console.log('map was dragged');
+        app.state.theZoom = _map.getZoom();
+        app.state.theCenter = _map.getCenter();
+        app.state.theX = app.state.theCenter.lng;
+        app.state.theY = app.state.theCenter.lat;
+        localStorage.setItem('theZoom', app.state.theZoom)
+        localStorage.setItem('theX', app.state.theX)
+        localStorage.setItem('theY', app.state.theY)
       });
 
-      // if map moves, reload Pictometry
+      // when map is finished being dragged, 1 more time reset
+      // the center in localStorage
+      // this will move Pictometry AND Cyclomedia
       _map.on('dragend', function(){
-        console.log('map was dragged');
-        app.map.theCenter = _map.getCenter();
-        app.map.theX = app.map.theCenter.lng;
-        app.map.theY = app.map.theCenter.lat;
-        localStorage.setItem('theX', app.map.theX)
-        localStorage.setItem('theY', app.map.theY)
+        //console.log('map was dragged');
+        app.state.theZoom = _map.getZoom();
+        app.state.theCenter = _map.getCenter();
+        app.state.theX = app.state.theCenter.lng;
+        app.state.theY = app.state.theCenter.lat;
+        localStorage.setItem('theZoom', app.state.theZoom)
+        localStorage.setItem('theX', app.state.theX)
+        localStorage.setItem('theY', app.state.theY)
+        localStorage.setItem('cycloX', app.state.theX)
+        localStorage.setItem('cycloY', app.state.theY)
+        localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
       });
 
-      if(localStorage.getItem('theX')){
-        var theX = localStorage.getItem('theX');
-        console.log('got theX ' +  theX);
-      } else {
-        console.log('there is no theX');
-      }
-
+      // when map is zoomed, reset zoom in localStorage
+      // this will re-zoom Pictometry also
       _map.on('zoomend', function(){
         console.log('map was zoomed');
-        app.map.theLeafletZoom = _map.getZoom();
-        localStorage.setItem('theLeafletZoom', app.map.theLeafletZoom)
+        app.state.theZoom = _map.getZoom();
+        localStorage.setItem('theZoom', app.state.theZoom)
       })
-
     }, // end of initMap
 
     renderAisResult: function (obj) {
