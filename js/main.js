@@ -1,5 +1,9 @@
 /* global L, _, $ */
 
+/*
+NOTE: this is just a demo - lots of jQuery soup ahead :)
+*/
+
 /*$(window).bind('storage', function (e) {
      console.log(e.originalEvent.key, e.originalEvent.newValue);
 });*/
@@ -9,7 +13,7 @@ var app = (function ()
 {
   // debug stuff
   var DEBUG = true,
-      DEBUG_ADDRESS = '300 broad st';
+      DEBUG_ADDRESS = '1234 market st';
 
   var map;
 
@@ -152,7 +156,7 @@ var app = (function ()
       });
 
       // fire off ais
-      app.getAis(val, app.didGetAisResult);
+      app.getAis(val);
     },
 
     getAis: function (address) {
@@ -312,6 +316,30 @@ var app = (function ()
       // this is nice and  elegant but the callback is firing before the
       // individual callbacks have completed. commenting out for now.
       // $.when(liDeferreds).then(app.didGetAllLiResults);
+      
+      // get dor parcel
+      // TEST 001S070144
+      var dorParcelId = app.state.ais.features[0].properties.dor_parcel_id;
+      console.log('parcel', dorParcelId);
+      app.state.dor = undefined;
+      // $.ajax({
+      //   url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0/query?where=MAPREG%3D',
+      //   data: {
+      //     where: encodeURIComponent("MAPREG='" + dorParcelId + '"'),
+      //     outFields: '*',
+      //     f: 'geojson',
+      //   },
+      //   success: function (data) {
+      //     app.state.dor = data;
+      //     app.didGetDorResult();
+      //   },
+      //   error: function (err) {
+      //     console.log('get dor error', err);
+      //   },
+      // });
+      var dorParcelQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0'});
+      dorParcelQuery.where("MAPREG = '" + dorParcelId + "'");
+      dorParcelQuery.run(app.didGetDorResult);
     },
 
     // takes an object of divId => text and renders
@@ -419,12 +447,47 @@ var app = (function ()
               plural = remainingCount > 1,
               resourceNoun = plural ? stateKey : stateKey.slice(0, -1),
               seeMoreText = 'See ' + remainingCount + ' older ' + resourceNoun,
+              // TODO form real url
               seeMoreUrl = 'http://li.phila.gov/#summary?address=1234+market+st',
               seeMoreHtml = '<a class="external li-see-more-link" href="' + seeMoreUrl + '">' + seeMoreText + '</a>',
               $seeMoreLink = $(seeMoreHtml);
           $liSectionTable.after($seeMoreLink);
         }
       });
+    },
+    
+    didGetDorResult: function (error, featureCollection, response) {
+      // TODO handle error
+      if (error || !featureCollection || featureCollection.features.length === 0) {
+        console.log('dor error', error);
+        return;
+      }
+      
+      // set state
+      app.state.dor = featureCollection;
+      
+      // TODO for right now, we're just taking the first parcel if there's more than one
+      var parcel = featureCollection.features[0],
+          props = parcel.properties;
+          parcelId = props.MAPREG;
+      
+      // clean up attributes
+      var ADDRESS_FIELDS = ['HOUSE', 'SUFFIX', 'STDIR', 'STNAM', 'STDES', 'STDESSUF'],
+          comps = _.map(_.pick(props, ADDRESS_FIELDS), app.util.cleanDorAttribute),
+          // TODO handle individual address comps (like mapping stex=2 => 1/2)
+          // addressLow = comps.HOUSE,
+          // addressHigh = comps.STEX,
+          // streetPredir = comps.STDIR,
+          // streetName = comps.STNAM,
+          // streetSuffix = comps.STDES,
+          // streetPostdir = comps.STDESSUF,
+          
+          // remove nulls and concat
+          address = _.compact(comps).join(' ');
+
+      // render
+      $('#land-records-parcel-id').html(parcelId);
+      $('#land-records-parcel-address').html(address);
     },
   };
 })();
