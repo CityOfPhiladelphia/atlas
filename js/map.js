@@ -5,17 +5,19 @@ app.map = (function ()
   // the leaflet map object
   var _map,
   // create an empty layer group
-      _layerGroup = new L.LayerGroup();
+      _layerGroup = new L.LayerGroup(),
       // overlayHS = L.esri.featureLayer({
       //   url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/SchoolDist_Catchments_HS/FeatureServer/0'
       // })
+      _stViewMarker = new L.marker()
+      //marker1 = new L.marker()
 
   return {
     //theObject: queryParcel,
     initMap : function () {
       app.state.map = {}
       app.state.clickedOnMap = false
-      app.state.moveMode = true
+      //app.state.moveMode = true
       var CITY_HALL = [39.952388, -75.163596];
 
       _map = L.map('map', {
@@ -23,6 +25,9 @@ app.map = (function ()
          //measureControl: true,
       });
       _map.setView(CITY_HALL, 18);
+
+      //marker1.setLatLng(CITY_HALL);
+      //marker1.addTo(_map);
 
       // Basemaps
       var baseMapLight = L.esri.tiledMapLayer({
@@ -78,15 +83,40 @@ app.map = (function ()
       // one of 2 ways to call AIS
       _map.on('click', app.map.didClickMap);
 
-      $('#pict-button').on('click', function(e){
-        e.preventDefault();
-        app.gis.theLeafletZoom = _map.getZoom();
-        app.gis.theCenter = _map.getCenter();
-        app.gis.theX = app.gis.theCenter.lng
-        app.gis.theY = app.gis.theCenter.lat
-        //alert(theCenter);
-        window.open('http://192.168.104.182/philapictometry/ipa.php?lat=' + app.gis.theY + '&lon=' + app.gis.theX + '&zoom=' + (app.gis.theLeafletZoom + 1))
+      // set map state and localStorage on init, drag, dragend, and zoom
+      app.map.LSinit();
+
+      _map.on('drag', function(){
+        app.map.LSdrag();
+      });
+
+      _map.on('dragend', function(){
+        app.map.LSdragend();
+      });
+
+      _map.on('zoomend', function(){
+        app.map.LSzoomend();
       })
+
+      if(localStorage.stViewCoords) {
+        console.log('stView marker should be at ' + localStorage.stViewCoords)
+        app.state.stViewX = localStorage.getItem('stViewX');
+        app.state.stViewY = localStorage.getItem('stViewY');
+        _stViewMarker.setLatLng([app.state.stViewY, app.state.stViewX]);
+        _stViewMarker.addTo(_map);
+      }
+
+      $(window).bind('storage', function (e) {
+        if (e.originalEvent.key == 'stViewCoords'){
+          console.log('move stView marker to ' + e.originalEvent.newValue);
+          app.state.stViewX = localStorage.getItem('stViewX');
+          app.state.stViewY = localStorage.getItem('stViewY');
+          _stViewMarker.setLatLng([app.state.stViewY, app.state.stViewX]);
+          _stViewMarker.addTo(_map);
+          console.log('it should be on map')
+        }
+      });
+
     }, // end of initMap
 
     renderAisResult: function (obj) {
@@ -154,7 +184,9 @@ app.map = (function ()
       // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
       // if (app.state.map.shouldPan) {
         // latlon = new L.LatLng(thelatlon[0], thelatlon[1]);
-        _map.setView(parcelCentroid, 18);
+      _map.setView(parcelCentroid, 18);
+      // set new state and localStorage
+      app.map.LSinit();
       // }
 
       // add to map
@@ -171,18 +203,52 @@ app.map = (function ()
       });
     },
 
-    //function drawPolygon(geoObj){
-    // drawPolygon : function(geoObj, thelatlon) {
-    //   app.data.gis.layerGroup.clearLayers()
-    //   if (app.state.moveMode == true){  // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
-    //     latlon = new L.LatLng(thelatlon[0],thelatlon[1])
-    //     _map.setView(latlon, 20)
-    //   }
-    //   app.data.gis.layerGroup.addLayer(L.polygon([geoObj], {
-    //     color: 'blue',
-    //     weight: 2
-    //   }))
-    // } // end of drawPolygon
+    // LocalStorage functions
+    // on init, put center and zoom in LocalStorage, in case
+    // Pictometry or Cyclomedia are used
+    LSinit: function() {
+      app.state.theZoom = _map.getZoom();
+      app.state.theCenter = _map.getCenter();
+      app.state.theX = app.state.theCenter.lng;
+      app.state.theY = app.state.theCenter.lat;
+      localStorage.setItem('theZoom', app.state.theZoom);
+      localStorage.setItem('theX', app.state.theX);
+      localStorage.setItem('theY', app.state.theY);
+      localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
+      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
+    },
+
+    // while map is dragged, constantly reset center in localStorage
+    // this will move Pictometry with it, but not Cyclomedia
+    LSdrag: function() {
+      app.state.theCenter = _map.getCenter();
+      app.state.theX = app.state.theCenter.lng;
+      app.state.theY = app.state.theCenter.lat;
+      localStorage.setItem('theX', app.state.theX);
+      localStorage.setItem('theY', app.state.theY);
+      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
+    },
+
+    // when map is finished being dragged, 1 more time reset
+    // the center in localStorage
+    // this will move Pictometry AND Cyclomedia
+    LSdragend: function() {
+      app.state.theCenter = _map.getCenter();
+      app.state.theX = app.state.theCenter.lng;
+      app.state.theY = app.state.theCenter.lat;
+      localStorage.setItem('theX', app.state.theX);
+      localStorage.setItem('theY', app.state.theY);
+      localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
+      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
+    },
+
+    // when map is zoomed, reset zoom in localStorage
+    // this will re-zoom Pictometry also
+    LSzoomend: function() {
+      app.state.theZoom = _map.getZoom();
+      localStorage.setItem('theZoom', app.state.theZoom);
+      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
+    },
 
   }; // end of return
 })();
