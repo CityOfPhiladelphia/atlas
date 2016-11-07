@@ -4,12 +4,19 @@ app.map = (function ()
 {
   // the leaflet map object
   var _map,
+
+    yellowArrow = L.icon({
+      iconUrl: '../css/images/yellowArrow.png',
+      iconSize: [38,95],
+      iconAnchor: [22.94]
+    }),
+
   // create an empty layer group
       _layerGroup = new L.LayerGroup(),
       // overlayHS = L.esri.featureLayer({
       //   url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/SchoolDist_Catchments_HS/FeatureServer/0'
       // })
-      _stViewMarker = new L.marker()
+      _stViewMarker = new L.marker({icon: yellowArrow});
       //marker1 = new L.marker()
 
   return {
@@ -111,7 +118,7 @@ app.map = (function ()
           console.log('move stView marker to ' + e.originalEvent.newValue);
           app.state.stViewX = localStorage.getItem('stViewX');
           app.state.stViewY = localStorage.getItem('stViewY');
-          _stViewMarker.setLatLng([app.state.stViewY, app.state.stViewX]);
+          _stViewMarker.setLatLng([app.state.stViewY, app.state.stViewX], {icon: yellowArrow});
           _stViewMarker.addTo(_map);
           console.log('it should be on map')
         }
@@ -120,14 +127,9 @@ app.map = (function ()
     }, // end of initMap
 
     renderAisResult: function (obj) {
-      // if no parcel, query for it
-      if (!app.state.map.parcel) {
-        var pwdParcelId = obj.properties.pwd_parcel_id;
-        app.map.getParcelById(pwdParcelId);
-      }
-      else {
-
-      }
+      // get parcel
+      var pwdParcelId = obj.properties.pwd_parcel_id;
+      app.map.getParcelById(pwdParcelId);
     },
 
     getParcelById: function (id) {
@@ -138,8 +140,8 @@ app.map = (function ()
 
     didClickMap: function (e) {
       // set state
-      // app.state.clickedOnMap = true
-      app.state.map.didClickMap = true;
+      app.state.clickedOnMap = true
+      //app.state.map.didClickMap = true;
       app.state.map.shouldPan = false;
 
       // query parcel layer
@@ -158,7 +160,7 @@ app.map = (function ()
       app.state.map.parcel = parcel;
 
       // if this is the result of a map click, query ais for the address
-      if (app.state.map.didClickMap) {
+      if (app.state.map.clickedOnMap) {
         app.getAis(parcelAddress);
         app.state.map.didClickMap = false;
       }
@@ -177,6 +179,7 @@ app.map = (function ()
           }),
           parcelCentroid = parcelPoly.getBounds().getCenter();
 
+      app.state.theParcelCentroid = parcelCentroid;
       // clear existing parcel
       _layerGroup.clearLayers();
 
@@ -185,6 +188,8 @@ app.map = (function ()
       // if (app.state.map.shouldPan) {
         // latlon = new L.LatLng(thelatlon[0], thelatlon[1]);
       _map.setView(parcelCentroid, 18);
+      // need to wait until map sets view
+      // or need to use parcel centroid instead of center of map
       // set new state and localStorage
       app.map.LSinit();
       // }
@@ -207,10 +212,20 @@ app.map = (function ()
     // on init, put center and zoom in LocalStorage, in case
     // Pictometry or Cyclomedia are used
     LSinit: function() {
+      console.log('running LSinit');
+      console.log('clickedOnMap is ' + app.state.clickedOnMap);
+      if (app.state.clickedOnMap == true){
+        console.log('setting app.state.theX and theY from parcelCentroid');
+        app.state.theX = app.state.theParcelCentroid.lng;
+        app.state.theY = app.state.theParcelCentroid.lat;
+      } else {
+        console.log('setting app.state.theX and theY from map center');
+        app.state.theCenter = _map.getCenter();
+        app.state.theX = app.state.theCenter.lng;
+        app.state.theY = app.state.theCenter.lat;
+      }
+      console.log('setting the rest of the variables')
       app.state.theZoom = _map.getZoom();
-      app.state.theCenter = _map.getCenter();
-      app.state.theX = app.state.theCenter.lng;
-      app.state.theY = app.state.theCenter.lat;
       localStorage.setItem('theZoom', app.state.theZoom);
       localStorage.setItem('theX', app.state.theX);
       localStorage.setItem('theY', app.state.theY);

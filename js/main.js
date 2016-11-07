@@ -135,6 +135,8 @@ var app = (function ()
     },
 
     search: function () {
+      app.state.clickedOnMap = false;
+      app.state.map.shouldPan = true;
       var val = $('#search-input').val();
 
       // display loading
