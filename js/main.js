@@ -8,7 +8,6 @@ NOTE: this is just a demo - lots of jQuery soup ahead :)
      console.log(e.originalEvent.key, e.originalEvent.newValue);
 });*/
 
-
 var app = (function ()
 {
   // debug stuff

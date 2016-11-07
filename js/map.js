@@ -6,24 +6,24 @@ app.map = (function ()
   var _map,
 
     yellowArrow = L.icon({
-      iconUrl: '../css/images/yellowArrow.png',
-      iconSize: [38,95],
-      iconAnchor: [22.94]
+      iconUrl: 'css/images/yellowArrow.png',
+      //iconSize: [38,95],
+      //iconAnchor: [22.94]
     }),
 
-  // create an empty layer group
+      // create an empty layer group
       _layerGroup = new L.LayerGroup(),
       // overlayHS = L.esri.featureLayer({
       //   url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/SchoolDist_Catchments_HS/FeatureServer/0'
       // })
-      _stViewMarker = new L.marker({icon: yellowArrow});
-      //marker1 = new L.marker()
 
+      // create window level placeholder for _stViewMarker
+      _stViewMarker
   return {
     //theObject: queryParcel,
     initMap : function () {
       app.state.map = {}
-      app.state.clickedOnMap = false
+      app.state.map.clickedOnMap = false
       //app.state.moveMode = true
       var CITY_HALL = [39.952388, -75.163596];
 
@@ -31,10 +31,7 @@ app.map = (function ()
          zoomControl: false,
          //measureControl: true,
       });
-      _map.setView(CITY_HALL, 18);
-
-      //marker1.setLatLng(CITY_HALL);
-      //marker1.addTo(_map);
+      _map.setView(CITY_HALL, 17);
 
       // Basemaps
       var baseMapLight = L.esri.tiledMapLayer({
@@ -105,23 +102,56 @@ app.map = (function ()
         app.map.LSzoomend();
       })
 
-      if(localStorage.stViewCoords) {
-        console.log('stView marker should be at ' + localStorage.stViewCoords)
+      // when map refreshes, if there is already a cyclomedia tab open, place the marker
+      if(localStorage.stViewOpen) {
+        console.log('stView marker should be at ' + localStorage.stViewCoords + 'and stViewYaw should be ' + app.state.stViewYaw);
         app.state.stViewX = localStorage.getItem('stViewX');
         app.state.stViewY = localStorage.getItem('stViewY');
-        _stViewMarker.setLatLng([app.state.stViewY, app.state.stViewX]);
+        app.state.stViewYaw = localStorage.getItem('stViewYaw');
+        _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
+          icon: yellowArrow,
+          rotationAngle: app.state.stViewYaw
+        });
         _stViewMarker.addTo(_map);
       }
 
+      // watch localStorage for changes to:
+      //1. stViewOpen, 2. stViewCoords, 3. stViewYaw
       $(window).bind('storage', function (e) {
+        // if Cyclomedia window closes, remove marker
+        if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == 'false') {
+          if (_stViewMarker) {
+            _stViewMarker.remove();
+          };
+        };
         if (e.originalEvent.key == 'stViewCoords'){
-          console.log('move stView marker to ' + e.originalEvent.newValue);
+          //console.log('move stView marker to ' + e.originalEvent.newValue);
           app.state.stViewX = localStorage.getItem('stViewX');
           app.state.stViewY = localStorage.getItem('stViewY');
-          _stViewMarker.setLatLng([app.state.stViewY, app.state.stViewX], {icon: yellowArrow});
+          if (_stViewMarker) {
+            _stViewMarker.remove();
+          };
+          _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
+            icon: yellowArrow,
+            rotationAngle: app.state.stViewYaw
+          });
+          //_stViewMarker.setLatLng([app.state.stViewY, app.state.stViewX]);
           _stViewMarker.addTo(_map);
-          console.log('it should be on map')
-        }
+          console.log('it should be on map');
+        };
+        if (e.originalEvent.key == 'stViewYaw'){
+          console.log('stViewYaw changed to ' +  e.originalEvent.newValue);
+          app.state.stViewYaw = localStorage.getItem('stViewYaw');
+          if (_stViewMarker) {
+            _stViewMarker.remove();
+          };
+          _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
+            icon: yellowArrow,
+            rotationAngle: app.state.stViewYaw
+          });
+          _stViewMarker.addTo(_map);
+          console.log('stViewYaw should have just caused icon to rotate');
+        };
       });
 
     }, // end of initMap
@@ -140,7 +170,7 @@ app.map = (function ()
 
     didClickMap: function (e) {
       // set state
-      app.state.clickedOnMap = true
+      app.state.map.clickedOnMap = true
       //app.state.map.didClickMap = true;
       app.state.map.shouldPan = false;
 
@@ -162,7 +192,7 @@ app.map = (function ()
       // if this is the result of a map click, query ais for the address
       if (app.state.map.clickedOnMap) {
         app.getAis(parcelAddress);
-        app.state.map.didClickMap = false;
+        app.state.map.clickedOnMap = false;
       }
 
       // render parcel
@@ -187,7 +217,7 @@ app.map = (function ()
       // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
       // if (app.state.map.shouldPan) {
         // latlon = new L.LatLng(thelatlon[0], thelatlon[1]);
-      _map.setView(parcelCentroid, 18);
+      _map.setView(parcelCentroid, 20);
       // need to wait until map sets view
       // or need to use parcel centroid instead of center of map
       // set new state and localStorage
@@ -213,8 +243,8 @@ app.map = (function ()
     // Pictometry or Cyclomedia are used
     LSinit: function() {
       console.log('running LSinit');
-      console.log('clickedOnMap is ' + app.state.clickedOnMap);
-      if (app.state.clickedOnMap == true){
+      console.log('clickedOnMap is ' + app.state.map.clickedOnMap);
+      if (app.state.map.clickedOnMap == true){
         console.log('setting app.state.theX and theY from parcelCentroid');
         app.state.theX = app.state.theParcelCentroid.lng;
         app.state.theY = app.state.theParcelCentroid.lat;
