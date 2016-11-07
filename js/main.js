@@ -1,8 +1,8 @@
 /* global L, _, $ */
 
-$(window).bind('storage', function (e) {
+/*$(window).bind('storage', function (e) {
      console.log(e.originalEvent.key, e.originalEvent.newValue);
-});
+});*/
 
 
 var app = (function ()

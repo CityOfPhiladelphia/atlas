@@ -5,17 +5,19 @@ app.map = (function ()
   // the leaflet map object
   var _map,
   // create an empty layer group
-      _layerGroup = new L.LayerGroup();
+      _layerGroup = new L.LayerGroup(),
       // overlayHS = L.esri.featureLayer({
       //   url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/SchoolDist_Catchments_HS/FeatureServer/0'
       // })
+      _stViewMarker = new L.marker()
+      //marker1 = new L.marker()
 
   return {
     //theObject: queryParcel,
     initMap : function () {
       app.state.map = {}
       app.state.clickedOnMap = false
-      app.state.moveMode = true
+      //app.state.moveMode = true
       var CITY_HALL = [39.952388, -75.163596];
 
       _map = L.map('map', {
@@ -23,6 +25,9 @@ app.map = (function ()
          //measureControl: true,
       });
       _map.setView(CITY_HALL, 18);
+
+      //marker1.setLatLng(CITY_HALL);
+      //marker1.addTo(_map);
 
       // Basemaps
       var baseMapLight = L.esri.tiledMapLayer({
@@ -92,6 +97,25 @@ app.map = (function ()
       _map.on('zoomend', function(){
         app.map.LSzoomend();
       })
+
+      if(localStorage.stViewCoords) {
+        console.log('stView marker should be at ' + localStorage.stViewCoords)
+        app.state.stViewX = localStorage.getItem('stViewX');
+        app.state.stViewY = localStorage.getItem('stViewY');
+        _stViewMarker.setLatLng([app.state.stViewY, app.state.stViewX]);
+        _stViewMarker.addTo(_map);
+      }
+
+      $(window).bind('storage', function (e) {
+        if (e.originalEvent.key == 'stViewCoords'){
+          console.log('move stView marker to ' + e.originalEvent.newValue);
+          app.state.stViewX = localStorage.getItem('stViewX');
+          app.state.stViewY = localStorage.getItem('stViewY');
+          _stViewMarker.setLatLng([app.state.stViewY, app.state.stViewX]);
+          _stViewMarker.addTo(_map);
+          console.log('it should be on map')
+        }
+      });
 
     }, // end of initMap
 
@@ -191,8 +215,7 @@ app.map = (function ()
       localStorage.setItem('theX', app.state.theX);
       localStorage.setItem('theY', app.state.theY);
       localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
-      localStorage.setItem('cycloX', app.state.theX);
-      localStorage.setItem('cycloY', app.state.theY);
+      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
     },
 
     // while map is dragged, constantly reset center in localStorage
@@ -203,6 +226,7 @@ app.map = (function ()
       app.state.theY = app.state.theCenter.lat;
       localStorage.setItem('theX', app.state.theX);
       localStorage.setItem('theY', app.state.theY);
+      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
     },
 
     // when map is finished being dragged, 1 more time reset
@@ -215,8 +239,7 @@ app.map = (function ()
       localStorage.setItem('theX', app.state.theX);
       localStorage.setItem('theY', app.state.theY);
       localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
-      localStorage.setItem('cycloX', app.state.theX);
-      localStorage.setItem('cycloY', app.state.theY);
+      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
     },
 
     // when map is zoomed, reset zoom in localStorage
@@ -224,6 +247,7 @@ app.map = (function ()
     LSzoomend: function() {
       app.state.theZoom = _map.getZoom();
       localStorage.setItem('theZoom', app.state.theZoom);
+      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
     },
 
   }; // end of return
