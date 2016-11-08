@@ -15,8 +15,8 @@ header.site-header > .row:last-of-type {
     height: 2.78571rem;
 }
 
-#theLinkButtons {
-    float: right;
+#imagery-buttons {
+    margin-bottom: 15px;
 }
 
 #pict-button {

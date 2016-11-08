@@ -274,13 +274,13 @@ var app = (function ()
 
       // render ais data
       $('#data-panel-title').text(streetAddress);
-      $('#basic-info-mailing-address').html(mailingAddress);
-      $('#basic-info-street-code').text(data.features[0].properties.street_code);
+      $('#address-info-mailing-address').html(mailingAddress);
+      $('#address-info-street-code').text(data.features[0].properties.street_code);
       console.log('zoning', props.zoning);
       $('#zoning-code').text(props.zoning);
 
       // show basic info
-      app.activateTopic('address-details');
+      app.activateTopic('address-info');
 
       // render map for this address
       if (selectedAddress) app.map.renderAisResult(obj);
@@ -409,7 +409,7 @@ var app = (function ()
 
       // update prop search link
       var propertySearchUrl = 'http://property.phila.gov/?an=' + props.parcel_number;
-      $('#address-details-property-link').attr('href', propertySearchUrl);
+      $('#address-info-property-link').attr('href', propertySearchUrl);
     },
 
     didGetAllLiResults: function ()

@@ -34,12 +34,8 @@
                       <h1 class="page-title">Atlas</h1>
                     </a>
                   </div>
-                  <div id="theLinkButtons">
-                    <a href="#" class="button no-margin" id="pict-button">Oblique Imagery</a>
-                    <a href="#" class="button no-margin" id="cyclo-button">Street View</a>
-                  </div> <!--theLinkButtons-->
                   <div id="search-container">
-                    <input type="text" placeholder="Which address are you looking for?" id="search-input">
+                    <input type="text" placeholder="Enter an address here." id="search-input">
                     <a href="#" id="search-button" class="button no-margin">Go</a>
                   </div>
                 </div>
@@ -56,27 +52,37 @@
                         <button class="close-button" data-close aria-label="Close modal" type="button"></button>
                     </div>
 
-                    <h1 id="data-panel-title">Learn more about an address.</h1>
+                    <h1 id="data-panel-title">Learn more about Philadelphia addresses.</h1>
+                    <div class="callout">
+                        <p>Type an address in the search box above, or click on the map to start your search.</p>
+                    </div>
+                    
+                    <div id="imagery-buttons">
+                        <!--<p>Use the buttons below to see interactive imagery for this location.</p>-->
+                        <a href="#" class="button no-margin" id="pict-button">Oblique Imagery</a>
+                        <a href="#" class="button no-margin" id="cyclo-button">Street View</a>
+                    </div>
+                    
                     <div id="topic-list">
-                        <!--Address Details-->
-                        <a id="topic-link-address-details" class="topic-link" href="/#/basic-info"><span class="topic-link-icon flaticon-copy"></span>Address Details</a>
-                        <div id="topic-address-details" class="topic">
+                        <!--Address Information-->
+                        <a id="topic-link-address-info" class="topic-link" href="#"><span class="topic-link-icon flaticon-copy"></span>Address Information</a>
+                        <div id="topic-address-info" class="topic">
                             <table>
                                 <tr>
                                     <th>Mailing Address</th>
-                                    <td id="basic-info-mailing-address"></td>
+                                    <td id="address-info-mailing-address"></td>
                                 </tr>
                                 <!--<tr>-->
                                 <!--    <th>Owner</th>-->
-                                <!--    <td id="basic-info-owner"></td>-->
+                                <!--    <td id="address-info-owner"></td>-->
                                 <!--</tr>-->
                                 <tr>
                                     <th>Street Code</th>
-                                    <td id="basic-info-street-code"></td>
+                                    <td id="address-info-street-code"></td>
                                 </tr>
                             </table>
                             <!--TODO update this link dynamically-->
-                            <a id="address-details-property-link" href="#" class="external">See more at Property Search</a>
+                            <a id="address-info-property-link" href="#" class="external">See more at Property Search</a>
                         </div>
 
                         <!-- LAND RECORDS -->
