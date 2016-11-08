@@ -97,11 +97,16 @@ var app = (function ()
       DEBUG && $('#search-input').val(DEBUG_ADDRESS);
 
       // TEMP: just for mockup. Listen for clicks on data row link.
-      $('.data-row-link').click(function (e) {
+      $('.topic-link').click(function (e) {
+        // e.preventDefault();
+        // var $topic = $(this).next();
+        // $('.topic:visible').slideUp(350);
+        // if (!$topic.is(':visible')) $(this).next().slideDown(350);
+        
+        // TEST
         e.preventDefault();
-        var $dataRow = $(this).next();
-        $('.data-row:visible').slideUp(350);
-        if (!$dataRow.is(':visible')) $(this).next().slideDown(350);
+        var topicName = $(this).attr('id').replace('topic-link-', '');
+        app.activateTopic(topicName);
       });
 
       // Make ext links open in new window
@@ -226,17 +231,22 @@ var app = (function ()
         // draw polygon
         // app.map.drawPolygon(app.state.map.curFeatGeo)
         // app.map.drawParcel();
-
       });
     },
 
     // takes a topic (formerly "data row") name and activates the corresponding
     // section in the data panel
-    activateTopic: function (topic) {
-      // e.preventDefault();
-      var $dataRow = $(this).next();
-      $('.data-row:visible').slideUp(350);
-      if (!$dataRow.is(':visible')) $(this).next().slideDown(350);
+    activateTopic: function (targetTopicName) {
+      var $targetTopic = $('#topic-' + targetTopicName);
+          
+      // get the currently active topic
+      var $activeTopic = $('.topic:visible');
+      
+      // only activate if it's not already active
+      if ($targetTopic.is($activeTopic)) return;
+      
+      $activeTopic.slideUp(350);
+      $targetTopic.slideDown(350);
     },
 
     didGetAisResult: function () {
@@ -264,7 +274,7 @@ var app = (function ()
       $('#basic-info-street-code').text(data.features[0].properties.street_code);
 
       // show basic info
-      $('#data-row-link-basic-info').click();
+      app.activateTopic('address-details');
 
       // render map for this address
       if (selectedAddress) app.map.renderAisResult(obj);
@@ -387,7 +397,9 @@ var app = (function ()
 
       app.renderDivs(vals);
 
-      // TODO update prop search link
+      // update prop search link
+      var propertySearchUrl = 'http://property.phila.gov/?an=' + props.parcel_number;
+      $('#address-details-property-link').attr('href', propertySearchUrl);
     },
 
     didGetAllLiResults: function ()

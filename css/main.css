@@ -48,7 +48,7 @@ header.site-header > .row:last-of-type {
     color: #666;
 }
 
-#data-row-list > a {
+#topic-list > a {
     background: #f5f5f5;
     border: 1px solid #ddd;
     display: block;
@@ -65,26 +65,26 @@ header.site-header > .row:last-of-type {
     margin-bottom: 8px;
 }
 
-#data-row-list > a:hover {
+#topic-list > a:hover {
     background: #fff;
     color: inherit;
 }
 
-#data-row-list .data-row-link-icon {
+#topic-list .topic-link-icon {
     padding-right: 30px;
 }
 
-.data-row {
+.topic {
     padding: 10px;
     margin-bottom: 10px;
     display: none;
 }
 
-.data-row table th, .data-row table td {
+.topic table th, .topic table td {
     font-size: 15px;
 }
 
-.data-row table tr th {
+.topic table tr th {
     text-align: left;
     vertical-align: top;
 }
@@ -92,6 +92,41 @@ header.site-header > .row:last-of-type {
 .li-section > a.external {
      display: inline-block;
      margin-bottom: 20px;
+}
+
+#zoning-badge {
+    width: 300px;
+    padding: 0;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+
+#zoning-badge > h4 {
+    background: #58c04d;
+    color: #eee;
+    text-align: center;
+    margin: 0;
+    
+}
+
+#zoning-badge > #zoning-badge-body {
+    /*padding-top: 10px;*/
+    /*padding-bottom: 10px;*/
+    padding: 10px;
+}
+
+#zoning-badge > #zoning-badge-body > #zoning-code {
+    /*display: inline-block;*/
+    margin: 0;
+    /*margin-top: 7px;*/
+    /*margin-bottom: 7px;*/
+    /*margin-bottom: 5px;*/
+    margin-bottom: 5px;
+}
+
+#zoning-badge > #zoning-badge-body > #zoning-description {
+    /*display: inline-block;*/
+    margin-bottom: 
 }
 
 #map {
@@ -105,3 +140,7 @@ ul {
 }
 
 img { max-width: inherit; }
+
+h4.has-tip {
+    font-weight: normal;
+}
