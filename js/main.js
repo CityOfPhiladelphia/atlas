@@ -269,8 +269,10 @@ var app = (function ()
           streetAddress = props.street_address;
 
       // make mailing address
-      var mailingAddress = streetAddress + '<br>PHILADELPHIA, PA ' + props.zip_code;
-      if (props.zip_4) mailingAddress += '-' + props.zip_4;
+      // var mailingAddress = streetAddress + '<br>PHILADELPHIA, PA ' + props.zip_code;
+      // if (props.zip_4) mailingAddress += '-' + props.zip_4;
+      var line2 = 'PHILADELPHIA, PA ' + props.zip_code;
+      if (props.zip_4) line2 += '-' + props.zip_4;
 
       // hide greeting if it's there
       var $topicPanelHeaderGreeting = $('#topic-panel-header-greeting');
@@ -282,7 +284,10 @@ var app = (function ()
 
       // render ais data
       $('#topic-panel-title').text(streetAddress);
-      $('#address-info-mailing-address').html(mailingAddress);
+      // $('#address-info-mailing-address').html(mailingAddress);
+      $('#topic-panel-header-address-line-1').html(streetAddress);
+      $('#topic-panel-header-address-line-2').html(line2);
+      
       $('#address-info-street-code').text(data.features[0].properties.street_code);
       console.log('zoning', props.zoning);
       // $('#zoning-code').text(props.zoning);
@@ -528,12 +533,12 @@ var app = (function ()
     },
     
     didGetZoningOverlayResult: function (error, featureCollection, response) {
-      // var features = featureCollection.features,
-      //     $tbody = $('#zoning-table-overlays').search('tbody');
-      // _.each(features, function (feature) {
-      //   // append row to overlays table
-      //   // $tbody.append();
-      // });
+      var features = featureCollection.features,
+          $tbody = $('#zoning-table-overlays').search('tbody');
+      _.each(features, function (feature) {
+        // append row to overlays table
+        // $tbody.append();
+      });
     },
     
     // long code => description
