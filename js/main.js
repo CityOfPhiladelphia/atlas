@@ -1,9 +1,18 @@
+/* global L, _, $ */
+
+/*
+NOTE: this is just a demo - lots of jQuery soup ahead :)
+*/
+
+/*$(window).bind('storage', function (e) {
+     console.log(e.originalEvent.key, e.originalEvent.newValue);
+});*/
 
 var app = (function ()
 {
   // debug stuff
   var DEBUG = true,
-      DEBUG_ADDRESS = '300 broad st';
+      DEBUG_ADDRESS = '1234 market st';
 
   var map;
 
@@ -87,12 +96,11 @@ var app = (function ()
     {
       DEBUG && $('#search-input').val(DEBUG_ADDRESS);
 
-      // TEMP: just for mockup. Listen for clicks on data row link.
-      $('.data-row-link').click(function (e) {
+      // listen for clicks on topics
+      $('.topic-link').click(function (e) {
         e.preventDefault();
-        var $dataRow = $(this).next();
-        $('.data-row:visible').slideUp(350);
-        if (!$dataRow.is(':visible')) $(this).next().slideDown(350);
+        var topicName = $(this).attr('id').replace('topic-link-', '');
+        app.toggleTopic(topicName);
       });
 
       // Make ext links open in new window
@@ -146,7 +154,7 @@ var app = (function ()
       });
 
       // fire off ais
-      app.getAis(val, app.didGetAisResult);
+      app.getAis(val);
     },
 
     getAis: function (address) {
@@ -186,7 +194,7 @@ var app = (function ()
         $('#addressList').empty()
 
         // store selected address in state
-        var selectedIndex = $(this).attr('number');
+        var selectedIndex = $(this).attr('number'),
             selectedAddressObj = data.features[selectedIndex],
             selectedAddress = selectedAddressObj.properties.street_address;
         app.state.selectedAddress = selectedAddress;
@@ -217,19 +225,34 @@ var app = (function ()
         // draw polygon
         // app.map.drawPolygon(app.state.map.curFeatGeo)
         // app.map.drawParcel();
-
       });
     },
 
     // takes a topic (formerly "data row") name and activates the corresponding
     // section in the data panel
-    activateTopic: function (topic) {
-      // e.preventDefault();
-      var $dataRow = $(this).next();
-      $('.data-row:visible').slideUp(350);
-      if (!$dataRow.is(':visible')) $(this).next().slideDown(350);
-    },
+    activateTopic: function (targetTopicName) {
+      var $targetTopic = $('#topic-' + targetTopicName);
 
+      // get the currently active topic
+      var $activeTopic = $('.topic:visible');
+      
+      // only activate if it's not already active
+      if ($targetTopic.is($activeTopic)) return;
+      
+      $activeTopic.slideUp(350);
+      $targetTopic.slideDown(350);
+    },
+    
+    toggleTopic: function (targetTopicName) {
+      var $targetTopic = $('#topic-' + targetTopicName);
+      
+      // if it's already visible, hide it
+      if ($targetTopic.is(':visible')) $targetTopic.slideUp(350);
+
+      // otherwise, activate
+      else app.activateTopic(targetTopicName);
+    },
+    
     didGetAisResult: function () {
       // set app state
       // app.state.ais = data;
@@ -253,9 +276,11 @@ var app = (function ()
       $('#data-panel-title').text(streetAddress);
       $('#basic-info-mailing-address').html(mailingAddress);
       $('#basic-info-street-code').text(data.features[0].properties.street_code);
+      console.log('zoning', props.zoning);
+      $('#zoning-code').text(props.zoning);
 
       // show basic info
-      $('#data-row-link-basic-info').click();
+      app.activateTopic('address-details');
 
       // render map for this address
       if (selectedAddress) app.map.renderAisResult(obj);
@@ -303,9 +328,37 @@ var app = (function ()
             });
           });
       // fire deferreds
-      // this is nice and  elegant but the callback is firing before the
+      // this is nice and elegant but the callback is firing before the
       // individual callbacks have completed. commenting out for now.
       // $.when(liDeferreds).then(app.didGetAllLiResults);
+      
+      // get dor parcel
+      var dorParcelId = app.state.ais.features[0].properties.dor_parcel_id;
+      app.state.dor = undefined;
+      // $.ajax({
+      //   url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0/query?where=MAPREG%3D',
+      //   data: {
+      //     where: encodeURIComponent("MAPREG='" + dorParcelId + '"'),
+      //     outFields: '*',
+      //     f: 'geojson',
+      //   },
+      //   success: function (data) {
+      //     app.state.dor = data;
+      //     app.didGetDorResult();
+      //   },
+      //   error: function (err) {
+      //     console.log('get dor error', err);
+      //   },
+      // });
+      var dorParcelQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0'});
+      dorParcelQuery.where("MAPREG = '" + dorParcelId + "'");
+      dorParcelQuery.run(app.didGetDorResult);
+      
+      // get zoning
+      var zoningOverlayQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/1'}),
+          aisGeom = app.state.ais.features[0].geometry;
+      zoningOverlayQuery.contains(aisGeom);
+      zoningOverlayQuery.run(app.didGetZoningOverlayResult);
     },
 
     // takes an object of divId => text and renders
@@ -354,7 +407,9 @@ var app = (function ()
 
       app.renderDivs(vals);
 
-      // TODO update prop search link
+      // update prop search link
+      var propertySearchUrl = 'http://property.phila.gov/?an=' + props.parcel_number;
+      $('#address-details-property-link').attr('href', propertySearchUrl);
     },
 
     didGetAllLiResults: function ()
@@ -413,11 +468,55 @@ var app = (function ()
               plural = remainingCount > 1,
               resourceNoun = plural ? stateKey : stateKey.slice(0, -1),
               seeMoreText = 'See ' + remainingCount + ' older ' + resourceNoun,
+              // TODO form real url
               seeMoreUrl = 'http://li.phila.gov/#summary?address=1234+market+st',
               seeMoreHtml = '<a class="external li-see-more-link" href="' + seeMoreUrl + '">' + seeMoreText + '</a>',
               $seeMoreLink = $(seeMoreHtml);
           $liSectionTable.after($seeMoreLink);
         }
+      });
+    },
+    
+    didGetDorResult: function (error, featureCollection, response) {
+      // TODO handle error
+      if (error || !featureCollection || featureCollection.features.length === 0) {
+        console.log('dor error', error);
+        return;
+      }
+      
+      // set state
+      app.state.dor = featureCollection;
+      
+      // TODO for right now, we're just taking the first parcel if there's more than one
+      var parcel = featureCollection.features[0],
+          props = parcel.properties,
+          parcelId = props.MAPREG;
+      
+      // clean up attributes
+      var ADDRESS_FIELDS = ['HOUSE', 'SUFFIX', 'STDIR', 'STNAM', 'STDES', 'STDESSUF'],
+          comps = _.map(_.pick(props, ADDRESS_FIELDS), app.util.cleanDorAttribute),
+          // TODO handle individual address comps (like mapping stex=2 => 1/2)
+          // addressLow = comps.HOUSE,
+          // addressHigh = comps.STEX,
+          // streetPredir = comps.STDIR,
+          // streetName = comps.STNAM,
+          // streetSuffix = comps.STDES,
+          // streetPostdir = comps.STDESSUF,
+          
+          // remove nulls and concat
+          address = _.compact(comps).join(' ');
+
+      // render
+      $('#land-records-parcel-id').html(parcelId);
+      $('#land-records-parcel-address').html(address);
+    },
+    
+    didGetZoningOverlayResult: function (error, featureCollection, response) {
+      var features = featureCollection.features,
+          $tbody = $('#zoning-table-overlays').search('tbody');
+      _.each(features, function (feature) {
+        // append row to overlays table
+        // $tbody.append();
       });
     },
   };

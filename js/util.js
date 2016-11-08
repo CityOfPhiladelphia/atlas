@@ -21,5 +21,19 @@ app.util = (function () {
       }
       return b;
     },
+    
+    // clean up various types of whitespace/null values in dor
+    cleanDorAttribute: function (attr) {
+      // trim leading and trailing whitespace
+      var cleanAttr = attr ? String(attr) : '';
+      cleanAttr = cleanAttr.replace(/\s+/g, '');
+      
+      // return null for zeros and empty strings
+      if (['', '0'].indexOf(cleanAttr) > -1) {
+        return null;
+      }
+      
+      return cleanAttr;
+    },
   };
 }());
