@@ -5,24 +5,26 @@ app.map = (function ()
   // the leaflet map object
   var _map,
 
-    yellowArrow = L.icon({
-      iconUrl: 'css/images/yellowArrow.png',
-      //iconSize: [38,95],
-      //iconAnchor: [22.94]
-    }),
-    viewcone = L.icon({
-      iconUrl: 'css/images/viewcone.png',
-      iconSize: [40,40],
-      iconAnchor: [20, 30],
-    }),
-    camera = L.icon({
-      iconUrl: 'css/images/camera_04.png',
-      iconSize: [30, 20],
-      iconAnchor: [15,  10],
-    }),
+      yellowArrow = L.icon({
+        iconUrl: 'css/images/yellowArrow.png',
+        //iconSize: [38,95],
+        //iconAnchor: [22.94]
+      }),
+      viewcone = L.icon({
+        iconUrl: 'css/images/viewcone.png',
+        iconSize: [40,40],
+        iconAnchor: [20, 30],
+      }),
+      camera = L.icon({
+        iconUrl: 'css/images/camera_04.png',
+        iconSize: [30, 20],
+        iconAnchor: [15,  10],
+      }),
 
-      // create an empty layer group
-      _layerGroup = new L.LayerGroup(),
+      _baseLayerGroup = new L.LayerGroup(),
+      _overlayLayerGroup = new L.LayerGroup(),
+      // create an empty layer group for the parcel query layer
+      _parcelLayerGroup = new L.LayerGroup(),
       // overlayHS = L.esri.featureLayer({
       //   url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/SchoolDist_Catchments_HS/FeatureServer/0'
       // })
@@ -43,26 +45,65 @@ app.map = (function ()
       });
       _map.setView(CITY_HALL, 17);
 
+      /*
+      Using multiple tiled Layers in esri-leaflet is not well documented.
+      The structure of the html rendered looks like this:
+      <div id="map" class="leaflet-container leaflet-fade-anim leaflet-grab leaflet-touch-drag" style="position: relative;" tabindex="0">
+        <div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 29px, 0px);">
+          <div class="leaflet-pane leaflet-tile-pane">
+          <div class="leaflet-pane leaflet-shadow-pane"></div>
+          <div class="leaflet-pane leaflet-overlay-pane"></div>
+          <div class="leaflet-pane leaflet-marker-pane">
+          <div class="leaflet-pane leaflet-tooltip-pane"></div>
+          <div class="leaflet-pane leaflet-popup-pane"></div>
+          <div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(9771460px, 1.27088e+7px, 0px) scale(65536);"></div>
+
+      all of the tiled maps will have low z values, and be grouped in the <div class="leaflet-pane leaflet-tile-pane">:
+      <div class="leaflet-pane leaflet-tile-pane">
+        <div class="leaflet-layer " style="z-index: 1; opacity: 1;">
+        <div class="leaflet-layer " style="z-index: 3; opacity: 1;">
+        <div class="leaflet-layer " style="z-index: 4; opacity: 1;">
+
+      It is difficult to get the layer that you want to have the z value you want.
+      The order in lists below, and setting up the L.control.layers is important for getting z values right.
+
+      */
       // Basemaps
       var baseMapLight = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer",
-        //url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_SP/MapServer",
         maxZoom: 22
       });
-      /*var baseMapDark = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Slate/MapServer",
-        maxZoom: 22
-      });*/
+
       var baseMapImagery2015 = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer",
         maxZoom: 22
       });
-      baseMapLight.addTo(_map);
+
+      /*var baseMapDark = L.esri.tiledMapLayer({
+        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Slate/MapServer",
+        maxZoom: 22
+      });*/
+
+      _baseLayerGroup.addLayer(baseMapLight, baseMapImagery2015);
+      _baseLayerGroup.addTo(_map);
+      //baseMapLight.addTo(_map);
 
       // Overlays
       var overlayZoning = L.esri.tiledMapLayer({
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer'
       });
+
+      var overlayBaseLabels = L.esri.tiledMapLayer({
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer',
+      });
+
+      // YOU SHOULD NOT USE AN OVERLAY GROUP IF NOT USING THE L.Control.Layers
+      // IT WILL ONLY TURN ON THE FIRST LAYER IN THE GROUP, AND BE HARDER TO REFERENCE LAYERS TO TURN ON AND OFF
+      //_overlayLayerGroup.addLayer(overlayZoning, overlayBaseLabels);
+      //_overlayLayerGroup.addTo(_map);
+      overlayZoning.addTo(_map);
+      overlayBaseLabels.addTo(_map);
+
       /*
       var overlayHS = L.esri.featureLayer({
         url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/SchoolDist_Catchments_HS/FeatureServer/0'
@@ -74,26 +115,30 @@ app.map = (function ()
         url: 'services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/SchoolDist_Catchments_MS/FeatureServer/0'
       });
       */
+
       var baseLayers = {
-        'Light':    baseMapLight,
-        //'Dark':     baseMapDark,
+        'Light': baseMapLight,
         'Imagery 2015': baseMapImagery2015,
+        //'Dark':     baseMapDark,
       };
-      /*
+
+      // THE ORDER HERE MATTERS.  THE LOWER ON THIS LIST, THE HIGHER THE Z VALUE THE LAYER WILL GET
       var overlays = {
-        'Zoning':     overlayZoning,
-        'PWD Parcels':  overlayPwdParcels,
+        'Zoning': overlayZoning,
+        'Street Labels': overlayBaseLabels,
+        //'PWD Parcels':  overlayPwdParcels,
         // 'Land Use': landUse,
       };
-      */
+
 
       // Controls
-      L.control.layers(baseLayers, '', {position: 'topright'}).addTo(_map);
-      //L.control.layers(baseLayers, overlays, {position: 'topright'}).addTo(map);
+      //L.control.layers(baseLayers, '', {position: 'topright'}).addTo(_map);
+      L.control.layers(baseLayers, overlays, {position: 'topright'})//.addTo(_map);
       //var measureControl = new L.Control.Measure({position: 'topright'});
       //measureControl.addTo(map);
       new L.Control.Zoom({position: 'topright'}).addTo(_map);
-      _layerGroup.addTo(_map);
+
+      _parcelLayerGroup.addTo(_map);
 
       // one of 2 ways to call AIS
       _map.on('click', app.map.didClickMap);
@@ -114,7 +159,7 @@ app.map = (function ()
       })
 
       // when map refreshes, if there is already a cyclomedia tab open, place the marker
-      if(localStorage.stViewOpen) {
+      if(localStorage.stViewOpen == 'true') {
         console.log('stView marker should be at ' + localStorage.stViewCoords + 'and stViewYaw should be ' + app.state.stViewYaw);
         app.state.stViewX = localStorage.getItem('stViewX');
         app.state.stViewY = localStorage.getItem('stViewY');
@@ -222,7 +267,7 @@ app.map = (function ()
 
       app.state.theParcelCentroid = parcelCentroid;
       // clear existing parcel
-      _layerGroup.clearLayers();
+      _parcelLayerGroup.clearLayers();
 
       // pan map
       // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
@@ -236,7 +281,7 @@ app.map = (function ()
       // }
 
       // add to map
-      _layerGroup.addLayer(parcelPoly);
+      _parcelLayerGroup.addLayer(parcelPoly);
     }, // end of drawPolygon
 
     getGeomFromLatLon : function(latlon){
