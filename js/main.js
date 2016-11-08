@@ -96,17 +96,11 @@ var app = (function ()
     {
       DEBUG && $('#search-input').val(DEBUG_ADDRESS);
 
-      // TEMP: just for mockup. Listen for clicks on data row link.
+      // listen for clicks on topics
       $('.topic-link').click(function (e) {
-        // e.preventDefault();
-        // var $topic = $(this).next();
-        // $('.topic:visible').slideUp(350);
-        // if (!$topic.is(':visible')) $(this).next().slideDown(350);
-        
-        // TEST
         e.preventDefault();
         var topicName = $(this).attr('id').replace('topic-link-', '');
-        app.activateTopic(topicName);
+        app.toggleTopic(topicName);
       });
 
       // Make ext links open in new window
@@ -200,7 +194,7 @@ var app = (function ()
         $('#addressList').empty()
 
         // store selected address in state
-        var selectedIndex = $(this).attr('number');
+        var selectedIndex = $(this).attr('number'),
             selectedAddressObj = data.features[selectedIndex],
             selectedAddress = selectedAddressObj.properties.street_address;
         app.state.selectedAddress = selectedAddress;
@@ -238,7 +232,7 @@ var app = (function ()
     // section in the data panel
     activateTopic: function (targetTopicName) {
       var $targetTopic = $('#topic-' + targetTopicName);
-          
+
       // get the currently active topic
       var $activeTopic = $('.topic:visible');
       
@@ -248,7 +242,17 @@ var app = (function ()
       $activeTopic.slideUp(350);
       $targetTopic.slideDown(350);
     },
+    
+    toggleTopic: function (targetTopicName) {
+      var $targetTopic = $('#topic-' + targetTopicName);
+      
+      // if it's already visible, hide it
+      if ($targetTopic.is(':visible')) $targetTopic.slideUp(350);
 
+      // otherwise, activate
+      else app.activateTopic(targetTopicName);
+    },
+    
     didGetAisResult: function () {
       // set app state
       // app.state.ais = data;
@@ -322,14 +326,12 @@ var app = (function ()
             });
           });
       // fire deferreds
-      // this is nice and  elegant but the callback is firing before the
+      // this is nice and elegant but the callback is firing before the
       // individual callbacks have completed. commenting out for now.
       // $.when(liDeferreds).then(app.didGetAllLiResults);
       
       // get dor parcel
-      // TEST 001S070144
       var dorParcelId = app.state.ais.features[0].properties.dor_parcel_id;
-      console.log('parcel', dorParcelId);
       app.state.dor = undefined;
       // $.ajax({
       //   url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0/query?where=MAPREG%3D',
@@ -349,6 +351,12 @@ var app = (function ()
       var dorParcelQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0'});
       dorParcelQuery.where("MAPREG = '" + dorParcelId + "'");
       dorParcelQuery.run(app.didGetDorResult);
+      
+      // get zoning
+      var zoningOverlayQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/1'}),
+          aisGeom = app.state.ais.features[0].geometry;
+      zoningOverlayQuery.contains(aisGeom);
+      zoningOverlayQuery.run(app.didGetZoningOverlayResult);
     },
 
     // takes an object of divId => text and renders
@@ -479,7 +487,7 @@ var app = (function ()
       
       // TODO for right now, we're just taking the first parcel if there's more than one
       var parcel = featureCollection.features[0],
-          props = parcel.properties;
+          props = parcel.properties,
           parcelId = props.MAPREG;
       
       // clean up attributes
@@ -499,6 +507,15 @@ var app = (function ()
       // render
       $('#land-records-parcel-id').html(parcelId);
       $('#land-records-parcel-address').html(address);
+    },
+    
+    didGetZoningOverlayResult: function (error, featureCollection, response) {
+      var features = featureCollection.features,
+          $tbody = $('#zoning-table-overlays').search('tbody');
+      _.each(features, function (feature) {
+        // append row to overlays table
+        // $tbody.append();
+      });
     },
   };
 })();

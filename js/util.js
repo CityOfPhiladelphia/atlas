@@ -26,12 +26,8 @@ app.util = (function () {
     cleanDorAttribute: function (attr) {
       // trim leading and trailing whitespace
       var cleanAttr = attr ? String(attr) : '';
-      
-      console.log('clean attr was: "' + cleanAttr + '"');
-      
       cleanAttr = cleanAttr.replace(/\s+/g, '');
       
-      console.log('clean attr is now: "' + cleanAttr + '"');
       // return null for zeros and empty strings
       if (['', '0'].indexOf(cleanAttr) > -1) {
         return null;
