@@ -287,8 +287,11 @@ var app = (function ()
       console.log('zoning', props.zoning);
       $('#zoning-code').text(props.zoning);
 
-      // show basic info
-      app.activateTopic('address-info');
+      // if no topic is active, show property
+      if ($('.topic:visible').length === 0) {
+        console.log('no visible', $('.topic:visible'))
+        app.activateTopic('property');
+      }
 
       // render map for this address
       if (selectedAddress) app.map.renderAisResult(obj);
