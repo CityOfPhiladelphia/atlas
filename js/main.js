@@ -276,6 +276,8 @@ var app = (function ()
       $('#data-panel-title').text(streetAddress);
       $('#basic-info-mailing-address').html(mailingAddress);
       $('#basic-info-street-code').text(data.features[0].properties.street_code);
+      console.log('zoning', props.zoning);
+      $('#zoning-code').text(props.zoning);
 
       // show basic info
       app.activateTopic('address-details');
