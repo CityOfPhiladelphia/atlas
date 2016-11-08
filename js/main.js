@@ -285,7 +285,7 @@ var app = (function ()
       $('#address-info-mailing-address').html(mailingAddress);
       $('#address-info-street-code').text(data.features[0].properties.street_code);
       console.log('zoning', props.zoning);
-      $('#zoning-code').text(props.zoning);
+      // $('#zoning-code').text(props.zoning);
 
       // if no topic is active, show property
       if ($('.topic:visible').length === 0) {
@@ -366,8 +366,13 @@ var app = (function ()
       dorParcelQuery.run(app.didGetDorResult);
       
       // get zoning
-      var zoningOverlayQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/1'}),
-          aisGeom = app.state.ais.features[0].geometry;
+      var aisGeom = app.state.ais.features[0].geometry;
+      
+      var zoningBaseQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/6/'});
+      zoningBaseQuery.contains(aisGeom);
+      zoningBaseQuery.run(app.didGetZoningBaseResult);
+      
+      var zoningOverlayQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/1'});
       zoningOverlayQuery.contains(aisGeom);
       zoningOverlayQuery.run(app.didGetZoningOverlayResult);
     },
@@ -529,6 +534,56 @@ var app = (function ()
       //   // append row to overlays table
       //   // $tbody.append();
       // });
+    },
+    
+    // long code => description
+    ZONING_CODE_MAP: {
+      'RSD-1': 'Residential Single Family Detached-1',
+      'RSD-2': 'Residential Single Family Detached-2',
+      'RSD-3': 'Residential Single Family Detached-3',
+      'RSA-1': 'Residential Single Family Attached-1',
+      'RSA-2': 'Residential Single Family Attached-2',
+      'RSA-3': 'Residential Single Family Attached-3',
+      'RSA-4': 'Residential Single Family Attached-4',
+      'RSA-5': 'Residential Single Family Attached-5',
+      'RTA-1': 'Residential Two-Family Attached-1',
+      'RM-1': 'Residential Multi-Family-1',
+      'RM-2': 'Residential Multi-Family-2',
+      'RM-3': 'Residential Multi-Family-3',
+      'RM-4': 'Residential Multi-Family-4',
+      'RMX-1': 'Residential Mixed-Use-1',
+      'RMX-2': 'Residential Mixed-Use-2',
+      'RMX-3': 'Residential (Center City) Mixed-Use-3',
+      'CA-1': 'Auto-Oriented Commercial-1',
+      'CA-2': 'Auto-Oriented Commercial-2',
+      'CMX-1': 'Neighborhood Commercial Mixed-Use-1',
+      'CMX-2': 'Neighborhood Commercial Mixed-Use-2',
+      'CMX-2.5': 'Neighborhood Commercial Mixed-Use-2.5',
+      'CMX-3': 'Community Commercial Mixed-Use',
+      'CMX-4': 'Center City Commercial Mixed-Use',
+      'CMX-5': 'Center City Core Commercial Mixed-Use',
+      'I-1': 'Light Industrial',
+      'I-2': 'Medium Industrial',
+      'I-3': 'Heavy Industrial',
+      'I-P': 'Port Industrial',
+      'ICMX': 'Industrial Commercial Mixed-Use',
+      'IRMX': 'Industrial Residential Mixed-Use',
+      'SP-ENT': 'Commercial Entertainment (Casinos)',
+      'SP-AIR': 'Airport',
+      'SP-INS': 'Institutional Development',
+      'SP-STA': 'Stadium',
+      'SP-PO-A': 'Recreation',
+      'SP-PO-P': 'Recreation',
+    },
+    
+    didGetZoningBaseResult: function (error, featureCollection, response) {
+      var feature = featureCollection.features[0],
+          props = feature.properties,
+          longCode = props.LONG_CODE;
+      $('#zoning-code').html(longCode);
+      
+      var desc = app.ZONING_CODE_MAP[longCode];
+      if (desc) $('#zoning-description').html(desc);
     },
   };
 })();
