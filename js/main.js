@@ -142,7 +142,7 @@ var app = (function ()
       var val = $('#search-input').val();
 
       // display loading
-      $('#data-panel-title').text('Loading...');
+      $('#topic-panel-title').text('Loading...');
 
       // clean up UI from last search
       // TODO make this a function
@@ -272,8 +272,16 @@ var app = (function ()
       var mailingAddress = streetAddress + '<br>PHILADELPHIA, PA ' + props.zip_code;
       if (props.zip_4) mailingAddress += '-' + props.zip_4;
 
+      // hide greeting if it's there
+      var $topicPanelHeaderGreeting = $('#topic-panel-header-greeting');
+      if ($topicPanelHeaderGreeting.is(':visible')) {
+        $topicPanelHeaderGreeting.fadeOut(175, function () {
+          $('#topic-panel-header-address').fadeIn(175);
+        });
+      }
+
       // render ais data
-      $('#data-panel-title').text(streetAddress);
+      $('#topic-panel-title').text(streetAddress);
       $('#address-info-mailing-address').html(mailingAddress);
       $('#address-info-street-code').text(data.features[0].properties.street_code);
       console.log('zoning', props.zoning);
@@ -512,12 +520,12 @@ var app = (function ()
     },
     
     didGetZoningOverlayResult: function (error, featureCollection, response) {
-      var features = featureCollection.features,
-          $tbody = $('#zoning-table-overlays').search('tbody');
-      _.each(features, function (feature) {
-        // append row to overlays table
-        // $tbody.append();
-      });
+      // var features = featureCollection.features,
+      //     $tbody = $('#zoning-table-overlays').search('tbody');
+      // _.each(features, function (feature) {
+      //   // append row to overlays table
+      //   // $tbody.append();
+      // });
     },
   };
 })();

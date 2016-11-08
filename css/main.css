@@ -4,6 +4,7 @@ header.site-header > .row:last-of-type {
 
 #search-container {
     float: right;
+    margin-top: 10px;
 }
 
 #search-input {
@@ -30,13 +31,13 @@ header.site-header > .row:last-of-type {
 #container {
     /*height: 100%;*/
     position: absolute;
-    top: 78px;
+    top: 88px;
     right: 0;
     left: 0;
     bottom: 0;
 }
 
-#data-panel {
+#topic-panel {
     background: #fff;
     padding-left: 12px;
     padding-right: 12px;
@@ -44,8 +45,23 @@ header.site-header > .row:last-of-type {
     overflow: auto;
 }
 
-#data-panel > h1 {
+/*#topic-panel-header {*/
+/*    height: 70px;*/
+/*}*/
+
+.topic-panel-header-item {
+    /*margin-top: 15px;*/
+    /*margin-bottom: 15px;*/
+    margin: 15px;
+}
+
+#topic-panel-header-address {
     color: #666;
+    display: none;
+}
+
+#topic-panel-header-address-line-1 {
+    margin-bottom: 0;
 }
 
 #topic-list > a {

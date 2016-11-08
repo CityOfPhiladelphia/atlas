@@ -32,6 +32,7 @@
                   <div class="page-title-container">
                     <a href="#/">
                       <h1 class="page-title">Atlas</h1>
+                      <h2 class="page-subtitle">Learn more about addresses in the City of Philadelphia.</h2>
                     </a>
                   </div>
                   <div id="search-container">
@@ -43,8 +44,8 @@
             </header>
 
             <div id="container" class="row collapse">
-                <!--LEFT PANEL-->
-                <div id="data-panel" class="large-12 columns">
+                <!-- TOPIC PANEL-->
+                <div id="topic-panel" class="large-12 columns">
                     <!-- multiple address modal -->
                     <div id="addressModal" class="reveal" data-reveal aria-labelledby="modal-title" aria-hidden="true" role="dialog">
                         <h1 id="addressModal-title">Select Address</h1>
@@ -52,41 +53,108 @@
                         <button class="close-button" data-close aria-label="Close modal" type="button"></button>
                     </div>
 
-                    <h1 id="data-panel-title">Learn more about Philadelphia addresses.</h1>
-                    <div class="callout">
-                        <p>Type an address in the search box above, or click on the map to start your search.</p>
+                    <div id="topic-panel-header">
+                        <div class="row">
+                            <div id="topic-panel-header-greeting" class="topic-panel-header-item">
+                                <div class="columns medium-18 medium-centered">
+                                    <div class="callout">
+                                        <p>To start your search, type an address into the search box or click anywhere on the map.</p>
+                                    </div>
+                                </div>
+                            </div>
+                                
+                            <div id="topic-panel-header-address" class="topic-panel-header-item">
+                                <h1 id="topic-panel-header-address-line-1">1234 MARKET ST</h1>
+                                <div id="topic-panel-header-address-line-2" class="small-text">Philadelphia, PA 19107-3615</div>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div id="imagery-buttons">
-                        <!--<p>Use the buttons below to see interactive imagery for this location.</p>-->
-                        <a href="#" class="button no-margin" id="pict-button">Oblique Imagery</a>
-                        <a href="#" class="button no-margin" id="cyclo-button">Street View</a>
-                    </div>
                     
                     <div id="topic-list">
                         <!--Address Information-->
-                        <a id="topic-link-address-info" class="topic-link" href="#"><span class="topic-link-icon flaticon-copy"></span>Address Information</a>
-                        <div id="topic-address-info" class="topic">
-                            <table>
-                                <tr>
-                                    <th>Mailing Address</th>
-                                    <td id="address-info-mailing-address"></td>
-                                </tr>
+                        <!--<a id="topic-link-address-info" class="topic-link" href="#"><span class="topic-link-icon flaticon-copy"></span>Address Information</a>-->
+                        <!--<div id="topic-address-info" class="topic">-->
+                        <!--    <table>-->
+                        <!--        <tr>-->
+                        <!--            <th>Mailing Address</th>-->
+                        <!--            <td id="address-info-mailing-address"></td>-->
+                        <!--        </tr>-->
                                 <!--<tr>-->
                                 <!--    <th>Owner</th>-->
                                 <!--    <td id="address-info-owner"></td>-->
                                 <!--</tr>-->
+                        <!--        <tr>-->
+                        <!--            <th>Street Code</th>-->
+                        <!--            <td id="address-info-street-code"></td>-->
+                        <!--        </tr>-->
+                        <!--    </table>-->
+                            <!--TODO update this link dynamically-->
+                        <!--    <a id="address-info-property-link" href="#" class="external">See more at Property Search</a><br><br>-->
+                            
+                            <!--<h4>Imagery</h4>-->
+                            <!--<div id="imagery-buttons">-->
+                                <!--<p>Use the buttons below to see interactive imagery for this location.</p>-->
+                            <!--    <a href="#" class="button no-margin" id="pict-button">Oblique View</a>-->
+                            <!--    <a href="#" class="button no-margin" id="cyclo-button">Street View</a>-->
+                            <!--</div>-->
+                            <!--<div class="callout">-->
+                            <!--    <p>Use these buttons below to open new windows with oblique and/or street view imagery. When you move the map on the right, the imagery windows will move as well.</p>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        
+                        <!-- PROPERTY -->
+                        <a id="topic-link-property" class="topic-link" href="#"><span class="topic-link-icon flaticon-house"></span>Property Snapshot</a>
+                        <div id="topic-property" class="topic">
+                            <table>
                                 <tr>
-                                    <th>Street Code</th>
-                                    <td id="address-info-street-code"></td>
+                                    <th>Account #</th>
+                                    <td id="property-account-num"></td>
+                                </tr>
+                                <tr>
+                                    <th>Owner</th>
+                                    <td id="property-owners"></td>
+                                </tr>
+                                <tr>
+                                    <th>Assessed Value (2017)</th>
+                                    <td id="property-value"></td>
+                                </tr>
+                                <tr>
+                                    <th>Sale Date</th>
+                                    <td id="property-sale-date"></td>
+                                </tr>
+                                <tr>
+                                    <th>Sale Price</th>
+                                    <td id="property-sale-price"></td>
+                                </tr>
+                                <tr>
+                                    <th>Land Area</th>
+                                    <td id="property-land-area"></td>
+                                </tr>
+                                <tr>
+                                    <th>Improvement Area</th>
+                                    <td id="property-improvement-area"></td>
                                 </tr>
                             </table>
-                            <!--TODO update this link dynamically-->
-                            <a id="address-info-property-link" href="#" class="external">See more at Property Search</a>
+                            <a href="http://property.phila.gov/?p=011001100" class="external">See more at Property Search</a>
+                        </div>
+                        
+                        <!--IMAGERY-->
+                        <a id="topic-link-imagery" class="topic-link" href="#"><span class="topic-link-icon flaticon-copy"></span>360&deg; View</a>
+                        <div id="topic-imagery" class="topic">
+                            <div class="callout">
+                                <p>Use the buttons below to open new windows with oblique and/or street view imagery. When you move the map on the right, the imagery windows will move as well.</p>
+                            </div>
+                            <div id="imagery-buttons">
+                                <!--<p>Use the buttons below to see interactive imagery for this location.</p>-->
+                                <a href="#" class="button no-margin external" id="pict-button">Oblique View</a>
+                                <a href="#" class="button no-margin external" id="cyclo-button">Street View</a>
+                            </div>
                         </div>
 
+
                         <!-- LAND RECORDS -->
-                        <a id="topic-link-land-records" class="topic-link" href="#"><span class="topic-link-icon flaticon-copy"></span>Land Records</a>
+                        <a id="topic-link-land-records" class="topic-link" href="#"><span class="topic-link-icon flaticon-copy"></span>Deeds</a>
                         <div id="topic-land-records" class="topic">
                             <table>
                                 <tr>
@@ -103,42 +171,6 @@
                                 </tr>
                             </table>
                         </div>
-
-                        <!-- PROPERTY -->
-                        <!--<a id="topic-link-property" class="topic-link" href="#"><span class="topic-link-icon flaticon-house"></span>Property Taxes</a>-->
-                        <!--<div id="topic-property" class="topic">-->
-                        <!--    <table>-->
-                        <!--        <tr>-->
-                        <!--            <th>Account #</th>-->
-                        <!--            <td id="property-account-num"></td>-->
-                        <!--        </tr>-->
-                        <!--        <tr>-->
-                        <!--            <th>Owner</th>-->
-                        <!--            <td id="property-owners"></td>-->
-                        <!--        </tr>-->
-                        <!--        <tr>-->
-                        <!--            <th>Assessed Value (2017)</th>-->
-                        <!--            <td id="property-value"></td>-->
-                        <!--        </tr>-->
-                        <!--        <tr>-->
-                        <!--            <th>Sale Date</th>-->
-                        <!--            <td id="property-sale-date"></td>-->
-                        <!--        </tr>-->
-                        <!--        <tr>-->
-                        <!--            <th>Sale Price</th>-->
-                        <!--            <td id="property-sale-price"></td>-->
-                        <!--        </tr>-->
-                        <!--        <tr>-->
-                        <!--            <th>Land Area</th>-->
-                        <!--            <td id="property-land-area"></td>-->
-                        <!--        </tr>-->
-                        <!--        <tr>-->
-                        <!--            <th>Improvement Area</th>-->
-                        <!--            <td id="property-improvement-area"></td>-->
-                        <!--        </tr>-->
-                        <!--    </table>-->
-                        <!--    <a href="http://property.phila.gov/?p=011001100" class="external">See more at Property Search</a>-->
-                        <!--</div>-->
 
                         <!--L & I-->
                         <a id="topic-link-li" class="topic-link" href="/#/licenses-and-inspections/"><span class="topic-link-icon flaticon-hard-hat"></span>Licenses + Inspections</a>
@@ -202,7 +234,23 @@
                                     <tbody></tbody>
                                 </table>
                             </div>
+                            
+                            <!--<div id="li-section-appeals" class="li-section">-->
+                            <!--    <h4>Appeals</h4>-->
+                            <!--    <table id="li-table-appeals" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">-->
+                            <!--        <thead>-->
+                            <!--            <tr>-->
+                            <!--                <th scope="col">Date</th>-->
+                            <!--                <th scope="col">ID</th>-->
+                            <!--                <th scope="col">Description</th>-->
+                            <!--                <th scope="col">Status</th>-->
+                            <!--            </tr>-->
+                            <!--        </thead>-->
+                            <!--        <tbody></tbody>-->
+                            <!--    </table>-->
+                            <!--</div>-->
                         </div>
+                        
 
                         <a id="topic-link-zoning" class="topic-link" href="/#/zoning/"><span class="topic-link-icon flaticon-industrial-zone"></span>Zoning</a>
                         <div id="topic-zoning" class="topic">
@@ -281,24 +329,25 @@
                         <!--    <a href="http://www.philadelphiastreets.com/" class="external">See more at the Streets Department</a>-->
                         <!--</div>-->
                         
-                        <a id="topic-link-schools" class="topic-link" href="/#/schools/"><span class="topic-link-icon flaticon-graduate-diploma"></span>School Catchments</a>
-                        <div id="topic-schools" class="topic">
-                            <table>
-                                <tr>
-                                    <th>Elementary School</th>
-                                    <td>McCall</td>
-                                </tr>
-                                <tr>
-                                    <th>Middle School</th>
-                                    <td>McCall</td>
-                                </tr>
-                                <tr>
-                                    <th>High School</th>
-                                    <td>Franklin</td>
-                                </tr>
-                            </table>
-                            <a href="http://www.phila.k12.pa.us/" class="external">See more at the School District of Philadelphia</a>
-                        </div>
+                        <!--<a id="topic-link-schools" class="topic-link" href="/#/schools/"><span class="topic-link-icon flaticon-graduate-diploma"></span>School Catchments</a>-->
+                        <!--<div id="topic-schools" class="topic">-->
+                        <!--    <table>-->
+                        <!--        <tr>-->
+                        <!--            <th>Elementary School</th>-->
+                        <!--            <td>McCall</td>-->
+                        <!--        </tr>-->
+                        <!--        <tr>-->
+                        <!--            <th>Middle School</th>-->
+                        <!--            <td>McCall</td>-->
+                        <!--        </tr>-->
+                        <!--        <tr>-->
+                        <!--            <th>High School</th>-->
+                        <!--            <td>Franklin</td>-->
+                        <!--        </tr>-->
+                        <!--    </table>-->
+                        <!--    <a href="http://www.phila.k12.pa.us/" class="external">See more at the School District of Philadelphia</a>-->
+                        <!--</div>-->
+                        
                         <!--<a class="topic-link" href="/#/schools/"><span class="topic-link-icon flaticon-leaf"></span>Parks + Recreation</a>
                         <div class="topic">
                             <table>
