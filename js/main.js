@@ -533,12 +533,12 @@ var app = (function ()
     },
     
     didGetZoningOverlayResult: function (error, featureCollection, response) {
+      console.log('overlays', featureCollection);
       var features = featureCollection.features,
-          $tbody = $('#zoning-table-overlays').search('tbody');
-      _.each(features, function (feature) {
-        // append row to overlays table
-        // $tbody.append();
-      });
+          $tbody = $('#zoning-table-overlays').find('tbody'),
+          fields = ['OVERLAY_NAME', 'CODE_SECTION', 'PENDING'],
+          tbodyHtml = app.util.makeTableRows(features, fields);
+      $tbody.html(tbodyHtml);
     },
     
     // long code => description

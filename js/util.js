@@ -1,3 +1,5 @@
+/* global _, app */
+
 app.util = (function () {
   return {
     serializeQueryStringParams: function (obj) {
@@ -14,7 +16,7 @@ app.util = (function () {
     flipCoords: function (coords) {
       var a = coords[0],
           b = [];
-      for (i = 0; i < a.length; i++) {
+      for (var i = 0; i < a.length; i++) {
         b[i] = []
         b[i][0] = a[i][1]
         b[i][1] = a[i][0]
@@ -34,6 +36,22 @@ app.util = (function () {
       }
       
       return cleanAttr;
+    },
+    
+    // takes an array of geojson features, returns a string of concatenated <tr> elements
+    makeTableRows: function (rows, fields) {
+      // loop over rows
+      var rowsHtml =  _.map(rows, function (row) {
+        var props = row.properties;
+        // loop over fields
+        var valsHtml = _.map(fields, function (field) { 
+          var val = props[field];
+          return '<td>' + val + '</td>';
+        }).join('');
+        return '<tr>' + valsHtml + '</tr>';
+      }).join('');
+      
+      return rowsHtml;
     },
   };
 }());
