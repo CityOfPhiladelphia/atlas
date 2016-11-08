@@ -16,7 +16,7 @@ app.map = (function ()
       iconAnchor: [20, 30],
     }),
     camera = L.icon({
-      iconUrl: 'css/images/camera_03.png',
+      iconUrl: 'css/images/camera_04.png',
       iconSize: [30, 20],
       iconAnchor: [15,  10],
     }),
@@ -46,12 +46,13 @@ app.map = (function ()
       // Basemaps
       var baseMapLight = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer",
+        //url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_SP/MapServer",
         maxZoom: 22
       });
-      var baseMapDark = L.esri.tiledMapLayer({
+      /*var baseMapDark = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Slate/MapServer",
         maxZoom: 22
-      });
+      });*/
       var baseMapImagery2015 = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer",
         maxZoom: 22
@@ -75,7 +76,7 @@ app.map = (function ()
       */
       var baseLayers = {
         'Light':    baseMapLight,
-        'Dark':     baseMapDark,
+        //'Dark':     baseMapDark,
         'Imagery 2015': baseMapImagery2015,
       };
       /*
