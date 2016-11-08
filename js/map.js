@@ -74,34 +74,43 @@ app.map = (function ()
         maxZoom: 22
       });
 
-      var baseMapImagery2015 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer",
+      var baseMapImagery2016 = L.esri.tiledMapLayer({
+        url: "http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer",
         maxZoom: 22
       });
+
+      /*var baseMapImagery2015 = L.esri.tiledMapLayer({
+        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer",
+        maxZoom: 22
+      });*/
 
       /*var baseMapDark = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Slate/MapServer",
         maxZoom: 22
       });*/
 
-      _baseLayerGroup.addLayer(baseMapLight, baseMapImagery2015);
+      _baseLayerGroup.addLayer(baseMapLight, baseMapImagery2016);
       _baseLayerGroup.addTo(_map);
       //baseMapLight.addTo(_map);
 
       // Overlays
       var overlayZoning = L.esri.tiledMapLayer({
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer'
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer',
       });
 
       var overlayBaseLabels = L.esri.tiledMapLayer({
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer',
       });
 
+      var overlayImageryLabels = L.esri.tiledMapLayer({
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_Labels/MapServer',
+      })
+
       // YOU SHOULD NOT USE AN OVERLAY GROUP IF NOT USING THE L.Control.Layers
       // IT WILL ONLY TURN ON THE FIRST LAYER IN THE GROUP, AND BE HARDER TO REFERENCE LAYERS TO TURN ON AND OFF
       //_overlayLayerGroup.addLayer(overlayZoning, overlayBaseLabels);
       //_overlayLayerGroup.addTo(_map);
-      overlayZoning.addTo(_map);
+      //overlayZoning.addTo(_map);
       overlayBaseLabels.addTo(_map);
 
       /*
@@ -118,7 +127,7 @@ app.map = (function ()
 
       var baseLayers = {
         'Light': baseMapLight,
-        'Imagery 2015': baseMapImagery2015,
+        'Imagery 2016': baseMapImagery2016,
         //'Dark':     baseMapDark,
       };
 
@@ -126,6 +135,7 @@ app.map = (function ()
       var overlays = {
         'Zoning': overlayZoning,
         'Street Labels': overlayBaseLabels,
+        'Imagery Street Labels': overlayImageryLabels,
         //'PWD Parcels':  overlayPwdParcels,
         // 'Land Use': landUse,
       };
@@ -133,10 +143,26 @@ app.map = (function ()
 
       // Controls
       //L.control.layers(baseLayers, '', {position: 'topright'}).addTo(_map);
-      L.control.layers(baseLayers, overlays, {position: 'topright'})//.addTo(_map);
+      //L.control.layers(baseLayers, overlays, {position: 'topright'}).addTo(_map);
+      L.control.layers(baseLayers, overlays).addTo(_map);
       //var measureControl = new L.Control.Measure({position: 'topright'});
       //measureControl.addTo(map);
       new L.Control.Zoom({position: 'topright'}).addTo(_map);
+
+      $('#test-toggle-button').on('click', function(){
+        console.log('clicked test toggle button');
+        //baseMapLight.redraw();
+        //baseMapLight.bringToFront();
+        baseMapLight.remove();
+        overlayBaseLabels.remove();
+        baseMapImagery2016.addTo(_map);
+        console.log('added baseMapImagery2016 to map');
+        overlayImageryLabels.addTo(_map);
+        console.log('added overlayImageryLabels to map');
+
+      })
+
+
 
       _parcelLayerGroup.addTo(_map);
 
