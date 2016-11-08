@@ -10,6 +10,16 @@ app.map = (function ()
       //iconSize: [38,95],
       //iconAnchor: [22.94]
     }),
+    viewcone = L.icon({
+      iconUrl: 'css/images/viewcone.png',
+      iconSize: [40,40],
+      iconAnchor: [20, 30],
+    }),
+    camera = L.icon({
+      iconUrl: 'css/images/camera_03.png',
+      iconSize: [30, 20],
+      iconAnchor: [15,  10],
+    }),
 
       // create an empty layer group
       _layerGroup = new L.LayerGroup(),
@@ -109,7 +119,7 @@ app.map = (function ()
         app.state.stViewY = localStorage.getItem('stViewY');
         app.state.stViewYaw = localStorage.getItem('stViewYaw');
         _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-          icon: yellowArrow,
+          icon: viewcone,
           rotationAngle: app.state.stViewYaw
         });
         _stViewMarker.addTo(_map);
@@ -132,7 +142,7 @@ app.map = (function ()
             _stViewMarker.remove();
           };
           _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-            icon: yellowArrow,
+            icon: viewcone,
             rotationAngle: app.state.stViewYaw
           });
           //_stViewMarker.setLatLng([app.state.stViewY, app.state.stViewX]);
@@ -146,7 +156,7 @@ app.map = (function ()
             _stViewMarker.remove();
           };
           _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-            icon: yellowArrow,
+            icon: viewcone,
             rotationAngle: app.state.stViewYaw
           });
           _stViewMarker.addTo(_map);
