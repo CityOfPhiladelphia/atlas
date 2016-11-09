@@ -524,7 +524,6 @@ var app = (function ()
     },
 
     didGetZoningOverlayResult: function (error, featureCollection, response) {
-      console.log('overlays', featureCollection);
       var features = featureCollection.features,
           $tbody = $('#zoning-table-overlays').find('tbody'),
           fields = ['OVERLAY_NAME', 'CODE_SECTION', 'PENDING'],
