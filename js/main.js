@@ -351,28 +351,46 @@ var app = (function ()
       // $.when(liDeferreds).then(app.didGetAllLiResults);
 
       // get dor parcel
-      // TODO check state for parcel
-      var dorParcelId = app.state.ais.features[0].properties.dor_parcel_id;
-      app.state.dor = undefined;
-      // $.ajax({
-      //   url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0/query?where=MAPREG%3D',
-      //   data: {
-      //     where: encodeURIComponent("MAPREG='" + dorParcelId + '"'),
-      //     outFields: '*',
-      //     f: 'geojson',
-      //   },
-      //   success: function (data) {
-      //     app.state.dor = data;
-      //     app.didGetDorResult();
-      //   },
-      //   error: function (err) {
-      //     console.log('get dor error', err);
-      //   },
-      // });
-
-      var dorParcelQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0'});
-      dorParcelQuery.where("MAPREG = '" + dorParcelId + "'");
-      dorParcelQuery.run(app.didGetDorResult);
+      var dorParcelId = app.state.ais.features[0].properties.dor_parcel_id,
+          stateParcel = app.state.parcel && app.state.parcel.features ? app.state.parcel.features[0] : null;
+      
+      // if we already have the parcel (i.e. did click on map), skip the query
+      if (stateParcel && stateParcel.properties.MAPREG === dorParcelId) {
+        app.renderParcel(stateParcel);
+      }
+      else {
+        app.state.dor = undefined;
+        // $.ajax({
+        //   url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0/query?where=MAPREG%3D',
+        //   data: {
+        //     where: encodeURIComponent("MAPREG='" + dorParcelId + '"'),
+        //     outFields: '*',
+        //     f: 'geojson',
+        //   },
+        //   success: function (data) {
+        //     app.state.dor = data;
+        //     app.didGetDorResult();
+        //   },
+        //   error: function (err) {
+        //     console.log('get dor error', err);
+        //   },
+        // });
+  
+        var dorParcelQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0'});
+        dorParcelQuery.where("MAPREG = '" + dorParcelId + "'");
+        dorParcelQuery.run(function (error, featureCollection, response) {
+          if (!featureCollection) {
+            console.log('dor error', error);
+            return;
+          }
+    
+          // set state
+          app.state.dor = featureCollection;
+          
+          // render (doesn't include map, just topic panel)
+          app.renderParcel(app.state.dor.features[0]);
+        });
+      }
 
       // get zoning
       var aisGeom = app.state.ais.features[0].geometry;
@@ -476,15 +494,24 @@ var app = (function ()
           rowsHtml += rowHtml;
         });
 
-
         // set table content
-        var $liSectionTable = $('#li-table-' + stateKey);
+        // TEMP since we moved appeals to zoning
+        var $liSectionTable;
+        if (stateKey === 'appeals') {
+         $liSectionTable = $('#zoning-appeals');
+         console.log('zoning table', $liSectionTable, rowsHtml);
+        }
+        else {
+          $liSectionTable = $('#li-table-' + stateKey);
+        }
         $liSectionTable.find('tbody').html(rowsHtml);
 
         // update count
         var count = items.length,
             countText = ' (' + count + ')',
             $liCount = $('#li-section-' + stateKey + ' > .topic-subsection-title > .li-count');
+        // TEMP for appeals
+        if (stateKey === 'appeals') $liCount = $('#zoning-appeals-count');
         $liCount.text(countText);
 
         // add "see more" link, if there are rows not shown
@@ -502,19 +529,8 @@ var app = (function ()
       });
     },
 
-    didGetDorResult: function (error, featureCollection, response) {
-      // TODO handle error
-      if (error || !featureCollection || featureCollection.features.length === 0) {
-        console.log('dor error', error);
-        return;
-      }
-
-      // set state
-      app.state.dor = featureCollection;
-
-      // TODO for right now, we're just taking the first parcel if there's more than one
-      var parcel = featureCollection.features[0],
-          parcelId = parcel.properties.MAPREG,
+    renderParcel: function (parcel) {
+      var parcelId = parcel.properties.MAPREG,
           // clean up attributes
           address = app.util.concatDorAddress(parcel);
 
@@ -523,12 +539,36 @@ var app = (function ()
       $('#land-records-parcel-address').html(address);
     },
 
+    // didGetDorResult: function (error, featureCollection, response) {
+    //   // TODO handle error
+    //   if (!featureCollection) {
+    //     console.log('dor error', error);
+    //     return;
+    //   }
+
+    //   // set state
+    //   app.state.dor = featureCollection;
+
+    //   // TODO for right now, we're just taking the first parcel if there's more than one
+    //   parcel = featureCollection.features[0]
+    //   var parcelId = parcel.properties.MAPREG,
+    //       // clean up attributes
+    //       address = app.util.concatDorAddress(parcel);
+
+    //   // render
+    //   $('#land-records-parcel-id').html(parcelId);
+    //   $('#land-records-parcel-address').html(address);
+    // },
+
     didGetZoningOverlayResult: function (error, featureCollection, response) {
       var features = featureCollection.features,
-          $tbody = $('#zoning-table-overlays').find('tbody'),
+          $tbody = $('#zoning-overlays').find('tbody'),
           fields = ['OVERLAY_NAME', 'CODE_SECTION', 'PENDING'],
           tbodyHtml = app.util.makeTableRows(features, fields);
       $tbody.html(tbodyHtml);
+      
+      var count = features.length;
+      $('#zoning-overlays-count').html(' (' + count + ')');
     },
 
     // long code => description
@@ -593,7 +633,7 @@ var app = (function ()
     didGetParcelQueryResult: function (error, featureCollection, response) {
       // handle null/error responses
       if (error || !featureCollection) return;
-
+      
       var parcel = featureCollection.features[0],
           parcelAddress = app.util.concatDorAddress(parcel);
 
