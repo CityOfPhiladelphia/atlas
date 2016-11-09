@@ -34,8 +34,10 @@ app.map = (function ()
   return {
     //theObject: queryParcel,
     initMap : function () {
-      app.state.map = {}
-      app.state.map.clickedOnMap = false
+      app.state.map = {};
+      app.state.map.clickedOnMap = false;
+      app.state.map.baseLayer;
+      app.state.map.overLayers = [];
       //app.state.moveMode = true
       var CITY_HALL = [39.952388, -75.163596];
 
@@ -71,40 +73,90 @@ app.map = (function ()
       // Basemaps
       var baseMapLight = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer",
-        maxZoom: 22
+        maxZoom: 22,
+        name: 'baseMapLight',
+        type: 'base',
+        zIndex: 1,
       });
 
       var baseMapImagery2016 = L.esri.tiledMapLayer({
         url: "http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer",
-        maxZoom: 22
+        maxZoom: 22,
+        name: 'baseMapImagery2016',
+        type: 'base',
+        zIndex: 2,
       });
 
-      /*var baseMapImagery2015 = L.esri.tiledMapLayer({
+      var baseMapImagery2015 = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer",
-        maxZoom: 22
-      });*/
+        maxZoom: 22,
+        name: 'baseMapImagery2015',
+        type: 'base',
+        zIndex: 3,
+      });
+
+      var baseMapImagery2012 = L.esri.tiledMapLayer({
+        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2012_3in/MapServer",
+        maxZoom: 22,
+        name: 'baseMapImagery2012',
+        type: 'base',
+        zIndex: 4,
+      });
+
+      var baseMapImagery2010 = L.esri.tiledMapLayer({
+        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2010_3in/MapServer",
+        maxZoom: 22,
+        name: 'baseMapImagery2012',
+        type: 'base',
+        zIndex: 5,
+      });
+
+      var baseMapImagery2010 = L.esri.tiledMapLayer({
+        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2008_3in/MapServer",
+        maxZoom: 22,
+        name: 'baseMapImagery2012',
+        type: 'base',
+        zIndex: 6,
+      });
+
+
+
+
 
       /*var baseMapDark = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Slate/MapServer",
         maxZoom: 22
       });*/
 
-      _baseLayerGroup.addLayer(baseMapLight, baseMapImagery2016);
-      _baseLayerGroup.addTo(_map);
-      //baseMapLight.addTo(_map);
+      //_baseLayerGroup.addLayer(baseMapLight, baseMapImagery2016);
+      //_baseLayerGroup.addTo(_map);
+      baseMapLight.addTo(_map);
 
       // Overlays
-      var overlayZoning = L.esri.tiledMapLayer({
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer',
-      });
-
       var overlayBaseLabels = L.esri.tiledMapLayer({
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer',
+        maxZoom: 22,
+        name: 'overlayBaseLabels',
+        type: 'overlay',
+        zIndex: 100,
       });
 
       var overlayImageryLabels = L.esri.tiledMapLayer({
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_Labels/MapServer',
+        maxZoom: 22,
+        name: 'overlayImageryLabels',
+        type: 'overlay',
+        zIndex: 101,
       })
+
+      var overlayZoning = L.esri.tiledMapLayer({
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer',
+        maxZoom: 22,
+        name: 'overlayZoning',
+        type: 'overlay',
+        zIndex: 10,
+      });
+
 
       // YOU SHOULD NOT USE AN OVERLAY GROUP IF NOT USING THE L.Control.Layers
       // IT WILL ONLY TURN ON THE FIRST LAYER IN THE GROUP, AND BE HARDER TO REFERENCE LAYERS TO TURN ON AND OFF
@@ -126,10 +178,11 @@ app.map = (function ()
       */
 
       var baseLayers = {
-        'Light': baseMapLight,
+        'Basemap': baseMapLight,
         'Imagery 2016': baseMapImagery2016,
         //'Dark':     baseMapDark,
       };
+
 
       // THE ORDER HERE MATTERS.  THE LOWER ON THIS LIST, THE HIGHER THE Z VALUE THE LAYER WILL GET
       var overlays = {
@@ -140,37 +193,188 @@ app.map = (function ()
         // 'Land Use': landUse,
       };
 
+      function domLayerList() {
+        _map.eachLayer(function(layer){
+          if (layer.options.name && layer.options.type == 'base') {
+            //console.log(layer.options.name);
+            //console.log(layer);
+            app.state.map.baseLayer = layer.options.name;
+          };
+        });
+        app.state.map.overLayers = [];
+        _map.eachLayer(function(layer){
+          if (layer.options.name && layer.options.type == 'overlay') {
+            //console.log(layer.options.name);
+            //console.log(layer);
+            app.state.map.overLayers.push(layer.options.name);
+          };
+        });
+      }
+
+      domLayerList();
 
       // Controls
       //L.control.layers(baseLayers, '', {position: 'topright'}).addTo(_map);
       //L.control.layers(baseLayers, overlays, {position: 'topright'}).addTo(_map);
-      L.control.layers(baseLayers, overlays).addTo(_map);
+      //L.control.layers(baseLayers, overlays).addTo(_map);
+
       //var measureControl = new L.Control.Measure({position: 'topright'});
       //measureControl.addTo(map);
+
       new L.Control.Zoom({position: 'topright'}).addTo(_map);
 
-      $('#test-toggle-button').on('click', function(){
-        //console.log('clicked test toggle button');
-        //baseMapLight.redraw();
-        //baseMapLight.bringToFront();
-        baseMapLight.remove();
-        overlayBaseLabels.remove();
-        baseMapImagery2016.addTo(_map);
-        console.log('added baseMapImagery2016 to map');
-        overlayImageryLabels.addTo(_map);
-        console.log('added overlayImageryLabels to map');
-        console.log('current map panes: ', _map.getPanes());
-        _map.eachLayer(function(layer){
-          console.log(layer);
-        });
-        /*console.log('current map layers: ', _map.eachLayer(
-          function(layer){
-            console.log(layer)
-          });
-        );*/
+      var basemapToggleButton = L.easyButton({
+        position: 'topright',
+        states: [{
+          stateName: 'toggleToImagery',
+          icon:      '<img src="css/images/imagery_small.png">',
+          title:     'Toggle To Imagery',
+          onClick: function(control) {
+            toggleBasemap();
+            control.state('toggletoBasemap');
+          }
+        }, {
+          stateName: 'toggletoBasemap',
+          icon:      '<img src="css/images/basemap_small.png">',
+          title:     'Toggle To Basemap',
+          onClick: function(control) {
+            toggleBasemap();
+            control.state('toggleToImagery');
+          }
+        }]
+      });
+      basemapToggleButton.addTo(_map);
 
-      })
+      /*
+      var button1 = L.easyButton({
+        position: 'bottomright',
+        states: [{
+          stateName: 'toggleToImagery',
+          icon:      '<img src="css/images/yellowArrow.png">',
+          title:     'Toggle To Imagery',
+          onClick: function() {
+            console.log('clicked button')
+          }
+        }]
+      });
+      button1.addTo(_map);
 
+      var button2 = L.easyButton(
+        '<img src="css/images/yellowArrow.png">', function(){
+          console.log('clicked button2')
+        }
+      )
+      button2.addTo(_map);*/
+
+      /*var buttons = [
+        L.easyButton({
+          position: 'bottomright',
+          states: [{
+            stateName: 'toggleToImagery',
+            icon:      '<img src="css/images/yellowArrow.png">',
+            title:     'button 1',
+            onClick: function() {
+              console.log('clicked button 1')
+            }
+          }]
+        }),
+        L.easyButton({
+          position: 'bottomright',
+          states: [{
+            stateName: 'toggleToImagery',
+            icon:      '<img src="css/images/yellowArrow.png">',
+            title:     'button 2',
+            onClick: function() {
+              console.log('clicked button 2')
+            }
+          }]
+        }),
+        L.easyButton({
+          position: 'bottomright',
+          states: [{
+            stateName: 'toggleToImagery',
+            icon:      '<img src="css/images/yellowArrow.png">',
+            title:     'button 3',
+            onClick: function() {
+              console.log('clicked button 3')
+            }
+          }]
+        }),
+      ];*/
+
+      var historicalImageryButtons = [
+        L.easyButton('<strong>2015</strong>', function() {
+          console.log('clicked 2015')
+        }),
+        L.easyButton('<strong>2014</strong>', function() {
+          console.log('clicked 2012')
+        }),
+        L.easyButton('<strong>2013</strong>', function() {
+          console.log('clicked 2010')
+        }),
+        L.easyButton('<strong>2012</strong>', function() {
+          console.log('clicked 2008')
+        })
+      ];
+
+      // build a toolbar with them
+      //L.easyBar(buttons).addTo(_map);
+      L.easyBar(historicalImageryButtons, {
+        position: 'topright'
+      }
+    ).addTo(_map);
+
+
+
+      /*var ourCustomControl = L.Control.extend({
+        options: {
+          position: 'topright'
+          //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
+        },
+        onAdd: function (_map) {
+          var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+          container.style.backgroundColor = 'white';
+          container.style.width = '30px';
+          container.style.height = '30px';
+          container.onclick = function(){
+            console.log('buttonClicked');
+          }
+          return container;
+        }
+      });
+      _map.addControl(new ourCustomControl());*/
+
+      function toggleBasemap() {
+        if (app.state.map.baseLayer == 'baseMapLight') {
+          baseMapLight.remove();
+          overlayBaseLabels.remove();
+          baseMapImagery2016.addTo(_map);
+          overlayImageryLabels.addTo(_map);
+        } else {
+          baseMapImagery2016.remove();
+          overlayImageryLabels.remove();
+          baseMapLight.addTo(_map);
+          overlayBaseLabels.addTo(_map);
+        }
+        domLayerList();
+      };
+
+      
+
+      /*$('#test-toggle-button').on('click', function() {
+        if (app.state.map.baseLayer == 'baseMapLight') {
+          baseMapLight.remove();
+          overlayBaseLabels.remove();
+          baseMapImagery2016.addTo(_map);
+          overlayImageryLabels.addTo(_map);
+        } else {
+          baseMapImagery2016.remove();
+          overlayImageryLabels.remove();
+          baseMapLight.addTo(_map);
+          overlayBaseLabels.addTo(_map);
+        }
+        domLayerList();
+      });*/
 
 
       _parcelLayerGroup.addTo(_map);
