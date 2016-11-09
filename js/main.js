@@ -352,7 +352,7 @@ var app = (function ()
 
       // get dor parcel
       var dorParcelId = app.state.ais.features[0].properties.dor_parcel_id,
-          stateParcel = app.state.parcel.features ? app.state.parcel.features[0] : null;
+          stateParcel = app.state.parcel && app.state.parcel.features ? app.state.parcel.features[0] : null;
       
       // if we already have the parcel (i.e. did click on map), skip the query
       if (stateParcel && stateParcel.properties.MAPREG === dorParcelId) {
@@ -495,13 +495,23 @@ var app = (function ()
         });
 
         // set table content
-        var $liSectionTable = $('#li-table-' + stateKey);
+        // TEMP since we moved appeals to zoning
+        var $liSectionTable;
+        if (stateKey === 'appeals') {
+         $liSectionTable = $('#zoning-appeals');
+         console.log('zoning table', $liSectionTable, rowsHtml);
+        }
+        else {
+          $liSectionTable = $('#li-table-' + stateKey);
+        }
         $liSectionTable.find('tbody').html(rowsHtml);
 
         // update count
         var count = items.length,
             countText = ' (' + count + ')',
             $liCount = $('#li-section-' + stateKey + ' > .topic-subsection-title > .li-count');
+        // TEMP for appeals
+        if (stateKey === 'appeals') $liCount = $('#zoning-appeals-count');
         $liCount.text(countText);
 
         // add "see more" link, if there are rows not shown
@@ -553,7 +563,7 @@ var app = (function ()
     didGetZoningOverlayResult: function (error, featureCollection, response) {
       console.log('overlays', featureCollection);
       var features = featureCollection.features,
-          $tbody = $('#zoning-table-overlays').find('tbody'),
+          $tbody = $('#zoning-overlays').find('tbody'),
           fields = ['OVERLAY_NAME', 'CODE_SECTION', 'PENDING'],
           tbodyHtml = app.util.makeTableRows(features, fields);
       $tbody.html(tbodyHtml);
