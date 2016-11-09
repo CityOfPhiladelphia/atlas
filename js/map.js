@@ -250,7 +250,8 @@ app.map = (function ()
     renderAisResult: function (obj) {
       // get parcel
       var parcelId = obj.properties.dor_parcel_id;
-      app.getParcelById(parcelId);
+      // app.getParcelById(parcelId);
+      this.drawParcel();
     },
 
     didClickMap: function (e) {
@@ -260,13 +261,32 @@ app.map = (function ()
       app.state.map.shouldPan = false;
 
       // query parcel layer
-      var parcelQuery = L.esri.query({url: app.config.map.parcelLayerUrl});
-      parcelQuery.contains(e.latlng)
-      parcelQuery.run(app.didGetParcelQueryResult);
+      // var parcelQuery = L.esri.query({url: app.config.parcelLayerUrl});
+      // parcelQuery.contains(e.latlng)
+      // parcelQuery.run(app.didGetParcelQueryResult);
+      
+      app.getParcelByLatLng(e.latlng, function () {
+        var parcel = app.state.dor.features[0],
+            parcelAddress = app.util.concatDorAddress(parcel);
+  
+        // if this is the result of a map click, query ais for the address
+        if (app.state.map.clickedOnMap) {
+          app.getAis(parcelAddress);
+          app.state.map.clickedOnMap = false;
+        }
+  
+        // render parcel
+        app.map.drawParcel();
+      });
     },
 
     drawParcel: function () {
-      var parcel = app.state.parcel,
+      console.log('draw parcel', app.state.dor);
+      
+      // if there's no parcel, return
+      if (!app.state.dor) return;
+      
+      var parcel = app.state.dor.features[0],
           // flip these because leaflet uses lat/lon and esri is x/y
           coords = app.util.flipCoords(parcel.geometry.coordinates),
           parcelPoly = L.polygon([coords], {

@@ -77,11 +77,11 @@ var app = (function ()
         // },
         displayFields:        ['date', 'id', 'description', 'status',],
       },
-      map: {
-        //parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0',
-        parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0'
-      },
-
+      
+      map: {},
+      
+      //parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0',
+      parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
 
       pictometry: {
         pictometryUrl: 'http://192.168.104.182/philapictometry/ipa.php',
@@ -186,7 +186,7 @@ var app = (function ()
       var data = app.state.ais;
 
       // construct modal dom element
-      for (i = 0; i < data.features.length; i++) {
+      for (var i = 0; i < data.features.length; i++) {
         $('#addressList').append('<li><a href="#" number='+i+'><span class="tab">'+data.features[i].properties.street_address+'</span></a></li>')
       }
       $('#addressModal').foundation('open');
@@ -203,32 +203,6 @@ var app = (function ()
             selectedAddress = selectedAddressObj.properties.street_address;
         app.state.selectedAddress = selectedAddress;
         app.didGetAisResult();
-        // app.map.didSelectAddress();
-
-        // write to history
-        // var params = {'address': selectedAddress}
-        // var queryStringParams = app.util.serializeQueryStringParams(params)
-        // history.replaceState(null, null, '?' + queryStringParams)
-
-
-        // if (!app.state.map.clickedOnMap) {
-        //     //console.log('it routed to clickedonmap false')
-        //     app.map.getGeomFromLatLon(latlon);
-        // } else {
-        //     //console.log('it routed to straight to flipCoords')
-        //     app.map.flipCoords(app.state.map.curFeatGeo);
-        // }
-
-        // TODO render topics
-
-        // TODO update history
-        // app.util.history()
-
-        // finish
-
-        // draw polygon
-        // app.map.drawPolygon(app.state.map.curFeatGeo)
-        // app.map.drawParcel();
       });
     },
 
@@ -309,6 +283,8 @@ var app = (function ()
 
     // initiates requests to topic APIs (OPA, L&I, etc.)
     getTopics: function (aisProps) {
+      console.log('get topics');
+      
       // opa
       var opaAccountNum = aisProps.opa_account_num;
       $.get({
@@ -350,45 +326,21 @@ var app = (function ()
       // individual callbacks have completed. commenting out for now.
       // $.when(liDeferreds).then(app.didGetAllLiResults);
 
-      // get dor parcel
-      var dorParcelId = app.state.ais.features[0].properties.dor_parcel_id,
-          stateParcel = app.state.parcel && app.state.parcel.features ? app.state.parcel.features[0] : null;
+      // DOR
+      // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
+      var aisParcelId = app.state.ais.features[0].properties.dor_parcel_id,
+          stateParcel = app.state.dor && app.state.dor.features ? app.state.parcel.features[0] : null;
       
-      // if we already have the parcel (i.e. did click on map), skip the query
-      if (stateParcel && stateParcel.properties.MAPREG === dorParcelId) {
-        app.renderParcel(stateParcel);
+      // if we already have the parcel
+      if (stateParcel && stateParcel.properties.MAPREG === aisParcelId) {
+        app.renderParcelTopic();
       }
+      // otherwise we don't have a parcel, so go get one
       else {
-        app.state.dor = undefined;
-        // $.ajax({
-        //   url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0/query?where=MAPREG%3D',
-        //   data: {
-        //     where: encodeURIComponent("MAPREG='" + dorParcelId + '"'),
-        //     outFields: '*',
-        //     f: 'geojson',
-        //   },
-        //   success: function (data) {
-        //     app.state.dor = data;
-        //     app.didGetDorResult();
-        //   },
-        //   error: function (err) {
-        //     console.log('get dor error', err);
-        //   },
-        // });
-  
-        var dorParcelQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0'});
-        dorParcelQuery.where("MAPREG = '" + dorParcelId + "'");
-        dorParcelQuery.run(function (error, featureCollection, response) {
-          if (!featureCollection) {
-            console.log('dor error', error);
-            return;
-          }
-    
-          // set state
-          app.state.dor = featureCollection;
-          
-          // render (doesn't include map, just topic panel)
-          app.renderParcel(app.state.dor.features[0]);
+        console.log('no parcel in state, go get one');
+        app.getParcelById(aisParcelId, function () {
+          app.renderParcelTopic();
+          app.map.drawParcel();
         });
       }
 
@@ -402,6 +354,18 @@ var app = (function ()
       var zoningOverlayQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/1'});
       zoningOverlayQuery.contains(aisGeom);
       zoningOverlayQuery.run(app.didGetZoningOverlayResult);
+    },
+
+    // render deeds (assumes there's a parcel in the state)
+    renderParcelTopic: function () {
+      console.log('render parcel topic', typeof app.state.dor);
+      
+      var parcel = app.state.dor.features[0],
+          parcelId = parcel.properties.MAPREG,
+          address = app.util.concatDorAddress(parcel);
+          
+      $('#land-records-parcel-id').html(parcelId);
+      $('#land-records-parcel-address').html(address);
     },
 
     // takes an object of divId => text and renders
@@ -529,37 +493,6 @@ var app = (function ()
       });
     },
 
-    renderParcel: function (parcel) {
-      var parcelId = parcel.properties.MAPREG,
-          // clean up attributes
-          address = app.util.concatDorAddress(parcel);
-
-      // render
-      $('#land-records-parcel-id').html(parcelId);
-      $('#land-records-parcel-address').html(address);
-    },
-
-    // didGetDorResult: function (error, featureCollection, response) {
-    //   // TODO handle error
-    //   if (!featureCollection) {
-    //     console.log('dor error', error);
-    //     return;
-    //   }
-
-    //   // set state
-    //   app.state.dor = featureCollection;
-
-    //   // TODO for right now, we're just taking the first parcel if there's more than one
-    //   parcel = featureCollection.features[0]
-    //   var parcelId = parcel.properties.MAPREG,
-    //       // clean up attributes
-    //       address = app.util.concatDorAddress(parcel);
-
-    //   // render
-    //   $('#land-records-parcel-id').html(parcelId);
-    //   $('#land-records-parcel-address').html(address);
-    // },
-
     didGetZoningOverlayResult: function (error, featureCollection, response) {
       console.log('overlays', featureCollection);
       var features = featureCollection.features,
@@ -622,33 +555,57 @@ var app = (function ()
       if (desc) $('#zoning-description').html(desc);
     },
 
-    // get a parcel
-    getParcelById: function (id) {
-      var parcelQuery = L.esri.query({url: app.config.map.parcelLayerUrl});
-      parcelQuery.where("MAPREG = '" + id + "'");
-      parcelQuery.run(app.didGetParcelQueryResult);
-    },
-
-    // called after parcel query finishes
-    // this is a slow process - only want to do it once
-    didGetParcelQueryResult: function (error, featureCollection, response) {
-      // handle null/error responses
-      if (error || !featureCollection) return;
+    // get a parcel by parcel id
+    getParcelById: function (id, callback) {
+      console.log('get parcel by id: ', id);
       
-      var parcel = featureCollection.features[0],
-          parcelAddress = app.util.concatDorAddress(parcel);
-
-      // update state
-      app.state.parcel = parcel;
-
-      // if this is the result of a map click, query ais for the address
-      if (app.state.map.clickedOnMap) {
-        app.getAis(parcelAddress);
-        app.state.map.clickedOnMap = false;
-      }
-
-      // render parcel
-      app.map.drawParcel();
+      // OLD METHOD
+      // var parcelQuery = L.esri.query({url: app.config.map.parcelLayerUrl});
+      // parcelQuery.where("MAPREG = '" + id + "'");
+      // parcelQuery.run(app.didGetParcelQueryResult);
+      
+      // clear state
+      app.state.dor = undefined;
+      
+      $.ajax({
+        url: app.config.parcelLayerUrl + '/query',
+        data: {
+          where: "MAPREG = '" + id + "'",
+          outSR: 4326,
+          outFields: '*',
+          f: 'geojson',
+        },
+        success: function (data) {
+          console.log('got parcel by id', this.url);
+          
+          // AGO returns json as plaintext soooo...
+          data = JSON.parse(data);
+          
+          app.state.dor = data;
+          callback && callback();
+        },
+        error: function (err) {
+          console.log('get parcel by id error', err);
+        },
+      });
+    },
+    
+    // get a parcel by a leaflet latlng
+    getParcelByLatLng: function (latLng, callback) {
+      // clear state
+      app.state.dor = undefined;
+      
+      var parcelQuery = L.esri.query({url: app.config.parcelLayerUrl});
+      parcelQuery.contains(latLng);
+      parcelQuery.run(function (error, featureCollection, response) {
+        if (error || !featureCollection) return;
+        
+        // update state
+        app.state.dor = featureCollection;
+        
+        // if there's a callback, call it
+        callback && callback();
+      }); 
     },
   };
 })();
