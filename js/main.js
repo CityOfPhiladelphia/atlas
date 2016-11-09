@@ -567,6 +567,9 @@ var app = (function ()
           fields = ['OVERLAY_NAME', 'CODE_SECTION', 'PENDING'],
           tbodyHtml = app.util.makeTableRows(features, fields);
       $tbody.html(tbodyHtml);
+      
+      var count = features.length;
+      $('#zoning-overlays-count').html(' (' + count + ')');
     },
 
     // long code => description
