@@ -355,17 +355,31 @@ var app = (function ()
       zoningOverlayQuery.contains(aisGeom);
       zoningOverlayQuery.run(app.didGetZoningOverlayResult);
     },
+  
+    // TODO confirm these
+    PARCEL_STATUS: {
+      1:  'Active',
+      2:  'Inactive',
+      3:  'Trans',
+    },
 
     // render deeds (assumes there's a parcel in the state)
     renderParcelTopic: function () {
-      console.log('render parcel topic', typeof app.state.dor);
-      
       var parcel = app.state.dor.features[0],
-          parcelId = parcel.properties.MAPREG,
+          props = parcel.properties,
+          parcelId = props.MAPREG,
           address = app.util.concatDorAddress(parcel);
           
-      $('#land-records-parcel-id').html(parcelId);
-      $('#land-records-parcel-address').html(address);
+      console.log('render parcel topic', parcel);
+          
+      $('#land-records-id').html(parcelId);
+      $('#land-records-address').html(address);
+      $('#land-records-status').html(app.PARCEL_STATUS[props.STATUS]);
+      // TODO air rights
+      // $('#land-records-air-rights').html(props.);
+      $('#land-records-condo').html(props.CONDOFLAG === 1 ? 'Yes' : 'No');
+      
+      
     },
 
     // takes an object of divId => text and renders
