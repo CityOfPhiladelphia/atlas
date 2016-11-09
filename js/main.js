@@ -78,8 +78,11 @@ var app = (function ()
         displayFields:        ['date', 'id', 'description', 'status',],
       },
       map: {
-        parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0',
+        //parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0',
+        parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0'
       },
+
+
       pictometry: {
         pictometryUrl: 'http://192.168.104.182/philapictometry/ipa.php',
       },
@@ -139,6 +142,7 @@ var app = (function ()
     search: function () {
       app.state.clickedOnMap = false;
       app.state.map.shouldPan = true;
+
       var val = $('#search-input').val();
 
       // display loading
@@ -235,24 +239,24 @@ var app = (function ()
 
       // get the currently active topic
       var $activeTopic = $('.topic:visible');
-      
+
       // only activate if it's not already active
       if ($targetTopic.is($activeTopic)) return;
-      
+
       $activeTopic.slideUp(350);
       $targetTopic.slideDown(350);
     },
-    
+
     toggleTopic: function (targetTopicName) {
       var $targetTopic = $('#topic-' + targetTopicName);
-      
+
       // if it's already visible, hide it
       if ($targetTopic.is(':visible')) $targetTopic.slideUp(350);
 
       // otherwise, activate
       else app.activateTopic(targetTopicName);
     },
-    
+
     didGetAisResult: function () {
       // set app state
       // app.state.ais = data;
@@ -287,14 +291,12 @@ var app = (function ()
       // $('#address-info-mailing-address').html(mailingAddress);
       $('#topic-panel-header-address-line-1').html(streetAddress);
       $('#topic-panel-header-address-line-2').html(line2);
-      
+
       $('#address-info-street-code').text(data.features[0].properties.street_code);
-      console.log('zoning', props.zoning);
       // $('#zoning-code').text(props.zoning);
 
       // if no topic is active, show property
       if ($('.topic:visible').length === 0) {
-        console.log('no visible', $('.topic:visible'))
         app.activateTopic('property');
       }
 
@@ -347,8 +349,9 @@ var app = (function ()
       // this is nice and elegant but the callback is firing before the
       // individual callbacks have completed. commenting out for now.
       // $.when(liDeferreds).then(app.didGetAllLiResults);
-      
+
       // get dor parcel
+      // TODO check state for parcel
       var dorParcelId = app.state.ais.features[0].properties.dor_parcel_id;
       app.state.dor = undefined;
       // $.ajax({
@@ -366,17 +369,18 @@ var app = (function ()
       //     console.log('get dor error', err);
       //   },
       // });
+
       var dorParcelQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0'});
       dorParcelQuery.where("MAPREG = '" + dorParcelId + "'");
       dorParcelQuery.run(app.didGetDorResult);
-      
+
       // get zoning
       var aisGeom = app.state.ais.features[0].geometry;
-      
+
       var zoningBaseQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/6/'});
       zoningBaseQuery.contains(aisGeom);
       zoningBaseQuery.run(app.didGetZoningBaseResult);
-      
+
       var zoningOverlayQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/1'});
       zoningOverlayQuery.contains(aisGeom);
       zoningOverlayQuery.run(app.didGetZoningOverlayResult);
@@ -497,41 +501,28 @@ var app = (function ()
         }
       });
     },
-    
+
     didGetDorResult: function (error, featureCollection, response) {
       // TODO handle error
       if (error || !featureCollection || featureCollection.features.length === 0) {
         console.log('dor error', error);
         return;
       }
-      
+
       // set state
       app.state.dor = featureCollection;
-      
+
       // TODO for right now, we're just taking the first parcel if there's more than one
       var parcel = featureCollection.features[0],
-          props = parcel.properties,
-          parcelId = props.MAPREG;
-      
-      // clean up attributes
-      var ADDRESS_FIELDS = ['HOUSE', 'SUFFIX', 'STDIR', 'STNAM', 'STDES', 'STDESSUF'],
-          comps = _.map(_.pick(props, ADDRESS_FIELDS), app.util.cleanDorAttribute),
-          // TODO handle individual address comps (like mapping stex=2 => 1/2)
-          // addressLow = comps.HOUSE,
-          // addressHigh = comps.STEX,
-          // streetPredir = comps.STDIR,
-          // streetName = comps.STNAM,
-          // streetSuffix = comps.STDES,
-          // streetPostdir = comps.STDESSUF,
-          
-          // remove nulls and concat
-          address = _.compact(comps).join(' ');
+          parcelId = parcel.properties.MAPREG,
+          // clean up attributes
+          address = app.util.concatDorAddress(parcel);
 
       // render
       $('#land-records-parcel-id').html(parcelId);
       $('#land-records-parcel-address').html(address);
     },
-    
+
     didGetZoningOverlayResult: function (error, featureCollection, response) {
       console.log('overlays', featureCollection);
       var features = featureCollection.features,
@@ -540,7 +531,7 @@ var app = (function ()
           tbodyHtml = app.util.makeTableRows(features, fields);
       $tbody.html(tbodyHtml);
     },
-    
+
     // long code => description
     ZONING_CODE_MAP: {
       'RSD-1': 'Residential Single Family Detached-1',
@@ -580,15 +571,44 @@ var app = (function ()
       'SP-PO-A': 'Recreation',
       'SP-PO-P': 'Recreation',
     },
-    
+
     didGetZoningBaseResult: function (error, featureCollection, response) {
       var feature = featureCollection.features[0],
           props = feature.properties,
           longCode = props.LONG_CODE;
       $('#zoning-code').html(longCode);
-      
+
       var desc = app.ZONING_CODE_MAP[longCode];
       if (desc) $('#zoning-description').html(desc);
+    },
+
+    // get a parcel
+    getParcelById: function (id) {
+      var parcelQuery = L.esri.query({url: app.config.map.parcelLayerUrl});
+      parcelQuery.where("MAPREG = '" + id + "'");
+      parcelQuery.run(app.didGetParcelQueryResult);
+    },
+
+    // called after parcel query finishes
+    // this is a slow process - only want to do it once
+    didGetParcelQueryResult: function (error, featureCollection, response) {
+      // handle null/error responses
+      if (error || !featureCollection) return;
+
+      var parcel = featureCollection.features[0],
+          parcelAddress = app.util.concatDorAddress(parcel);
+
+      // update state
+      app.state.parcel = parcel;
+
+      // if this is the result of a map click, query ais for the address
+      if (app.state.map.clickedOnMap) {
+        app.getAis(parcelAddress);
+        app.state.map.clickedOnMap = false;
+      }
+
+      // render parcel
+      app.map.drawParcel();
     },
   };
 })();

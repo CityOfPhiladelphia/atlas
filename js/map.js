@@ -150,7 +150,7 @@ app.map = (function ()
       new L.Control.Zoom({position: 'topright'}).addTo(_map);
 
       $('#test-toggle-button').on('click', function(){
-        console.log('clicked test toggle button');
+        //console.log('clicked test toggle button');
         //baseMapLight.redraw();
         //baseMapLight.bringToFront();
         baseMapLight.remove();
@@ -159,6 +159,15 @@ app.map = (function ()
         console.log('added baseMapImagery2016 to map');
         overlayImageryLabels.addTo(_map);
         console.log('added overlayImageryLabels to map');
+        console.log('current map panes: ', _map.getPanes());
+        _map.eachLayer(function(layer){
+          console.log(layer);
+        });
+        /*console.log('current map layers: ', _map.eachLayer(
+          function(layer){
+            console.log(layer)
+          });
+        );*/
 
       })
 
@@ -186,7 +195,7 @@ app.map = (function ()
 
       // when map refreshes, if there is already a cyclomedia tab open, place the marker
       if(localStorage.stViewOpen == 'true') {
-        console.log('stView marker should be at ' + localStorage.stViewCoords + 'and stViewYaw should be ' + app.state.stViewYaw);
+        //console.log('stView marker should be at ' + localStorage.stViewCoords + 'and stViewYaw should be ' + app.state.stViewYaw);
         app.state.stViewX = localStorage.getItem('stViewX');
         app.state.stViewY = localStorage.getItem('stViewY');
         app.state.stViewYaw = localStorage.getItem('stViewYaw');
@@ -219,10 +228,10 @@ app.map = (function ()
           });
           //_stViewMarker.setLatLng([app.state.stViewY, app.state.stViewX]);
           _stViewMarker.addTo(_map);
-          console.log('it should be on map');
+          //console.log('it should be on map');
         };
         if (e.originalEvent.key == 'stViewYaw'){
-          console.log('stViewYaw changed to ' +  e.originalEvent.newValue);
+          //console.log('stViewYaw changed to ' +  e.originalEvent.newValue);
           app.state.stViewYaw = localStorage.getItem('stViewYaw');
           if (_stViewMarker) {
             _stViewMarker.remove();
@@ -232,7 +241,7 @@ app.map = (function ()
             rotationAngle: app.state.stViewYaw
           });
           _stViewMarker.addTo(_map);
-          console.log('stViewYaw should have just caused icon to rotate');
+          //console.log('stViewYaw should have just caused icon to rotate');
         };
       });
 
@@ -240,14 +249,8 @@ app.map = (function ()
 
     renderAisResult: function (obj) {
       // get parcel
-      var pwdParcelId = obj.properties.pwd_parcel_id;
-      app.map.getParcelById(pwdParcelId);
-    },
-
-    getParcelById: function (id) {
-      var parcelQuery = L.esri.query({url: app.config.map.parcelLayerUrl});
-      parcelQuery.where('PARCELID = ' + id);
-      parcelQuery.run(app.map.didGetParcelQueryResult);
+      var parcelId = obj.properties.dor_parcel_id;
+      app.getParcelById(parcelId);
     },
 
     didClickMap: function (e) {
@@ -259,30 +262,11 @@ app.map = (function ()
       // query parcel layer
       var parcelQuery = L.esri.query({url: app.config.map.parcelLayerUrl});
       parcelQuery.contains(e.latlng)
-      parcelQuery.run(app.map.didGetParcelQueryResult);
-    },
-
-    // called after parcel query finishes
-    // this is a slow process - only want to do it once
-    didGetParcelQueryResult: function (error, featureCollection, response) {
-      var parcel = featureCollection.features[0],
-          parcelAddress = parcel.properties.ADDRESS;
-
-      // update state
-      app.state.map.parcel = parcel;
-
-      // if this is the result of a map click, query ais for the address
-      if (app.state.map.clickedOnMap) {
-        app.getAis(parcelAddress);
-        app.state.map.clickedOnMap = false;
-      }
-
-      // render parcel
-      app.map.drawParcel();
+      parcelQuery.run(app.didGetParcelQueryResult);
     },
 
     drawParcel: function () {
-      var parcel = app.state.map.parcel,
+      var parcel = app.state.parcel,
           // flip these because leaflet uses lat/lon and esri is x/y
           coords = app.util.flipCoords(parcel.geometry.coordinates),
           parcelPoly = L.polygon([coords], {
@@ -324,19 +308,19 @@ app.map = (function ()
     // on init, put center and zoom in LocalStorage, in case
     // Pictometry or Cyclomedia are used
     LSinit: function() {
-      console.log('running LSinit');
-      console.log('clickedOnMap is ' + app.state.map.clickedOnMap);
+      //console.log('running LSinit');
+      //console.log('clickedOnMap is ' + app.state.map.clickedOnMap);
       if (app.state.map.clickedOnMap == true){
-        console.log('setting app.state.theX and theY from parcelCentroid');
+        //console.log('setting app.state.theX and theY from parcelCentroid');
         app.state.theX = app.state.theParcelCentroid.lng;
         app.state.theY = app.state.theParcelCentroid.lat;
       } else {
-        console.log('setting app.state.theX and theY from map center');
+        //console.log('setting app.state.theX and theY from map center');
         app.state.theCenter = _map.getCenter();
         app.state.theX = app.state.theCenter.lng;
         app.state.theY = app.state.theCenter.lat;
       }
-      console.log('setting the rest of the variables')
+      //console.log('setting the rest of the variables')
       app.state.theZoom = _map.getZoom();
       localStorage.setItem('theZoom', app.state.theZoom);
       localStorage.setItem('theX', app.state.theX);

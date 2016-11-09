@@ -23,35 +23,56 @@ app.util = (function () {
       }
       return b;
     },
-    
+
     // clean up various types of whitespace/null values in dor
     cleanDorAttribute: function (attr) {
       // trim leading and trailing whitespace
       var cleanAttr = attr ? String(attr) : '';
       cleanAttr = cleanAttr.replace(/\s+/g, '');
-      
+
       // return null for zeros and empty strings
       if (['', '0'].indexOf(cleanAttr) > -1) {
         return null;
       }
-      
+
       return cleanAttr;
     },
-    
+
     // takes an array of geojson features, returns a string of concatenated <tr> elements
     makeTableRows: function (rows, fields) {
       // loop over rows
       var rowsHtml =  _.map(rows, function (row) {
         var props = row.properties;
         // loop over fields
-        var valsHtml = _.map(fields, function (field) { 
+        var valsHtml = _.map(fields, function (field) {
           var val = props[field];
           return '<td>' + val + '</td>';
         }).join('');
         return '<tr>' + valsHtml + '</tr>';
       }).join('');
-      
+
       return rowsHtml;
+    },
+
+    // takes a dor parcel object (geojson response) and creates the full,
+    // concatenated street address
+    concatDorAddress: function (obj) {
+      var ADDRESS_FIELDS = ['HOUSE', 'SUFFIX', 'STDIR', 'STNAM', 'STDES', 'STDESSUF'],
+          props = obj.properties,
+          // clean up attributes
+          comps = _.map(_.pick(props, ADDRESS_FIELDS), app.util.cleanDorAttribute),
+          // TODO handle individual address comps (like mapping stex=2 => 1/2)
+          // addressLow = comps.HOUSE,
+          // addressHigh = comps.STEX,
+          // streetPredir = comps.STDIR,
+          // streetName = comps.STNAM,
+          // streetSuffix = comps.STDES,
+          // streetPostdir = comps.STDESSUF,
+
+          // remove nulls and concat
+          address = _.compact(comps).join(' ');
+
+      return address;
     },
   };
 }());
