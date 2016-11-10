@@ -88,7 +88,18 @@ var app = (function ()
       },
       cyclomedia: {
         cyclomediaUrl: 'http://192.168.104.182/philacyclo/',
-      }
+      },
+      
+      // socrataAppToken: 'bHXcnyGew4lczXrhTd7z7DKkc',
+      // socrataAppToken: 'wEPcq2ctcmWapPW7v6nWp7gg4',
+      socrata: {
+        baseUrl: '//data.phila.gov/resource/',
+      },
+      
+      nearby: {
+        // in feet
+        radius: 500,
+      },
     },
 
     // global app state
@@ -227,6 +238,9 @@ var app = (function ()
 
       $activeTopic.slideUp(350);
       $targetTopic.slideDown(350);
+      
+      // tell map about it
+      app.map.didActivateTopic(targetTopicName);
     },
 
     toggleTopic: function (targetTopicName) {
@@ -293,6 +307,8 @@ var app = (function ()
     getTopics: function (aisProps) {
       // console.log('get topics');
       
+      var aisAddress = aisProps.street_address;
+      
       // opa
       var opaAccountNum = aisProps.opa_account_num;
       $.get({
@@ -350,6 +366,24 @@ var app = (function ()
           app.map.drawParcel();
         });
       }
+      
+      // get dor documents
+      // $.ajax({
+      //   url: '//data.phila.gov/resource/6fwh-qntk.json',
+      //   // beforeSend: function (request) {
+      //   //   request.setRequestHeader('X-App-Token', app.config.socrataAppToken);
+      //   // },
+      //   data: {
+      //     address: aisAddress,
+      //     $$app_token: app.config.socrata,
+      //   },
+      //   success: function (data) {
+      //     console.log('dor docs', data);
+      //   },
+      //   error: function (err) {
+      //     console.log('dor document error', err);
+      //   },
+      // });
 
       // get zoning
       var aisGeom = app.state.ais.features[0].geometry;
@@ -361,6 +395,35 @@ var app = (function ()
       var zoningOverlayQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/1'});
       zoningOverlayQuery.contains(aisGeom);
       zoningOverlayQuery.run(app.didGetZoningOverlayResult);
+      
+      /*
+      NEARBY
+      */
+      
+      // appeals
+      var aisX = aisGeom.coordinates[0],
+          aisY = aisGeom.coordinates[1],
+          radiusMeters = app.config.nearby.radius * 0.3048,
+          nearbyAppealsUrl = app.config.socrata.baseUrl + app.config.li.socrataIds.appeals + '.json',
+          // nearbyAppealsQuery = 'DISTANCE_IN_METERS(location, POINT(' + aisX + ',' + aisY + ')) <= ' + radiusMeters;
+          nearbyAppealsQuery = 'within_circle(' + ['shape', aisY, aisX, radiusMeters].join(', ') + ')';
+      // exclude appeals at the exact address
+      if (liAddressKey) nearbyAppealsQuery += " AND addresskey != '" + liAddressKey + "'";
+      
+      $.ajax({
+        url: nearbyAppealsUrl,
+        data: {
+          $where: nearbyAppealsQuery,
+        },
+        success: function (data) {
+          if (!app.state.nearby) app.state.nearby = {};
+          app.state.nearby.appeals = data;
+          app.didGetNearbyAppeals();
+        },
+        error: function (err) {
+          console.log('nearby appeals error', err);
+        },
+      });
     },
   
     // TODO confirm these
@@ -385,8 +448,6 @@ var app = (function ()
       // TODO air rights
       // $('#land-records-air-rights').html(props.);
       $('#land-records-condo').html(props.CONDOFLAG === 1 ? 'Yes' : 'No');
-      
-      
     },
 
     // takes an object of divId => text and renders
@@ -518,7 +579,7 @@ var app = (function ()
       var features = featureCollection.features,
           $tbody = $('#zoning-overlays').find('tbody'),
           fields = ['OVERLAY_NAME', 'CODE_SECTION'],
-          tbodyHtml = app.util.makeTableRows(features, fields);
+          tbodyHtml = app.util.makeTableRowsFromGeoJson(features, fields);
       $tbody.html(tbodyHtml);
       
       var count = features.length;
@@ -634,11 +695,43 @@ var app = (function ()
         
         // update state
         app.state.dor = featureCollection;
-        console.log('updated dor state', app.state.dor);
         
         // if there's a callback, call it
         callback && callback();
-      }); 
+      });
+    },
+    
+    didGetNearbyAppeals: function () {
+      var features = app.state.nearby.appeals,
+          featuresSorted = _.orderBy(features, app.config.li.fieldMap.appeals.date, ['desc']),
+          sourceFields = _.map(app.config.li.displayFields, function (displayField) { 
+                            return app.config.li.fieldMap.appeals[displayField];
+                          }), 
+          rowsHtml = app.util.makeTableRowsFromJson(featuresSorted, sourceFields),
+          $tbody = $('#nearby-appeals').find('tbody');
+      $tbody.html(rowsHtml);
+      $('#nearby-appeals-count').text(' (' + features.length + ')');
+      
+      // TEMP attribute rows with appeal id
+      var sourceIdField = app.config.li.fieldMap.appeals.id;
+      _.forEach($tbody.find('tr'), function (row, i) {
+        $(row).attr('data-appeal-id', features[i][sourceIdField]);
+      });
+      
+      // listen for hover
+      $tbody.find('tr').hover(
+        function () {
+          var $this = $(this);
+          $this.css('background', '#ffffff'); 
+          
+          // tell map to highlight pin
+          var appealId = $this.attr('data-appeal-id');
+          app.map.didHoverOverNearbyAppeal(appealId);
+        },
+        function () {
+          $(this).css('background', '');
+        }
+      );
     },
   };
 })();

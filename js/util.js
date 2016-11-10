@@ -39,13 +39,28 @@ app.util = (function () {
     },
 
     // takes an array of geojson features, returns a string of concatenated <tr> elements
-    makeTableRows: function (rows, fields) {
+    makeTableRowsFromGeoJson: function (rows, fields) {
       // loop over rows
       var rowsHtml =  _.map(rows, function (row) {
         var props = row.properties;
         // loop over fields
         var valsHtml = _.map(fields, function (field) {
-          var val = props[field];
+          var val = props[field] || '';
+          return '<td>' + val + '</td>';
+        }).join('');
+        return '<tr>' + valsHtml + '</tr>';
+      }).join('');
+
+      return rowsHtml;
+    },
+    
+    // takes an array of flat json features, returns a string of concatenated <tr> elements
+    makeTableRowsFromJson: function (rows, fields) {
+      // loop over rows
+      var rowsHtml =  _.map(rows, function (row) {
+        // loop over fields
+        var valsHtml = _.map(fields, function (field) {
+          var val = row[field] || '';
           return '<td>' + val + '</td>';
         }).join('');
         return '<tr>' + valsHtml + '</tr>';

@@ -187,6 +187,21 @@
                                     <td id="land-records-area"></td>
                                 </tr>
                             </table>
+                            
+                            <h4>Documents<span id="land-records-documents-count"></span></h4>
+                            <table id="land-records-table-documents" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Type</th>
+                                            <th scope="col">Grantor</th>
+                                            <th scope="col">Grantee</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            
                         </div>
 
                         <!--L & I-->
@@ -396,6 +411,44 @@
                         <!--<a class="topic-link" href="/#/land-records/"><span class="topic-link-icon flaticon-copy"></span>Land Records</a>-->
                         <!--<a class="topic-link" href="/#/voting/"><span class="topic-link-icon flaticon-correct"></span>Voting + Government</a>-->
                         <!--<a class="topic-link" href="/#/311/"><span class="topic-link-icon flaticon-telephone"></span>311</a>-->
+                        
+                        <!--NEARBY-->
+                        <a id="topic-link-nearby" class="topic-link" href="#"><span class="topic-link-icon flaticon-industrial-zone"></span>Nearby Activity</a>
+                        <div id="topic-nearby" class="topic">
+                            <div class="callout">
+                                <p>
+                                    Interested in construction and development near this address? Here are permits and zoning appeals within a 500 feet radius, 
+                                    starting with the most recent. For activity at this exact address, see the Permits and Zoning tabs above.
+                                </p>
+                            </div>
+                            
+                            <h4>Zoning Appeals<span id="nearby-appeals-count"></span></h4>
+                            <table id="nearby-appeals" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            
+                            <h4>Permits<span id="nearby-permits-count"></span></h4>
+                            <table id="nearby-permits" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div><!-- /nearby -->
+                        
                     </div>
                 </div>
 
