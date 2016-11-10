@@ -291,7 +291,7 @@ var app = (function ()
 
     // initiates requests to topic APIs (OPA, L&I, etc.)
     getTopics: function (aisProps) {
-      console.log('get topics');
+      // console.log('get topics');
       
       // opa
       var opaAccountNum = aisProps.opa_account_num;
@@ -345,7 +345,6 @@ var app = (function ()
       }
       // otherwise we don't have a parcel, so go get one
       else {
-        console.log('no parcel in state, go get one');
         app.getParcelById(aisParcelId, function () {
           app.renderParcelTopic();
           app.map.drawParcel();
@@ -373,14 +372,12 @@ var app = (function ()
 
     // render deeds (assumes there's a parcel in the state)
     renderParcelTopic: function () {
-      console.log('render parcel topic');
+      // console.log('render parcel topic');
       
       var parcel = app.state.dor.features[0],
           props = parcel.properties,
           parcelId = props.MAPREG,
           address = app.util.concatDorAddress(parcel);
-          
-      console.log('parcel', parcel);
           
       $('#land-records-id').html(parcelId);
       $('#land-records-address').html(address);
@@ -488,7 +485,6 @@ var app = (function ()
         var $liSectionTable;
         if (stateKey === 'appeals') {
          $liSectionTable = $('#zoning-appeals');
-         console.log('zoning table', $liSectionTable, rowsHtml);
         }
         else {
           $liSectionTable = $('#li-table-' + stateKey);
@@ -581,7 +577,7 @@ var app = (function ()
 
     // get a parcel by parcel id
     getParcelById: function (id, callback) {
-      console.log('get parcel by id: ', id);
+      // console.log('get parcel by id: ', id);
       
       // OLD METHOD
       // var parcelQuery = L.esri.query({url: app.config.map.parcelLayerUrl});
@@ -600,9 +596,7 @@ var app = (function ()
           f: 'geojson',
         },
         success: function (data) {
-          console.log('got parcel by id', data);
-          
-          // AGO returns json as plaintext soooo...
+          // AGO returns json with plaintext headers, so parse
           data = JSON.parse(data);
           
           app.state.dor = data;
@@ -616,7 +610,7 @@ var app = (function ()
     
     // get a parcel by a leaflet latlng
     getParcelByLatLng: function (latLng, callback) {
-      console.log('get parcel by latlng');
+      // console.log('get parcel by latlng');
       
       // clear state
       // disabling this because if the new query doesn't return anything,

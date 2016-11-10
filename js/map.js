@@ -487,7 +487,7 @@ app.map = (function ()
     },
 
     drawParcel: function () {
-      console.log('draw parcel', app.state.dor);
+      // console.log('draw parcel', app.state.dor);
       
       // if there's no parcel, return
       if (!app.state.dor) return;
