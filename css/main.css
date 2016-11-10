@@ -2,10 +2,6 @@ header.site-header > .row:last-of-type {
     background: #2176d2;
 }
 
-#test-toggle-button {
-    height: 2.78571rem;
-}
-
 #search-container {
     float: right;
     margin-top: 10px;

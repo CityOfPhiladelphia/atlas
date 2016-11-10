@@ -38,6 +38,7 @@ app.map = (function ()
       app.state.map.clickedOnMap = false;
       app.state.map.baseLayer;
       app.state.map.overLayers = [];
+      app.map.controls = {}
       //app.state.moveMode = true
       var CITY_HALL = [39.952388, -75.163596];
 
@@ -111,7 +112,7 @@ app.map = (function ()
         zIndex: 5,
       });
 
-      var baseMapImagery2010 = L.esri.tiledMapLayer({
+      var baseMapImagery2008 = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2008_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2012',
@@ -129,8 +130,9 @@ app.map = (function ()
       });*/
 
       //_baseLayerGroup.addLayer(baseMapLight, baseMapImagery2016);
-      //_baseLayerGroup.addTo(_map);
-      baseMapLight.addTo(_map);
+      _baseLayerGroup.addLayer(baseMapLight);
+      _baseLayerGroup.addTo(_map);
+      //baseMapLight.addTo(_map);
 
       // Overlays
       var overlayBaseLabels = L.esri.tiledMapLayer({
@@ -193,6 +195,7 @@ app.map = (function ()
         // 'Land Use': landUse,
       };
 
+      // overwrites DOM objects app.state.map.baseLayer and app.state.map.overlayers when called
       function domLayerList() {
         _map.eachLayer(function(layer){
           if (layer.options.name && layer.options.type == 'base') {
@@ -224,6 +227,7 @@ app.map = (function ()
       new L.Control.Zoom({position: 'topright'}).addTo(_map);
 
       var basemapToggleButton = L.easyButton({
+        id: 'baseToggleButton',
         position: 'topright',
         states: [{
           stateName: 'toggleToImagery',
@@ -245,121 +249,164 @@ app.map = (function ()
       });
       basemapToggleButton.addTo(_map);
 
-      /*
-      var button1 = L.easyButton({
-        position: 'bottomright',
-        states: [{
-          stateName: 'toggleToImagery',
-          icon:      '<img src="css/images/yellowArrow.png">',
-          title:     'Toggle To Imagery',
-          onClick: function() {
-            console.log('clicked button')
-          }
-        }]
-      });
-      button1.addTo(_map);
-
-      var button2 = L.easyButton(
-        '<img src="css/images/yellowArrow.png">', function(){
-          console.log('clicked button2')
-        }
-      )
-      button2.addTo(_map);*/
-
-      /*var buttons = [
+      app.state.map.historicalImageryButtons = [
         L.easyButton({
-          position: 'bottomright',
-          states: [{
-            stateName: 'toggleToImagery',
-            icon:      '<img src="css/images/yellowArrow.png">',
-            title:     'button 1',
-            onClick: function() {
-              console.log('clicked button 1')
+          id: '2016ToggleButton',
+          states:[{
+            stateName: 'dateSelected',
+            icon: '<strong class="aDate">2016</strong>',
+            title: 'Show 2016 Imagery',
+            onClick: function(control) {
+              console.log('clicked 2016 - it was already active');
+              //toggleYear(id);
+              //control.state('dateNotSelected');
+            }
+          }, {
+            stateName: 'dateNotSelected',
+            icon: '<strong class="aDate">2016</strong>',
+            title: 'Show 2016 Imagery',
+            onClick: function(control) {
+              console.log('clicked 2016');
+              toggleYear(control, baseMapImagery2016);
+              /*for (i = 0; i < app.state.map.historicalImageryButtons.length; i++) {
+                console.log(app.state.map.historicalImageryButtons[i].options.id);
+                app.state.map.historicalImageryButtons[i].state('dateNotSelected');
+              };
+              control.state('dateSelected');*/
             }
           }]
         }),
         L.easyButton({
-          position: 'bottomright',
-          states: [{
-            stateName: 'toggleToImagery',
-            icon:      '<img src="css/images/yellowArrow.png">',
-            title:     'button 2',
-            onClick: function() {
-              console.log('clicked button 2')
+          id: '2015ToggleButton',
+          states:[{
+            stateName: 'dateNotSelected',
+            icon: '<strong class="aDate">2015</strong>',
+            title: 'Show 2015 Imagery',
+            onClick: function(control) {
+              console.log('clicked 2015')
+              toggleYear(control, baseMapImagery2015);
+              //control.state('dateSelected')
+            }
+          }, {
+            stateName: 'dateSelected',
+            icon: '<strong class="aDate">2015</strong>',
+            title: 'Show 2015 Imagery',
+            onClick: function(control) {
+              console.log('clicked 2015 - it was already active')
+              //control.state('dateNotSelected')
             }
           }]
         }),
         L.easyButton({
-          position: 'bottomright',
-          states: [{
-            stateName: 'toggleToImagery',
-            icon:      '<img src="css/images/yellowArrow.png">',
-            title:     'button 3',
-            onClick: function() {
-              console.log('clicked button 3')
+          id: '2012ToggleButton',
+          states:[{
+            stateName: 'dateNotSelected',
+            icon: '<strong class="aDate">2012</strong>',
+            title: 'Show 2012 Imagery',
+            onClick: function(control) {
+              console.log('clicked 2012')
+              toggleYear(control, baseMapImagery2012);
+              //control.state('dateSelected')
+            }
+          }, {
+            stateName: 'dateSelected',
+            icon: '<strong class="aDate">2012</strong>',
+            title: 'Show 2012 Imagery',
+            onClick: function(control) {
+              console.log('clicked 2012 - it was already active')
+              //control.state('dateNotSelected')
             }
           }]
         }),
-      ];*/
-
-      var historicalImageryButtons = [
-        L.easyButton('<strong>2015</strong>', function() {
-          console.log('clicked 2015')
+        L.easyButton({
+          id: '2010ToggleButton',
+          states:[{
+            stateName: 'dateNotSelected',
+            icon: '<strong class="aDate">2010</strong>',
+            title: 'Show 2010 Imagery',
+            onClick: function(control) {
+              console.log('clicked 2010')
+              toggleYear(control, baseMapImagery2010);
+              //control.state('dateSelected')
+            }
+          }, {
+            stateName: 'dateSelected',
+            icon: '<strong class="aDate">2010</strong>',
+            title: 'Show 2010 Imagery',
+            onClick: function(control) {
+              console.log('clicked 2010 - it was already active')
+              //control.state('dateNotSelected')
+            }
+          }]
         }),
-        L.easyButton('<strong>2014</strong>', function() {
-          console.log('clicked 2012')
-        }),
-        L.easyButton('<strong>2013</strong>', function() {
-          console.log('clicked 2010')
-        }),
-        L.easyButton('<strong>2012</strong>', function() {
-          console.log('clicked 2008')
+        L.easyButton({
+          id: '2008ToggleButton',
+          states:[{
+            stateName: 'dateNotSelected',
+            icon: '<strong class="aDate">2008</strong>',
+            title: 'Show 2008 Imagery',
+            onClick: function(control) {
+              console.log('clicked 2008')
+              toggleYear(control, baseMapImagery2008);
+              //control.state('dateSelected')
+            }
+          }, {
+            stateName: 'dateSelected',
+            icon: '<strong class="aDate">2008</strong>',
+            title: 'Show 2008 Imagery',
+            onClick: function(control) {
+              console.log('clicked 2008 - it was already active')
+              //control.state('dateNotSelected')
+            }
+          }]
         })
       ];
 
       // build a toolbar with them
       //L.easyBar(buttons).addTo(_map);
-      L.easyBar(historicalImageryButtons, {
+      theEasyBar = L.easyBar(app.state.map.historicalImageryButtons, {
         position: 'topright'
-      }
-    ).addTo(_map);
+      })//.addTo(_map);
 
-
-
-      /*var ourCustomControl = L.Control.extend({
-        options: {
-          position: 'topright'
-          //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
-        },
-        onAdd: function (_map) {
-          var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-          container.style.backgroundColor = 'white';
-          container.style.width = '30px';
-          container.style.height = '30px';
-          container.onclick = function(){
-            console.log('buttonClicked');
-          }
-          return container;
-        }
-      });
-      _map.addControl(new ourCustomControl());*/
-
+      // adds and removes baseLayer and overlay
       function toggleBasemap() {
         if (app.state.map.baseLayer == 'baseMapLight') {
-          baseMapLight.remove();
+          _baseLayerGroup.clearLayers();
+          //baseMapLight.remove();
           overlayBaseLabels.remove();
-          baseMapImagery2016.addTo(_map);
+          _baseLayerGroup.addLayer(baseMapImagery2016);
+          //baseMapImagery2016.addTo(_map);
           overlayImageryLabels.addTo(_map);
+          theEasyBar.addTo(_map);
+
         } else {
-          baseMapImagery2016.remove();
+          _baseLayerGroup.clearLayers();
+          //baseMapImagery2016.remove();
           overlayImageryLabels.remove();
-          baseMapLight.addTo(_map);
+          _baseLayerGroup.addLayer(baseMapLight);
+          //baseMapLight.addTo(_map);
           overlayBaseLabels.addTo(_map);
+          theEasyBar.remove();
         }
         domLayerList();
       };
 
-      
+
+      function toggleYear(control, requestedLayer) {
+        // gray all buttons
+        for (i = 0; i < app.state.map.historicalImageryButtons.length; i++) {
+          //console.log(app.state.map.historicalImageryButtons[i].options.id);
+          app.state.map.historicalImageryButtons[i].state('dateNotSelected');
+        };
+        _baseLayerGroup.clearLayers();
+        _baseLayerGroup.addLayer(requestedLayer)
+
+        // highlight current button
+        control.state('dateSelected');
+
+      };
+
+
 
       /*$('#test-toggle-button').on('click', function() {
         if (app.state.map.baseLayer == 'baseMapLight') {
@@ -460,7 +507,7 @@ app.map = (function ()
 
     didClickMap: function (e) {
       console.log('did click map');
-      
+
       // set state
       app.state.map.clickedOnMap = true
       //app.state.map.didClickMap = true;
@@ -470,17 +517,17 @@ app.map = (function ()
       // var parcelQuery = L.esri.query({url: app.config.parcelLayerUrl});
       // parcelQuery.contains(e.latlng)
       // parcelQuery.run(app.didGetParcelQueryResult);
-      
+
       app.getParcelByLatLng(e.latlng, function () {
         var parcel = app.state.dor.features[0],
             parcelAddress = app.util.concatDorAddress(parcel);
-  
+
         // if this is the result of a map click, query ais for the address
         if (app.state.map.clickedOnMap) {
           app.getAis(parcelAddress);
           app.state.map.clickedOnMap = false;
         }
-  
+
         // render parcel
         app.map.drawParcel();
       });
@@ -488,10 +535,10 @@ app.map = (function ()
 
     drawParcel: function () {
       // console.log('draw parcel', app.state.dor);
-      
+
       // if there's no parcel, return
       if (!app.state.dor) return;
-      
+
       var parcel = app.state.dor.features[0],
           // flip these because leaflet uses lat/lon and esri is x/y
           coords = app.util.flipCoords(parcel.geometry.coordinates),
@@ -586,11 +633,11 @@ app.map = (function ()
       localStorage.setItem('theZoom', app.state.theZoom);
       localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
     },
-    
+
     // called when the active topic in the topic panel changes
     didActivateTopic: function (topic) {
       console.log('did activate topic:', topic);
-      
+
       switch (topic) {
         case 'deeds':
           // code here

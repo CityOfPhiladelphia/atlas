@@ -1,8 +1,22 @@
+/*
 .leaflet-bar button,
 .leaflet-bar button:hover {
   background-color: #fff;
   border: none;
   border-bottom: 1px solid #ccc;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: black;
+}*/
+
+.leaflet-bar button {
+  background-color: #fff;
+  border: none;
+  border-bottom: 1px solid #eee;
   width: 26px;
   height: 26px;
   line-height: 26px;
@@ -19,9 +33,13 @@
   display: block;
 }
 
+
 .leaflet-bar button:hover {
-  background-color: #f4f4f4;
+  /*background-color: #fad26e;*/
+  height: 30px;
+  width: 40px;
 }
+
 
 .leaflet-bar button:first-of-type {
   border-top-left-radius: 4px;
@@ -53,4 +71,27 @@
   width: 30px;
   height: 30px;
   line-height: 30px;
+}
+
+#baseToggleButton {
+    height: 40px;
+    width: 40px;
+}
+
+.easy-button-button.dateNotSelected-active {
+    height: 30px;
+    width: 40px;
+    background-color: #cfcfcf
+}
+
+.easy-button-button.dateSelected-active {
+    height: 30px;
+    width: 40px;
+    background-color: #ffffff
+}
+
+.aDate {
+    height: 30px;
+    line-height: 30px;
+    white-space: nowrap;
 }
