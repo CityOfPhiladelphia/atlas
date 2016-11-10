@@ -517,7 +517,7 @@ var app = (function ()
     didGetZoningOverlayResult: function (error, featureCollection, response) {
       var features = featureCollection.features,
           $tbody = $('#zoning-overlays').find('tbody'),
-          fields = ['OVERLAY_NAME', 'CODE_SECTION', 'PENDING'],
+          fields = ['OVERLAY_NAME', 'CODE_SECTION'],
           tbodyHtml = app.util.makeTableRows(features, fields);
       $tbody.html(tbodyHtml);
       
