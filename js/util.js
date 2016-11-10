@@ -1,4 +1,4 @@
-/* global _, app */
+/* global _, moment, app */
 
 app.util = (function () {
   return {
@@ -61,6 +61,12 @@ app.util = (function () {
         // loop over fields
         var valsHtml = _.map(fields, function (field) {
           var val = row[field] || '';
+          
+          // kludgily format iso dates
+          if (field.match('date')) {
+            val = moment(val).format('YYYY-MM-DD');
+          }
+          
           return '<td>' + val + '</td>';
         }).join('');
         return '<tr>' + valsHtml + '</tr>';

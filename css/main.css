@@ -167,3 +167,13 @@ img { max-width: inherit; }
 h4.has-tip {
     font-weight: normal;
 }
+
+/*min width for date columns in topic tables*/
+table {
+    /*table-layout: fixed;*/
+    width: 100%;
+}
+
+.date-col {
+    width: 12%;
+}

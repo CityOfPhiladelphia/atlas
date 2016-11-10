@@ -704,9 +704,11 @@ var app = (function ()
     didGetNearbyAppeals: function () {
       var features = app.state.nearby.appeals,
           featuresSorted = _.orderBy(features, app.config.li.fieldMap.appeals.date, ['desc']),
-          sourceFields = _.map(app.config.li.displayFields, function (displayField) { 
-                            return app.config.li.fieldMap.appeals[displayField];
-                          }), 
+          // sourceFields = _.map(app.config.li.displayFields, function (displayField) { 
+          //                   return app.config.li.fieldMap.appeals[displayField];
+          //                 }),
+          // adding address:
+          sourceFields = ['processeddate', 'appealkey', 'address', 'appealgrounds', 'decision',],
           rowsHtml = app.util.makeTableRowsFromJson(featuresSorted, sourceFields),
           $tbody = $('#nearby-appeals').find('tbody');
       $tbody.html(rowsHtml);
