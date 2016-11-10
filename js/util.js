@@ -46,6 +46,15 @@ app.util = (function () {
         // loop over fields
         var valsHtml = _.map(fields, function (field) {
           var val = props[field] || '';
+          
+          // TEMP format iso dates
+          // if (field.indexOf('date') > -1) {
+          //   val = moment(val).format('YYYY-MM-DD');
+          // }
+          // else {
+          //   // console.log('not date', field);
+          // }
+          
           return '<td>' + val + '</td>';
         }).join('');
         return '<tr>' + valsHtml + '</tr>';
@@ -62,10 +71,13 @@ app.util = (function () {
         var valsHtml = _.map(fields, function (field) {
           var val = row[field] || '';
           
-          // kludgily format iso dates
-          if (field.match('date')) {
-            val = moment(val).format('YYYY-MM-DD');
-          }
+          // TEMP format iso dates
+          // if (field.indexOf('date') > -1) {
+          //   val = moment(val).format('YYYY-MM-DD');
+          // }
+          // else {
+          //   console.log('not date', field);
+          // }
           
           return '<td>' + val + '</td>';
         }).join('');
