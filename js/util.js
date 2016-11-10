@@ -45,7 +45,7 @@ app.util = (function () {
         var props = row.properties;
         // loop over fields
         var valsHtml = _.map(fields, function (field) {
-          var val = props[field];
+          var val = props[field] || '';
           return '<td>' + val + '</td>';
         }).join('');
         return '<tr>' + valsHtml + '</tr>';
@@ -60,7 +60,7 @@ app.util = (function () {
       var rowsHtml =  _.map(rows, function (row) {
         // loop over fields
         var valsHtml = _.map(fields, function (field) {
-          var val = row[field];
+          var val = row[field] || '';
           return '<td>' + val + '</td>';
         }).join('');
         return '<tr>' + valsHtml + '</tr>';
