@@ -144,9 +144,13 @@ header.site-header > .row:last-of-type {
     margin-bottom: 5px;
 }
 
-#zoning-badge > #zoning-badge-body > #zoning-description {
+/*#zoning-badge > #zoning-badge-body > #zoning-description {*/
     /*display: inline-block;*/
-    margin-bottom:
+    /*margin-bottom:*/
+/*}*/
+
+#map-panel {
+    height: 100%;
 }
 
 #map {

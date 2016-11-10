@@ -54,7 +54,7 @@
                         <ul id="addressList"></ul>
                         <button class="close-button" data-close aria-label="Close modal" type="button"></button>
                     </div>
-
+                    
                     <div id="topic-panel-header">
                         <div class="row">
                             <div id="topic-panel-header-greeting" class="topic-panel-header-item">
@@ -400,11 +400,19 @@
                 </div>
 
                 <!--RIGHT PANEL-->
-                <div class="large-12 columns" style="height: 100%">
+                <div id="map-panel" class="large-12 columns">
                     <div id="map"></div>
                 </div>
             </div>
         </div><!-- End #page -->
+
+        <!--MODALS-->
+        <!-- no results address modal -->
+        <div id="no-results-modal" class="reveal" data-reveal aria-labelledby="modal-title" aria-hidden="true" role="dialog">
+            <h1>Sorry, no addresses were found.</h1>
+            <p>Please try your search again.</p>
+            <!--<button class="close-button" data-close aria-label="Close modal" type="button">OK</button>-->
+        </div>
 
         <!-- JS: VENDOR -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>

@@ -329,7 +329,7 @@ var app = (function ()
       // DOR
       // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
       var aisParcelId = app.state.ais.features[0].properties.dor_parcel_id,
-          stateParcel = app.state.dor && app.state.dor.features ? app.state.parcel.features[0] : null;
+          stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
       
       // if we already have the parcel
       if (stateParcel && stateParcel.properties.MAPREG === aisParcelId) {
@@ -365,12 +365,14 @@ var app = (function ()
 
     // render deeds (assumes there's a parcel in the state)
     renderParcelTopic: function () {
+      console.log('render parcel topic');
+      
       var parcel = app.state.dor.features[0],
           props = parcel.properties,
           parcelId = props.MAPREG,
           address = app.util.concatDorAddress(parcel);
           
-      console.log('render parcel topic', parcel);
+      console.log('parcel', parcel);
           
       $('#land-records-id').html(parcelId);
       $('#land-records-address').html(address);
@@ -393,10 +395,11 @@ var app = (function ()
     {
       // this is a POC, so let's populate some divs by hand ¯\_(ツ)_/¯
 
-      var props = data[0];
+      
+      var props = data[0] || {};
 
       // concat owners
-      var owners = [props.owner_1];
+      var owners = [props.owner_1 || 'None'];
       if (props.owner_2) owners.push(props.owner_2);
       var ownersJoined = owners.join(', ');
 
@@ -417,13 +420,13 @@ var app = (function ()
 
       // NEW METHOD: do this manually, because some vals have to be handled manually
       var vals = {
-        'property-account-num':         props.parcel_number,
-        'property-sale-date':           props.sale_date,
-        'property-sale-price':          props.sale_price,
-        'property-value':               props.market_value,
-        'property-owners':              ownersJoined,
-        'property-land-area':           props.total_livable_area,
-        'property-improvement-area':    props.total_area,
+        'property-account-num':         props.parcel_number || 'None',
+        'property-sale-date':           props.sale_date || 'None',
+        'property-sale-price':          props.sale_price || 'None',
+        'property-value':               props.market_value || 'None',
+        'property-owners':              ownersJoined || 'None',
+        'property-land-area':           props.total_livable_area || 'None',
+        'property-improvement-area':    props.total_area || 'None',
       };
 
       app.renderDivs(vals);
@@ -578,7 +581,7 @@ var app = (function ()
       // parcelQuery.run(app.didGetParcelQueryResult);
       
       // clear state
-      app.state.dor = undefined;
+      // app.state.dor = undefined;
       
       $.ajax({
         url: app.config.parcelLayerUrl + '/query',
@@ -589,7 +592,7 @@ var app = (function ()
           f: 'geojson',
         },
         success: function (data) {
-          console.log('got parcel by id', this.url);
+          console.log('got parcel by id', data);
           
           // AGO returns json as plaintext soooo...
           data = JSON.parse(data);
@@ -605,16 +608,31 @@ var app = (function ()
     
     // get a parcel by a leaflet latlng
     getParcelByLatLng: function (latLng, callback) {
+      console.log('get parcel by latlng');
+      
       // clear state
-      app.state.dor = undefined;
+      // disabling this because if the new query doesn't return anything,
+      // we don't want to flush out the current dor parcel
+      // app.state.dor = undefined;
       
       var parcelQuery = L.esri.query({url: app.config.parcelLayerUrl});
       parcelQuery.contains(latLng);
       parcelQuery.run(function (error, featureCollection, response) {
-        if (error || !featureCollection) return;
+        if (error || !featureCollection) {
+          console.log('get parcel by latlng error', error);
+          return;
+        }
+        
+        // if empty response
+        if (featureCollection.features.length === 0) {
+          // show alert
+          $('#no-results-modal').foundation('open');
+          return;
+        }
         
         // update state
         app.state.dor = featureCollection;
+        console.log('updated dor state', app.state.dor);
         
         // if there's a callback, call it
         callback && callback();

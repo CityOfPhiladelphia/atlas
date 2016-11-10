@@ -459,6 +459,8 @@ app.map = (function ()
     },
 
     didClickMap: function (e) {
+      console.log('did click map');
+      
       // set state
       app.state.map.clickedOnMap = true
       //app.state.map.didClickMap = true;
