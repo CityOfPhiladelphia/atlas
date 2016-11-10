@@ -33,7 +33,8 @@
                   <div class="page-title-container">
                     <a href="#/">
                       <h1 class="page-title">Atlas</h1>
-                      <h2 class="page-subtitle">Explore and visualize addresses in the City of Philadelphia.</h2>
+                      <!--<h2 class="page-subtitle">Explore and visualize addresses in the City of Philadelphia.</h2>-->
+                      <h2 class="page-subtitle">Philadelphia in 360 Degrees</h2>
                     </a>
                   </div>
                   <div id="search-container">
@@ -144,11 +145,24 @@
                         <a id="topic-link-imagery" class="topic-link" href="#"><span class="topic-link-icon flaticon-copy"></span>360&deg; View</a>
                         <div id="topic-imagery" class="topic">
                             <div class="callout">
-                                <p>Use the buttons below to open new windows with oblique and/or street view imagery. When you move the map on the right, the imagery windows will follow.</p>
+                                <!--<p>Use the buttons below to open new windows with oblique and/or street view imagery. When you move the map on the right, the imagery windows will follow.</p>-->
+                                <p>
+                                    The map to your right is the <span class="keyword">basemap</span>. Toggle between the default basemap view and an aerial image 
+                                    by clicking the button in the upper-right corner. Once you've turned on aerial imagery, you can choose a year from
+                                    the options just below the toggle. Click <span class="keyword">Sky View 45&deg;</span> to open a new window 
+                                    of aerial imagery captured at a 45&deg; angle to explore a 3D-like view of this address. Click <span class="keyword">Street View</span> to
+                                    explore a high-resolution view from the street. When you move the basemap, the Sky View and 
+                                    Street View windows follow along.
+                                </p>
                             </div>
-                            <div id="imagery-buttons">
+                            <div id="imagery-buttons" class="center">
                                 <!--<p>Use the buttons below to see interactive imagery for this location.</p>-->
-                                <a href="#" class="button no-margin external" id="pict-button">Oblique View</a>
+                                <!--<a href="#" class="button no-margin external" id="pict-button">Oblique View</a>-->
+                                <a href="#" class="button no-margin external" id="pict-button">Sky View 45&deg;</a>
+                                
+                                <!--this never happened-->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                <!--<a href="#" class="button no-margin external" id="cyclo-button">Street View</a>-->
                                 <a href="#" class="button no-margin external" id="cyclo-button">Street View</a>
                             </div>
                         </div>
