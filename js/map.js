@@ -180,7 +180,7 @@ app.map = (function ()
       });
 
       app.state.map.mapServices.ZoningMap = L.esri.dynamicMapLayer({
-        url: 'http://gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer',
+        url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer',
         maxZoom: 22,
         name: 'zoningMap',
         type: 'overlay',
