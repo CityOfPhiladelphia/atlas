@@ -586,7 +586,21 @@ app.map = (function ()
       localStorage.setItem('theZoom', app.state.theZoom);
       localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
     },
-
+    
+    // called when the active topic in the topic panel changes
+    didActivateTopic: function (topic) {
+      console.log('did activate topic:', topic);
+      
+      switch (topic) {
+        case 'deeds':
+          // code here
+          break;
+        case 'zoning':
+          break;
+        default:
+          console.log('unhandled topic:', topic);
+      }
+    },
   }; // end of return
 })();
 
