@@ -91,7 +91,15 @@ var app = (function ()
       },
       
       // socrataAppToken: 'bHXcnyGew4lczXrhTd7z7DKkc',
-      socrataAppToken: 'wEPcq2ctcmWapPW7v6nWp7gg4',
+      // socrataAppToken: 'wEPcq2ctcmWapPW7v6nWp7gg4',
+      socrata: {
+        baseUrl: '//data.phila.gov/resource/',
+      },
+      
+      nearby: {
+        // in feet
+        radius: 500,
+      },
     },
 
     // global app state
@@ -387,6 +395,35 @@ var app = (function ()
       var zoningOverlayQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/1'});
       zoningOverlayQuery.contains(aisGeom);
       zoningOverlayQuery.run(app.didGetZoningOverlayResult);
+      
+      /*
+      NEARBY
+      */
+      
+      // appeals
+      var aisX = aisGeom.coordinates[0],
+          aisY = aisGeom.coordinates[1],
+          radiusMeters = app.config.nearby.radius * 0.3048,
+          nearbyAppealsUrl = app.config.socrata.baseUrl + app.config.li.socrataIds.appeals + '.json',
+          // nearbyAppealsQuery = 'DISTANCE_IN_METERS(location, POINT(' + aisX + ',' + aisY + ')) <= ' + radiusMeters;
+          nearbyAppealsQuery = 'within_circle(' + ['shape', aisY, aisX, radiusMeters].join(', ') + ')';
+      // exclude appeals at the exact address
+      if (liAddressKey) nearbyAppealsQuery += " AND addresskey != '" + liAddressKey + "'";
+      
+      $.ajax({
+        url: nearbyAppealsUrl,
+        data: {
+          $where: nearbyAppealsQuery,
+        },
+        success: function (data) {
+          if (!app.state.nearby) app.state.nearby = {};
+          app.state.nearby.appeals = data;
+          app.didGetNearbyAppeals();
+        },
+        error: function (err) {
+          console.log('nearby appeals error', err);
+        },
+      });
     },
   
     // TODO confirm these
@@ -542,7 +579,7 @@ var app = (function ()
       var features = featureCollection.features,
           $tbody = $('#zoning-overlays').find('tbody'),
           fields = ['OVERLAY_NAME', 'CODE_SECTION'],
-          tbodyHtml = app.util.makeTableRows(features, fields);
+          tbodyHtml = app.util.makeTableRowsFromGeoJson(features, fields);
       $tbody.html(tbodyHtml);
       
       var count = features.length;
@@ -661,7 +698,20 @@ var app = (function ()
         
         // if there's a callback, call it
         callback && callback();
-      }); 
+      });
+    },
+    
+    didGetNearbyAppeals: function () {
+      var features = app.state.nearby.appeals,
+          featuresSorted = _.orderBy(features, app.config.li.fieldMap.appeals.date, ['desc']),
+          sourceFields = _.map(app.config.li.displayFields, function (displayField) { 
+                            return app.config.li.fieldMap.appeals[displayField];
+                          }), 
+          rowsHtml = app.util.makeTableRowsFromJson(featuresSorted, sourceFields);
+      $('#nearby-appeals').find('tbody').html(rowsHtml);
+      $('#nearby-appeals-count').text(' (' + features.length + ')');
+      
+      // listen for hover
     },
   };
 })();
