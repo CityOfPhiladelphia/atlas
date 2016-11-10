@@ -88,7 +88,10 @@ var app = (function ()
       },
       cyclomedia: {
         cyclomediaUrl: 'http://192.168.104.182/philacyclo/',
-      }
+      },
+      
+      // socrataAppToken: 'bHXcnyGew4lczXrhTd7z7DKkc',
+      socrataAppToken: 'wEPcq2ctcmWapPW7v6nWp7gg4',
     },
 
     // global app state
@@ -227,6 +230,9 @@ var app = (function ()
 
       $activeTopic.slideUp(350);
       $targetTopic.slideDown(350);
+      
+      // tell map about it
+      app.map.didActivateTopic(targetTopicName);
     },
 
     toggleTopic: function (targetTopicName) {
@@ -293,6 +299,8 @@ var app = (function ()
     getTopics: function (aisProps) {
       // console.log('get topics');
       
+      var aisAddress = aisProps.street_address;
+      
       // opa
       var opaAccountNum = aisProps.opa_account_num;
       $.get({
@@ -350,6 +358,24 @@ var app = (function ()
           app.map.drawParcel();
         });
       }
+      
+      // get dor documents
+      // $.ajax({
+      //   url: '//data.phila.gov/resource/6fwh-qntk.json',
+      //   // beforeSend: function (request) {
+      //   //   request.setRequestHeader('X-App-Token', app.config.socrataAppToken);
+      //   // },
+      //   data: {
+      //     address: aisAddress,
+      //     $$app_token: app.config.socrata,
+      //   },
+      //   success: function (data) {
+      //     console.log('dor docs', data);
+      //   },
+      //   error: function (err) {
+      //     console.log('dor document error', err);
+      //   },
+      // });
 
       // get zoning
       var aisGeom = app.state.ais.features[0].geometry;
@@ -385,8 +411,6 @@ var app = (function ()
       // TODO air rights
       // $('#land-records-air-rights').html(props.);
       $('#land-records-condo').html(props.CONDOFLAG === 1 ? 'Yes' : 'No');
-      
-      
     },
 
     // takes an object of divId => text and renders
@@ -634,7 +658,6 @@ var app = (function ()
         
         // update state
         app.state.dor = featureCollection;
-        console.log('updated dor state', app.state.dor);
         
         // if there's a callback, call it
         callback && callback();
