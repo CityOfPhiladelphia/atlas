@@ -707,11 +707,31 @@ var app = (function ()
           sourceFields = _.map(app.config.li.displayFields, function (displayField) { 
                             return app.config.li.fieldMap.appeals[displayField];
                           }), 
-          rowsHtml = app.util.makeTableRowsFromJson(featuresSorted, sourceFields);
-      $('#nearby-appeals').find('tbody').html(rowsHtml);
+          rowsHtml = app.util.makeTableRowsFromJson(featuresSorted, sourceFields),
+          $tbody = $('#nearby-appeals').find('tbody');
+      $tbody.html(rowsHtml);
       $('#nearby-appeals-count').text(' (' + features.length + ')');
       
+      // TEMP attribute rows with appeal id
+      var sourceIdField = app.config.li.fieldMap.appeals.id;
+      _.forEach($tbody.find('tr'), function (row, i) {
+        $(row).attr('data-appeal-id', features[i][sourceIdField]);
+      });
+      
       // listen for hover
+      $tbody.find('tr').hover(
+        function () {
+          var $this = $(this);
+          $this.css('background', '#ffffff'); 
+          
+          // tell map to highlight pin
+          var appealId = $this.attr('data-appeal-id');
+          app.map.didHoverOverNearbyAppeal(appealId);
+        },
+        function () {
+          $(this).css('background', '');
+        }
+      );
     },
   };
 })();

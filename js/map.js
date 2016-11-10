@@ -601,6 +601,10 @@ app.map = (function ()
           console.log('unhandled topic:', topic);
       }
     },
+    
+    didHoverOverNearbyAppeal: function (id) {
+      console.log('did hover over nearby appeal', id);
+    },
   }; // end of return
 })();
 
