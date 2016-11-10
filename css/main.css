@@ -62,6 +62,9 @@ header.site-header > .row:last-of-type {
 #topic-panel-header-address {
     color: #666;
     display: none;
+    border-left: 5px solid #58c04d;
+    margin-left: 10px;
+    padding-left: 15px;
 }
 
 #topic-panel-header-address-line-1 {
