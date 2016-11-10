@@ -38,7 +38,10 @@ app.map = (function ()
       app.state.map.clickedOnMap = false;
       app.state.map.baseLayer;
       app.state.map.overLayers = [];
-      app.map.controls = {}
+      app.state.map.tileLayers = {};
+      app.state.map.featureLayers = {};
+      app.state.map.mapServices = {};
+
       //app.state.moveMode = true
       var CITY_HALL = [39.952388, -75.163596];
 
@@ -48,6 +51,7 @@ app.map = (function ()
       });
       _map.setView(CITY_HALL, 17);
 
+      _overlayLayerGroup.addTo(_map);
       /*
       Using multiple tiled Layers in esri-leaflet is not well documented.
       The structure of the html rendered looks like this:
@@ -151,13 +155,38 @@ app.map = (function ()
         zIndex: 101,
       })
 
-      var overlayZoning = L.esri.tiledMapLayer({
+      app.state.map.tileLayers.overlayZoning = L.esri.tiledMapLayer({
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer',
         maxZoom: 22,
         name: 'overlayZoning',
         type: 'overlay',
         zIndex: 10,
       });
+
+      app.state.map.featureLayers.zoningOverlayDistricts = L.esri.featureLayer({
+        url: 'http://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Zoning_legend/FeatureServer/1',
+        maxZoom: 22,
+        name: 'zoningOverlayDistricts',
+        type: 'overlay',
+        zIndex: 11,
+      });
+
+      app.state.map.featureLayers.zoningBaseDistricts = L.esri.featureLayer({
+        url: 'http://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Zoning_legend/FeatureServer/6',
+        maxZoom: 22,
+        name: 'zoningBaseDistricts',
+        type: 'overlay',
+        zIndex: 12,
+      });
+
+      app.state.map.mapServices.ZoningMap = L.esri.dynamicMapLayer({
+        url: 'http://gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer',
+        maxZoom: 22,
+        name: 'zoningMap',
+        type: 'overlay',
+        zIndex: 13,
+      });
+
 
 
       // YOU SHOULD NOT USE AN OVERLAY GROUP IF NOT USING THE L.Control.Layers
@@ -188,7 +217,7 @@ app.map = (function ()
 
       // THE ORDER HERE MATTERS.  THE LOWER ON THIS LIST, THE HIGHER THE Z VALUE THE LAYER WILL GET
       var overlays = {
-        'Zoning': overlayZoning,
+        'Zoning': app.state.map.tileLayers.overlayZoning,
         'Street Labels': overlayBaseLabels,
         'Imagery Street Labels': overlayImageryLabels,
         //'PWD Parcels':  overlayPwdParcels,
@@ -372,20 +401,20 @@ app.map = (function ()
       function toggleBasemap() {
         if (app.state.map.baseLayer == 'baseMapLight') {
           _baseLayerGroup.clearLayers();
-          //baseMapLight.remove();
           overlayBaseLabels.remove();
+          //_overlayLayerGroup.clearLayers();
           _baseLayerGroup.addLayer(baseMapImagery2016);
-          //baseMapImagery2016.addTo(_map);
           overlayImageryLabels.addTo(_map);
+          //_overlayLayerGroup.addLayer(overlayImageryLabels);
           theEasyBar.addTo(_map);
 
         } else {
           _baseLayerGroup.clearLayers();
-          //baseMapImagery2016.remove();
           overlayImageryLabels.remove();
+          //_overlayLayerGroup.clearLayers();
           _baseLayerGroup.addLayer(baseMapLight);
-          //baseMapLight.addTo(_map);
           overlayBaseLabels.addTo(_map);
+          //_overlayLayerGroup.addLayer(overlayBaseLabels);
           theEasyBar.remove();
         }
         domLayerList();
@@ -403,6 +432,7 @@ app.map = (function ()
 
         // highlight current button
         control.state('dateSelected');
+        domLayerList();
 
       };
 
@@ -643,12 +673,18 @@ app.map = (function ()
           // code here
           break;
         case 'zoning':
+          //_overlayLayerGroup.addLayer(app.state.map.featureLayers.zoningOverlayDistricts);
+          //_overlayLayerGroup.addLayer(app.state.map.featureLayers.zoningBaseDistricts);
+          app.state.map.mapServices.ZoningMap.addTo(_map);
+          //app.state.map.featureLayers.zoningOverlayDistricts.addToMap()
+          //domLayerList();
+
           break;
         default:
           console.log('unhandled topic:', topic);
       }
     },
-    
+
     didHoverOverNearbyAppeal: function (id) {
       console.log('did hover over nearby appeal', id);
     },
