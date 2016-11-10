@@ -92,7 +92,10 @@ var app = (function ()
     },
 
     // global app state
-    state: {},
+    state: {
+      // prevent topics from opening until we've completed a search
+      shouldOpenTopics: false,
+    },
 
     // start app
     init: function ()
@@ -168,7 +171,9 @@ var app = (function ()
         url: url,
         data: params,
         success: function (data) {
+          app.state.shouldOpenTopics = true;
           app.state.ais = data;
+          
           // if more than one address result, show a modal
           if (data.features.length > 1) app.showMultipleAisResultModal();
           else {
@@ -209,6 +214,9 @@ var app = (function ()
     // takes a topic (formerly "data row") name and activates the corresponding
     // section in the data panel
     activateTopic: function (targetTopicName) {
+      // prevent topics from opening until we have at least AIS (arbitrary , but should work)
+      if (!app.state.ais) return;
+      
       var $targetTopic = $('#topic-' + targetTopicName);
 
       // get the currently active topic
