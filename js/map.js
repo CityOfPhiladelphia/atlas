@@ -547,14 +547,13 @@ app.map = (function ()
 
       // pan map
       // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
-      // if (app.state.map.shouldPan) {
+      if (app.state.map.shouldPan) {
         // latlon = new L.LatLng(thelatlon[0], thelatlon[1]);
-      _map.setView(parcelCentroid, 20);
-      // need to wait until map sets view
-      // or need to use parcel centroid instead of center of map
-      // set new state and localStorage
-      app.map.LSinit();
-      // }
+        _map.setView(parcelCentroid, 20, {animate:false});
+        // or need to use parcel centroid instead of center of map
+        // set new state and localStorage
+        app.map.LSinit();
+      };
 
       // add to map
       _parcelLayerGroup.addLayer(parcelPoly);
@@ -629,9 +628,8 @@ app.map = (function ()
 
     // called when the active topic in the topic panel changes
     didActivateTopic: function (topic) {
-      console.log('did activate topic:', topic);
       _overlayLayerGroup.clearLayers();
-      app.map.domLayerList();
+      //app.map.domLayerList();
 
       switch (topic) {
         case 'deeds':
@@ -640,7 +638,7 @@ app.map = (function ()
         case 'zoning':
           _overlayLayerGroup.addLayer(app.state.map.mapServices.ZoningMap);
           // add name "zoningMap" to the DOM list
-          app.map.domLayerList();
+          //app.map.domLayerList();
           break;
         case 'nearby':
           app.map.addNearbyAppealsToMap();
@@ -650,7 +648,6 @@ app.map = (function ()
     },
 
     didDisactivateTopic: function (topic) {
-      console.log('did disactivate topic:', topic);
       switch (topic) {
         case 'deeds':
           // code here
@@ -658,7 +655,7 @@ app.map = (function ()
         case 'zoning':
           if (app.state.map.namesOverLayers.includes('zoningMap')){
             _overlayLayerGroup.clearLayers();
-            app.map.domLayerList();
+            //app.map.domLayerList();
           }
           break;
         case 'nearby':
@@ -684,7 +681,7 @@ app.map = (function ()
         });
         _appealsLayerGroup.addLayer(newMarker);
         // this might have been useless
-        app.map.domLayerList();
+        //app.map.domLayerList();
       }
     },
 

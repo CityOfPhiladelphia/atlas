@@ -723,13 +723,16 @@ var app = (function ()
       _.forEach($tbody.find('tr'), function (row, i) {
         $(row).attr('data-appeal-id', featuresSorted[i][sourceIdField]);
       });
+
       // refresh them on map if topic accordian is open
-      if ($('#topic-nearby').attr('style') == 'display: block;') {
-        console.log($('#topic-nearby').attr('style'));
-        console.log('refreshing appeals layer');
-        //app.state.map.appealsLayerGroup.clearLayers();
-        app.map.removeNearbyAppeals;
-        app.map.addNearbyAppealsToMap;
+      console.log('right before if');
+      var $targetTopic = $('#topic-nearby');
+      if ($targetTopic.is(':visible')){
+      //if ($('#topic-nearby').attr('style') == 'display: block;') {
+        //console.log($('#topic-nearby').attr('style'));
+        //console.log('refreshing appeals layer');
+        app.map.removeNearbyAppeals();
+        app.map.addNearbyAppealsToMap();
       };
 
       // listen for hover
