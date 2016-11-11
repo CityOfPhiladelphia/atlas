@@ -57,7 +57,7 @@ app.map = (function ()
       app.state.map.tileLayers = {};
       app.state.map.mapServices = {};
 
-
+      //app.state.map.appealsLayerGroup = new L.LayerGroup();
 
       //app.state.moveMode = true
       var CITY_HALL = [39.952388, -75.163596];
@@ -225,14 +225,12 @@ app.map = (function ()
             icon: '<strong class="aDate">2016</strong>',
             title: 'Show 2016 Imagery',
             onClick: function(control) {
-              console.log('clicked 2016 - it was already active');
             }
           }, {
             stateName: 'dateNotSelected',
             icon: '<strong class="aDate">2016</strong>',
             title: 'Show 2016 Imagery',
             onClick: function(control) {
-              console.log('clicked 2016');
               toggleYear(control, app.state.map.tileLayers.baseMapImagery2016);
               app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2016;
             }
@@ -245,7 +243,6 @@ app.map = (function ()
             icon: '<strong class="aDate">2015</strong>',
             title: 'Show 2015 Imagery',
             onClick: function(control) {
-              console.log('clicked 2015')
               toggleYear(control, app.state.map.tileLayers.baseMapImagery2015);
               app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2015;
             }
@@ -254,7 +251,6 @@ app.map = (function ()
             icon: '<strong class="aDate">2015</strong>',
             title: 'Show 2015 Imagery',
             onClick: function(control) {
-              console.log('clicked 2015 - it was already active')
             }
           }]
         }),
@@ -265,7 +261,6 @@ app.map = (function ()
             icon: '<strong class="aDate">2012</strong>',
             title: 'Show 2012 Imagery',
             onClick: function(control) {
-              console.log('clicked 2012')
               toggleYear(control, app.state.map.tileLayers.baseMapImagery2012);
               app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2012;
             }
@@ -274,7 +269,6 @@ app.map = (function ()
             icon: '<strong class="aDate">2012</strong>',
             title: 'Show 2012 Imagery',
             onClick: function(control) {
-              console.log('clicked 2012 - it was already active')
             }
           }]
         }),
@@ -285,7 +279,6 @@ app.map = (function ()
             icon: '<strong class="aDate">2010</strong>',
             title: 'Show 2010 Imagery',
             onClick: function(control) {
-              console.log('clicked 2010')
               toggleYear(control, app.state.map.tileLayers.baseMapImagery2010);
               app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2010;
             }
@@ -294,7 +287,6 @@ app.map = (function ()
             icon: '<strong class="aDate">2010</strong>',
             title: 'Show 2010 Imagery',
             onClick: function(control) {
-              console.log('clicked 2010 - it was already active')
             }
           }]
         }),
@@ -305,7 +297,6 @@ app.map = (function ()
             icon: '<strong class="aDate">2008</strong>',
             title: 'Show 2008 Imagery',
             onClick: function(control) {
-              console.log('clicked 2008')
               toggleYear(control, app.state.map.tileLayers.baseMapImagery2008);
               app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2008;
             }
@@ -314,7 +305,6 @@ app.map = (function ()
             icon: '<strong class="aDate">2008</strong>',
             title: 'Show 2008 Imagery',
             onClick: function(control) {
-              console.log('clicked 2008 - it was already active')
             }
           }]
         }),
@@ -325,7 +315,6 @@ app.map = (function ()
             icon: '<strong class="aDate">2004</strong>',
             title: 'Show 2004 Imagery',
             onClick: function(control) {
-              console.log('clicked 2004')
               toggleYear(control, app.state.map.tileLayers.baseMapImagery2004);
               app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2004;
             }
@@ -334,7 +323,6 @@ app.map = (function ()
             icon: '<strong class="aDate">2004</strong>',
             title: 'Show 2004 Imagery',
             onClick: function(control) {
-              console.log('clicked 2004 - it was already active')
             }
           }]
         }),
@@ -345,7 +333,6 @@ app.map = (function ()
             icon: '<strong class="aDate">1996</strong>',
             title: 'Show 1996 Imagery',
             onClick: function(control) {
-              console.log('clicked 1996')
               toggleYear(control, app.state.map.tileLayers.baseMapImagery1996);
               app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery1996;
             }
@@ -354,7 +341,6 @@ app.map = (function ()
             icon: '<strong class="aDate">1996</strong>',
             title: 'Show 1996 Imagery',
             onClick: function(control) {
-              console.log('clicked 2008 - it was already active')
             }
           }]
         })
@@ -680,6 +666,10 @@ app.map = (function ()
         //default:
         //  console.log('unhandled topic:', topic);
       }
+    },
+
+    removeNearbyAppeals: function () {
+      _appealsLayerGroup.clearLayers();
     },
 
     addNearbyAppealsToMap: function (id) {
