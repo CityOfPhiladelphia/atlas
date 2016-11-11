@@ -77,9 +77,9 @@ var app = (function ()
         // },
         displayFields:        ['date', 'id', 'description', 'status',],
       },
-      
+
       map: {},
-      
+
       //parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0',
       parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
 
@@ -89,13 +89,13 @@ var app = (function ()
       cyclomedia: {
         cyclomediaUrl: 'http://192.168.104.182/philacyclo/',
       },
-      
+
       // socrataAppToken: 'bHXcnyGew4lczXrhTd7z7DKkc',
       // socrataAppToken: 'wEPcq2ctcmWapPW7v6nWp7gg4',
       socrata: {
         baseUrl: '//data.phila.gov/resource/',
       },
-      
+
       nearby: {
         // in feet
         radius: 500,
@@ -184,7 +184,7 @@ var app = (function ()
         success: function (data) {
           app.state.shouldOpenTopics = true;
           app.state.ais = data;
-          
+
           // if more than one address result, show a modal
           if (data.features.length > 1) app.showMultipleAisResultModal();
           else {
@@ -227,7 +227,7 @@ var app = (function ()
     activateTopic: function (targetTopicName) {
       // prevent topics from opening until we have at least AIS (arbitrary , but should work)
       if (!app.state.ais) return;
-      
+
       var $targetTopic = $('#topic-' + targetTopicName);
 
       // get the currently active topic
@@ -238,7 +238,7 @@ var app = (function ()
 
       $activeTopic.slideUp(350);
       $targetTopic.slideDown(350);
-      
+
       // tell map about it
       app.map.didActivateTopic(targetTopicName);
     },
@@ -247,7 +247,10 @@ var app = (function ()
       var $targetTopic = $('#topic-' + targetTopicName);
 
       // if it's already visible, hide it
-      if ($targetTopic.is(':visible')) $targetTopic.slideUp(350);
+      if ($targetTopic.is(':visible')){
+        $targetTopic.slideUp(350);
+        app.map.didDisactivateTopic(targetTopicName);
+      }
 
       // otherwise, activate
       else app.activateTopic(targetTopicName);
@@ -306,9 +309,9 @@ var app = (function ()
     // initiates requests to topic APIs (OPA, L&I, etc.)
     getTopics: function (aisProps) {
       // console.log('get topics');
-      
+
       var aisAddress = aisProps.street_address;
-      
+
       // opa
       var opaAccountNum = aisProps.opa_account_num;
       $.get({
@@ -354,7 +357,7 @@ var app = (function ()
       // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
       var aisParcelId = app.state.ais.features[0].properties.dor_parcel_id,
           stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
-      
+
       // if we already have the parcel
       if (stateParcel && stateParcel.properties.MAPREG === aisParcelId) {
         app.renderParcelTopic();
@@ -366,7 +369,7 @@ var app = (function ()
           app.map.drawParcel();
         });
       }
-      
+
       // get dor documents
       // $.ajax({
       //   url: '//data.phila.gov/resource/6fwh-qntk.json',
@@ -395,11 +398,11 @@ var app = (function ()
       var zoningOverlayQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/1'});
       zoningOverlayQuery.contains(aisGeom);
       zoningOverlayQuery.run(app.didGetZoningOverlayResult);
-      
+
       /*
       NEARBY
       */
-      
+
       // appeals
       var aisX = aisGeom.coordinates[0],
           aisY = aisGeom.coordinates[1],
@@ -409,7 +412,7 @@ var app = (function ()
           nearbyAppealsQuery = 'within_circle(' + ['shape', aisY, aisX, radiusMeters].join(', ') + ')';
       // exclude appeals at the exact address
       if (liAddressKey) nearbyAppealsQuery += " AND addresskey != '" + liAddressKey + "'";
-      
+
       $.ajax({
         url: nearbyAppealsUrl,
         data: {
@@ -425,7 +428,7 @@ var app = (function ()
         },
       });
     },
-  
+
     // TODO confirm these
     PARCEL_STATUS: {
       1:  'Active',
@@ -436,12 +439,12 @@ var app = (function ()
     // render deeds (assumes there's a parcel in the state)
     renderParcelTopic: function () {
       // console.log('render parcel topic');
-      
+
       var parcel = app.state.dor.features[0],
           props = parcel.properties,
           parcelId = props.MAPREG,
           address = app.util.concatDorAddress(parcel);
-          
+
       $('#land-records-id').html(parcelId);
       $('#land-records-address').html(address);
       $('#land-records-status').html(app.PARCEL_STATUS[props.STATUS]);
@@ -461,7 +464,7 @@ var app = (function ()
     {
       // this is a POC, so let's populate some divs by hand ¯\_(ツ)_/¯
 
-      
+
       var props = data[0] || {};
 
       // concat owners
@@ -581,7 +584,7 @@ var app = (function ()
           fields = ['OVERLAY_NAME', 'CODE_SECTION'],
           tbodyHtml = app.util.makeTableRowsFromGeoJson(features, fields);
       $tbody.html(tbodyHtml);
-      
+
       var count = features.length;
       $('#zoning-overlays-count').html(' (' + count + ')');
     },
@@ -639,15 +642,15 @@ var app = (function ()
     // get a parcel by parcel id
     getParcelById: function (id, callback) {
       // console.log('get parcel by id: ', id);
-      
+
       // OLD METHOD
       // var parcelQuery = L.esri.query({url: app.config.map.parcelLayerUrl});
       // parcelQuery.where("MAPREG = '" + id + "'");
       // parcelQuery.run(app.didGetParcelQueryResult);
-      
+
       // clear state
       // app.state.dor = undefined;
-      
+
       $.ajax({
         url: app.config.parcelLayerUrl + '/query',
         data: {
@@ -659,7 +662,7 @@ var app = (function ()
         success: function (data) {
           // AGO returns json with plaintext headers, so parse
           data = JSON.parse(data);
-          
+
           app.state.dor = data;
           callback && callback();
         },
@@ -668,16 +671,16 @@ var app = (function ()
         },
       });
     },
-    
+
     // get a parcel by a leaflet latlng
     getParcelByLatLng: function (latLng, callback) {
       // console.log('get parcel by latlng');
-      
+
       // clear state
       // disabling this because if the new query doesn't return anything,
       // we don't want to flush out the current dor parcel
       // app.state.dor = undefined;
-      
+
       var parcelQuery = L.esri.query({url: app.config.parcelLayerUrl});
       parcelQuery.contains(latLng);
       parcelQuery.run(function (error, featureCollection, response) {
@@ -685,26 +688,26 @@ var app = (function ()
           console.log('get parcel by latlng error', error);
           return;
         }
-        
+
         // if empty response
         if (featureCollection.features.length === 0) {
           // show alert
           $('#no-results-modal').foundation('open');
           return;
         }
-        
+
         // update state
         app.state.dor = featureCollection;
-        
+
         // if there's a callback, call it
         callback && callback();
       });
     },
-    
+
     didGetNearbyAppeals: function () {
       var features = app.state.nearby.appeals,
           featuresSorted = _.orderBy(features, app.config.li.fieldMap.appeals.date, ['desc']),
-          // sourceFields = _.map(app.config.li.displayFields, function (displayField) { 
+          // sourceFields = _.map(app.config.li.displayFields, function (displayField) {
           //                   return app.config.li.fieldMap.appeals[displayField];
           //                 }),
           // adding address:
@@ -713,19 +716,19 @@ var app = (function ()
           $tbody = $('#nearby-appeals').find('tbody');
       $tbody.html(rowsHtml);
       $('#nearby-appeals-count').text(' (' + features.length + ')');
-      
+
       // TEMP attribute rows with appeal id
       var sourceIdField = app.config.li.fieldMap.appeals.id;
       _.forEach($tbody.find('tr'), function (row, i) {
         $(row).attr('data-appeal-id', features[i][sourceIdField]);
       });
-      
+
       // listen for hover
       $tbody.find('tr').hover(
         function () {
           var $this = $(this);
-          $this.css('background', '#ffffff'); 
-          
+          $this.css('background', '#ffffff');
+
           // tell map to highlight pin
           var appealId = $this.attr('data-appeal-id');
           app.map.didHoverOverNearbyAppeal(appealId);

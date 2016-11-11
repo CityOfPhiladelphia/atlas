@@ -22,6 +22,7 @@ app.map = (function ()
       }),
 
       _baseLayerGroup = new L.LayerGroup(),
+      _labelLayerGroup = new L.LayerGroup(),
       _overlayLayerGroup = new L.LayerGroup(),
       // create an empty layer group for the parcel query layer
       _parcelLayerGroup = new L.LayerGroup(),
@@ -36,10 +37,11 @@ app.map = (function ()
     initMap : function () {
       app.state.map = {};
       app.state.map.clickedOnMap = false;
-      app.state.map.baseLayer;
-      app.state.map.overLayers = [];
+      // the next 2 variables hold names for checking what is on the map
+      app.state.map.nameBaseLayer;
+      app.state.map.namesOverLayers = [];
+      // the next 2 objects hold the actual layers
       app.state.map.tileLayers = {};
-      app.state.map.featureLayers = {};
       app.state.map.mapServices = {};
 
       //app.state.moveMode = true
@@ -51,32 +53,8 @@ app.map = (function ()
       });
       _map.setView(CITY_HALL, 17);
 
-      _overlayLayerGroup.addTo(_map);
-      /*
-      Using multiple tiled Layers in esri-leaflet is not well documented.
-      The structure of the html rendered looks like this:
-      <div id="map" class="leaflet-container leaflet-fade-anim leaflet-grab leaflet-touch-drag" style="position: relative;" tabindex="0">
-        <div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 29px, 0px);">
-          <div class="leaflet-pane leaflet-tile-pane">
-          <div class="leaflet-pane leaflet-shadow-pane"></div>
-          <div class="leaflet-pane leaflet-overlay-pane"></div>
-          <div class="leaflet-pane leaflet-marker-pane">
-          <div class="leaflet-pane leaflet-tooltip-pane"></div>
-          <div class="leaflet-pane leaflet-popup-pane"></div>
-          <div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(9771460px, 1.27088e+7px, 0px) scale(65536);"></div>
-
-      all of the tiled maps will have low z values, and be grouped in the <div class="leaflet-pane leaflet-tile-pane">:
-      <div class="leaflet-pane leaflet-tile-pane">
-        <div class="leaflet-layer " style="z-index: 1; opacity: 1;">
-        <div class="leaflet-layer " style="z-index: 3; opacity: 1;">
-        <div class="leaflet-layer " style="z-index: 4; opacity: 1;">
-
-      It is difficult to get the layer that you want to have the z value you want.
-      The order in lists below, and setting up the L.control.layers is important for getting z values right.
-
-      */
       // Basemaps
-      var baseMapLight = L.esri.tiledMapLayer({
+      app.state.map.tileLayers.baseMapLight = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer",
         maxZoom: 22,
         name: 'baseMapLight',
@@ -84,7 +62,7 @@ app.map = (function ()
         zIndex: 1,
       });
 
-      var baseMapImagery2016 = L.esri.tiledMapLayer({
+      app.state.map.tileLayers.baseMapImagery2016 = L.esri.tiledMapLayer({
         url: "http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2016',
@@ -92,7 +70,7 @@ app.map = (function ()
         zIndex: 2,
       });
 
-      var baseMapImagery2015 = L.esri.tiledMapLayer({
+      app.state.map.tileLayers.baseMapImagery2015 = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2015',
@@ -100,7 +78,7 @@ app.map = (function ()
         zIndex: 3,
       });
 
-      var baseMapImagery2012 = L.esri.tiledMapLayer({
+      app.state.map.tileLayers.baseMapImagery2012 = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2012_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2012',
@@ -108,38 +86,29 @@ app.map = (function ()
         zIndex: 4,
       });
 
-      var baseMapImagery2010 = L.esri.tiledMapLayer({
+      app.state.map.tileLayers.baseMapImagery2010 = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2010_3in/MapServer",
         maxZoom: 22,
-        name: 'baseMapImagery2012',
+        name: 'baseMapImagery2010',
         type: 'base',
         zIndex: 5,
       });
 
-      var baseMapImagery2008 = L.esri.tiledMapLayer({
+      app.state.map.tileLayers.baseMapImagery2008 = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2008_3in/MapServer",
         maxZoom: 22,
-        name: 'baseMapImagery2012',
+        name: 'baseMapImagery2008',
         type: 'base',
         zIndex: 6,
       });
-
-
-
-
 
       /*var baseMapDark = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Slate/MapServer",
         maxZoom: 22
       });*/
 
-      //_baseLayerGroup.addLayer(baseMapLight, baseMapImagery2016);
-      _baseLayerGroup.addLayer(baseMapLight);
-      _baseLayerGroup.addTo(_map);
-      //baseMapLight.addTo(_map);
-
-      // Overlays
-      var overlayBaseLabels = L.esri.tiledMapLayer({
+      // Overlays - Labels
+      app.state.map.tileLayers.overlayBaseLabels = L.esri.tiledMapLayer({
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer',
         maxZoom: 22,
         name: 'overlayBaseLabels',
@@ -147,7 +116,7 @@ app.map = (function ()
         zIndex: 100,
       });
 
-      var overlayImageryLabels = L.esri.tiledMapLayer({
+      app.state.map.tileLayers.overlayImageryLabels = L.esri.tiledMapLayer({
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_Labels/MapServer',
         maxZoom: 22,
         name: 'overlayImageryLabels',
@@ -155,6 +124,8 @@ app.map = (function ()
         zIndex: 101,
       })
 
+      // Overlays - Other
+      // right now this is not used
       app.state.map.tileLayers.overlayZoning = L.esri.tiledMapLayer({
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer',
         maxZoom: 22,
@@ -163,22 +134,7 @@ app.map = (function ()
         zIndex: 10,
       });
 
-      app.state.map.featureLayers.zoningOverlayDistricts = L.esri.featureLayer({
-        url: 'http://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Zoning_legend/FeatureServer/1',
-        maxZoom: 22,
-        name: 'zoningOverlayDistricts',
-        type: 'overlay',
-        zIndex: 11,
-      });
-
-      app.state.map.featureLayers.zoningBaseDistricts = L.esri.featureLayer({
-        url: 'http://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Zoning_legend/FeatureServer/6',
-        maxZoom: 22,
-        name: 'zoningBaseDistricts',
-        type: 'overlay',
-        zIndex: 12,
-      });
-
+      // right now this is used, and set to dynamicMapLayer instead of FeatureLayer
       app.state.map.mapServices.ZoningMap = L.esri.dynamicMapLayer({
         url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer',
         maxZoom: 22,
@@ -188,71 +144,20 @@ app.map = (function ()
       });
 
 
+      // Now add to map
+      _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapLight);
+      _baseLayerGroup.addTo(_map);
+      _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayBaseLabels);
+      _labelLayerGroup.addTo(_map);
 
-      // YOU SHOULD NOT USE AN OVERLAY GROUP IF NOT USING THE L.Control.Layers
-      // IT WILL ONLY TURN ON THE FIRST LAYER IN THE GROUP, AND BE HARDER TO REFERENCE LAYERS TO TURN ON AND OFF
-      //_overlayLayerGroup.addLayer(overlayZoning, overlayBaseLabels);
-      //_overlayLayerGroup.addTo(_map);
-      //overlayZoning.addTo(_map);
-      overlayBaseLabels.addTo(_map);
+      // The next 2 are not used initially
+      _overlayLayerGroup.addTo(_map);
+      _parcelLayerGroup.addTo(_map);
 
-      /*
-      var overlayHS = L.esri.featureLayer({
-        url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/SchoolDist_Catchments_HS/FeatureServer/0'
-      });
-      var overlayES = L.esri.featureLayer({
-        url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/SchoolDist_Catchments_ES/FeatureServer/0'
-      });
-      var overlayMS = L.esri.featureLayer({
-        url: 'services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/SchoolDist_Catchments_MS/FeatureServer/0'
-      });
-      */
-
-      var baseLayers = {
-        'Basemap': baseMapLight,
-        'Imagery 2016': baseMapImagery2016,
-        //'Dark':     baseMapDark,
-      };
-
-
-      // THE ORDER HERE MATTERS.  THE LOWER ON THIS LIST, THE HIGHER THE Z VALUE THE LAYER WILL GET
-      var overlays = {
-        'Zoning': app.state.map.tileLayers.overlayZoning,
-        'Street Labels': overlayBaseLabels,
-        'Imagery Street Labels': overlayImageryLabels,
-        //'PWD Parcels':  overlayPwdParcels,
-        // 'Land Use': landUse,
-      };
-
-      // overwrites DOM objects app.state.map.baseLayer and app.state.map.overlayers when called
-      function domLayerList() {
-        _map.eachLayer(function(layer){
-          if (layer.options.name && layer.options.type == 'base') {
-            //console.log(layer.options.name);
-            //console.log(layer);
-            app.state.map.baseLayer = layer.options.name;
-          };
-        });
-        app.state.map.overLayers = [];
-        _map.eachLayer(function(layer){
-          if (layer.options.name && layer.options.type == 'overlay') {
-            //console.log(layer.options.name);
-            //console.log(layer);
-            app.state.map.overLayers.push(layer.options.name);
-          };
-        });
-      }
-
-      domLayerList();
+      // add names of layers on the map to the DOM
+      app.map.domLayerList();
 
       // Controls
-      //L.control.layers(baseLayers, '', {position: 'topright'}).addTo(_map);
-      //L.control.layers(baseLayers, overlays, {position: 'topright'}).addTo(_map);
-      //L.control.layers(baseLayers, overlays).addTo(_map);
-
-      //var measureControl = new L.Control.Measure({position: 'topright'});
-      //measureControl.addTo(map);
-
       new L.Control.Zoom({position: 'topright'}).addTo(_map);
 
       var basemapToggleButton = L.easyButton({
@@ -296,7 +201,7 @@ app.map = (function ()
             title: 'Show 2016 Imagery',
             onClick: function(control) {
               console.log('clicked 2016');
-              toggleYear(control, baseMapImagery2016);
+              toggleYear(control, app.state.map.tileLayers.baseMapImagery2016);
               /*for (i = 0; i < app.state.map.historicalImageryButtons.length; i++) {
                 console.log(app.state.map.historicalImageryButtons[i].options.id);
                 app.state.map.historicalImageryButtons[i].state('dateNotSelected');
@@ -313,7 +218,7 @@ app.map = (function ()
             title: 'Show 2015 Imagery',
             onClick: function(control) {
               console.log('clicked 2015')
-              toggleYear(control, baseMapImagery2015);
+              toggleYear(control, app.state.map.tileLayers.baseMapImagery2015);
               //control.state('dateSelected')
             }
           }, {
@@ -334,7 +239,7 @@ app.map = (function ()
             title: 'Show 2012 Imagery',
             onClick: function(control) {
               console.log('clicked 2012')
-              toggleYear(control, baseMapImagery2012);
+              toggleYear(control, app.state.map.tileLayers.baseMapImagery2012);
               //control.state('dateSelected')
             }
           }, {
@@ -355,7 +260,7 @@ app.map = (function ()
             title: 'Show 2010 Imagery',
             onClick: function(control) {
               console.log('clicked 2010')
-              toggleYear(control, baseMapImagery2010);
+              toggleYear(control, app.state.map.tileLayers.baseMapImagery2010);
               //control.state('dateSelected')
             }
           }, {
@@ -376,7 +281,7 @@ app.map = (function ()
             title: 'Show 2008 Imagery',
             onClick: function(control) {
               console.log('clicked 2008')
-              toggleYear(control, baseMapImagery2008);
+              toggleYear(control, app.state.map.tileLayers.baseMapImagery2008);
               //control.state('dateSelected')
             }
           }, {
@@ -399,25 +304,26 @@ app.map = (function ()
 
       // adds and removes baseLayer and overlay
       function toggleBasemap() {
-        if (app.state.map.baseLayer == 'baseMapLight') {
+        if (app.state.map.nameBaseLayer == 'baseMapLight') {
           _baseLayerGroup.clearLayers();
-          overlayBaseLabels.remove();
-          //_overlayLayerGroup.clearLayers();
-          _baseLayerGroup.addLayer(baseMapImagery2016);
-          overlayImageryLabels.addTo(_map);
-          //_overlayLayerGroup.addLayer(overlayImageryLabels);
+          //app.state.map.tileLayers.overlayBaseLabels.remove();
+          _labelLayerGroup.clearLayers();
+          // This has to change, it is loading 2016 every time
+          _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapImagery2016);
+          //app.state.map.tileLayers.overlayImageryLabels.addTo(_map);
+          _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayImageryLabels);
           theEasyBar.addTo(_map);
 
         } else {
           _baseLayerGroup.clearLayers();
-          overlayImageryLabels.remove();
-          //_overlayLayerGroup.clearLayers();
-          _baseLayerGroup.addLayer(baseMapLight);
-          overlayBaseLabels.addTo(_map);
-          //_overlayLayerGroup.addLayer(overlayBaseLabels);
+          //app.state.map.tileLayers.overlayImageryLabels.remove();
+          _labelLayerGroup.clearLayers();
+          _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapLight);
+          //app.state.map.tileLayers.overlayBaseLabels.addTo(_map);
+          _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayBaseLabels);
           theEasyBar.remove();
         }
-        domLayerList();
+        app.map.domLayerList();
       };
 
 
@@ -432,7 +338,7 @@ app.map = (function ()
 
         // highlight current button
         control.state('dateSelected');
-        domLayerList();
+        app.map.domLayerList();
 
       };
 
@@ -454,7 +360,7 @@ app.map = (function ()
       });*/
 
 
-      _parcelLayerGroup.addTo(_map);
+
 
       // one of 2 ways to call AIS
       _map.on('click', app.map.didClickMap);
@@ -527,6 +433,25 @@ app.map = (function ()
       });
 
     }, // end of initMap
+
+    // add names of layers on the map to the DOM
+    domLayerList: function() {
+      _map.eachLayer(function(layer){
+        if (layer.options.name && layer.options.type == 'base') {
+          //console.log(layer.options.name);
+          //console.log(layer);
+          app.state.map.nameBaseLayer = layer.options.name;
+        };
+      });
+      app.state.map.namesOverLayers = [];
+      _map.eachLayer(function(layer){
+        if (layer.options.name && layer.options.type == 'overlay') {
+          //console.log(layer.options.name);
+          //console.log(layer);
+          app.state.map.namesOverLayers.push(layer.options.name);
+        };
+      });
+    },
 
     renderAisResult: function (obj) {
       // get parcel
@@ -667,21 +592,37 @@ app.map = (function ()
     // called when the active topic in the topic panel changes
     didActivateTopic: function (topic) {
       console.log('did activate topic:', topic);
+      _overlayLayerGroup.clearLayers();
 
       switch (topic) {
         case 'deeds':
           // code here
           break;
         case 'zoning':
-          //_overlayLayerGroup.addLayer(app.state.map.featureLayers.zoningOverlayDistricts);
-          //_overlayLayerGroup.addLayer(app.state.map.featureLayers.zoningBaseDistricts);
-          app.state.map.mapServices.ZoningMap.addTo(_map);
-          //app.state.map.featureLayers.zoningOverlayDistricts.addToMap()
-          //domLayerList();
+          _overlayLayerGroup.addLayer(app.state.map.mapServices.ZoningMap);
+          // add name "zoningMap" to the DOM list
+          app.map.domLayerList();
 
           break;
         default:
           console.log('unhandled topic:', topic);
+      }
+    },
+
+    didDisactivateTopic: function (topic) {
+      console.log('did disactivate topic:', topic);
+      switch (topic) {
+        case 'deeds':
+          // code here
+          break;
+        case 'zoning':
+          if (app.state.map.namesOverLayers.includes('zoningMap')){
+            _overlayLayerGroup.clearLayers();
+          }
+          app.map.domLayerList();
+          break;
+        //default:
+        //  console.log('unhandled topic:', topic);
       }
     },
 
