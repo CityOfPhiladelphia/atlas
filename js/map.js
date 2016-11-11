@@ -629,7 +629,7 @@ app.map = (function ()
     // called when the active topic in the topic panel changes
     didActivateTopic: function (topic) {
       _overlayLayerGroup.clearLayers();
-      //app.map.domLayerList();
+      app.map.domLayerList();
 
       switch (topic) {
         case 'deeds':
@@ -638,7 +638,7 @@ app.map = (function ()
         case 'zoning':
           _overlayLayerGroup.addLayer(app.state.map.mapServices.ZoningMap);
           // add name "zoningMap" to the DOM list
-          //app.map.domLayerList();
+          app.map.domLayerList();
           break;
         case 'nearby':
           app.map.addNearbyAppealsToMap();
@@ -655,7 +655,7 @@ app.map = (function ()
         case 'zoning':
           if (app.state.map.namesOverLayers.includes('zoningMap')){
             _overlayLayerGroup.clearLayers();
-            //app.map.domLayerList();
+            app.map.domLayerList();
           }
           break;
         case 'nearby':
@@ -681,7 +681,7 @@ app.map = (function ()
         });
         _appealsLayerGroup.addLayer(newMarker);
         // this might have been useless
-        //app.map.domLayerList();
+        app.map.domLayerList();
       }
     },
 
