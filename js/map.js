@@ -39,6 +39,7 @@ app.map = (function ()
       app.state.map.clickedOnMap = false;
       // the next 2 variables hold names for checking what is on the map
       app.state.map.nameBaseLayer;
+      app.state.map.nameLabelsLayer;
       app.state.map.namesOverLayers = [];
       // the next 2 objects hold the actual layers
       app.state.map.tileLayers = {};
@@ -102,6 +103,24 @@ app.map = (function ()
         zIndex: 6,
       });
 
+      app.state.map.tileLayers.baseMapImagery2004 = L.esri.tiledMapLayer({
+        url: "http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2004_6in/MapServer",
+        maxZoom: 22,
+        name: 'baseMapImagery2004',
+        type: 'base',
+        zIndex: 7,
+      });
+
+      app.state.map.tileLayers.baseMapImagery1996 = L.esri.tiledMapLayer({
+        url: "http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_1996_6in/MapServer",
+        maxZoom: 22,
+        name: 'baseMapImagery1996',
+        type: 'base',
+        zIndex: 8,
+      });
+
+
+
       /*var baseMapDark = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Slate/MapServer",
         maxZoom: 22
@@ -112,7 +131,7 @@ app.map = (function ()
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer',
         maxZoom: 22,
         name: 'overlayBaseLabels',
-        type: 'overlay',
+        type: 'labels',
         zIndex: 100,
       });
 
@@ -120,7 +139,7 @@ app.map = (function ()
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_Labels/MapServer',
         maxZoom: 22,
         name: 'overlayImageryLabels',
-        type: 'overlay',
+        type: 'labels',
         zIndex: 101,
       })
 
@@ -192,8 +211,6 @@ app.map = (function ()
             title: 'Show 2016 Imagery',
             onClick: function(control) {
               console.log('clicked 2016 - it was already active');
-              //toggleYear(id);
-              //control.state('dateNotSelected');
             }
           }, {
             stateName: 'dateNotSelected',
@@ -202,11 +219,7 @@ app.map = (function ()
             onClick: function(control) {
               console.log('clicked 2016');
               toggleYear(control, app.state.map.tileLayers.baseMapImagery2016);
-              /*for (i = 0; i < app.state.map.historicalImageryButtons.length; i++) {
-                console.log(app.state.map.historicalImageryButtons[i].options.id);
-                app.state.map.historicalImageryButtons[i].state('dateNotSelected');
-              };
-              control.state('dateSelected');*/
+              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2016;
             }
           }]
         }),
@@ -219,7 +232,7 @@ app.map = (function ()
             onClick: function(control) {
               console.log('clicked 2015')
               toggleYear(control, app.state.map.tileLayers.baseMapImagery2015);
-              //control.state('dateSelected')
+              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2015;
             }
           }, {
             stateName: 'dateSelected',
@@ -227,7 +240,6 @@ app.map = (function ()
             title: 'Show 2015 Imagery',
             onClick: function(control) {
               console.log('clicked 2015 - it was already active')
-              //control.state('dateNotSelected')
             }
           }]
         }),
@@ -240,7 +252,7 @@ app.map = (function ()
             onClick: function(control) {
               console.log('clicked 2012')
               toggleYear(control, app.state.map.tileLayers.baseMapImagery2012);
-              //control.state('dateSelected')
+              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2012;
             }
           }, {
             stateName: 'dateSelected',
@@ -248,7 +260,6 @@ app.map = (function ()
             title: 'Show 2012 Imagery',
             onClick: function(control) {
               console.log('clicked 2012 - it was already active')
-              //control.state('dateNotSelected')
             }
           }]
         }),
@@ -261,7 +272,7 @@ app.map = (function ()
             onClick: function(control) {
               console.log('clicked 2010')
               toggleYear(control, app.state.map.tileLayers.baseMapImagery2010);
-              //control.state('dateSelected')
+              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2010;
             }
           }, {
             stateName: 'dateSelected',
@@ -269,7 +280,6 @@ app.map = (function ()
             title: 'Show 2010 Imagery',
             onClick: function(control) {
               console.log('clicked 2010 - it was already active')
-              //control.state('dateNotSelected')
             }
           }]
         }),
@@ -282,7 +292,7 @@ app.map = (function ()
             onClick: function(control) {
               console.log('clicked 2008')
               toggleYear(control, app.state.map.tileLayers.baseMapImagery2008);
-              //control.state('dateSelected')
+              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2008;
             }
           }, {
             stateName: 'dateSelected',
@@ -290,17 +300,55 @@ app.map = (function ()
             title: 'Show 2008 Imagery',
             onClick: function(control) {
               console.log('clicked 2008 - it was already active')
-              //control.state('dateNotSelected')
+            }
+          }]
+        }),
+        L.easyButton({
+          id: '2004ToggleButton',
+          states:[{
+            stateName: 'dateNotSelected',
+            icon: '<strong class="aDate">2004</strong>',
+            title: 'Show 2004 Imagery',
+            onClick: function(control) {
+              console.log('clicked 2004')
+              toggleYear(control, app.state.map.tileLayers.baseMapImagery2004);
+              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2004;
+            }
+          }, {
+            stateName: 'dateSelected',
+            icon: '<strong class="aDate">2004</strong>',
+            title: 'Show 2004 Imagery',
+            onClick: function(control) {
+              console.log('clicked 2004 - it was already active')
+            }
+          }]
+        }),
+        L.easyButton({
+          id: '1996ToggleButton',
+          states:[{
+            stateName: 'dateNotSelected',
+            icon: '<strong class="aDate">1996</strong>',
+            title: 'Show 1996 Imagery',
+            onClick: function(control) {
+              console.log('clicked 1996')
+              toggleYear(control, app.state.map.tileLayers.baseMapImagery1996);
+              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery1996;
+            }
+          }, {
+            stateName: 'dateSelected',
+            icon: '<strong class="aDate">1996</strong>',
+            title: 'Show 1996 Imagery',
+            onClick: function(control) {
+              console.log('clicked 2008 - it was already active')
             }
           }]
         })
       ];
 
       // build a toolbar with them
-      //L.easyBar(buttons).addTo(_map);
       theEasyBar = L.easyBar(app.state.map.historicalImageryButtons, {
         position: 'topright'
-      })//.addTo(_map);
+      })
 
       // adds and removes baseLayer and overlay
       function toggleBasemap() {
@@ -309,7 +357,11 @@ app.map = (function ()
           //app.state.map.tileLayers.overlayBaseLabels.remove();
           _labelLayerGroup.clearLayers();
           // This has to change, it is loading 2016 every time
-          _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapImagery2016);
+          if (app.state.map.lastYearViewed) {
+            _baseLayerGroup.addLayer(app.state.map.lastYearViewed);
+          } else {
+            _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapImagery2016);
+          }
           //app.state.map.tileLayers.overlayImageryLabels.addTo(_map);
           _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayImageryLabels);
           theEasyBar.addTo(_map);
@@ -341,25 +393,6 @@ app.map = (function ()
         app.map.domLayerList();
 
       };
-
-
-
-      /*$('#test-toggle-button').on('click', function() {
-        if (app.state.map.baseLayer == 'baseMapLight') {
-          baseMapLight.remove();
-          overlayBaseLabels.remove();
-          baseMapImagery2016.addTo(_map);
-          overlayImageryLabels.addTo(_map);
-        } else {
-          baseMapImagery2016.remove();
-          overlayImageryLabels.remove();
-          baseMapLight.addTo(_map);
-          overlayBaseLabels.addTo(_map);
-        }
-        domLayerList();
-      });*/
-
-
 
 
       // one of 2 ways to call AIS
@@ -438,16 +471,14 @@ app.map = (function ()
     domLayerList: function() {
       _map.eachLayer(function(layer){
         if (layer.options.name && layer.options.type == 'base') {
-          //console.log(layer.options.name);
-          //console.log(layer);
           app.state.map.nameBaseLayer = layer.options.name;
-        };
+        } else if (layer.options.name && layer.options.type == 'labels') {
+          app.state.map.nameLabelsLayer = layer.options.name;
+        }
       });
       app.state.map.namesOverLayers = [];
       _map.eachLayer(function(layer){
         if (layer.options.name && layer.options.type == 'overlay') {
-          //console.log(layer.options.name);
-          //console.log(layer);
           app.state.map.namesOverLayers.push(layer.options.name);
         };
       });
@@ -593,6 +624,7 @@ app.map = (function ()
     didActivateTopic: function (topic) {
       console.log('did activate topic:', topic);
       _overlayLayerGroup.clearLayers();
+      app.map.domLayerList();
 
       switch (topic) {
         case 'deeds':
@@ -618,8 +650,8 @@ app.map = (function ()
         case 'zoning':
           if (app.state.map.namesOverLayers.includes('zoningMap')){
             _overlayLayerGroup.clearLayers();
+            app.map.domLayerList();
           }
-          app.map.domLayerList();
           break;
         //default:
         //  console.log('unhandled topic:', topic);
