@@ -20,10 +20,22 @@ app.map = (function ()
         iconSize: [30, 20],
         iconAnchor: [15,  10],
       }),
+      bigRedMarker = L.icon({
+        iconUrl: 'css/images/marker-red-icon.png',
+        iconSize: [37, 61],
+        iconAnchor: [18, 63],
+      }),
+      blueMarker = L.icon({
+        iconUrl: 'css/images/marker-blue-icon.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+      }),
 
       _baseLayerGroup = new L.LayerGroup(),
       _labelLayerGroup = new L.LayerGroup(),
       _overlayLayerGroup = new L.LayerGroup(),
+
+      _appealsLayerGroup = new L.LayerGroup(),
       // create an empty layer group for the parcel query layer
       _parcelLayerGroup = new L.LayerGroup(),
       // overlayHS = L.esri.featureLayer({
@@ -44,6 +56,8 @@ app.map = (function ()
       // the next 2 objects hold the actual layers
       app.state.map.tileLayers = {};
       app.state.map.mapServices = {};
+
+
 
       //app.state.moveMode = true
       var CITY_HALL = [39.952388, -75.163596];
@@ -169,9 +183,10 @@ app.map = (function ()
       _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayBaseLabels);
       _labelLayerGroup.addTo(_map);
 
-      // The next 2 are not used initially
+      // The next 3 are not used initially
       _overlayLayerGroup.addTo(_map);
       _parcelLayerGroup.addTo(_map);
+      _appealsLayerGroup.addTo(_map);
 
       // add names of layers on the map to the DOM
       app.map.domLayerList();
@@ -482,6 +497,12 @@ app.map = (function ()
           app.state.map.namesOverLayers.push(layer.options.name);
         };
       });
+      app.state.map.namesAppealsMarkers = [];
+      _map.eachLayer(function(layer){
+        if (layer.options.name && layer.options.type == 'appealsMarker') {
+          app.state.map.namesAppealsMarkers.push(layer.options.name);
+        }
+      })
     },
 
     renderAisResult: function (obj) {
@@ -634,8 +655,9 @@ app.map = (function ()
           _overlayLayerGroup.addLayer(app.state.map.mapServices.ZoningMap);
           // add name "zoningMap" to the DOM list
           app.map.domLayerList();
-
           break;
+        case 'nearby':
+          app.map.addNearbyAppealsToMap();
         default:
           console.log('unhandled topic:', topic);
       }
@@ -653,13 +675,43 @@ app.map = (function ()
             app.map.domLayerList();
           }
           break;
+        case 'nearby':
+          _appealsLayerGroup.clearLayers();
         //default:
         //  console.log('unhandled topic:', topic);
       }
     },
 
+    addNearbyAppealsToMap: function (id) {
+      for (i = 0; i < app.state.nearby.appeals.length; i++) {
+        var lon = app.state.nearby.appeals[i].shape.coordinates[0];
+        var lat = app.state.nearby.appeals[i].shape.coordinates[1];
+        var newMarker = L.marker([lat, lon], {
+          title: 'Zoning Appeal ' + app.state.nearby.appeals[i].appealkey,
+          icon: blueMarker,
+          name: app.state.nearby.appeals[i].appealkey,
+          type: 'appealsMarker',
+        });
+        _appealsLayerGroup.addLayer(newMarker);
+        // this might have been useless
+        app.map.domLayerList();
+      }
+    },
+
     didHoverOverNearbyAppeal: function (id) {
-      console.log('did hover over nearby appeal', id);
+      _map.eachLayer(function(layer){
+        if (id == layer.options.name) {
+          layer.setIcon(bigRedMarker);
+        }
+      })
+    },
+
+    didMoveOffNearbyAppeal: function (id) {
+      _map.eachLayer(function(layer){
+        if (id == layer.options.name) {
+          layer.setIcon(blueMarker);
+        }
+      })
     },
   }; // end of return
 })();

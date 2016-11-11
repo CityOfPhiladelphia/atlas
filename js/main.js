@@ -705,6 +705,7 @@ var app = (function ()
     },
 
     didGetNearbyAppeals: function () {
+      //console.log('function didGetNearbyAppeals is starting to run')
       var features = app.state.nearby.appeals,
           featuresSorted = _.orderBy(features, app.config.li.fieldMap.appeals.date, ['desc']),
           // sourceFields = _.map(app.config.li.displayFields, function (displayField) {
@@ -720,7 +721,7 @@ var app = (function ()
       // TEMP attribute rows with appeal id
       var sourceIdField = app.config.li.fieldMap.appeals.id;
       _.forEach($tbody.find('tr'), function (row, i) {
-        $(row).attr('data-appeal-id', features[i][sourceIdField]);
+        $(row).attr('data-appeal-id', featuresSorted[i][sourceIdField]);
       });
 
       // listen for hover
@@ -728,13 +729,15 @@ var app = (function ()
         function () {
           var $this = $(this);
           $this.css('background', '#ffffff');
-
           // tell map to highlight pin
           var appealId = $this.attr('data-appeal-id');
           app.map.didHoverOverNearbyAppeal(appealId);
         },
         function () {
-          $(this).css('background', '');
+          var $this = $(this);
+          $this.css('background', '');
+          var appealId = $this.attr('data-appeal-id');
+          app.map.didMoveOffNearbyAppeal(appealId);
         }
       );
     },
