@@ -66,7 +66,6 @@ var app = (function ()
         //   'inspections':      'inspectioncompleted',
         //   'violations':       'violationdate',
         // },
-        recordLimit: 5,
         // these are the columns to show in each l&i section (using mapped
         // field names)
         // displayFields: {
@@ -79,6 +78,8 @@ var app = (function ()
       },
 
       map: {},
+
+      topicRecordLimit: 5,
 
       //parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0',
       parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
@@ -380,11 +381,12 @@ var app = (function ()
           f: 'json',
         },
         success: function (data) {
-          console.log('data', data);
           // have to unpack these differently from geojson/socrata
           var features = _.map(JSON.parse(data).features, function (feature) { return feature.attributes; }),
+              recordLimit = app.config.topicRecordLimit,
+              featuresLimited = features.slice(0, recordLimit),
               FIELDS = ['RECORDING_DATE', 'R_NUM', 'DOC_TYPE', 'GRANTOR', 'GRANTEE',],
-              rowsHtml = app.util.makeTableRowsFromJson(features, FIELDS),
+              rowsHtml = app.util.makeTableRowsFromJson(featuresLimited, FIELDS),
               $tbody = $('#land-records-documents').find('tbody');
           $tbody.html(rowsHtml);
 
@@ -399,6 +401,28 @@ var app = (function ()
                 });
             $idField.html(idFieldHtml);
           });
+
+          // update count
+          var count = features.length;
+          $('#land-records-documents-count').text(' (' + count + ')');
+
+          // add "see more" link, if there are rows not shown
+          if (count > recordLimit) {
+            console.log('yo');
+            var remainingCount = count - recordLimit,
+                plural = remainingCount > 1,
+                resourceNoun = plural ? 'documents' : 'document',
+                seeMoreText = ['See ', remainingCount, 'older', resourceNoun, 'at PhilaDox'].join(' '),
+                seeMoreUrl = 'http://170.115.71.250/picris/documentSearch.jsp',
+                $seeMoreLink = $('<a />', {
+                  class: 'external li-see-more-link',
+                  href: seeMoreUrl,
+                  text: seeMoreText,
+                });
+            $('#land-records-documents').after($seeMoreLink);
+          } else {
+            console.log(count, recordLimit);
+          }
         },
         error: function (err) {
           console.log('dor document error', err);
@@ -528,7 +552,7 @@ var app = (function ()
           displayFields = app.config.li.displayFields,
           liState = app.state.li,
           fieldMap = app.config.li.fieldMap,
-          recordLimit = app.config.li.recordLimit;
+          recordLimit = app.config.topicRecordLimit;
 
       // loop over sections ("state keys")
       _.forEach(stateKeys, function (stateKey) {
