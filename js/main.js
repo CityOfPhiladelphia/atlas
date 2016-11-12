@@ -371,22 +371,20 @@ var app = (function ()
       }
 
       // get dor documents
-      // $.ajax({
-      //   url: '//data.phila.gov/resource/6fwh-qntk.json',
-      //   // beforeSend: function (request) {
-      //   //   request.setRequestHeader('X-App-Token', app.config.socrataAppToken);
-      //   // },
-      //   data: {
-      //     address: aisAddress,
-      //     $$app_token: app.config.socrata,
-      //   },
-      //   success: function (data) {
-      //     console.log('dor docs', data);
-      //   },
-      //   error: function (err) {
-      //     console.log('dor document error', err);
-      //   },
-      // });
+      $.ajax({
+        url: '//ase.phila.gov/arcgis/rest/services/RTT/MapServer/0/query',
+        data: {
+          where: "ADDRESS = '" + aisAddress + "'",
+          outFields: '*',
+          f: 'json',
+        },
+        success: function (data) {
+          console.log('dor docs', data);
+        },
+        error: function (err) {
+          console.log('dor document error', err);
+        },
+      });
 
       // get zoning
       var aisGeom = app.state.ais.features[0].geometry;
