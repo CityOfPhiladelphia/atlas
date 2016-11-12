@@ -372,13 +372,15 @@ var app = (function ()
 
       // get dor documents
       $.ajax({
-        url: '//ase.phila.gov/arcgis/rest/services/RTT/MapServer/0/query',
+        // url: '//ase.phila.gov/arcgis/rest/services/RTT/MapServer/0/query',
+        url: '//192.168.103.143:6443/arcgis/rest/services/RTT/MapServer/0/query',
         data: {
           where: "ADDRESS = '" + aisAddress + "'",
           outFields: '*',
           f: 'json',
         },
         success: function (data) {
+          console.log('data', data);
           // have to unpack these differently from geojson/socrata
           var features = _.map(JSON.parse(data).features, function (feature) { return feature.attributes; }),
               FIELDS = ['RECORDING_DATE', 'R_NUM', 'DOC_TYPE', 'GRANTOR', 'GRANTEE',],
