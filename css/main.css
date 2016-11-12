@@ -74,6 +74,10 @@ header.site-header > .row:last-of-type {
     margin-bottom: 0;
 }
 
+#topic-list {
+    display: none;
+}
+
 #topic-list > a {
     background: #f5f5f5;
     border: 1px solid #ddd;

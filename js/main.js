@@ -275,6 +275,9 @@ var app = (function ()
       var props = obj.properties,
           streetAddress = props.street_address;
 
+      // show accordion
+      $('#topic-list').show();
+
       // make mailing address
       // var mailingAddress = streetAddress + '<br>PHILADELPHIA, PA ' + props.zip_code;
       // if (props.zip_4) mailingAddress += '-' + props.zip_4;
