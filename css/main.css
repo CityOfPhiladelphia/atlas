@@ -27,11 +27,6 @@ header.site-header > .row:last-of-type {
     /*display: inline-block;*/
 }
 
-#imagery-buttons > a:first-child {
-    display: inline;
-    margin-right: 10px;
-}
-
 #pict-button {
     height: 2.78571rem;
 }
@@ -71,7 +66,7 @@ header.site-header > .row:last-of-type {
     color: #666;
     display: none;
     border-left: 5px solid #58c04d;
-    margin-left: 10px;
+    margin-left: 20px;
     padding-left: 15px;
 }
 
@@ -158,6 +153,11 @@ header.site-header > .row:last-of-type {
 /*#zoning-badge > #zoning-badge-body > #zoning-description {*/
     /*display: inline-block;*/
     /*margin-bottom:*/
+/*}*/
+
+/*.description-short {*/
+/*    max-width: 2ch;*/
+/*    text-overflow: ellipsis;*/
 /*}*/
 
 #map-panel {

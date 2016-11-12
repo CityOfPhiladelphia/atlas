@@ -47,6 +47,11 @@ app.util = (function () {
         var valsHtml = _.map(fields, function (field) {
           var val = props[field] || '';
           
+          // truncate long strings
+          if (typeof val === 'string' || val instanceof String && val.length > 150) {
+            val = val.substr(val, 150) + '...';
+          }
+          
           // TEMP format iso dates
           // if (field.indexOf('date') > -1) {
           //   val = moment(val).format('YYYY-MM-DD');
@@ -70,6 +75,11 @@ app.util = (function () {
         // loop over fields
         var valsHtml = _.map(fields, function (field) {
           var val = row[field] || '';
+          
+          // truncate long strings
+          if ((typeof val === 'string' || val instanceof String) && val.length > 150) {
+            val = val.substr(val, 150) + '...';
+          }
           
           // TEMP format iso dates
           // if (field.indexOf('date') > -1) {
