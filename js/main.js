@@ -384,47 +384,8 @@ var app = (function ()
           f: 'json',
         },
         success: function (data) {
-          // have to unpack these differently from geojson/socrata
-          var features = _.map(JSON.parse(data).features, function (feature) { return feature.attributes; }),
-              recordLimit = app.config.topicRecordLimit,
-              featuresLimited = features.slice(0, recordLimit),
-              FIELDS = ['RECORDING_DATE', 'R_NUM', 'DOC_TYPE', 'GRANTOR', 'GRANTEE',],
-              rowsHtml = app.util.makeTableRowsFromJson(featuresLimited, FIELDS),
-              $tbody = $('#land-records-documents').find('tbody');
-          $tbody.html(rowsHtml);
-
-          // make links
-          var idFields = $tbody.find('tr').find('td:nth-child(2)');
-          _.forEach(idFields, function (idField) {
-            var $idField = $(idField),
-                docId = $idField.text(),
-                idFieldHtml = $('<a />', {
-                  href: 'http://170.115.71.250/picris/detail.jsp?did=' + docId,
-                  text: docId,
-                });
-            $idField.html(idFieldHtml);
-          });
-
-          // update count
-          var count = features.length;
-          $('#land-records-documents-count').text(' (' + count + ')');
-
-          // add "see more" link, if there are rows not shown
-          if (count > recordLimit) {
-            var remainingCount = count - recordLimit,
-                plural = remainingCount > 1,
-                resourceNoun = plural ? 'documents' : 'document',
-                seeMoreText = ['See ', remainingCount, 'older', resourceNoun, 'at PhilaDox'].join(' '),
-                seeMoreUrl = 'http://170.115.71.250/picris/documentSearch.jsp',
-                $seeMoreLink = $('<a />', {
-                  class: 'external li-see-more-link',
-                  href: seeMoreUrl,
-                  text: seeMoreText,
-                });
-            $('#land-records-documents').after($seeMoreLink);
-          } else {
-            console.log(count, recordLimit);
-          }
+          app.state.dorDocuments = data;
+          app.didGetDorDocuments();
         },
         error: function (err) {
           console.log('dor document error', err);
@@ -799,6 +760,52 @@ var app = (function ()
           app.map.didMoveOffNearbyAppeal(appealId);
         }
       );
+    },
+
+    didGetDorDocuments: function () {
+      // have to unpack these differently from geojson/socrata
+      var features = _.map(JSON.parse(app.state.dorDocuments).features, function (feature) { return feature.attributes; }),
+          recordLimit = app.config.topicRecordLimit,
+          featuresLimited = features.slice(0, recordLimit),
+          FIELDS = ['RECORDING_DATE', 'R_NUM', 'DOC_TYPE', 'GRANTOR', 'GRANTEE',],
+          rowsHtml = app.util.makeTableRowsFromJson(featuresLimited, FIELDS),
+          $table = $('#land-records-documents'),
+          $tbody = $table.find('tbody');
+      $tbody.html(rowsHtml);
+
+      // make links
+      var idFields = $tbody.find('tr').find('td:nth-child(2)');
+      _.forEach(idFields, function (idField) {
+        var $idField = $(idField),
+            docId = $idField.text(),
+            idFieldHtml = $('<a />', {
+              href: 'http://170.115.71.250/picris/detail.jsp?did=' + docId,
+              text: docId,
+            });
+        $idField.html(idFieldHtml);
+      });
+
+      // update count
+      var count = features.length;
+      $('#land-records-documents-count').text(' (' + count + ')');
+
+      // add "see more" link, if there are rows not shown
+      if (count > recordLimit) {
+        var remainingCount = count - recordLimit,
+            plural = remainingCount > 1,
+            resourceNoun = plural ? 'documents' : 'document',
+            seeMoreText = ['See ', remainingCount, 'older', resourceNoun, 'at PhilaDox'].join(' '),
+            seeMoreUrl = 'http://170.115.71.250/picris/documentSearch.jsp',
+            $seeMoreLink = $('<a />', {
+              class: 'external li-see-more-link',
+              href: seeMoreUrl,
+              text: seeMoreText,
+            });
+        $('#land-records-documents').after($seeMoreLink);
+      }
+
+      // format date col
+      app.util.formatTableFields($table);
     },
   };
 })();

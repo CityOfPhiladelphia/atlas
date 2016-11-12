@@ -111,13 +111,19 @@ app.util = (function () {
     },
 
     FIELD_TRANSFORMS: {
-      'currency': function (val) {
+      currency: function (val) {
         return accounting.formatMoney(val);
       },
-
-      'date': function (val) {
+      date: function (val) {
+        // check for epoch dates
+        if (!isNaN(val)) val = parseInt(val);
         // return moment(val).format('YYYY-MM-DD');
-        return moment(val).format('M/DD/YYYY');
+        return moment(val).format('M/D/YYYY');
+      },
+      'epoch-date': function (val) {
+        console.log('is num', !isNaN(val));
+        valInt = parseInt(val);
+        return app.util.FIELD_TRANSFORMS.date(valInt);
       },
     },
 
