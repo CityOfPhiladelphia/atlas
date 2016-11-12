@@ -379,7 +379,24 @@ var app = (function ()
           f: 'json',
         },
         success: function (data) {
-          console.log('dor docs', data);
+          // have to unpack these differently from geojson/socrata
+          var features = _.map(JSON.parse(data).features, function (feature) { return feature.attributes; }),
+              FIELDS = ['RECORDING_DATE', 'R_NUM', 'DOC_TYPE', 'GRANTOR', 'GRANTEE',],
+              rowsHtml = app.util.makeTableRowsFromJson(features, FIELDS),
+              $tbody = $('#land-records-documents').find('tbody');
+          $tbody.html(rowsHtml);
+
+          // make links
+          var idFields = $tbody.find('tr').find('td:nth-child(2)');
+          _.forEach(idFields, function (idField) {
+            var $idField = $(idField),
+                docId = $idField.text(),
+                idFieldHtml = $('<a />', {
+                  href: 'http://170.115.71.250/picris/detail.jsp?did=' + docId,
+                  text: docId,
+                });
+            $idField.html(idFieldHtml);
+          });
         },
         error: function (err) {
           console.log('dor document error', err);
@@ -722,7 +739,7 @@ var app = (function ()
         $(row).attr('data-appeal-id', featuresSorted[i][sourceIdField]);
       });
 
-      // refresh them on map if topic accordian is open
+      // refresh them on map if topic accordion is open
       console.log('right before if');
       var $targetTopic = $('#topic-nearby');
       if ($targetTopic.is(':visible')){
