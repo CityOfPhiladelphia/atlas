@@ -372,8 +372,8 @@ var app = (function ()
 
       // get dor documents
       $.ajax({
-        // url: '//ase.phila.gov/arcgis/rest/services/RTT/MapServer/0/query',
-        url: '//192.168.103.143:6443/arcgis/rest/services/RTT/MapServer/0/query',
+        url: '//ase.phila.gov/arcgis/rest/services/RTT/MapServer/0/query',
+        // url: '//192.168.103.143:6443/arcgis/rest/services/RTT/MapServer/0/query',
         data: {
           where: "ADDRESS = '" + aisAddress + "'",
           outFields: '*',
