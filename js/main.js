@@ -114,6 +114,9 @@ var app = (function ()
     {
       DEBUG && $('#search-input').val(DEBUG_ADDRESS);
 
+      // set up accounting
+      accounting.settings.currency.precision = 0;
+
       // listen for clicks on topics
       $('.topic-link').click(function (e) {
         e.preventDefault();
@@ -408,7 +411,6 @@ var app = (function ()
 
           // add "see more" link, if there are rows not shown
           if (count > recordLimit) {
-            console.log('yo');
             var remainingCount = count - recordLimit,
                 plural = remainingCount > 1,
                 resourceNoun = plural ? 'documents' : 'document',
@@ -505,7 +507,6 @@ var app = (function ()
     {
       // this is a POC, so let's populate some divs by hand ¯\_(ツ)_/¯
 
-
       var props = data[0] || {};
 
       // concat owners
@@ -544,6 +545,9 @@ var app = (function ()
       // update prop search link
       var propertySearchUrl = 'http://property.phila.gov/?an=' + props.parcel_number;
       $('#address-info-property-link').attr('href', propertySearchUrl);
+
+      // format fields
+      app.util.formatTableFields($('#topic-property > table'));
     },
 
     didGetAllLiResults: function ()
@@ -616,6 +620,9 @@ var app = (function ()
               $seeMoreLink = $(seeMoreHtml);
           $liSectionTable.after($seeMoreLink);
         }
+
+        // format fields
+        app.util.formatTableFields($liSectionTable);
       });
     },
 

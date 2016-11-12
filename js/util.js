@@ -52,14 +52,6 @@ app.util = (function () {
             val = val.substr(val, 150) + '...';
           }
           
-          // TEMP format iso dates
-          // if (field.indexOf('date') > -1) {
-          //   val = moment(val).format('YYYY-MM-DD');
-          // }
-          // else {
-          //   // console.log('not date', field);
-          // }
-          
           return '<td>' + val + '</td>';
         }).join('');
         return '<tr>' + valsHtml + '</tr>';
@@ -116,6 +108,64 @@ app.util = (function () {
           address = _.compact(comps).join(' ');
 
       return address;
+    },
+
+    FIELD_TRANSFORMS: {
+      'currency': function (val) {
+        return accounting.formatMoney(val);
+      },
+
+      'date': function (val) {
+        // return moment(val).format('YYYY-MM-DD');
+        return moment(val).format('M/DD/YYYY');
+      },
+    },
+
+    // given an array of fields (table cells), update text using transform
+    _updateTableFields: function (fields, transform) {
+      _.forEach(fields, function (field) {
+        var $field = $(field),
+            val = $field.text(),
+            newVal = transform(val);
+        $field.html(newVal);
+      });
+    },
+
+    _formatVerticalTableFields: function ($table) {
+      // loop over transforms
+      _.forEach(app.util.FIELD_TRANSFORMS, function (transform, fieldType) {
+        // loop over fields
+        var fields = $table.find('th[data-field-type=' + fieldType + ']').next();
+        app.util._updateTableFields(fields, transform);
+      });
+    },
+
+    _formatHorizontalTableFields: function ($table) {
+      // loop over transforms
+      _.forEach(app.util.FIELD_TRANSFORMS, function (transform, fieldType) {
+        // loop over columns
+        var cols = $table.find('th[data-field-type=' + fieldType + ']');
+        _.forEach(cols, function (col) {
+          // get the col's index
+          var $col = $(col),
+              index = $col.index(),
+          // get all cells at that index. for some reason these nth-children
+          // seem to be indexed from 1, not 0 (??)
+              fields = $table.find('td:nth-child(' + (index + 1) + ')');
+          app.util._updateTableFields(fields, transform);
+        });
+      });
+    },
+
+    // format table fields
+    formatTableFields: function ($table) {
+      // determine if it's a vertical or horizontal table
+      var hasThead = $table.find('thead').length > 0,
+          orientation = hasThead ? 'Horizontal' : 'Vertical';
+          fnName = '_format' + orientation + 'TableFields';
+
+      // call more specific format function
+      app.util[fnName]($table);
     },
   };
 }());

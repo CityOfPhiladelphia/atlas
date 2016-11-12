@@ -110,7 +110,7 @@
                         <div id="topic-property" class="topic">
                             <table>
                                 <tr>
-                                    <th>Account #</th>
+                                    <th>Tax Account #</th>
                                     <td id="property-account-num"></td>
                                 </tr>
                                 <tr>
@@ -118,15 +118,15 @@
                                     <td id="property-owners"></td>
                                 </tr>
                                 <tr>
-                                    <th>Assessed Value (2017)</th>
+                                    <th data-field-type="currency">Assessed Value (2017)</th>
                                     <td id="property-value"></td>
                                 </tr>
                                 <tr>
-                                    <th>Sale Date</th>
-                                    <td id="property-sale-date"></td>
+                                    <th data-field-type="date">Sale Date</th>
+                                    <td id="property-sale-date" data-field-type="date"></td>
                                 </tr>
                                 <tr>
-                                    <th>Sale Price</th>
+                                    <th data-field-type="currency">Sale Price</th>
                                     <td id="property-sale-price"></td>
                                 </tr>
                                 <!--<tr>-->
@@ -226,7 +226,7 @@
                                 <table id="li-table-permits" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Date</th>
+                                            <th scope="col" data-field-type="date">Date</th>
                                             <th scope="col">ID</th>
                                             <th scope="col">Description</th>
                                             <th scope="col">Status</th>
@@ -256,7 +256,7 @@
                                 <table id="li-table-inspections" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Date</th>
+                                            <th scope="col" data-field-type="date">Date</th>
                                             <th scope="col">ID</th>
                                             <th scope="col">Description</th>
                                             <th scope="col">Status</th>
@@ -271,7 +271,7 @@
                                 <table id="li-table-violations" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Date</th>
+                                            <th scope="col" data-field-type="date">Date</th>
                                             <th scope="col">ID</th>
                                             <th scope="col">Description</th>
                                             <th scope="col">Status</th>
@@ -349,7 +349,7 @@
                             <table id="zoning-appeals" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Date</th>
+                                        <th scope="col" data-field-type="date">Date</th>
                                         <th scope="col">ID</th>
                                         <th scope="col">Description</th>
                                         <th scope="col">Status</th>
@@ -440,7 +440,7 @@
                             <table id="nearby-appeals" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                 <thead>
                                     <tr>
-                                        <th scope="col" class="date-col">Date</th>
+                                        <th scope="col" class="date-col" data-field-type="date">Date</th>
                                         <th scope="col">ID</th>
                                         <th scope="col">Address</th>
                                         <th scope="col">Description</th>
@@ -454,7 +454,7 @@
                             <table id="nearby-permits" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Date</th>
+                                        <th scope="col" data-field-type="date">Date</th>
                                         <th scope="col">ID</th>
                                         <th scope="col">Description</th>
                                         <th scope="col">Status</th>
@@ -487,6 +487,7 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.1.2/foundation.min.js"></script>
         <script src="//cityofphiladelphia.github.io/patterns/dist/1.3.0/js/patterns.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.6/lodash.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
         <!--<script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>-->
         <!--<script src="//cdn.jsdelivr.net/leaflet/1.0.0-beta.2/leaflet.js"></script>-->
         <script src='js/leaflet.js'></script>
