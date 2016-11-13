@@ -117,8 +117,8 @@ app.util = (function () {
       date: function (val) {
         // check for epoch dates
         if (!isNaN(val)) val = parseInt(val);
-        // return moment(val).format('YYYY-MM-DD');
-        return moment(val).format('M/D/YYYY');
+        return moment(val).format('YYYY-MM-DD');
+        // return moment(val).format('M/D/YYYY');
       },
       'epoch-date': function (val) {
         console.log('is num', !isNaN(val));

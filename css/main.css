@@ -193,3 +193,15 @@ table {
 .date-col {
     width: 12%;
 }
+
+#nearby-appeals-header > h4 {
+    float: left;
+}
+
+#nearby-appeals-sort-container {
+    float: right;
+}
+
+#nearby-appeals-sort-container > input {
+    margin-left: 10px;
+}

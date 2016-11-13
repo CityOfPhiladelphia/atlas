@@ -431,12 +431,20 @@
                         <div id="topic-nearby" class="topic">
                             <div class="callout">
                                 <p>
-                                    Interested in construction and development near this address? Here are permits and zoning appeals within a 500 feet radius, 
-                                    starting with the most recent. For activity at this exact address, see the Permits and Zoning tabs above.
+                                    Looking for construction and development activity around this address? Below are zoning appeals within a 500 feet radius. You can either sort by date (most recent first) or 
+                                    distance (closest first).
                                 </p>
                             </div>
                             
-                            <h4>Zoning Appeals<span id="nearby-appeals-count"></span></h4>
+                            <div id="nearby-appeals-header">
+                                <h4>
+                                    Zoning Appeals<span id="nearby-appeals-count"></span>
+                                </h4>
+                                <div id="nearby-appeals-sort-container">
+                                    <input type="radio" name="nearby-appeals-sort-by" value="date" checked="checked">sort by date
+                                    <input type="radio" name="nearby-appeals-sort-by" value="distance">sort by distance
+                                </div>
+                            </div>
                             <table id="nearby-appeals" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                 <thead>
                                     <tr>
@@ -450,7 +458,7 @@
                                 <tbody></tbody>
                             </table>
                             
-                            <h4>Permits<span id="nearby-permits-count"></span></h4>
+<!--                             <h4>Permits<span id="nearby-permits-count"></span></h4>
                             <table id="nearby-permits" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                 <thead>
                                     <tr>
@@ -462,7 +470,7 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
-                        </div><!-- /nearby -->
+ -->                        </div><!-- /nearby -->
                         
                     </div>
                 </div>

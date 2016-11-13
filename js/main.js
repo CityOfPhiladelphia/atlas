@@ -125,6 +125,12 @@ var app = (function ()
         app.toggleTopic(topicName);
       });
 
+      // listen for sort events on nearby appeals
+      $("input[name='nearby-appeals-sort-by'").click(function (e) {
+        var sortBy = $(this).attr('value');
+        app.sortNearbyAppealsBy(sortBy);
+      });
+
       // Make ext links open in new window
       $('a').each(function() {
          var a = new RegExp('/' + window.location.host + '/');
@@ -417,16 +423,28 @@ var app = (function ()
           radiusMeters = app.config.nearby.radius * 0.3048,
           nearbyAppealsUrl = app.config.socrata.baseUrl + app.config.li.socrataIds.appeals + '.json',
           // nearbyAppealsQuery = 'DISTANCE_IN_METERS(location, POINT(' + aisX + ',' + aisY + ')) <= ' + radiusMeters;
-          nearbyAppealsQuery = 'within_circle(' + ['shape', aisY, aisX, radiusMeters].join(', ') + ')';
+          nearbyAppealsWhere = 'within_circle(' + ['shape', aisY, aisX, radiusMeters].join(', ') + ')',
+          nearbyAppealsSelectComps = [
+            'processeddate',
+            'appealkey',
+            'address',
+            'appealgrounds',
+            'decision',
+            'shape',
+            "DISTANCE_IN_METERS(shape, 'POINT(" + aisX + ' ' + aisY + ")') * 3.28084 AS distance",
+          ],
+          nearbyAppealsSelect = nearbyAppealsSelectComps.join(', ');
       // exclude appeals at the exact address
-      if (liAddressKey) nearbyAppealsQuery += " AND addresskey != '" + liAddressKey + "'";
+      if (liAddressKey) nearbyAppealsWhere += " AND addresskey != '" + liAddressKey + "'";
 
       $.ajax({
         url: nearbyAppealsUrl,
         data: {
-          $where: nearbyAppealsQuery,
+          $where: nearbyAppealsWhere,
+          $select: nearbyAppealsSelect,
         },
         success: function (data) {
+          console.log('got nearby', this.url, data);
           if (!app.state.nearby) app.state.nearby = {};
           app.state.nearby.appeals = data;
           app.didGetNearbyAppeals();
@@ -727,15 +745,22 @@ var app = (function ()
           // adding address:
           sourceFields = ['processeddate', 'appealkey', 'address', 'appealgrounds', 'decision',],
           rowsHtml = app.util.makeTableRowsFromJson(featuresSorted, sourceFields),
-          $tbody = $('#nearby-appeals').find('tbody');
+          $table = $('#nearby-appeals'),
+          $tbody = $table.find('tbody');
       $tbody.html(rowsHtml);
       $('#nearby-appeals-count').text(' (' + features.length + ')');
 
-      // TEMP attribute rows with appeal id
+      // TEMP attribute rows with appeal id and distance
       var sourceIdField = app.config.li.fieldMap.appeals.id;
       _.forEach($tbody.find('tr'), function (row, i) {
-        $(row).attr('data-appeal-id', featuresSorted[i][sourceIdField]);
+        var feature = featuresSorted[i];
+        $(row).attr('data-appeal-id', feature[sourceIdField]);
+        $(row).attr('data-appeal-distance', feature.distance);
+        $(row).attr('data-appeal-date', feature.processeddate);
       });
+
+      // format fields
+      app.util.formatTableFields($table);
 
       // refresh them on map if topic accordion is open
       var $targetTopic = $('#topic-nearby');
@@ -763,6 +788,23 @@ var app = (function ()
           app.map.didMoveOffNearbyAppeal(appealId);
         }
       );
+
+      // TODO should sort?
+    },
+
+    sortNearbyAppealsBy: function (sortBy) {
+      // get rows
+      var rows = $('#nearby-appeals > tbody > tr'),
+          rowsSorted = _.sortBy(rows, function (row) {
+            return $(row).attr('data-appeal-' + sortBy);
+          });
+
+      // date should be desc
+      if (sortBy === 'date') rowsSorted = _.reverse(rowsSorted);
+
+      // clobber
+      $('#nearby-appeals > tbody').empty();
+      $('#nearby-appeals > tbody').append(rowsSorted);
     },
 
     didGetDorDocuments: function () {
