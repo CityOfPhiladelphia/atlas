@@ -444,7 +444,6 @@ var app = (function ()
           $select: nearbyAppealsSelect,
         },
         success: function (data) {
-          console.log('got nearby', this.url, data);
           if (!app.state.nearby) app.state.nearby = {};
           app.state.nearby.appeals = data;
           app.didGetNearbyAppeals();
@@ -853,6 +852,9 @@ var app = (function ()
 
       // add "see more" link, if there are rows not shown
       if (count > recordLimit) {
+        // clear the old one
+        $('#land-records-documents-see-more-link').remove();
+
         var remainingCount = count - recordLimit,
             plural = remainingCount > 1,
             resourceNoun = plural ? 'documents' : 'document',
@@ -860,6 +862,7 @@ var app = (function ()
             seeMoreUrl = 'http://170.115.71.250/picris/documentSearch.jsp',
             $seeMoreLink = $('<a />', {
               class: 'external li-see-more-link',
+              id: 'land-records-documents-see-more-link',
               href: seeMoreUrl,
               text: seeMoreText,
             });
