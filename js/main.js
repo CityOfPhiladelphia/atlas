@@ -805,6 +805,23 @@ var app = (function ()
       // clobber
       $('#nearby-appeals > tbody').empty();
       $('#nearby-appeals > tbody').append(rowsSorted);
+
+      // listen for hover
+      $('#nearby-appeals').find('tr').hover(
+        function () {
+          var $this = $(this);
+          $this.css('background', '#ffffff');
+          // tell map to highlight pin
+          var appealId = $this.attr('data-appeal-id');
+          app.map.didHoverOverNearbyAppeal(appealId);
+        },
+        function () {
+          var $this = $(this);
+          $this.css('background', '');
+          var appealId = $this.attr('data-appeal-id');
+          app.map.didMoveOffNearbyAppeal(appealId);
+        }
+      );
     },
 
     didGetDorDocuments: function () {
