@@ -4,7 +4,7 @@ app.util = (function () {
   return {
     serializeQueryStringParams: function (obj) {
       var _str = [];
-      for(var p in obj) {
+      for (var p in obj) {
         if (obj.hasOwnProperty(p)) {
           _str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
         }

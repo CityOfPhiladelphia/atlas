@@ -120,7 +120,8 @@ var app = (function ()
       // listen for clicks on topics
       $('.topic-link').click(function (e) {
         e.preventDefault();
-        var topicName = $(this).attr('id').replace('topic-link-', '');
+        var $this = $(this),
+            topicName = $this.attr('id').replace('topic-link-', '');
         app.toggleTopic(topicName);
       });
 
@@ -508,7 +509,7 @@ var app = (function ()
 
       // update prop search link
       var propertySearchUrl = 'http://property.phila.gov/?an=' + props.parcel_number;
-      $('#address-info-property-link').attr('href', propertySearchUrl);
+      $('#property-search-link').attr('href', propertySearchUrl);
 
       // format fields
       app.util.formatTableFields($('#topic-property > table'));
@@ -737,7 +738,6 @@ var app = (function ()
       });
 
       // refresh them on map if topic accordion is open
-      console.log('right before if');
       var $targetTopic = $('#topic-nearby');
       if ($targetTopic.is(':visible')){
       //if ($('#topic-nearby').attr('style') == 'display: block;') {
