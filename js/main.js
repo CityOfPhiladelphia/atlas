@@ -330,6 +330,20 @@ var app = (function ()
       app.getTopics(props);
     },
 
+    showContentForTopic: function (topic) {
+      // show "no content"
+      var topicDivId = '#topic-' + topic;
+      $(topicDivId + ' > topic-content').show();
+      $(topicDivId + ' > topic-content-not-found').hide();
+    },
+
+    hideContentForTopic: function (topic) {
+      // show "no content"
+      var topicDivId = '#topic-' + topic;
+      $(topicDivId + ' > topic-content').hide();
+      $(topicDivId + ' > topic-content-not-found').show();
+    },
+
     // initiates requests to topic APIs (OPA, L&I, etc.)
     getTopics: function (aisProps) {
       // console.log('get topics');
@@ -343,6 +357,7 @@ var app = (function ()
         success: app.didGetOpaResult,
         error: function (err) {
           console.log('opa error', err);
+          app.hideContentForTopic('property')
         },
       });
 
@@ -475,6 +490,11 @@ var app = (function ()
     renderParcelTopic: function () {
       // console.log('render parcel topic');
 
+      if (!app.state.dor.features[0]) {
+        console.log('render parcel topic, but no parcel feature', app.state.dor);
+        return;
+      }
+
       var parcel = app.state.dor.features[0],
           props = parcel.properties,
           parcelId = props.MAPREG,
@@ -538,7 +558,10 @@ var app = (function ()
       $('#property-search-link').attr('href', propertySearchUrl);
 
       // format fields
-      app.util.formatTableFields($('#topic-property > table'));
+      app.util.formatTableFields($('#topic-property table'));
+
+      // show content
+      $('#topic-property > topic-content').show();
     },
 
     didGetAllLiResults: function ()
@@ -693,7 +716,7 @@ var app = (function ()
       $.ajax({
         url: app.config.parcelLayerUrl + '/query',
         data: {
-          where: "MAPREG = '" + id + "'",
+          where: "MAPREG = '" + id + "' AND STATUS IN (1, 3)" ,
           outSR: 4326,
           outFields: '*',
           f: 'geojson',
@@ -722,6 +745,7 @@ var app = (function ()
 
       var parcelQuery = L.esri.query({url: app.config.parcelLayerUrl});
       parcelQuery.contains(latLng);
+      parcelQuery.where('STATUS IN (1, 3)')
       parcelQuery.run(function (error, featureCollection, response) {
         if (error || !featureCollection) {
           console.log('get parcel by latlng error', error);

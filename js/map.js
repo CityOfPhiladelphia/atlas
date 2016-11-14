@@ -524,6 +524,15 @@ app.map = (function ()
         var parcel = app.state.dor.features[0],
             parcelAddress = app.util.concatDorAddress(parcel);
 
+        // if the parcel address is null or falsy, don't proceed
+        var parcelHouseNumber = app.util.cleanDorAttribute(parcel.properties.HOUSE);
+        if (!parcelAddress || parcelAddress.length === 0 || !parcelHouseNumber) {
+          console.log('no parcel address', parcelAddress);
+          // show error
+          $('#no-parcel-address-modal').foundation('open');
+          return;
+        }
+
         // if this is the result of a map click, query ais for the address
         if (app.state.map.clickedOnMap) {
           app.getAis(parcelAddress);
@@ -531,7 +540,8 @@ app.map = (function ()
         }
 
         // render parcel
-        app.map.drawParcel();
+        // disabling this so we only draw the parcel after we get an ais result
+        // app.map.drawParcel();
       });
     },
 
