@@ -403,28 +403,18 @@ app.map = (function ()
 
       };
 
-      // one of 2 ways to call AIS
-      _map.on('click', app.map.didClickMap);
-
       // set map state and localStorage on init, drag, dragend, and zoom
       app.map.LSinit();
 
-      _map.on('drag', function(){
-        app.map.LSdrag();
-      });
-
-      _map.on('dragend', function(){
-        app.map.LSdragend();
-      });
-
-      _map.on('zoomend', function(){
-        app.map.LSzoomend();
-      });
-
+      // listen for map events
+      _map.on('click', app.map.didClickMap);
+      _map.on('drag', app.map.LSdrag);
+      _map.on('dragend', app.map.LSdragend);
+      _map.on('zoomend', app.map.LSzoomend);
       _map.on('moveend', app.map.LSmoveend);
 
       // when map refreshes, if there is already a cyclomedia tab open, place the marker
-      if(localStorage.stViewOpen == 'true') {
+      if (localStorage.stViewOpen == 'true') {
         //console.log('stView marker should be at ' + localStorage.stViewCoords + 'and stViewYaw should be ' + app.state.stViewYaw);
         app.state.stViewX = localStorage.getItem('stViewX');
         app.state.stViewY = localStorage.getItem('stViewY');

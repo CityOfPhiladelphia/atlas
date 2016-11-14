@@ -693,6 +693,7 @@ var app = (function ()
 
     didGetZoningBaseResult: function (error, featureCollection, response) {
       var feature = featureCollection.features[0],
+      // TODO check for null feature
           props = feature.properties,
           longCode = props.LONG_CODE;
       $('#zoning-code').html(longCode);
