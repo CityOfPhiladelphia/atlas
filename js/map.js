@@ -397,7 +397,8 @@ app.map = (function ()
           app.state.map.historicalImageryButtons[i].state('dateNotSelected');
         };
         _baseLayerGroup.clearLayers();
-        _baseLayerGroup.addLayer(requestedLayer)
+        _baseLayerGroup.addLayer(requestedLayer);
+        _baseLayerGroup.addLayer(app.state.map.tileLayers.Parcels);
 
         // highlight current button
         control.state('dateSelected');
