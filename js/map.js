@@ -545,8 +545,9 @@ app.map = (function ()
       if (!app.state.dor) return;
 
       var parcel = app.state.dor.features[0],
+          geom = parcel.geometry,
           // flip these because leaflet uses lat/lon and esri is x/y
-          coords = app.util.flipCoords(parcel.geometry.coordinates),
+          coords = app.util.flipCoords(geom.coordinates),
           parcelPoly = L.polygon([coords], {
             color: 'blue',
             weight: 2
@@ -575,6 +576,46 @@ app.map = (function ()
 
       // add to map
       _parcelLayerGroup.addLayer(parcelPoly);
+
+      // get parcel from the AGS service which returns area
+      // $.ajax({
+      //   url: '//gis.phila.gov/arcgis/rest/services/DOR_ParcelExplorer/rtt_basemap/MapServer/24/query',
+      //   data: {
+      //     where: "MAPREG = '" + parcel.properties.MAPREG + '"',
+      //     f: 'json',
+      //   },
+      //   success: function (data) {
+      //     console.log('got parcel with area', data);
+      //   },
+      //   error: function (err) {
+      //     console.log('parcel area error', err);
+      //   },
+      // });
+
+      // area method 2
+      var areaRequestGeom = '[' + JSON.stringify(geom).replace('"type":"Polygon","coordinates"', '"rings"') + ']';
+      // console.log('area polygon', areaParamPolygons);
+      $.ajax({
+        url: '//gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/areasAndLengths',
+        data: {
+          polygons: areaRequestGeom,
+          sr: 4326,
+          calculationType: 'geodesic',
+          f: 'json',
+          areaUnit: '{"areaUnit" : "esriSquareFeet"}',
+        },
+        success: function (dataString) {
+          // console.log('got polygon with area', data, this.url);
+          var data = JSON.parse(dataString),
+              area = Math.round(data.areas[0]),
+              perimeter = Math.round(data.lengths[0]);
+          $('#land-records-area').text(area + ' sq ft');
+          $('#land-records-perimeter').text(perimeter + ' ft');
+        },
+        error: function (err) {
+          console.log('polygon area error', err);
+        },
+      });
     }, // end of drawPolygon
 
     getGeomFromLatLon : function(latlon){

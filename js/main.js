@@ -191,11 +191,15 @@ var app = (function ()
 
     getAis: function (address) {
       var url = app.config.ais.url + encodeURIComponent(address),
-          params = {gatekeeperKey: app.config.ais.gatekeeperKey};
+          params = {
+            gatekeeperKey: app.config.ais.gatekeeperKey,
+            // include_units: '',
+          };
       $.ajax({
         url: url,
         data: params,
         success: function (data) {
+          // console.log('got ais', data);
           app.state.shouldOpenTopics = true;
           app.state.ais = data;
 
@@ -208,6 +212,7 @@ var app = (function ()
         },
         error: function (err) {
           console.log('ais error', err);
+          $('#no-results-modal').foundation('open');
         },
       });
     },
@@ -217,7 +222,7 @@ var app = (function ()
 
       // construct modal dom element
       for (var i = 0; i < data.features.length; i++) {
-        $('#addressList').append('<li><a href="#" number='+i+'><span class="tab">'+data.features[i].properties.street_address+'</span></a></li>')
+        $('#addressList').append('<li><a href="#" number=' + i + '><span class="tab">' + data.features[i].properties.street_address + '</span></a></li>');
       }
       $('#addressModal').foundation('open');
 
@@ -517,7 +522,6 @@ var app = (function ()
     didGetOpaResult: function (data)
     {
       // this is a POC, so let's populate some divs by hand ¯\_(ツ)_/¯
-
       var props = data[0] || {};
 
       // concat owners
