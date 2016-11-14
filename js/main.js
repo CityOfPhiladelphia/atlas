@@ -483,8 +483,7 @@ var app = (function ()
       $('#land-records-id').html(parcelId);
       $('#land-records-address').html(address);
       $('#land-records-status').html(app.PARCEL_STATUS[props.STATUS]);
-      // TODO air rights
-      // $('#land-records-air-rights').html(props.);
+      $('#land-records-air-rights').html(props.SUFFIX === 'A' ? 'Yes' : 'No');
       $('#land-records-condo').html(props.CONDOFLAG === 1 ? 'Yes' : 'No');
     },
 
@@ -888,6 +887,5 @@ var app = (function ()
 $(function () {
   app.init();
 });
-
 
 // https://api.tiles.mapbox.com/v4/mapbox.streets/11/1024/681.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw
