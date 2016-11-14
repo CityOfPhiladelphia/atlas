@@ -162,6 +162,9 @@ var app = (function ()
         window.open(app.config.cyclomedia.cyclomediaUrl, app.config.cyclomedia.cyclomediaUrl);
         return false
       });
+
+      // clear active topic in localStorage
+      localStorage.removeItem('activeTopic');
     },
 
     search: function () {
@@ -251,7 +254,13 @@ var app = (function ()
       $targetTopic.slideDown(350);
 
       // tell map about it
-      app.map.didActivateTopic(targetTopicName);
+      var prevTopic;
+      if ($activeTopic.length > 0) {
+        prevTopic = $activeTopic.attr('id').replace('topic-', '');
+      } else {
+        prevTopic = null;
+      }
+      app.map.didChangeTopic(prevTopic, targetTopicName);
     },
 
     toggleTopic: function (targetTopicName) {
@@ -260,7 +269,8 @@ var app = (function ()
       // if it's already visible, hide it
       if ($targetTopic.is(':visible')){
         $targetTopic.slideUp(350);
-        app.map.didDisactivateTopic(targetTopicName);
+        app.map.didChangeTopic(targetTopicName, null);
+        // app.map.didDisactivateTopic(targetTopicName);
       }
 
       // otherwise, activate

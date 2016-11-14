@@ -176,6 +176,14 @@ app.map = (function ()
         zIndex: 13,
       });
 
+    app.state.map.mapServices.ParcelOverlay = L.esri.dynamicMapLayer({
+      url: '//ase.phila.gov/arcgis/rest/services/DOR/rtt_basemap/MapServer/24',
+      maxZoom: 22,
+      name: 'parcelOverlay',
+      type: 'overlay',
+      zIndex: 14,
+    })
+
 
       // Now add to map
       _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapLight);
@@ -395,7 +403,6 @@ app.map = (function ()
 
       };
 
-
       // one of 2 ways to call AIS
       _map.on('click', app.map.didClickMap);
 
@@ -412,7 +419,9 @@ app.map = (function ()
 
       _map.on('zoomend', function(){
         app.map.LSzoomend();
-      })
+      });
+
+      _map.on('moveend', app.map.LSmoveend);
 
       // when map refreshes, if there is already a cyclomedia tab open, place the marker
       if(localStorage.stViewOpen == 'true') {
@@ -632,8 +641,36 @@ app.map = (function ()
       localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
     },
 
+    LSmoveend: function() {
+      app.state.theCenter = _map.getCenter();
+      app.state.theX = app.state.theCenter.lng;
+      app.state.theY = app.state.theCenter.lat;
+      localStorage.setItem('theX', app.state.theX);
+      localStorage.setItem('theY', app.state.theY);
+      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
+    },
+
+    didChangeTopic: function (prevTopic, nextTopic) {
+      console.log('did change topic', prevTopic, '=>', nextTopic);
+
+      if (prevTopic) {
+        app.map.didDisactivateTopic(prevTopic);
+      }
+
+      if (nextTopic) {
+        app.map.didActivateTopic(nextTopic);
+      }
+
+      localStorage.setItem('activeTopic', nextTopic);
+    },
+
     // called when the active topic in the topic panel changes
     didActivateTopic: function (topic) {
+      console.log('did activate topic', topic);
+
+      // save to localstorage for pictometry viewer
+      // localStorage.setItem('activeTopic', topic);
+
       _overlayLayerGroup.clearLayers();
       app.map.domLayerList();
 
@@ -647,6 +684,7 @@ app.map = (function ()
           app.map.domLayerList();
           break;
         case 'nearby':
+          console.log('didActivateTopic for case "nearby"')
           app.map.addNearbyAppealsToMap();
         default:
           console.log('unhandled topic:', topic);
@@ -654,17 +692,22 @@ app.map = (function ()
     },
 
     didDisactivateTopic: function (topic) {
+      localStorage.setItem('activeTopic', null);
+      console.log('didDisactivateTopic', topic, localStorage);
+
       switch (topic) {
         case 'deeds':
           // code here
           break;
         case 'zoning':
+          console.log('didDisactivateTopic ran for case "zoning"')
           if (app.state.map.namesOverLayers.includes('zoningMap')){
             _overlayLayerGroup.clearLayers();
             app.map.domLayerList();
           }
           break;
         case 'nearby':
+          console.log('didDisactivateTopic ran for case "nearby"')
           _appealsLayerGroup.clearLayers();
         //default:
         //  console.log('unhandled topic:', topic);
