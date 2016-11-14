@@ -133,7 +133,13 @@ app.map = (function ()
         zIndex: 8,
       });
 
-
+      app.state.map.tileLayers.Parcels = L.esri.tiledMapLayer({
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ParcleTile/MapServer',
+        maxZoom: 22,
+        name: 'parcelOverlay',
+        type: 'overlay',
+        zIndex: 9,
+      });
 
       /*var baseMapDark = L.esri.tiledMapLayer({
         url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Slate/MapServer",
@@ -176,13 +182,7 @@ app.map = (function ()
         zIndex: 13,
       });
 
-    app.state.map.mapServices.ParcelOverlay = L.esri.dynamicMapLayer({
-      url: '//ase.phila.gov/arcgis/rest/services/DOR/rtt_basemap/MapServer/24',
-      maxZoom: 22,
-      name: 'parcelOverlay',
-      type: 'overlay',
-      zIndex: 14,
-    })
+
 
 
       // Now add to map
@@ -368,8 +368,10 @@ app.map = (function ()
           // This has to change, it is loading 2016 every time
           if (app.state.map.lastYearViewed) {
             _baseLayerGroup.addLayer(app.state.map.lastYearViewed);
+            _baseLayerGroup.addLayer(app.state.map.tileLayers.Parcels);
           } else {
             _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapImagery2016);
+            _baseLayerGroup.addLayer(app.state.map.tileLayers.Parcels);
           }
           //app.state.map.tileLayers.overlayImageryLabels.addTo(_map);
           _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayImageryLabels);
@@ -395,7 +397,8 @@ app.map = (function ()
           app.state.map.historicalImageryButtons[i].state('dateNotSelected');
         };
         _baseLayerGroup.clearLayers();
-        _baseLayerGroup.addLayer(requestedLayer)
+        _baseLayerGroup.addLayer(requestedLayer);
+        _baseLayerGroup.addLayer(app.state.map.tileLayers.Parcels);
 
         // highlight current button
         control.state('dateSelected');
