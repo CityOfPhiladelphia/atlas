@@ -549,7 +549,13 @@ app.map = (function ()
       // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
       if (app.state.map.shouldPan) {
         // latlon = new L.LatLng(thelatlon[0], thelatlon[1]);
-        _map.setView(parcelCentroid, 20, {animate:false});
+        // _map.setView(parcelCentroid, 20, {animate:false});
+
+        // zoom to bounds of parcel poly plus some buffer
+        var boundsPadded = parcelPoly.getBounds().pad(1.15);
+        // _map.fitBounds(bounds, {padding: ['20%', '20%']});
+        _map.fitBounds(boundsPadded);
+
         // or need to use parcel centroid instead of center of map
         // set new state and localStorage
         app.map.LSinit();
