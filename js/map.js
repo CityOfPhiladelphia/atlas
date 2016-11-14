@@ -603,9 +603,10 @@ app.map = (function ()
           calculationType: 'geodesic',
           f: 'json',
           areaUnit: '{"areaUnit" : "esriSquareFeet"}',
+          lengthUnit: 9002,
         },
         success: function (dataString) {
-          // console.log('got polygon with area', data, this.url);
+          console.log('got polygon with area', dataString, this.url);
           var data = JSON.parse(dataString),
               area = Math.round(data.areas[0]),
               perimeter = Math.round(data.lengths[0]);
