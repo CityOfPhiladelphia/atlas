@@ -220,6 +220,8 @@ var app = (function ()
     showMultipleAisResultModal: function (callback) {
       var data = app.state.ais;
 
+      $('#addressList').empty();
+
       // construct modal dom element
       for (var i = 0; i < data.features.length; i++) {
         $('#addressList').append('<li><a href="#" number=' + i + '><span class="tab">' + data.features[i].properties.street_address + '</span></a></li>');
@@ -228,7 +230,7 @@ var app = (function ()
 
       // called after user selects address
       $('#addressModal a').click(function () {
-        $('#search-input').val($(this).text())
+        // $('#search-input').val($(this).text())
         $('#addressModal').foundation('close');
         $('#addressList').empty()
 
@@ -344,9 +346,12 @@ var app = (function ()
 
     hideContentForTopic: function (topic) {
       // show "no content"
-      var topicDivId = '#topic-' + topic;
-      $(topicDivId + ' > topic-content').hide();
-      $(topicDivId + ' > topic-content-not-found').show();
+      var topicDivId = '#topic-' + topic,
+          $topicContent = $(topicDivId + ' > .topic-content'),
+          $topicContentNotFound = $(topicDivId + ' > .topic-content-not-found');
+      console.log('hide content: ', $topicContent, $topicContentNotFound);
+      $topicContent.hide();
+      $topicContentNotFound.show();
     },
 
     // initiates requests to topic APIs (OPA, L&I, etc.)
@@ -357,14 +362,17 @@ var app = (function ()
 
       // opa
       var opaAccountNum = aisProps.opa_account_num;
-      $.get({
-        url: '//data.phila.gov/resource/w7rb-qrn8.json?parcel_number=' + opaAccountNum,
-        success: app.didGetOpaResult,
-        error: function (err) {
-          console.log('opa error', err);
-          app.hideContentForTopic('property')
-        },
-      });
+      if (opaAccountNum) {
+        $.get({
+          url: '//data.phila.gov/resource/w7rb-qrn8.json?parcel_number=' + opaAccountNum,
+          success: app.didGetOpaResult,
+          error: function (err) {
+
+          },
+        });
+      } else {
+        app.hideContentForTopic('property');
+      }
 
       // l&i
       app.state.li = {};
@@ -565,7 +573,7 @@ var app = (function ()
       app.util.formatTableFields($('#topic-property table'));
 
       // show content
-      $('#topic-property > topic-content').show();
+      app.showContentForTopic('property');
     },
 
     didGetAllLiResults: function ()
@@ -696,9 +704,14 @@ var app = (function ()
     },
 
     didGetZoningBaseResult: function (error, featureCollection, response) {
-      var feature = featureCollection.features[0],
-      // TODO check for null feature
-          props = feature.properties,
+      var feature = featureCollection.features[0];
+
+      if (!feature) {
+        console.log('could not get zoning base', error, featureCollection);
+        return;
+      }
+
+      var props = feature.properties,
           longCode = props.LONG_CODE;
       $('#zoning-code').html(longCode);
 

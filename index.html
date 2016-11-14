@@ -176,39 +176,40 @@
                         <!-- LAND RECORDS -->
                         <a id="topic-link-land-records" class="topic-link" href="#"><span class="topic-link-icon flaticon-copy"></span>Deeds</a>
                         <div id="topic-land-records" class="topic">
-                            <table>
-                                <tr>
-                                    <th>Parcel ID</th>
-                                    <td id="land-records-id"></td>
-                                </tr>
-                                <tr>
-                                    <th>Parcel Address</th>
-                                    <td id="land-records-address"></td>
-                                </tr>
-                                <tr>
-                                    <th>Status</th>
-                                    <td id="land-records-status"></td>
-                                </tr>
-                                <tr>
-                                    <th>Has Air Rights</th>
-                                    <td id="land-records-air-rights"></td>
-                                </tr>
-                                <tr>
-                                    <th>Is Condo</th>
-                                    <td id="land-records-condo"></td>
-                                </tr>
-                                <tr>
-                                    <th>Perimeter</th>
-                                    <td id="land-records-perimeter"></td>
-                                </tr>
-                                <tr>
-                                    <th>Area</th>
-                                    <td id="land-records-area"></td>
-                                </tr>
-                            </table>
-                            
-                            <h4>Documents<span id="land-records-documents-count"></span></h4>
-                            <table id="land-records-documents" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                            <div class="topic-content">
+                                <table>
+                                    <tr>
+                                        <th>Parcel ID</th>
+                                        <td id="land-records-id"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Parcel Address</th>
+                                        <td id="land-records-address"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td id="land-records-status"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Has Air Rights</th>
+                                        <td id="land-records-air-rights"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Is Condo</th>
+                                        <td id="land-records-condo"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Perimeter</th>
+                                        <td id="land-records-perimeter"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Area</th>
+                                        <td id="land-records-area"></td>
+                                    </tr>
+                                </table>
+                                
+                                <h4>Documents<span id="land-records-documents-count"></span></h4>
+                                <table id="land-records-documents" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                     <thead>
                                         <tr>
                                             <th scope="col" data-field-type="date">Date</th>
@@ -220,7 +221,11 @@
                                     </thead>
                                     <tbody></tbody>
                                 </table>
+                            </div>
                             
+                            <div class="topic-content-not-found">
+                                No properties were found at this address.
+                            </div>
                         </div>
 
                         <!--L & I-->
@@ -490,15 +495,15 @@
         <!--MODALS-->
         <!-- no results address modal -->
         <div id="no-results-modal" class="reveal" data-reveal aria-labelledby="modal-title" aria-hidden="true" role="dialog">
-            <h1>Sorry, no addresses were found.</h1>
+            <h2>Sorry, no addresses were found.</h2>
             <p>Please try your search again.</p>
             <!--<button class="close-button" data-close aria-label="Close modal" type="button">OK</button>-->
         </div>
 
         <!-- no parcel address modal -->
         <div id="no-parcel-address-modal" class="reveal" data-reveal aria-labelledby="modal-title" aria-hidden="true" role="dialog">
-            <h1>Sorry, we can't find an address for that parcel.</h1>
-            <p>Don't worry, you didn't do anything wrong. Some parcels are missing a valid street address.
+            <h2>Sorry, we can't find an address for that parcel.</h2>
+            <p>Don't worry, you didn't do anything wrong. Some parcels can't be linked to an address we know about.
             If you know the parcel address, trying entering it in the search box above.</p>
             <!--<button class="close-button" data-close aria-label="Close modal" type="button">OK</button>-->
         </div>
