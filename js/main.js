@@ -591,6 +591,9 @@ var app = (function ()
           fieldMap = app.config.li.fieldMap,
           recordLimit = app.config.topicRecordLimit;
 
+      // clean up links
+      $('.li-see-more-link').remove();
+
       // loop over sections ("state keys")
       _.forEach(stateKeys, function (stateKey) {
         var items = liState[stateKey],
