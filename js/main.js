@@ -413,7 +413,6 @@ var app = (function ()
       // clear els
       _.forEach(['id', 'address', 'status', 'air-rights', 'condo'], function (tag) {
         var $el = $('#land-records-' + tag);
-        console.log($el);
         $el.empty();
       });
 
