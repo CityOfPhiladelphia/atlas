@@ -822,6 +822,10 @@ var app = (function ()
       $tbody.html(rowsHtml);
       $('#nearby-appeals-count').text(' (' + features.length + ')');
 
+      // reset radio button
+      var $dateButton = $('input[name="nearby-appeals-sort-by"][value="date"]');
+      $dateButton.prop({checked: true});
+
       // TEMP attribute rows with appeal id and distance
       var sourceIdField = app.config.li.fieldMap.appeals.id;
       _.forEach($tbody.find('tr'), function (row, i) {
