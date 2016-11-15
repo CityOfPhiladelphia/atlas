@@ -410,13 +410,21 @@ var app = (function ()
       var aisParcelId = app.state.ais.features[0].properties.dor_parcel_id,
           stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
 
+      // clear els
+      _.forEach(['id', 'address', 'status', 'air-rights', 'condo'], function (tag) {
+        var $el = $('#land-records-' + tag);
+        console.log($el);
+        $el.empty();
+      });
+
       // if we already have the parcel
       if (stateParcel && stateParcel.properties.MAPREG === aisParcelId) {
         app.renderParcelTopic();
       }
-      // otherwise we don't have a parcel, so go get one
-      else {
+      // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
+      else if (aisParcelId) {
         app.getParcelById(aisParcelId, function () {
+          console.log('got parcel by id', app.state.dor);
           app.renderParcelTopic();
           app.map.drawParcel();
         });
@@ -721,6 +729,10 @@ var app = (function ()
 
     // get a parcel by parcel id
     getParcelById: function (id, callback) {
+      if (!id) {
+        console.log('get parcel by id, but null');
+        return;
+      }
       // console.log('get parcel by id: ', id);
 
       // OLD METHOD
@@ -743,11 +755,19 @@ var app = (function ()
           // AGO returns json with plaintext headers, so parse
           data = JSON.parse(data);
 
+          // check data
+          if (data.features.length === 0) {
+            console.log('got parcel but 0 features', this.url);
+          }
+
           app.state.dor = data;
           callback && callback();
+
+          app.showContentForTopic('land-records');
         },
         error: function (err) {
           console.log('get parcel by id error', err);
+          app.hideContentForTopic('land-records');
         },
       });
     },

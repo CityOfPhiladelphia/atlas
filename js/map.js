@@ -494,10 +494,12 @@ app.map = (function ()
     },
 
     renderAisResult: function (obj) {
+      // console.log('render ais result', obj);
       // get parcel
-      var parcelId = obj.properties.dor_parcel_id;
+      // var parcelId = obj.properties.dor_parcel_id;
       // app.getParcelById(parcelId);
-      this.drawParcel();
+
+      if (app.state.dor) this.drawParcel();
     },
 
     didClickMap: function (e) {
@@ -747,7 +749,7 @@ app.map = (function ()
 
     didDisactivateTopic: function (topic) {
       localStorage.setItem('activeTopic', null);
-      console.log('didDisactivateTopic', topic, localStorage);
+      // console.log('didDisactivateTopic', topic, localStorage);
 
       switch (topic) {
         case 'deeds':
