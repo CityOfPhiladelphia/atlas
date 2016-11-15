@@ -117,8 +117,8 @@ app.util = (function () {
       date: function (val) {
         // check for epoch dates
         if (!isNaN(val)) val = parseInt(val);
-        return moment(val).format('YYYY-MM-DD');
-        // return moment(val).format('M/D/YYYY');
+        var newVal = moment(val).format('YYYY-MM-DD');
+        return newVal;
       },
       // 'epoch-date': function (val) {
       //   console.log('is num', !isNaN(val));
@@ -129,17 +129,20 @@ app.util = (function () {
         var url = '//li.phila.gov/#details?entity=permits&eid=' + val;
         return '<a href="' + url + '">' + val + '</a>';
       },
-
       'li-inspection-id': function (val) {
         // var url = '//li.phila.gov/#details?entity=permits&eid=' + val;
         // return '<a href="' + url + '">' + val + '</a>';
         return val;
       },
-
       'li-violation-id': function (val) {
         // var url = '//li.phila.gov/#details?entity=violationdetails&eid=' + val;
         // return '<a href="' + url + '">' + val + '</a>';
         return val;
+      },
+      'nearby-appeal-id': function (val) {
+        console.log('nearby', val);
+        var url = '//li.phila.gov/#details?entity=zoningboardappeals&eid=' + val;
+        return '<a href="' + url + '">' + val + '</a>';
       },
     },
 
