@@ -129,6 +129,18 @@ app.util = (function () {
         var url = '//li.phila.gov/#details?entity=permits&eid=' + val;
         return '<a href="' + url + '">' + val + '</a>';
       },
+
+      'li-inspection-id': function (val) {
+        // var url = '//li.phila.gov/#details?entity=permits&eid=' + val;
+        // return '<a href="' + url + '">' + val + '</a>';
+        return val;
+      },
+
+      'li-violation-id': function (val) {
+        // var url = '//li.phila.gov/#details?entity=violationdetails&eid=' + val;
+        // return '<a href="' + url + '">' + val + '</a>';
+        return val;
+      },
     },
 
     // given an array of fields (table cells), update text using transform
