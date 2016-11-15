@@ -539,15 +539,24 @@ app.map = (function ()
     },
 
     drawParcel: function () {
-      // console.log('draw parcel', app.state.dor);
+      console.log('draw parcel', app.state.dor);
 
-      // if there's no parcel, return
-      if (!app.state.dor) return;
+      // if there's no parcel in state, clear the map and don't render
+      // TODO zoom to AIS xy
+      var parcel, geom;
+      try {
+        parcel = app.state.dor.features[0];
+        if (!parcel) throw 'no parcel';
+        geom = parcel.geometry;
+      }
+      catch(err) {
+        console.log('draw parcel, but could not get parcel from state', err);
+        // clear parcel
+        _parcelLayerGroup.clearLayers();
+        return;
+      }
 
-      var parcel = app.state.dor.features[0],
-          geom = parcel.geometry,
-          // flip these because leaflet uses lat/lon and esri is x/y
-          coords = app.util.flipCoords(geom.coordinates),
+      var coords = app.util.flipCoords(geom.coordinates),
           parcelPoly = L.polygon([coords], {
             color: 'blue',
             weight: 2
@@ -606,7 +615,7 @@ app.map = (function ()
           lengthUnit: 9002,
         },
         success: function (dataString) {
-          console.log('got polygon with area', dataString, this.url);
+          // console.log('got polygon with area', dataString, this.url);
           var data = JSON.parse(dataString),
               area = Math.round(data.areas[0]),
               perimeter = Math.round(data.lengths[0]);
