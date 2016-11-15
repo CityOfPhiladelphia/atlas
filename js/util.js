@@ -120,10 +120,14 @@ app.util = (function () {
         return moment(val).format('YYYY-MM-DD');
         // return moment(val).format('M/D/YYYY');
       },
-      'epoch-date': function (val) {
-        console.log('is num', !isNaN(val));
-        valInt = parseInt(val);
-        return app.util.FIELD_TRANSFORMS.date(valInt);
+      // 'epoch-date': function (val) {
+      //   console.log('is num', !isNaN(val));
+      //   valInt = parseInt(val);
+      //   return app.util.FIELD_TRANSFORMS.date(valInt);
+      // },
+      'li-permit-id': function (val) {
+        var url = '//li.phila.gov/#details?entity=permits&eid=' + val;
+        return '<a href="' + url + '">' + val + '</a>';
       },
     },
 
