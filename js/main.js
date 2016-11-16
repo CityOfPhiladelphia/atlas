@@ -367,7 +367,7 @@ var app = (function ()
           url: '//data.phila.gov/resource/w7rb-qrn8.json?parcel_number=' + opaAccountNum,
           success: app.didGetOpaResult,
           error: function (err) {
-
+            console.log('opa error', err);
           },
         });
       } else {
@@ -536,8 +536,16 @@ var app = (function ()
 
     didGetOpaResult: function (data)
     {
+      // console.log('did get opa result', data);
+
+      // if no data, hide
+      if (data.length < 1) {
+        app.hideContentForTopic('property');
+        return;
+      }
+
       // this is a POC, so let's populate some divs by hand ¯\_(ツ)_/¯
-      var props = data[0] || {};
+      var props = data[0];
 
       // concat owners
       var owners = [props.owner_1 || 'None'];
