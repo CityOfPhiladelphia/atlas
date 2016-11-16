@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 28/07/2016 16:38
+  	Creation date: 16/11/2016 23:30
   	*/
 
 @font-face {
@@ -17,7 +17,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: "Flaticon";
-    src: url("../fonts/Flaticon.svg#Flaticon") format("svg");
+    src: url("./Flaticon.svg#Flaticon") format("svg");
   }
 }
 
@@ -31,11 +31,15 @@ margin-left: 20px;
 
 .flaticon-copy:before { content: "\f100"; }
 .flaticon-correct:before { content: "\f101"; }
-.flaticon-garbage:before { content: "\f102"; }
-.flaticon-garbage-1:before { content: "\f103"; }
+.flaticon-drop:before { content: "\f102"; }
+.flaticon-garbage:before { content: "\f103"; }
 .flaticon-graduate-diploma:before { content: "\f104"; }
 .flaticon-hard-hat:before { content: "\f105"; }
 .flaticon-house:before { content: "\f106"; }
 .flaticon-industrial-zone:before { content: "\f107"; }
 .flaticon-leaf:before { content: "\f108"; }
-.flaticon-telephone:before { content: "\f109"; }
+.flaticon-photo-camera:before { content: "\f109"; }
+.flaticon-placeholder-1:before { content: "\f10a"; }
+.flaticon-placeholder-2:before { content: "\f10b"; }
+.flaticon-placeholder-3:before { content: "\f10c"; }
+.flaticon-video-camera:before { content: "\f10d"; }
