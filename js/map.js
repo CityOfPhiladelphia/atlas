@@ -64,9 +64,18 @@ app.map = (function ()
 
       _map = L.map('map', {
          zoomControl: false,
-         measureControl: true,
+         // measureControl: true,
       });
       _map.setView(CITY_HALL, 17);
+
+      // make measure control
+      var measureControl = new L.Control.Measure({
+        primaryLengthUnit: 'feet',
+        // secondaryLengthUnit: 'miles',
+        primaryAreaUnit: 'sqfeet',
+        // secondaryAreaUnit: 'sqmiles',
+      });
+      measureControl.addTo(_map);
 
       // Basemaps
       app.state.map.tileLayers.baseMapLight = L.esri.tiledMapLayer({
