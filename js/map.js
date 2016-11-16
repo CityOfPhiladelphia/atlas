@@ -78,7 +78,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2016 = L.esri.tiledMapLayer({
-        url: "http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer",
+        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2016',
         type: 'base',
@@ -118,7 +118,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2004 = L.esri.tiledMapLayer({
-        url: "http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2004_6in/MapServer",
+        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2004_6in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2004',
         type: 'base',
@@ -126,7 +126,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery1996 = L.esri.tiledMapLayer({
-        url: "http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_1996_6in/MapServer",
+        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_1996_6in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery1996',
         type: 'base',
