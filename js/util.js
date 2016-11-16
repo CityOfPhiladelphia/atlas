@@ -140,7 +140,6 @@ app.util = (function () {
         return val;
       },
       'nearby-appeal-id': function (val) {
-        console.log('nearby', val);
         var url = '//li.phila.gov/#details?entity=zoningboardappeals&eid=' + val;
         return '<a href="' + url + '">' + val + '</a>';
       },
