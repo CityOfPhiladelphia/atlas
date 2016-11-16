@@ -64,7 +64,7 @@ app.map = (function ()
 
       _map = L.map('map', {
          zoomControl: false,
-         //measureControl: true,
+         measureControl: true,
       });
       _map.setView(CITY_HALL, 17);
 
