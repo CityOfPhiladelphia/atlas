@@ -339,9 +339,11 @@ var app = (function ()
 
     showContentForTopic: function (topic) {
       // show "no content"
-      var topicDivId = '#topic-' + topic;
-      $(topicDivId + ' > topic-content').show();
-      $(topicDivId + ' > topic-content-not-found').hide();
+      var topicDivId = '#topic-' + topic,
+          $topicContent = $(topicDivId + ' > .topic-content'),
+          $topicNoContent = $(topicDivId + ' > .topic-content-not-found');
+      $topicContent.show();
+      $topicNoContent.hide();
     },
 
     hideContentForTopic: function (topic) {
@@ -349,7 +351,6 @@ var app = (function ()
       var topicDivId = '#topic-' + topic,
           $topicContent = $(topicDivId + ' > .topic-content'),
           $topicContentNotFound = $(topicDivId + ' > .topic-content-not-found');
-      console.log('hide content: ', $topicContent, $topicContentNotFound);
       $topicContent.hide();
       $topicContentNotFound.show();
     },
@@ -588,6 +589,7 @@ var app = (function ()
       app.util.formatTableFields($('#topic-property table'));
 
       // show content
+      console.log('show content');
       app.showContentForTopic('property');
     },
 
