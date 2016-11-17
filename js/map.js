@@ -539,7 +539,7 @@ app.map = (function ()
 
         // if this is the result of a map click, query ais for the address
         if (app.state.map.clickedOnMap) {
-          app.getAis(parcelAddress);
+          app.searchForAddress(parcelAddress);
           app.state.map.clickedOnMap = false;
         }
 

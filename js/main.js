@@ -1,4 +1,4 @@
-/* global L, _, $ */
+/* global L, _, $, history */
 
 /*
 NOTE: this is just a demo - lots of jQuery soup ahead :)
@@ -144,20 +144,20 @@ var app = (function ()
       });
 
       // listen for search
-      $('#search-button').click(app.search);
+      $('#search-button').click(app.didClickSearch);
       $('#search-input').keypress(function (e) {
-        if (e.which === 13) app.search();
+        if (e.which === 13) app.didClickSearch();
       });
 
       // make "Obilque Imagery" button open Pictometry window
-      $('#pict-button').on('click', function(e){
+      $('#pict-button').on('click', function (e){
         e.preventDefault();
         window.open(app.config.pictometry.pictometryUrl, app.config.pictometry.pictometryUrl);
         return false
       });
 
       // make "Street View" button open Cyclomedia window
-      $('#cyclo-button').on('click', function(e){
+      $('#cyclo-button').on('click', function (e){
         e.preventDefault();
         window.open(app.config.cyclomedia.cyclomediaUrl, app.config.cyclomedia.cyclomediaUrl);
         return false
@@ -165,9 +165,45 @@ var app = (function ()
 
       // clear active topic in localStorage
       localStorage.removeItem('activeTopic');
+
+      // listen for hash changes
+      $(window).on('hashchange', app.route);
+      // route one time on load
+      app.route();
     },
 
-    search: function () {
+    route: function () {
+      var hash = location.hash,
+          comps = hash.split('/');
+
+      // check for enough comps (just 2, since topic is optional)
+      if (comps.length < 2) {
+        console.log('route, but not enough comps', comps);
+        return;
+      }
+
+      var address = comps[1],
+          topic = comps.length > 2 ? comps[2] : null,
+          state = history.state;
+
+      // activate topic
+      topic && app.activateTopic(topic);
+
+      // if there's no ais in state, go get it
+      if (!(state && state.ais)) {
+        app.searchForAddress(address);
+        return;
+      }
+
+      // rehydrate state
+      var ais = state.ais;
+      app.state.ais = ais;
+
+      // get topics
+      app.getTopics();
+    },
+
+    didClickSearch: function () {
       app.state.clickedOnMap = false;
       app.state.map.shouldPan = true;
 
@@ -186,10 +222,11 @@ var app = (function ()
       });
 
       // fire off ais
-      app.getAis(val);
+      app.searchForAddress(val);
     },
 
-    getAis: function (address) {
+    // fires ais search
+    searchForAddress: function (address) {
       var url = app.config.ais.url + encodeURIComponent(address),
           params = {
             gatekeeperKey: app.config.ais.gatekeeperKey,
@@ -247,7 +284,8 @@ var app = (function ()
     // section in the data panel
     activateTopic: function (targetTopicName) {
       // prevent topics from opening until we have at least AIS (arbitrary , but should work)
-      if (!app.state.ais) return;
+      var ais = app.state.ais;
+      if (!ais) return;
 
       var $targetTopic = $('#topic-' + targetTopicName);
 
@@ -268,6 +306,13 @@ var app = (function ()
         prevTopic = null;
       }
       app.map.didChangeTopic(prevTopic, targetTopicName);
+
+      // update url, eg /#/1234 MARKET ST/property
+      var address = app.state.ais.normalized[0],
+          hash = '#/' + address + '/' + targetTopicName,
+          // pare down state to something serializable
+          state = {ais: ais};
+      history.pushState(state, '', hash);
     },
 
     toggleTopic: function (targetTopicName) {
@@ -278,10 +323,15 @@ var app = (function ()
         $targetTopic.slideUp(350);
         app.map.didChangeTopic(targetTopicName, null);
         // app.map.didDisactivateTopic(targetTopicName);
+
+        // remove topic from url
+        var hashNoTopic = location.hash.split('/').slice(0, 2).join('/');
+        console.log('hash no topic', hashNoTopic);
+        history.pushState(history.state, '', hashNoTopic);
       }
 
       // otherwise, activate
-      else app.activateTopic(targetTopicName);
+      else app.activateTopic(targetTopicName);      
     },
 
     didGetAisResult: function () {
@@ -298,9 +348,6 @@ var app = (function ()
       else obj = data.features[0]
       var props = obj.properties,
           streetAddress = props.street_address;
-
-      // show accordion
-      $('#topic-list').show();
 
       // make mailing address
       // var mailingAddress = streetAddress + '<br>PHILADELPHIA, PA ' + props.zip_code;
@@ -325,16 +372,12 @@ var app = (function ()
       $('#address-info-street-code').text(data.features[0].properties.street_code);
       // $('#zoning-code').text(props.zoning);
 
-      // if no topic is active, show property
-      if ($('.topic:visible').length === 0) {
-        app.activateTopic('property');
-      }
-
       // render map for this address
       if (selectedAddress) app.map.renderAisResult(obj);
 
       // get topics
-      app.getTopics(props);
+      // app.getTopics(props);      
+      app.getTopics();
     },
 
     showContentForTopic: function (topic) {
@@ -356,10 +399,15 @@ var app = (function ()
     },
 
     // initiates requests to topic APIs (OPA, L&I, etc.)
-    getTopics: function (aisProps) {
+    getTopics: function () {
       // console.log('get topics');
 
-      var aisAddress = aisProps.street_address;
+      // show accordion
+      // doing this in route now
+      // $('#topic-list').show();
+
+      var aisProps = app.state.ais.features[0].properties,
+          aisAddress = aisProps.street_address;
 
       // opa
       var opaAccountNum = aisProps.opa_account_num;
@@ -498,6 +546,12 @@ var app = (function ()
           console.log('nearby appeals error', err);
         },
       });
+
+      // show topics
+      $('#topic-list').show();
+
+      // if no topic is active, show property
+      $('.topic:visible').length === 0 && app.activateTopic('property');
     },
 
     // TODO confirm these
