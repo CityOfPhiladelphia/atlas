@@ -139,7 +139,7 @@ app.util = (function () {
         // return '<a href="' + url + '">' + val + '</a>';
         return val;
       },
-      'nearby-appeal-id': function (val) {
+      'zoning-appeal-id': function (val) {
         var url = '//li.phila.gov/#details?entity=zoningboardappeals&eid=' + val;
         return '<a href="' + url + '">' + val + '</a>';
       },
