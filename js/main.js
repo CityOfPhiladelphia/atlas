@@ -768,7 +768,21 @@ var app = (function ()
           $tbody = $('#zoning-overlays').find('tbody'),
           fields = ['OVERLAY_NAME', 'CODE_SECTION'],
           tbodyHtml = app.util.makeTableRowsFromGeoJson(features, fields);
+      console.log('tbody html', tbodyHtml);
       $tbody.html(tbodyHtml);
+
+      // make code section links
+      var rows = $tbody.find('tr');
+      _.forEach(rows, function (row, i) {
+        var $row = $(row),
+            feature = features[i],
+            url = feature.properties.CODE_SECTION_LINK;
+        // get the code section field
+        $codeSectionField = $row.children().last();
+        var text = $codeSectionField.text(),
+            newHtml = '<a href="' + url + '">' + text + '</a>';
+        $codeSectionField.html(newHtml);
+      });
 
       var count = features.length;
       $('#zoning-overlays-count').html(' (' + count + ')');

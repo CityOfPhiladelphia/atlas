@@ -48,7 +48,7 @@ app.util = (function () {
           var val = props[field] || '';
 
           // truncate long strings
-          if (typeof val === 'string' || val instanceof String && val.length > 150) {
+          if ((typeof val === 'string' || val instanceof String) && val.length > 150) {
             val = val.substr(val, 150) + '...';
           }
 
