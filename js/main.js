@@ -14,8 +14,6 @@ var app = (function ()
   var DEBUG = true,
       DEBUG_ADDRESS = '1234 market st';
 
-  var map;
-
   return {
     config: {
       ais: {
