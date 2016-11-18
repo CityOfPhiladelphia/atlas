@@ -767,7 +767,6 @@ var app = (function ()
           $tbody = $('#zoning-overlays').find('tbody'),
           fields = ['OVERLAY_NAME', 'CODE_SECTION'],
           tbodyHtml = app.util.makeTableRowsFromGeoJson(features, fields);
-      console.log('tbody html', tbodyHtml);
       $tbody.html(tbodyHtml);
 
       // make code section links
