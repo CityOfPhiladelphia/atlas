@@ -11,7 +11,7 @@ NOTE: this is just a demo - lots of jQuery soup ahead :)
 var app = (function ()
 {
   // debug stuff
-  var DEBUG = true,
+  var DEBUG = false,
       DEBUG_ADDRESS = '1234 market st';
 
   return {
