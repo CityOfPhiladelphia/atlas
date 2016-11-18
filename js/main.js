@@ -355,6 +355,8 @@ var app = (function ()
         // remove topic from url
         var hashNoTopic = location.hash.split('/').slice(0, 2).join('/');
         history.pushState(history.state, '', hashNoTopic);
+
+        app.state.activeTopic = null;
       }
 
       // otherwise, activate
