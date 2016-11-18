@@ -171,7 +171,7 @@ var app = (function ()
 
       // listen for back button
       window.onpopstate = function () {
-        console.log('popped state', location.href);
+        // console.log('popped state', location.href);
         app.route();
       };
 
@@ -187,7 +187,6 @@ var app = (function ()
       // if there are query params
       var searchParam = params.search;
       if (searchParam) {
-        console.log('route, we have a search', searchParam);
         app.searchForAddress(searchParam);
         // TODO fix url
         return;
@@ -195,12 +194,12 @@ var app = (function ()
 
       // check for enough comps (just 2, since topic is optional)
       if (comps.length < 2) {
-        console.log('route, but not enough comps', comps);
+        // console.log('route, but not enough comps', comps);
         return;
       }
 
-      var address = comps[1],
-          topic = comps.length > 2 ? comps[2] : null,
+      var address = decodeURIComponent(comps[1]),
+          topic = comps.length > 2 ? decodeURIComponent(comps[2]) : null,
           state = history.state;
 
       // activate topic
