@@ -197,8 +197,8 @@ app.util = (function () {
         console.log('construct hash, but no address');
         return;
       }
-      var comps = ['#', address];
-      if (topic) comps.push(topic);
+      var comps = ['#', encodeURIComponent(address)];
+      if (topic) comps.push(encodeURIComponent(topic));
       var hash = comps.join('/');
       return hash;
     },
