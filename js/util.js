@@ -46,12 +46,12 @@ app.util = (function () {
         // loop over fields
         var valsHtml = _.map(fields, function (field) {
           var val = props[field] || '';
-          
+
           // truncate long strings
           if (typeof val === 'string' || val instanceof String && val.length > 150) {
             val = val.substr(val, 150) + '...';
           }
-          
+
           return '<td>' + val + '</td>';
         }).join('');
         return '<tr>' + valsHtml + '</tr>';
@@ -59,7 +59,7 @@ app.util = (function () {
 
       return rowsHtml;
     },
-    
+
     // takes an array of flat json features, returns a string of concatenated <tr> elements
     makeTableRowsFromJson: function (rows, fields) {
       // loop over rows
@@ -67,12 +67,12 @@ app.util = (function () {
         // loop over fields
         var valsHtml = _.map(fields, function (field) {
           var val = row[field] || '';
-          
+
           // truncate long strings
           if ((typeof val === 'string' || val instanceof String) && val.length > 150) {
             val = val.substr(val, 150) + '...';
           }
-          
+
           // TEMP format iso dates
           // if (field.indexOf('date') > -1) {
           //   val = moment(val).format('YYYY-MM-DD');
@@ -80,7 +80,7 @@ app.util = (function () {
           // else {
           //   console.log('not date', field);
           // }
-          
+
           return '<td>' + val + '</td>';
         }).join('');
         return '<tr>' + valsHtml + '</tr>';
@@ -190,6 +190,17 @@ app.util = (function () {
 
       // call more specific format function
       app.util[fnName]($table);
+    },
+
+    constructHash: function (address, topic) {
+      if (!address) {
+        console.log('construct hash, but no address');
+        return;
+      }
+      var comps = ['#', address];
+      if (topic) comps.push(topic);
+      var hash = comps.join('/');
+      return hash;
     },
   };
 }());

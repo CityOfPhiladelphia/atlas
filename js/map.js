@@ -550,7 +550,7 @@ app.map = (function ()
     },
 
     drawParcel: function () {
-      console.log('draw parcel', app.state.dor);
+      // console.log('draw parcel', app.state.dor);
 
       // if there's no parcel in state, clear the map and don't render
       // TODO zoom to AIS xy
@@ -716,7 +716,7 @@ app.map = (function ()
     },
 
     didChangeTopic: function (prevTopic, nextTopic) {
-      console.log('did change topic', prevTopic, '=>', nextTopic);
+      // console.log('did change topic', prevTopic, '=>', nextTopic);
 
       if (prevTopic) {
         app.map.didDisactivateTopic(prevTopic);
@@ -731,7 +731,7 @@ app.map = (function ()
 
     // called when the active topic in the topic panel changes
     didActivateTopic: function (topic) {
-      console.log('did activate topic', topic);
+      // console.log('did activate topic', topic);
 
       // save to localstorage for pictometry viewer
       // localStorage.setItem('activeTopic', topic);
@@ -752,7 +752,7 @@ app.map = (function ()
           console.log('didActivateTopic for case "nearby"')
           app.map.addNearbyAppealsToMap();
         default:
-          console.log('unhandled topic:', topic);
+          // console.log('unhandled topic:', topic);
       }
     },
 

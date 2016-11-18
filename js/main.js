@@ -173,6 +173,7 @@ var app = (function ()
     },
 
     route: function () {
+      console.log('route');
       var hash = location.hash,
           comps = hash.split('/');
 
@@ -187,7 +188,8 @@ var app = (function ()
           state = history.state;
 
       // activate topic
-      topic && app.activateTopic(topic);
+      // topic && app.activateTopic(topic);
+      app.state.activeTopic = topic;
 
       // if there's no ais in state, go get it
       if (!(state && state.ais)) {
@@ -198,9 +200,10 @@ var app = (function ()
       // rehydrate state
       var ais = state.ais;
       app.state.ais = ais;
+      app.didGetAisResult();
 
       // get topics
-      app.getTopics();
+      // app.getTopics();
     },
 
     didClickSearch: function () {
@@ -331,7 +334,7 @@ var app = (function ()
       }
 
       // otherwise, activate
-      else app.activateTopic(targetTopicName);      
+      else app.activateTopic(targetTopicName);
     },
 
     didGetAisResult: function () {
@@ -376,8 +379,18 @@ var app = (function ()
       if (selectedAddress) app.map.renderAisResult(obj);
 
       // get topics
-      // app.getTopics(props);      
+      // app.getTopics(props);
       app.getTopics();
+
+      // push state
+      var nextState = {ais: app.state.ais},
+          nextTopic = app.state.activeTopic || 'property',
+          nextHash = app.util.constructHash(streetAddress, nextTopic);
+      history.pushState(nextState, null, nextHash);
+
+      // if no topic is active, activate property
+      // if (!app.state.nextTopic) {}
+      app.activateTopic(nextTopic);
     },
 
     showContentForTopic: function (topic) {
@@ -472,7 +485,7 @@ var app = (function ()
       // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
       else if (aisParcelId) {
         app.getParcelById(aisParcelId, function () {
-          console.log('got parcel by id', app.state.dor);
+          // console.log('got parcel by id', app.state.dor);
           app.renderParcelTopic();
           app.map.drawParcel();
         });
@@ -551,7 +564,7 @@ var app = (function ()
       $('#topic-list').show();
 
       // if no topic is active, show property
-      $('.topic:visible').length === 0 && app.activateTopic('property');
+      // $('.topic:visible').length === 0 && app.activateTopic('property');
     },
 
     // TODO confirm these
@@ -643,7 +656,6 @@ var app = (function ()
       app.util.formatTableFields($('#topic-property table'));
 
       // show content
-      console.log('show content');
       app.showContentForTopic('property');
     },
 
