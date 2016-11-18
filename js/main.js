@@ -500,7 +500,7 @@ var app = (function ()
 
       // clear els
       _.forEach(['id', 'address', 'status', 'air-rights', 'condo'], function (tag) {
-        var $el = $('#land-records-' + tag);
+        var $el = $('#deeds-' + tag);
         $el.empty();
       });
 
@@ -614,11 +614,11 @@ var app = (function ()
           parcelId = props.MAPREG,
           address = app.util.concatDorAddress(parcel);
 
-      $('#land-records-id').html(parcelId);
-      $('#land-records-address').html(address);
-      $('#land-records-status').html(app.PARCEL_STATUS[props.STATUS]);
-      $('#land-records-air-rights').html(props.SUFFIX === 'A' ? 'Yes' : 'No');
-      $('#land-records-condo').html(props.CONDOFLAG === 1 ? 'Yes' : 'No');
+      $('#deeds-address').html(address);
+      $('#deeds-id').html(parcelId);
+      $('#deeds-status').html(app.PARCEL_STATUS[props.STATUS]);
+      $('#deeds-air-rights').html(props.SUFFIX === 'A' ? 'Yes' : 'No');
+      $('#deeds-condo').html(props.CONDOFLAG === 1 ? 'Yes' : 'No');
     },
 
     // takes an object of divId => text and renders
@@ -867,11 +867,11 @@ var app = (function ()
           app.state.dor = data;
           callback && callback();
 
-          app.showContentForTopic('land-records');
+          app.showContentForTopic('deeds');
         },
         error: function (err) {
           console.log('get parcel by id error', err);
-          app.hideContentForTopic('land-records');
+          app.hideContentForTopic('deeds');
         },
       });
     },
@@ -1009,7 +1009,7 @@ var app = (function ()
           featuresLimited = features.slice(0, recordLimit),
           FIELDS = ['RECORDING_DATE', 'R_NUM', 'DOC_TYPE', 'GRANTOR', 'GRANTEE',],
           rowsHtml = app.util.makeTableRowsFromJson(featuresLimited, FIELDS),
-          $table = $('#land-records-documents'),
+          $table = $('#deeds-documents'),
           $tbody = $table.find('tbody');
       $tbody.html(rowsHtml);
 
@@ -1027,12 +1027,12 @@ var app = (function ()
 
       // update count
       var count = features.length;
-      $('#land-records-documents-count').text(' (' + count + ')');
+      $('#deeds-documents-count').text(' (' + count + ')');
 
       // add "see more" link, if there are rows not shown
       if (count > recordLimit) {
         // clear the old one
-        $('#land-records-documents-see-more-link').remove();
+        $('#deeds-documents-see-more-link').remove();
 
         var remainingCount = count - recordLimit,
             plural = remainingCount > 1,
@@ -1041,11 +1041,11 @@ var app = (function ()
             seeMoreUrl = 'http://170.115.71.250/picris/documentSearch.jsp',
             $seeMoreLink = $('<a />', {
               class: 'external li-see-more-link',
-              id: 'land-records-documents-see-more-link',
+              id: 'deeds-documents-see-more-link',
               href: seeMoreUrl,
               text: seeMoreText,
             });
-        $('#land-records-documents').after($seeMoreLink);
+        $('#deeds-documents').after($seeMoreLink);
       }
 
       // format date col

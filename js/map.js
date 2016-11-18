@@ -531,9 +531,11 @@ app.map = (function ()
         // if the parcel address is null or falsy, don't proceed
         var parcelHouseNumber = app.util.cleanDorAttribute(parcel.properties.HOUSE);
         if (!parcelAddress || parcelAddress.length === 0 || !parcelHouseNumber) {
-          console.log('no parcel address', parcelAddress);
+          console.log('no parcel address', parcel);
           // show error
-          $('#no-parcel-address-modal').foundation('open');
+          $noParcelAddressModal = $('#no-parcel-address-modal');
+          $noParcelAddressModal.find('#parcel-id').text(parcelAddress || '<empty>');
+          $noParcelAddressModal.foundation('open');
           return;
         }
 
@@ -630,8 +632,8 @@ app.map = (function ()
           var data = JSON.parse(dataString),
               area = Math.round(data.areas[0]),
               perimeter = Math.round(data.lengths[0]);
-          $('#land-records-area').text(area + ' sq ft');
-          $('#land-records-perimeter').text(perimeter + ' ft');
+          $('#deeds-area').text(area + ' sq ft');
+          $('#deeds-perimeter').text(perimeter + ' ft');
         },
         error: function (err) {
           console.log('polygon area error', err);

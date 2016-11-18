@@ -38,7 +38,7 @@
                     <div class="large-16 columns">
                         <p>
                             Thanks for trying out this demo of Atlas.
-                            Let us know what you think with this 
+                            Let us know what you think with this
                             <a class="external" href="//philagsg.typeform.com/to/uuW3nj" target="_blank">quick survey<span class="accessible"> Opens in new window</span></a>.
                             If something's not working, please
                             <a class="external" href="//philagsg.typeform.com/to/lcocM3" target="_blank">report a bug<span class="accessible"> Opens in new window</span></a>.
@@ -176,11 +176,11 @@
                             <div class="callout">
                                 <!--<p>Use the buttons below to open new windows with oblique and/or street view imagery. When you move the map on the right, the imagery windows will follow.</p>-->
                                 <p>
-                                    The map to your right is the <span class="keyword">basemap</span>. Toggle between the default basemap view and an aerial image 
+                                    The map to your right is the <span class="keyword">basemap</span>. Toggle between the default basemap view and an aerial image
                                     by clicking the button in the upper-right corner. Once you've turned on aerial imagery, you can choose a year from
-                                    the options just below the toggle. Click <span class="keyword">Sky View 45&deg;</span> to open a new window 
+                                    the options just below the toggle. Click <span class="keyword">Sky View 45&deg;</span> to open a new window
                                     of aerial imagery captured at a 45&deg; angle to explore a 3D-like view of this address. Click <span class="keyword">Street View</span> to
-                                    explore a high-resolution view from the street. When you move the basemap, the Sky View and 
+                                    explore a high-resolution view from the street. When you move the basemap, the Sky View and
                                     Street View windows follow along.
                                 </p>
                             </div>
@@ -188,9 +188,9 @@
                                 <!--<p>Use the buttons below to see interactive imagery for this location.</p>-->
                                 <!--<a href="#" class="button no-margin external" id="pict-button">Oblique View</a>-->
                                 <a href="#" class="button no-margin external" id="pict-button">Sky View 45&deg;</a>
-                                
+
                                 <!--this never happened-->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                
+
                                 <!--<a href="#" class="button no-margin external" id="cyclo-button">Street View</a>-->
                                 <a href="#" class="button no-margin external" id="cyclo-button">Street View</a>
                             </div>
@@ -236,7 +236,7 @@
                             <div class="topic-content-not-found">
                                 No properties were found at this address.
                             </div>
-                                
+
                             <h4>Documents<span id="deeds-documents-count"></span></h4>
                             <table id="deeds-documents" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                 <thead>
@@ -461,17 +461,17 @@
                         <!--<a class="topic-link" href="/#/deeds/"><span class="topic-link-icon flaticon-copy"></span>Land Records</a>-->
                         <!--<a class="topic-link" href="/#/voting/"><span class="topic-link-icon flaticon-correct"></span>Voting + Government</a>-->
                         <!--<a class="topic-link" href="/#/311/"><span class="topic-link-icon flaticon-telephone"></span>311</a>-->
-                        
+
                         <!--NEARBY-->
                         <a id="topic-link-nearby" class="topic-link" href="#"><span class="topic-link-icon flaticon-placeholder-1"></span>Nearby Activity</a>
                         <div id="topic-nearby" class="topic">
                             <div class="callout">
                                 <p>
-                                    Looking for construction and development activity around this address? Below are zoning appeals within a 500 feet radius. You can either sort by date (most recent first) or 
+                                    Looking for construction and development activity around this address? Below are zoning appeals within a 500 feet radius. You can either sort by date (most recent first) or
                                     distance (closest first).
                                 </p>
                             </div>
-                            
+
                             <div id="nearby-appeals-header">
                                 <h4>
                                     Zoning Appeals<span id="nearby-appeals-count"></span>
@@ -493,7 +493,7 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
-                            
+
 <!--                             <h4>Permits<span id="nearby-permits-count"></span></h4>
                             <table id="nearby-permits" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                 <thead>
@@ -507,7 +507,7 @@
                                 <tbody></tbody>
                             </table>
  -->                        </div><!-- /nearby -->
-                        
+
                     </div>
                 </div>
 
@@ -529,8 +529,12 @@
         <!-- no parcel address modal -->
         <div id="no-parcel-address-modal" class="reveal" data-reveal aria-labelledby="modal-title" aria-hidden="true" role="dialog">
             <h2>Sorry, we can't find an address for that parcel.</h2>
-            <p>Don't worry, you didn't do anything wrong. Some parcels can't be linked to an address we know about.
-            If you know the parcel address, trying entering it in the search box above.</p>
+            <p>
+                The address for that parcel is
+                <strong><span id="parcel-id"></span></strong>, which isn't enough information for us to search on.
+                If you know the full parcel address, trying entering it in the
+                search box above.
+            </p>
             <!--<button class="close-button" data-close aria-label="Close modal" type="button">OK</button>-->
         </div>
 
