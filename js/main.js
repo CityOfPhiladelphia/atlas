@@ -83,10 +83,10 @@ var app = (function ()
       parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
 
       pictometry: {
-        pictometryUrl: 'http://192.168.104.182/philapictometry/ipa.php',
+        pictometryUrl: 'http://' + SECRET_CONFIG.internalHosts.atlas + '/philapictometry/ipa.php',
       },
       cyclomedia: {
-        cyclomediaUrl: 'http://192.168.104.182/philacyclo/',
+        cyclomediaUrl: 'http://' + SECRET_CONFIG.internalHosts.atlas + '/philacyclo/',
       },
 
       // socrataAppToken: 'bHXcnyGew4lczXrhTd7z7DKkc',
@@ -519,7 +519,6 @@ var app = (function ()
       // get dor documents
       $.ajax({
         url: '//ase.phila.gov/arcgis/rest/services/RTT/MapServer/0/query',
-        // url: '//192.168.103.143:6443/arcgis/rest/services/RTT/MapServer/0/query',
         data: {
           where: "ADDRESS = '" + aisAddress + "'",
           outFields: '*',
