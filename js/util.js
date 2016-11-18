@@ -202,5 +202,19 @@ app.util = (function () {
       var hash = comps.join('/');
       return hash;
     },
+
+    getQueryParams: function () {
+      var search = location.search,
+          searchTrimmed = search.substr(1),
+          pairs = searchTrimmed.split('&'),
+          params = {};
+      _.forEach(pairs, function (pair) {
+        var comps = pair.split('='),
+            key = comps[0],
+            value = decodeURIComponent(comps[1]);
+        params[key] = value;
+      });
+      return params;
+    },
   };
 }());

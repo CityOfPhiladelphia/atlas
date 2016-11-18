@@ -167,15 +167,31 @@ var app = (function ()
       localStorage.removeItem('activeTopic');
 
       // listen for hash changes
-      $(window).on('hashchange', app.route);
+      // $(window).on('hashchange', app.route);
+
+      // listen for back button
+      window.onpopstate = function () {
+        console.log('popped state', location.href);
+        app.route();
+      };
+
       // route one time on load
       app.route();
     },
 
     route: function () {
-      console.log('route');
       var hash = location.hash,
+          params = app.util.getQueryParams(),
           comps = hash.split('/');
+
+      // if there are query params
+      var searchParam = params.search;
+      if (searchParam) {
+        console.log('route, we have a search', searchParam);
+        app.searchForAddress(searchParam);
+        // TODO fix url
+        return;
+      }
 
       // check for enough comps (just 2, since topic is optional)
       if (comps.length < 2) {
@@ -258,6 +274,7 @@ var app = (function ()
     },
 
     showMultipleAisResultModal: function (callback) {
+      // console.log('show multiple ais modal');
       var data = app.state.ais;
 
       $('#addressList').empty();
@@ -269,7 +286,9 @@ var app = (function ()
       $('#addressModal').foundation('open');
 
       // called after user selects address
-      $('#addressModal a').click(function () {
+      $('#addressModal a').click(function (e) {
+        e.preventDefault();
+
         // $('#search-input').val($(this).text())
         $('#addressModal').foundation('close');
         $('#addressList').empty()
@@ -286,9 +305,19 @@ var app = (function ()
     // takes a topic (formerly "data row") name and activates the corresponding
     // section in the data panel
     activateTopic: function (targetTopicName) {
+      // console.log('activate topic', targetTopicName);
       // prevent topics from opening until we have at least AIS (arbitrary , but should work)
       var ais = app.state.ais;
-      if (!ais) return;
+      // if (!ais) return;
+
+      // update url, eg /#/1234 MARKET ST/property
+      var address = app.state.ais.features[0].properties.street_address,
+          hash = app.util.constructHash(address, targetTopicName),
+          // pare down state to something serializable
+          state = {ais: ais};
+      history.replaceState(state, '', hash);
+
+      app.state.activeTopic = targetTopicName;
 
       var $targetTopic = $('#topic-' + targetTopicName);
 
@@ -296,7 +325,10 @@ var app = (function ()
       var $activeTopic = $('.topic:visible');
 
       // only activate if it's not already active
-      if ($targetTopic.is($activeTopic)) return;
+      if ($targetTopic.is($activeTopic)) {
+        console.log('activate topic, but its already active');
+        return;
+      }
 
       $activeTopic.slideUp(350);
       $targetTopic.slideDown(350);
@@ -309,13 +341,6 @@ var app = (function ()
         prevTopic = null;
       }
       app.map.didChangeTopic(prevTopic, targetTopicName);
-
-      // update url, eg /#/1234 MARKET ST/property
-      var address = app.state.ais.normalized[0],
-          hash = '#/' + address + '/' + targetTopicName,
-          // pare down state to something serializable
-          state = {ais: ais};
-      history.pushState(state, '', hash);
     },
 
     toggleTopic: function (targetTopicName) {
@@ -329,7 +354,6 @@ var app = (function ()
 
         // remove topic from url
         var hashNoTopic = location.hash.split('/').slice(0, 2).join('/');
-        console.log('hash no topic', hashNoTopic);
         history.pushState(history.state, '', hashNoTopic);
       }
 
@@ -338,6 +362,8 @@ var app = (function ()
     },
 
     didGetAisResult: function () {
+      // console.log('did get ais result');
+
       // set app state
       // app.state.ais = data;
       var data = app.state.ais;
