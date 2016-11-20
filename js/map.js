@@ -17,8 +17,8 @@ app.map = (function ()
       }),
       camera = L.icon({
         iconUrl: 'css/images/camera_04.png',
-        iconSize: [30, 20],
-        iconAnchor: [15,  10],
+        iconSize: [26, 16],
+        iconAnchor: [11,  8],
       }),
       bigRedMarker = L.icon({
         iconUrl: 'css/images/marker-red-icon.png',
@@ -43,7 +43,8 @@ app.map = (function ()
       // })
 
       // create window level placeholder for _stViewMarker
-      _stViewMarker
+      _stViewMarker,
+      _stViewCameraMarker
   return {
     //theObject: queryParcel,
     initMap : function () {
@@ -415,6 +416,18 @@ app.map = (function ()
 
       };
 
+      function calculateConeCoords(options) {
+        console.log('running calculateConeCoords');
+      	var hFov = app.state.stViewHfov;
+      	var scale = 50//options.scale;
+        var angle = hFov / 2.0;
+        var width = Math.sin(angle*Math.PI/180);
+        var length = Math.sqrt(1.0 - width * width);
+        //var area = width * length;
+        //var size = scale / Math.sqrt(area);
+        return [width*scale, length*scale];
+      }
+
       // set map state and localStorage on init, drag, dragend, and zoom
       app.map.LSinit();
 
@@ -431,10 +444,22 @@ app.map = (function ()
         app.state.stViewX = localStorage.getItem('stViewX');
         app.state.stViewY = localStorage.getItem('stViewY');
         app.state.stViewYaw = localStorage.getItem('stViewYaw');
+        app.state.stViewHfov = localStorage.getItem('stViewHfov');
+        app.state.stViewConeCoords = calculateConeCoords();
         _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-          icon: viewcone,
+          icon: new L.divIcon.svgIcon.triangleIcon({
+            iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
+            iconAnchor: [app.state.stViewConeCoords[0]/2, app.state.stViewConeCoords[1]],
+            //iconSize: L.point(40,40),
+            //iconAnchor: [20, 40],
+          }),
+          rotationAngle: app.state.stViewYaw,
+        })
+        _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
+          icon: camera,
           rotationAngle: app.state.stViewYaw
         });
+        _stViewCameraMarker.addTo(_map);
         _stViewMarker.addTo(_map);
       }
 
@@ -445,6 +470,7 @@ app.map = (function ()
         if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == 'false') {
           if (_stViewMarker) {
             _stViewMarker.remove();
+            _stViewCameraMarker.remove();
           };
         };
         if (e.originalEvent.key == 'stViewCoords'){
@@ -453,12 +479,22 @@ app.map = (function ()
           app.state.stViewY = localStorage.getItem('stViewY');
           if (_stViewMarker) {
             _stViewMarker.remove();
+            _stViewCameraMarker.remove();
           };
           _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-            icon: viewcone,
+            icon: new L.divIcon.svgIcon.triangleIcon({
+              iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
+              iconAnchor: [app.state.stViewConeCoords[0]/2, app.state.stViewConeCoords[1]],
+              //iconSize: L.point(40,40),
+              //iconAnchor: [20, 40],
+            }),
+            rotationAngle: app.state.stViewYaw,
+          })
+          _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
+            icon: camera,
             rotationAngle: app.state.stViewYaw
           });
-          //_stViewMarker.setLatLng([app.state.stViewY, app.state.stViewX]);
+          _stViewCameraMarker.addTo(_map);
           _stViewMarker.addTo(_map);
           //console.log('it should be on map');
         };
@@ -467,11 +503,47 @@ app.map = (function ()
           app.state.stViewYaw = localStorage.getItem('stViewYaw');
           if (_stViewMarker) {
             _stViewMarker.remove();
+            _stViewCameraMarker.remove();
           };
           _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-            icon: viewcone,
+            icon: new L.divIcon.svgIcon.triangleIcon({
+              iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
+              iconAnchor: [app.state.stViewConeCoords[0]/2, app.state.stViewConeCoords[1]],
+              //iconSize: L.point(40,40),
+              //iconAnchor: [20, 40],
+            }),
+            rotationAngle: app.state.stViewYaw,
+          })
+          _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
+            icon: camera,
             rotationAngle: app.state.stViewYaw
           });
+          _stViewCameraMarker.addTo(_map);
+          _stViewMarker.addTo(_map);
+          //console.log('stViewYaw should have just caused icon to rotate');
+        };
+        if (e.originalEvent.key == 'stViewHfov'){
+          //console.log('stViewHfov changed to ' +  e.originalEvent.newValue);
+          app.state.stViewHfov = localStorage.getItem('stViewHfov');
+          if (_stViewMarker) {
+            _stViewMarker.remove();
+            _stViewCameraMarker.remove();
+          };
+          app.state.stViewConeCoords = calculateConeCoords();
+          _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
+            icon: new L.divIcon.svgIcon.triangleIcon({
+              iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
+              iconAnchor: [app.state.stViewConeCoords[0]/2, app.state.stViewConeCoords[1]],
+              //iconSize: L.point(40,40),
+              //iconAnchor: [20, 40],
+            }),
+            rotationAngle: app.state.stViewYaw,
+          })
+          _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
+            icon: camera,
+            rotationAngle: app.state.stViewYaw
+          });
+          _stViewCameraMarker.addTo(_map);
           _stViewMarker.addTo(_map);
           //console.log('stViewYaw should have just caused icon to rotate');
         };
