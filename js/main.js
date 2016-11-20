@@ -14,7 +14,12 @@ var app = (function ()
   var DEBUG = false,
       DEBUG_ADDRESS = '1234 market st';
 
+
   return {
+    CycloUsername: "andy.rothwell@phila.gov",
+    CycloPassword: "8ysnan2r",
+    CycloApiKey: "GfElS3oRuroNivgtibsZqDkpCvItyPUNuv0NmXglen8puXoJanEVarsZyns9ynkJ",
+
     config: {
       ais: {
         url: '//api.phila.gov/ais/v1/addresses/',

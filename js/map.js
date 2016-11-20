@@ -1,5 +1,12 @@
 /* global app, L */
 
+var wfsClient = new WFSClient(
+	"https://atlas.cyclomedia.com/Recordings/wfs",
+	"atlas:Recording",
+	"EPSG:3857",
+	""
+);
+
 app.map = (function ()
 {
   // the leaflet map object
@@ -41,6 +48,7 @@ app.map = (function ()
       // overlayHS = L.esri.featureLayer({
       //   url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/SchoolDist_Catchments_HS/FeatureServer/0'
       // })
+      _cycloLayerGroup = new L.LayerGroup(),
 
       // create window level placeholder for _stViewMarker
       _stViewMarker,
@@ -201,10 +209,11 @@ app.map = (function ()
       _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayBaseLabels);
       _labelLayerGroup.addTo(_map);
 
-      // The next 3 are not used initially
+      // The next 4 are not used initially
       _overlayLayerGroup.addTo(_map);
       _parcelLayerGroup.addTo(_map);
       _appealsLayerGroup.addTo(_map);
+      _cycloLayerGroup.addTo(_map);
 
       // add names of layers on the map to the DOM
       app.map.domLayerList();
@@ -549,6 +558,44 @@ app.map = (function ()
         };
       });
 
+      _map.on('moveend', onMoveEnd);
+
+      function bboxReady() {
+        _cycloLayerGroup.clearLayers();
+        app.recordings = wfsClient.recordingList;
+        if (app.recordings.length > 0) {
+          var b = [];
+          for (i=0; i < app.recordings.length; i++) {
+            var rec = app.recordings[i];
+            var coordRaw = [rec.lon, rec.lat];
+            var coordNotFlipped = proj4('EPSG:3857', 'EPSG:4326', coordRaw);
+            var coord = [coordNotFlipped[1], coordNotFlipped[0]];
+            var blueCircle = new L.circle(coord, 1.2, {
+              color: '#3388ff',
+              weight: 1,
+            });
+            blueCircle.addTo(_cycloLayerGroup);
+          }
+        }
+      };
+
+      function onMoveEnd(evt){
+        var Lview = _map.getBounds();
+        var Lzoomlevel = _map.getZoom();
+        //console.log('leaflet zoomlevel: ', Lzoomlevel);
+        if (Lzoomlevel < 19) {
+          _cycloLayerGroup.clearLayers();
+        };
+        if (Lzoomlevel > 18) {
+          //console.log(Lview._southWest.lat, Lview._southWest.lng, Lview._northEast.lat, Lview._northEast.lng);
+          var newSWCoord = proj4('EPSG:3857', [Lview._southWest.lng, Lview._southWest.lat]);
+          var newNECoord = proj4('EPSG:3857', [Lview._northEast.lng, Lview._northEast.lat]);
+          //console.log(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1]);
+          //wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], bboxReady, username, password);
+          wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], bboxReady, app.CycloUsername, app.CycloPassword);
+        }
+      };
+
     }, // end of initMap
 
     // add names of layers on the map to the DOM
@@ -888,6 +935,7 @@ app.map = (function ()
         }
       })
     },
+
   }; // end of return
 })();
 
