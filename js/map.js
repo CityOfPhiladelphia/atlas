@@ -45,9 +45,6 @@ app.map = (function ()
       _appealsLayerGroup = new L.LayerGroup(),
       // create an empty layer group for the parcel query layer
       _parcelLayerGroup = new L.LayerGroup(),
-      // overlayHS = L.esri.featureLayer({
-      //   url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/SchoolDist_Catchments_HS/FeatureServer/0'
-      // })
       _cycloLayerGroup = new L.LayerGroup(),
 
       // create window level placeholder for _stViewMarker
@@ -425,18 +422,6 @@ app.map = (function ()
 
       };
 
-      function calculateConeCoords(options) {
-        console.log('running calculateConeCoords');
-      	var hFov = app.state.stViewHfov;
-      	var scale = 50//options.scale;
-        var angle = hFov / 2.0;
-        var width = Math.sin(angle*Math.PI/180);
-        var length = Math.sqrt(1.0 - width * width);
-        //var area = width * length;
-        //var size = scale / Math.sqrt(area);
-        return [width*scale, length*scale];
-      }
-
       // set map state and localStorage on init, drag, dragend, and zoom
       app.map.LSinit();
 
@@ -445,157 +430,69 @@ app.map = (function ()
       _map.on('drag', app.map.LSdrag);
       _map.on('dragend', app.map.LSdragend);
       _map.on('zoomend', app.map.LSzoomend);
-      _map.on('moveend', app.map.LSmoveend);
+      _map.on('moveend', function(){
+        app.map.LSmoveend();
+        if (localStorage.stViewOpen == 'true') {
+          app.map.prepareCycloBbox();
+        };
+      });
 
       // when map refreshes, if there is already a cyclomedia tab open, place the marker
       if (localStorage.stViewOpen == 'true') {
-        //console.log('stView marker should be at ' + localStorage.stViewCoords + 'and stViewYaw should be ' + app.state.stViewYaw);
-        app.state.stViewX = localStorage.getItem('stViewX');
-        app.state.stViewY = localStorage.getItem('stViewY');
-        app.state.stViewYaw = localStorage.getItem('stViewYaw');
-        app.state.stViewHfov = localStorage.getItem('stViewHfov');
-        app.state.stViewConeCoords = calculateConeCoords();
-        _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-          icon: new L.divIcon.svgIcon.triangleIcon({
-            iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
-            iconAnchor: [app.state.stViewConeCoords[0]/2, app.state.stViewConeCoords[1]],
-            //iconSize: L.point(40,40),
-            //iconAnchor: [20, 40],
-          }),
-          rotationAngle: app.state.stViewYaw,
-        })
-        _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-          icon: camera,
-          rotationAngle: app.state.stViewYaw
-        });
-        _stViewCameraMarker.addTo(_map);
-        _stViewMarker.addTo(_map);
+        app.map.LSretrieve();
+        console.log('map refreshing triggered drawStViewMarkers');
+        app.map.drawStViewMarkers();
+        app.map.prepareCycloBbox();
       }
 
       // watch localStorage for changes to:
-      //1. stViewOpen, 2. stViewCoords, 3. stViewYaw
+      //1. stViewOpen, 2. stViewCoords, 3. stViewYaw 4. stViewHfov
+      // there is a problem, in that when it reopens all of these things trigger it to redraw
       $(window).bind('storage', function (e) {
         // if Cyclomedia window closes, remove marker
         if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == 'false') {
           if (_stViewMarker) {
             _stViewMarker.remove();
             _stViewCameraMarker.remove();
+            _cycloLayerGroup.clearLayers();
           };
         };
+        if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == 'true') {
+          app.map.LSretrieve();
+          console.log('change to stViewOpen triggered drawStViewMarkers');
+          app.map.drawStViewMarkers();
+          app.map.prepareCycloBbox();
+        };
         if (e.originalEvent.key == 'stViewCoords'){
-          //console.log('move stView marker to ' + e.originalEvent.newValue);
           app.state.stViewX = localStorage.getItem('stViewX');
           app.state.stViewY = localStorage.getItem('stViewY');
           if (_stViewMarker) {
             _stViewMarker.remove();
             _stViewCameraMarker.remove();
           };
-          _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-            icon: new L.divIcon.svgIcon.triangleIcon({
-              iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
-              iconAnchor: [app.state.stViewConeCoords[0]/2, app.state.stViewConeCoords[1]],
-              //iconSize: L.point(40,40),
-              //iconAnchor: [20, 40],
-            }),
-            rotationAngle: app.state.stViewYaw,
-          })
-          _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-            icon: camera,
-            rotationAngle: app.state.stViewYaw
-          });
-          _stViewCameraMarker.addTo(_map);
-          _stViewMarker.addTo(_map);
-          //console.log('it should be on map');
+          console.log('change to stViewCoords triggered drawStViewMarkers');
+          app.map.drawStViewMarkers();
         };
         if (e.originalEvent.key == 'stViewYaw'){
-          //console.log('stViewYaw changed to ' +  e.originalEvent.newValue);
           app.state.stViewYaw = localStorage.getItem('stViewYaw');
           if (_stViewMarker) {
             _stViewMarker.remove();
             _stViewCameraMarker.remove();
           };
-          _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-            icon: new L.divIcon.svgIcon.triangleIcon({
-              iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
-              iconAnchor: [app.state.stViewConeCoords[0]/2, app.state.stViewConeCoords[1]],
-              //iconSize: L.point(40,40),
-              //iconAnchor: [20, 40],
-            }),
-            rotationAngle: app.state.stViewYaw,
-          })
-          _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-            icon: camera,
-            rotationAngle: app.state.stViewYaw
-          });
-          _stViewCameraMarker.addTo(_map);
-          _stViewMarker.addTo(_map);
-          //console.log('stViewYaw should have just caused icon to rotate');
+          console.log('change to stViewYaw triggered drawStViewMarkers');
+          app.map.drawStViewMarkers();
         };
         if (e.originalEvent.key == 'stViewHfov'){
-          //console.log('stViewHfov changed to ' +  e.originalEvent.newValue);
           app.state.stViewHfov = localStorage.getItem('stViewHfov');
           if (_stViewMarker) {
             _stViewMarker.remove();
             _stViewCameraMarker.remove();
           };
-          app.state.stViewConeCoords = calculateConeCoords();
-          _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-            icon: new L.divIcon.svgIcon.triangleIcon({
-              iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
-              iconAnchor: [app.state.stViewConeCoords[0]/2, app.state.stViewConeCoords[1]],
-              //iconSize: L.point(40,40),
-              //iconAnchor: [20, 40],
-            }),
-            rotationAngle: app.state.stViewYaw,
-          })
-          _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-            icon: camera,
-            rotationAngle: app.state.stViewYaw
-          });
-          _stViewCameraMarker.addTo(_map);
-          _stViewMarker.addTo(_map);
-          //console.log('stViewYaw should have just caused icon to rotate');
+          app.state.stViewConeCoords = app.map.calculateConeCoords();
+          console.log('change to stViewHfov triggered drawStViewMarkers');
+          app.map.drawStViewMarkers();
         };
       });
-
-      _map.on('moveend', onMoveEnd);
-
-      function bboxReady() {
-        _cycloLayerGroup.clearLayers();
-        app.recordings = wfsClient.recordingList;
-        if (app.recordings.length > 0) {
-          var b = [];
-          for (i=0; i < app.recordings.length; i++) {
-            var rec = app.recordings[i];
-            var coordRaw = [rec.lon, rec.lat];
-            var coordNotFlipped = proj4('EPSG:3857', 'EPSG:4326', coordRaw);
-            var coord = [coordNotFlipped[1], coordNotFlipped[0]];
-            var blueCircle = new L.circle(coord, 1.2, {
-              color: '#3388ff',
-              weight: 1,
-            });
-            blueCircle.addTo(_cycloLayerGroup);
-          }
-        }
-      };
-
-      function onMoveEnd(evt){
-        var Lview = _map.getBounds();
-        var Lzoomlevel = _map.getZoom();
-        //console.log('leaflet zoomlevel: ', Lzoomlevel);
-        if (Lzoomlevel < 19) {
-          _cycloLayerGroup.clearLayers();
-        };
-        if (Lzoomlevel > 18) {
-          //console.log(Lview._southWest.lat, Lview._southWest.lng, Lview._northEast.lat, Lview._northEast.lng);
-          var newSWCoord = proj4('EPSG:3857', [Lview._southWest.lng, Lview._southWest.lat]);
-          var newNECoord = proj4('EPSG:3857', [Lview._northEast.lng, Lview._northEast.lat]);
-          //console.log(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1]);
-          //wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], bboxReady, username, password);
-          wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], bboxReady, app.CycloUsername, app.CycloPassword);
-        }
-      };
-
     }, // end of initMap
 
     // add names of layers on the map to the DOM
@@ -836,6 +733,32 @@ app.map = (function ()
       localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
     },
 
+    LSretrieve: function(){
+      app.state.stViewX = localStorage.getItem('stViewX');
+      app.state.stViewY = localStorage.getItem('stViewY');
+      app.state.stViewYaw = localStorage.getItem('stViewYaw');
+      app.state.stViewHfov = localStorage.getItem('stViewHfov');
+      app.state.stViewConeCoords = app.map.calculateConeCoords();
+    },
+
+    drawStViewMarkers: function(){
+      console.log('about to create _stViewMarker');
+      _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
+        icon: new L.divIcon.svgIcon.triangleIcon({
+          iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
+          iconAnchor: [app.state.stViewConeCoords[0]/2, app.state.stViewConeCoords[1]],
+        }),
+        rotationAngle: app.state.stViewYaw,
+      })
+      console.log('about to create _stViewCameraMarker');
+      _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
+        icon: camera,
+        rotationAngle: app.state.stViewYaw
+      });
+      _stViewCameraMarker.addTo(_map);
+      _stViewMarker.addTo(_map);
+    },
+
     didChangeTopic: function (prevTopic, nextTopic) {
       // console.log('did change topic', prevTopic, '=>', nextTopic);
 
@@ -935,6 +858,47 @@ app.map = (function ()
         }
       })
     },
+
+    calculateConeCoords: function(options) {
+      var hFov = app.state.stViewHfov;
+      var scale = 50//options.scale;
+      var angle = hFov / 2.0;
+      var width = Math.sin(angle*Math.PI/180);
+      var length = Math.sqrt(1.0 - width * width);
+      return [width*scale, length*scale];
+    },
+
+    prepareCycloBbox: function(evt){
+      var view = _map.getBounds();
+      var zoomLevel = _map.getZoom();
+      if (zoomLevel < 19) {
+        _cycloLayerGroup.clearLayers();
+      };
+      if (zoomLevel > 18) {
+        var newSWCoord = proj4('EPSG:3857', [view._southWest.lng, view._southWest.lat]);
+        var newNECoord = proj4('EPSG:3857', [view._northEast.lng, view._northEast.lat]);
+        wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.map.addCycloCircles, SECRET_CONFIG.cyclomedia.CycloUsername, SECRET_CONFIG.cyclomedia.CycloPassword);
+      }
+    },
+
+    addCycloCircles: function() {
+      _cycloLayerGroup.clearLayers();
+      app.recordings = wfsClient.recordingList;
+      if (app.recordings.length > 0) {
+        var b = [];
+        for (i=0; i < app.recordings.length; i++) {
+          var rec = app.recordings[i];
+          var coordRaw = [rec.lon, rec.lat];
+          var coordNotFlipped = proj4('EPSG:3857', 'EPSG:4326', coordRaw);
+          var coord = [coordNotFlipped[1], coordNotFlipped[0]];
+          var blueCircle = new L.circle(coord, 1.2, {
+            color: '#3388ff',
+            weight: 1,
+          });
+          blueCircle.addTo(_cycloLayerGroup);
+        }
+      }
+    }
 
   }; // end of return
 })();
