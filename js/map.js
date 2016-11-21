@@ -45,10 +45,13 @@ app.map = (function ()
       _appealsLayerGroup = new L.LayerGroup(),
       // create an empty layer group for the parcel query layer
       _parcelLayerGroup = new L.LayerGroup(),
-      _cycloLayerGroup = new L.LayerGroup(),
+      _cycloFeatureGroup = new L.FeatureGroup().on('click', function(){
+        console.log('clicked a member of the group');
+      }),
 
-      // create window level placeholder for _stViewMarker
-      _stViewMarker,
+      // create window level placeholder for _stViewHfovMarker
+      _stViewMarkersLayerGroup = new L.LayerGroup(),
+      _stViewHfovMarker,
       _stViewCameraMarker
   return {
     //theObject: queryParcel,
@@ -153,7 +156,7 @@ app.map = (function ()
         maxZoom: 22,
         name: 'parcelOverlay',
         type: 'overlay',
-        zIndex: 9,
+        zIndex: -1,
       });
 
       /*var baseMapDark = L.esri.tiledMapLayer({
@@ -210,7 +213,8 @@ app.map = (function ()
       _overlayLayerGroup.addTo(_map);
       _parcelLayerGroup.addTo(_map);
       _appealsLayerGroup.addTo(_map);
-      _cycloLayerGroup.addTo(_map);
+      _cycloFeatureGroup.addTo(_map);
+      _stViewMarkersLayerGroup.addTo(_map);
 
       // add names of layers on the map to the DOM
       app.map.domLayerList();
@@ -451,43 +455,34 @@ app.map = (function ()
       $(window).bind('storage', function (e) {
         // if Cyclomedia window closes, remove marker
         if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == 'false') {
-          if (_stViewMarker) {
-            _stViewMarker.remove();
-            _stViewCameraMarker.remove();
-            _cycloLayerGroup.clearLayers();
-          };
+            _stViewMarkersLayerGroup.clearLayers();
+            _cycloFeatureGroup.clearLayers();
         };
         if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == 'true') {
           app.map.LSretrieve();
           console.log('change to stViewOpen triggered drawStViewMarkers');
+          // this happens too quickly, or shouldn't happen if it already has been open, because you get
+          // a marker right away that is wrong, and then it slowly moves to the right place.
+          // need to set some kind of deferred...
           app.map.drawStViewMarkers();
           app.map.prepareCycloBbox();
         };
         if (e.originalEvent.key == 'stViewCoords'){
           app.state.stViewX = localStorage.getItem('stViewX');
           app.state.stViewY = localStorage.getItem('stViewY');
-          if (_stViewMarker) {
-            _stViewMarker.remove();
-            _stViewCameraMarker.remove();
-          };
+          _stViewMarkersLayerGroup.clearLayers();
           console.log('change to stViewCoords triggered drawStViewMarkers');
           app.map.drawStViewMarkers();
         };
         if (e.originalEvent.key == 'stViewYaw'){
           app.state.stViewYaw = localStorage.getItem('stViewYaw');
-          if (_stViewMarker) {
-            _stViewMarker.remove();
-            _stViewCameraMarker.remove();
-          };
+            _stViewMarkersLayerGroup.clearLayers();
           console.log('change to stViewYaw triggered drawStViewMarkers');
           app.map.drawStViewMarkers();
         };
         if (e.originalEvent.key == 'stViewHfov'){
           app.state.stViewHfov = localStorage.getItem('stViewHfov');
-          if (_stViewMarker) {
-            _stViewMarker.remove();
-            _stViewCameraMarker.remove();
-          };
+            _stViewMarkersLayerGroup.clearLayers();
           app.state.stViewConeCoords = app.map.calculateConeCoords();
           console.log('change to stViewHfov triggered drawStViewMarkers');
           app.map.drawStViewMarkers();
@@ -519,26 +514,22 @@ app.map = (function ()
     },
 
     renderAisResult: function (obj) {
-      // console.log('render ais result', obj);
-      // get parcel
-      // var parcelId = obj.properties.dor_parcel_id;
-      // app.getParcelById(parcelId);
-
       if (app.state.dor) this.drawParcel();
     },
 
     didClickMap: function (e) {
-      // console.log('did click map');
-
       // set state
       app.state.map.clickedOnMap = true
-      //app.state.map.didClickMap = true;
       app.state.map.shouldPan = false;
 
       // query parcel layer
       // var parcelQuery = L.esri.query({url: app.config.parcelLayerUrl});
       // parcelQuery.contains(e.latlng)
       // parcelQuery.run(app.didGetParcelQueryResult);
+      if (app.state.map.clickedCircle){
+        console.log('clicked a circle');
+        app.state.map.clickedCircle = false;
+      } else {
 
       app.getParcelByLatLng(e.latlng, function () {
         var parcel = app.state.dor.features[0],
@@ -565,11 +556,10 @@ app.map = (function ()
         // disabling this so we only draw the parcel after we get an ais result
         // app.map.drawParcel();
       });
+    }
     },
 
     drawParcel: function () {
-      // console.log('draw parcel', app.state.dor);
-
       // if there's no parcel in state, clear the map and don't render
       // TODO zoom to AIS xy
       var parcel, geom;
@@ -599,40 +589,19 @@ app.map = (function ()
       // pan map
       // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
       if (app.state.map.shouldPan) {
-        // latlon = new L.LatLng(thelatlon[0], thelatlon[1]);
-        // _map.setView(parcelCentroid, 20, {animate:false});
-
         // zoom to bounds of parcel poly plus some buffer
         var boundsPadded = parcelPoly.getBounds().pad(1.15);
         // _map.fitBounds(bounds, {padding: ['20%', '20%']});
         _map.fitBounds(boundsPadded);
-
         // or need to use parcel centroid instead of center of map
         // set new state and localStorage
         app.map.LSinit();
       };
-
       // add to map
       _parcelLayerGroup.addLayer(parcelPoly);
 
-      // get parcel from the AGS service which returns area
-      // $.ajax({
-      //   url: '//gis.phila.gov/arcgis/rest/services/DOR_ParcelExplorer/rtt_basemap/MapServer/24/query',
-      //   data: {
-      //     where: "MAPREG = '" + parcel.properties.MAPREG + '"',
-      //     f: 'json',
-      //   },
-      //   success: function (data) {
-      //     console.log('got parcel with area', data);
-      //   },
-      //   error: function (err) {
-      //     console.log('parcel area error', err);
-      //   },
-      // });
-
       // area method 2
       var areaRequestGeom = '[' + JSON.stringify(geom).replace('"type":"Polygon","coordinates"', '"rings"') + ']';
-      // console.log('area polygon', areaParamPolygons);
       $.ajax({
         url: '//gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/areasAndLengths',
         data: {
@@ -742,8 +711,8 @@ app.map = (function ()
     },
 
     drawStViewMarkers: function(){
-      console.log('about to create _stViewMarker');
-      _stViewMarker = L.marker([app.state.stViewY, app.state.stViewX], {
+      console.log('about to create _stViewHfovMarker');
+      _stViewHfovMarker = L.marker([app.state.stViewY, app.state.stViewX], {
         icon: new L.divIcon.svgIcon.triangleIcon({
           iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
           iconAnchor: [app.state.stViewConeCoords[0]/2, app.state.stViewConeCoords[1]],
@@ -755,8 +724,8 @@ app.map = (function ()
         icon: camera,
         rotationAngle: app.state.stViewYaw
       });
-      _stViewCameraMarker.addTo(_map);
-      _stViewMarker.addTo(_map);
+      _stViewCameraMarker.addTo(_stViewMarkersLayerGroup);
+      _stViewHfovMarker.addTo(_stViewMarkersLayerGroup);
     },
 
     didChangeTopic: function (prevTopic, nextTopic) {
@@ -872,17 +841,17 @@ app.map = (function ()
       var view = _map.getBounds();
       var zoomLevel = _map.getZoom();
       if (zoomLevel < 19) {
-        _cycloLayerGroup.clearLayers();
+        _cycloFeatureGroup.clearLayers();
       };
       if (zoomLevel > 18) {
         var newSWCoord = proj4('EPSG:3857', [view._southWest.lng, view._southWest.lat]);
         var newNECoord = proj4('EPSG:3857', [view._northEast.lng, view._northEast.lat]);
-        wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.map.addCycloCircles, SECRET_CONFIG.cyclomedia.CycloUsername, SECRET_CONFIG.cyclomedia.CycloPassword);
+        wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.map.addCycloCircles, app.config.cyclomedia.cycloUsername, app.config.cyclomedia.cycloPassword);
       }
     },
 
     addCycloCircles: function() {
-      _cycloLayerGroup.clearLayers();
+      _cycloFeatureGroup.clearLayers();
       app.recordings = wfsClient.recordingList;
       if (app.recordings.length > 0) {
         var b = [];
@@ -894,9 +863,14 @@ app.map = (function ()
           var blueCircle = new L.circle(coord, 1.2, {
             color: '#3388ff',
             weight: 1,
+          }).on('click', function(){
+            console.log('test')
+            app.state.map.clickedCircle = true;
           });
-          blueCircle.addTo(_cycloLayerGroup);
+          //blueCircle.on({click: console.log('clicked a circle')});
+          blueCircle.addTo(_cycloFeatureGroup);
         }
+        _cycloFeatureGroup.bringToFront();
       }
     }
 

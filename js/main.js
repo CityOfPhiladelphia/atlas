@@ -14,12 +14,7 @@ var app = (function ()
   var DEBUG = false,
       DEBUG_ADDRESS = '1234 market st';
 
-
   return {
-    CycloUsername: "andy.rothwell@phila.gov",
-    CycloPassword: "8ysnan2r",
-    CycloApiKey: "GfElS3oRuroNivgtibsZqDkpCvItyPUNuv0NmXglen8puXoJanEVarsZyns9ynkJ",
-
     config: {
       ais: {
         url: '//api.phila.gov/ais/v1/addresses/',
@@ -88,10 +83,13 @@ var app = (function ()
       parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
 
       pictometry: {
-        pictometryUrl: 'http://' + SECRET_CONFIG.internalHosts.atlas + '/philapictometry/ipa.php',
+        pictometryUrl: 'http://192.168.104.182/philapictometry/ipa.php',
       },
       cyclomedia: {
-        cyclomediaUrl: 'http://' + SECRET_CONFIG.internalHosts.atlas + '/philacyclo/',
+        cyclomediaUrl: 'http://192.168.104.182/philacyclo/',
+        cycloUsername : 'andy.rothwell@phila.gov',
+        cycloPassword : '8ysnan2r',
+        cycloApiKey : 'GfElS3oRuroNivgtibsZqDkpCvItyPUNuv0NmXglen8puXoJanEVarsZyns9ynkJ',
       },
 
       // socrataAppToken: 'bHXcnyGew4lczXrhTd7z7DKkc',
