@@ -18,7 +18,7 @@ var app = (function ()
     config: {
       ais: {
         url: '//api.phila.gov/ais/v1/addresses/',
-        gatekeeperKey: '35ae5b7bf8f0ff2613134935ce6b4c1e',
+        gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
       },
       // l&i config, denormalized by section for convenience
       li: {
