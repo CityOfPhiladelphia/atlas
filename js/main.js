@@ -104,8 +104,8 @@ var app = (function ()
       },
       cyclomedia: {
         url: constructLocalUrl(HOST, '/cyclomedia'),
-        username: 'andy.rothwell@phila.gov',
-        password: '8ysnan2r',
+        username: 'maps@phila.gov',
+        password: 'mapscyc01',
         apiKey: 'GfElS3oRuroNivgtibsZqDkpCvItyPUNuv0NmXglen8puXoJanEVarsZyns9ynkJ',
       },
 

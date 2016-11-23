@@ -8,9 +8,6 @@
  */
 
 var wfsClient;
-//app.CycloUsername = "andy.rothwell@phila.gov",
-//app.CycloPassword = "8ysnan2r",
-//app.CycloApiKey = "GfElS3oRuroNivgtibsZqDkpCvItyPUNuv0NmXglen8puXoJanEVarsZyns9ynkJ";
 
 function WFSClient(baseURL_, typename_, srs_, proxy_)
 {
@@ -109,7 +106,7 @@ WFSClient.prototype.loadBbox = function(left, bottom, right, top, callback_, use
 
 		http.open("POST", url , true);
 		http.setRequestHeader("Content-length", postData.length);
-		http.setRequestHeader("Authorization", "Basic " + btoa(app.config.cyclomedia.cycloUsername+ ":"+ app.config.cyclomedia.cycloPassword));
+		http.setRequestHeader("Authorization", "Basic " + btoa(app.config.cyclomedia.username+ ":"+ app.config.cyclomedia.password));
 		http.onreadystatechange = function()
 		{
 			if(http.readyState == 4  /* && http.status == 200 */)
