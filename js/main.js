@@ -18,7 +18,7 @@ var app = (function ()
     config: {
       ais: {
         url: '//api.phila.gov/ais/v1/addresses/',
-        gatekeeperKey: '35ae5b7bf8f0ff2613134935ce6b4c1e',
+        gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
       },
       // l&i config, denormalized by section for convenience
       li: {
@@ -83,10 +83,10 @@ var app = (function ()
       parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
 
       pictometry: {
-        pictometryUrl: 'http://10.8.101.67/philapictometry/',
+        pictometryUrl: 'http://atlas.phila.gov/philapictometry/',
       },
       cyclomedia: {
-        cyclomediaUrl: 'http://10.8.101.67/philacyclo/',
+        cyclomediaUrl: 'http://atlas.phila.gov/philacyclo/',
         cycloUsername : 'andy.rothwell@phila.gov',
         cycloPassword : '8ysnan2r',
         cycloApiKey : 'GfElS3oRuroNivgtibsZqDkpCvItyPUNuv0NmXglen8puXoJanEVarsZyns9ynkJ',
