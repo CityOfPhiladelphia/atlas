@@ -1,5 +1,7 @@
 /* global L, _, $, history */
 
+// https://www.youtube.com/watch?v=JFAcOnhcpGA
+
 /*
 NOTE: this is just a demo - lots of jQuery soup ahead :)
 */
@@ -11,8 +13,23 @@ NOTE: this is just a demo - lots of jQuery soup ahead :)
 var app = (function ()
 {
   // debug stuff
-  var DEBUG = false,
-      DEBUG_ADDRESS = '1234 market st';
+  // var DEBUG = false,
+  var DEBUG_HOSTS = [
+        '10.8.101.67',
+        '192.168.101.101',
+      ],
+      HOST = window.location.hostname,
+      DEBUG = (function () {
+        return _.some(_.map(DEBUG_HOSTS, function (debugHost) {
+          return HOST.indexOf(debugHost) >= 0;
+        }));
+      })(),
+      DEBUG_ADDRESS = '1234 market st',
+    // dynamically form a url based on the current hostname
+    // this can't go in app.util because it hasn't been defined yet
+      constructLocalUrl = function (host, path) {
+        return '//' + host + path;
+      };
 
   return {
     config: {
@@ -83,13 +100,13 @@ var app = (function ()
       parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
 
       pictometry: {
-        pictometryUrl: 'http://atlas.phila.gov/philapictometry/',
+        url: constructLocalUrl(HOST, '/pictometry'),
       },
       cyclomedia: {
-        cyclomediaUrl: 'http://atlas.phila.gov/philacyclo/',
-        cycloUsername : 'andy.rothwell@phila.gov',
-        cycloPassword : '8ysnan2r',
-        cycloApiKey : 'GfElS3oRuroNivgtibsZqDkpCvItyPUNuv0NmXglen8puXoJanEVarsZyns9ynkJ',
+        url: constructLocalUrl(HOST, '/cyclomedia'),
+        username: 'andy.rothwell@phila.gov',
+        password: '8ysnan2r',
+        apiKey: 'GfElS3oRuroNivgtibsZqDkpCvItyPUNuv0NmXglen8puXoJanEVarsZyns9ynkJ',
       },
 
       // socrataAppToken: 'bHXcnyGew4lczXrhTd7z7DKkc',
@@ -102,6 +119,8 @@ var app = (function ()
         // in feet
         radius: 500,
       },
+
+      // DEBUG: DEBUG,
     },
 
     // global app state
@@ -113,6 +132,9 @@ var app = (function ()
     // start app
     init: function ()
     {
+      console.log('debug', DEBUG);
+      console.log('config', app.config);
+
       DEBUG && $('#search-input').val(DEBUG_ADDRESS);
 
       // set up accounting

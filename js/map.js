@@ -846,7 +846,7 @@ app.map = (function ()
       if (zoomLevel > 18) {
         var newSWCoord = proj4('EPSG:3857', [view._southWest.lng, view._southWest.lat]);
         var newNECoord = proj4('EPSG:3857', [view._northEast.lng, view._northEast.lat]);
-        wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.map.addCycloCircles, app.config.cyclomedia.cycloUsername, app.config.cyclomedia.cycloPassword);
+        wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.map.addCycloCircles, app.config.cyclomedia.username, app.config.cyclomedia.password);
       }
     },
 
