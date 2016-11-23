@@ -16,7 +16,7 @@ var app = (function ()
   // var DEBUG = false,
   var DEBUG_HOSTS = [
         '10.8.101.67',
-        '192.168.101.101',
+        'localhost',
       ],
       HOST = window.location.hostname,
       DEBUG = (function () {
