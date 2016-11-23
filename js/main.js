@@ -132,9 +132,7 @@ var app = (function ()
     // start app
     init: function ()
     {
-      console.log('debug', DEBUG);
-      console.log('config', app.config);
-
+      DEBUG && console.log('debug mode on');
       DEBUG && $('#search-input').val(DEBUG_ADDRESS);
 
       // set up accounting
@@ -173,16 +171,16 @@ var app = (function ()
       });
 
       // make "Obilque Imagery" button open Pictometry window
-      $('#pict-button').on('click', function (e){
+      $('#pict-button').on('click', function (e) {
         e.preventDefault();
-        window.open(app.config.pictometry.pictometryUrl, app.config.pictometry.pictometryUrl);
+        window.open(app.config.pictometry.url, app.config.pictometry.url);
         return false
       });
 
       // make "Street View" button open Cyclomedia window
       $('#cyclo-button').on('click', function (e){
         e.preventDefault();
-        window.open(app.config.cyclomedia.cyclomediaUrl, app.config.cyclomedia.cyclomediaUrl);
+        window.open(app.config.cyclomedia.url, app.config.cyclomedia.url);
         return false
       });
 
