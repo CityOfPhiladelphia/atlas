@@ -83,10 +83,10 @@ var app = (function ()
       parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
 
       pictometry: {
-        pictometryUrl: 'http://192.168.104.182/philapictometry/ipa.php',
+        pictometryUrl: 'http://atlas.phila.gov/philapictometry/',
       },
       cyclomedia: {
-        cyclomediaUrl: 'http://192.168.104.182/philacyclo/',
+        cyclomediaUrl: 'http://atlas.phila.gov/philacyclo/',
         cycloUsername : 'andy.rothwell@phila.gov',
         cycloPassword : '8ysnan2r',
         cycloApiKey : 'GfElS3oRuroNivgtibsZqDkpCvItyPUNuv0NmXglen8puXoJanEVarsZyns9ynkJ',
