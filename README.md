@@ -2,7 +2,7 @@
 
 <h2>Philadelphia in 360deg - data, street and sky
 -----
-_Note: this is currently a demostration application only._
+_Note: this is currently a demonstration application only._
 
 The genisis of Atlas was to replace the internal city application Address Explorer and to also act as a demonstration for the Address Information System (AIS) api.
 
