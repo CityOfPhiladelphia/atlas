@@ -1,5 +1,6 @@
-Atlas
-Philadelphia in 360&deg - data, street and sky
+<h1>Atlas
+
+<h2>Philadelphia in 360deg - data, street and sky
 -----
 _Note: this is currently a demostration application only._
 
