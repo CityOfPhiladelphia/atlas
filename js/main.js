@@ -556,7 +556,9 @@ var app = (function ()
         },
       });
 
-      // get zoning
+      /*
+      ZONING
+      */
       var aisGeom = app.state.ais.features[0].geometry;
 
       var zoningBaseQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/6/'});
@@ -566,6 +568,22 @@ var app = (function ()
       var zoningOverlayQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/1'});
       zoningOverlayQuery.contains(aisGeom);
       zoningOverlayQuery.run(app.didGetZoningOverlayResult);
+
+      // get scanned documents ("zoning archive")
+      $.ajax({
+        url: '//data.phila.gov/resource/spcr-thsm.json',
+        data: {
+          address: aisAddress,
+        },
+        success: function (data) {
+          // console.log('got zoning docs', data);
+          app.state.zoningDocuments = data;
+          app.didGetZoningDocuments();
+        },
+        error: function (err) {
+          console.log('zoning docs error:', err);
+        },
+      });
 
       /*
       NEARBY
@@ -1083,6 +1101,37 @@ var app = (function ()
       }
 
       // format date col
+      app.util.formatTableFields($table);
+    },
+
+    didGetZoningDocuments: function () {
+      var features = app.state.zoningDocuments,
+          // recordLimit = app.config.topicRecordLimit,
+          // featuresLimited = features.slice(0, recordLimit),
+          idConstructor = function (row) {
+            var id = row.app_id + '-' + row.document_id;
+            return id;
+          },
+          linkConstructor = function (row) {
+            var address = row.address,
+                appId = row.app_id.length === 2 ? '0' + String(row.app_id) : row.app_id,
+                docType = row.document_type,
+                docId = row.document_id,
+                numPages = row.num_pages,
+                url = '//www.phila.gov/zoningarchive/Preview.aspx?address=' + address + '&&docType=' + docType + '&numofPages=' + numPages + '&docID=' + docId + '&app=' + appId;
+            return url;
+          },
+          FIELDS = ['scan_date', idConstructor, 'document_type', 'num_pages', linkConstructor],
+          rowsHtml = app.util.makeTableRowsFromJson(features, FIELDS),
+          $table = $('#zoning-documents'),
+          $tbody = $table.find('tbody');
+      $tbody.html(rowsHtml);
+
+      // update count
+      var count = features.length;
+      $('#zoning-documents-count').text(' (' + count + ')');
+
+      // format fields
       app.util.formatTableFields($table);
     },
   };

@@ -66,7 +66,13 @@ app.util = (function () {
       var rowsHtml =  _.map(rows, function (row) {
         // loop over fields
         var valsHtml = _.map(fields, function (field) {
-          var val = row[field] || '';
+          // if a function is passed in, run it against the row
+          if (typeof field === 'function') {
+            val = field(row);
+          }
+          else {
+            var val = row[field] || '';
+          }
 
           // truncate long strings
           if ((typeof val === 'string' || val instanceof String) && val.length > 150) {
@@ -142,6 +148,9 @@ app.util = (function () {
       'zoning-appeal-id': function (val) {
         var url = '//li.phila.gov/#details?entity=zoningboardappeals&eid=' + val;
         return '<a href="' + url + '">' + val + '</a>';
+      },
+      'zoning-document-link': function (val) {
+        return '<a href="' + val + '">View Scan</a>';
       },
     },
 

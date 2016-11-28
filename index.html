@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Atlas - Beta Version | phila.gov</title>
+        <title>Atlas [Demo] | phila.gov</title>
         <link rel='icon' type='image/x-icon' href="//cityofphiladelphia.github.io/patterns/images/favicon.ico">
         <meta name="description" content="">
 
@@ -40,10 +40,8 @@
                     <div class="large-16 columns">
                         <p>
                             Thanks for trying out this demo of Atlas.
-                            Let us know what you think with this
-                            <a class="external" href="//philagsg.typeform.com/to/uuW3nj" target="_blank">quick survey<span class="accessible"> Opens in new window</span></a>.
-                            If something's not working, please
-                            <a class="external" href="//philagsg.typeform.com/to/lcocM3" target="_blank">report a bug<span class="accessible"> Opens in new window</span></a>.
+                            We're still working on this app and would like to
+                            <a class="external" href="//philagsg.typeform.com/to/v0xlIR" target="_blank">get your feedback<span class="accessible"> Opens in new window</span></a>.
                         </p>
                     </div>
                 </div>
@@ -58,9 +56,10 @@
                   </a>
                   <div class="page-title-container">
                     <a href="#/">
-                      <h1 class="page-title">Atlas - Beta Version</h1>
+                      <h1 class="page-title">Atlas</h1>
                       <!--<h2 class="page-subtitle">Explore and visualize addresses in the City of Philadelphia.</h2>-->
-                      <h2 class="page-subtitle">Philadelphia in 360&deg - data, street and sky</h2>
+                      <!-- <h2 class="page-subtitle">Philadelphia in 360 Degrees: Data, Street and Sky [Demo]</h2> -->
+                      <h2 class="page-subtitle">Explore Philadelphia in 360&deg;</h2>
                     </a>
                   </div>
                   <div id="search-container">
@@ -397,6 +396,20 @@
                                         <th scope="col" data-field-type="zoning-appeal-id">ID</th>
                                         <th scope="col">Description</th>
                                         <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+
+                            <h4>Documents<span id="zoning-documents-count"></span></h4>
+                            <table id="zoning-documents" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" data-field-type="date">Date</th>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col"># Pages</th>
+                                        <th scope="col" data-field-type="zoning-document-link">Link</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
