@@ -769,7 +769,8 @@ app.map = (function ()
           break;
         case 'nearby':
           console.log('didActivateTopic for case "nearby"')
-          app.map.addNearbyAppealsToMap();
+					// TODO: handle various types of nearby
+          // app.map.addNearbyAppealsToMap();
         default:
           // console.log('unhandled topic:', topic);
       }

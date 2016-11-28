@@ -154,6 +154,11 @@ header.site-header > .row:last-of-type {
     margin-bottom: 5px;
 }
 
+.table-subheader {
+  color: #777;
+  font-size: 14px;
+}
+
 /*#zoning-badge > #zoning-badge-body > #zoning-description {*/
     /*display: inline-block;*/
     /*margin-bottom:*/
@@ -194,15 +199,15 @@ table {
     width: 12%;
 }
 
-#nearby-appeals-header > h4 {
+#nearby-activity-header > h4 {
     float: left;
 }
 
-#nearby-appeals-sort-container {
+#nearby-activity-sort-container {
     float: right;
 }
 
-#nearby-appeals-sort-container > input {
+#nearby-activity-sort-container > input {
     margin-left: 10px;
 }
 
