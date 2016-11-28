@@ -765,6 +765,7 @@ app.map = (function ()
           _overlayLayerGroup.addLayer(app.state.map.mapServices.ZoningMap);
           // add name "zoningMap" to the DOM list
           app.map.domLayerList();
+					app.map.addOpacitySlider(app.state.map.mapServices.ZoningMap);
           break;
         case 'nearby':
           console.log('didActivateTopic for case "nearby"')
@@ -787,6 +788,7 @@ app.map = (function ()
           if (app.state.map.namesOverLayers.includes('zoningMap')){
             _overlayLayerGroup.clearLayers();
             app.map.domLayerList();
+						app.map.removeOpacitySlider();
           }
           break;
         case 'nearby':
@@ -877,7 +879,19 @@ app.map = (function ()
         }
         _cycloFeatureGroup.bringToFront();
       }
-    }
+    },
+
+		addOpacitySlider: function(opacityLayer) {
+			app.state.map.opacitySlider = new L.Control.opacitySlider();
+			_map.addControl(app.state.map.opacitySlider);
+			app.state.map.opacitySlider.setOpacityLayer(opacityLayer);
+			app.state.map.opacitySlider.setPosition('topleft');
+			//opacityLayer.setOpacityLayer(1.0);
+		},
+
+		removeOpacitySlider: function() {
+			_map.removeControl(app.state.map.opacitySlider);
+		}
 
   }; // end of return
 })();
