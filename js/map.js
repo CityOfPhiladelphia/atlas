@@ -1,6 +1,7 @@
 /* global app, L */
 
-var wfsClient = new WFSClient(
+app.cyclomedia = {};
+app.cyclomedia.wfsClient = new WFSClient(
 	"https://atlas.cyclomedia.com/Recordings/wfs",
 	"atlas:Recording",
 	"EPSG:3857",
@@ -12,7 +13,7 @@ app.map = (function ()
   // the leaflet map object
   var _map,
 
-      yellowArrow = L.icon({
+      /*yellowArrow = L.icon({
         iconUrl: 'css/images/yellowArrow.png',
         //iconSize: [38,95],
         //iconAnchor: [22.94]
@@ -21,7 +22,7 @@ app.map = (function ()
         iconUrl: 'css/images/viewcone.png',
         iconSize: [40,40],
         iconAnchor: [20, 30],
-      }),
+      }),*/
       camera = L.icon({
         iconUrl: 'css/images/camera_04.png',
         iconSize: [26, 16],
@@ -156,7 +157,7 @@ app.map = (function ()
         maxZoom: 22,
         name: 'parcelOverlay',
         type: 'overlay',
-        zIndex: -1,
+        zIndex: 9,
       });
 
       /*var baseMapDark = L.esri.tiledMapLayer({
@@ -711,19 +712,23 @@ app.map = (function ()
     },
 
     drawStViewMarkers: function(){
-      console.log('about to create _stViewHfovMarker');
+      //console.log('about to create _stViewHfovMarker');
       _stViewHfovMarker = L.marker([app.state.stViewY, app.state.stViewX], {
         icon: new L.divIcon.svgIcon.triangleIcon({
           iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
           iconAnchor: [app.state.stViewConeCoords[0]/2, app.state.stViewConeCoords[1]],
         }),
         rotationAngle: app.state.stViewYaw,
-      })
-      console.log('about to create _stViewCameraMarker');
+      }).on('click', 	function(){
+				console.log('clicked triangle marker');
+			});
+      //console.log('about to create _stViewCameraMarker');
       _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
         icon: camera,
         rotationAngle: app.state.stViewYaw
-      });
+      }).on('click', function(){
+				console.log('clicked camera');
+			});
       _stViewCameraMarker.addTo(_stViewMarkersLayerGroup);
       _stViewHfovMarker.addTo(_stViewMarkersLayerGroup);
     },
@@ -846,17 +851,17 @@ app.map = (function ()
       if (zoomLevel > 18) {
         var newSWCoord = proj4('EPSG:3857', [view._southWest.lng, view._southWest.lat]);
         var newNECoord = proj4('EPSG:3857', [view._northEast.lng, view._northEast.lat]);
-        wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.map.addCycloCircles, app.config.cyclomedia.username, app.config.cyclomedia.password);
+        app.cyclomedia.wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.map.addCycloCircles, app.config.cyclomedia.username, app.config.cyclomedia.password);
       }
     },
 
     addCycloCircles: function() {
       _cycloFeatureGroup.clearLayers();
-      app.recordings = wfsClient.recordingList;
-      if (app.recordings.length > 0) {
+      app.cyclomedia.recordings = app.cyclomedia.wfsClient.recordingList;
+      if (app.cyclomedia.recordings.length > 0) {
         var b = [];
-        for (i=0; i < app.recordings.length; i++) {
-          var rec = app.recordings[i];
+        for (i=0; i < app.cyclomedia.recordings.length; i++) {
+          var rec = app.cyclomedia.recordings[i];
           var coordRaw = [rec.lon, rec.lat];
           var coordNotFlipped = proj4('EPSG:3857', 'EPSG:4326', coordRaw);
           var coord = [coordNotFlipped[1], coordNotFlipped[0]];
@@ -864,7 +869,7 @@ app.map = (function ()
             color: '#3388ff',
             weight: 1,
           }).on('click', function(){
-            console.log('test')
+            console.log('circle click happened')
             app.state.map.clickedCircle = true;
           });
           //blueCircle.on({click: console.log('clicked a circle')});

@@ -912,7 +912,7 @@ var app = (function ()
 
     // get a parcel by a leaflet latlng
     getParcelByLatLng: function (latLng, callback) {
-      // console.log('get parcel by latlng');
+      console.log('get parcel by latlng');
 
       // clear state
       // disabling this because if the new query doesn't return anything,

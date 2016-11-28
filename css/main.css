@@ -209,3 +209,11 @@ table {
 .topic .topic-content-not-found {
     display: none;
 }
+
+.svg-icon-noClick-svg {
+  pointer-events: none;
+}
+
+.svg-icon-noClick {
+  pointer-events: none;
+}

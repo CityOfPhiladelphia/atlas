@@ -3,6 +3,8 @@ L.DivIcon.SVGIcon.TriangleIcon = L.DivIcon.SVGIcon.extend({
         options = L.Util.setOptions(this, options);
         options.circleAnchor = L.point(Number(options.iconSize.x)/2, Number(options.iconSize.y)/2);
         options.circleRatio = 0;
+        options.className = options.className + "-noClick"
+        //options.iconSize = L.point(1,1);
         L.DivIcon.SVGIcon.prototype.initialize.call(this, options)
         return options
     },
