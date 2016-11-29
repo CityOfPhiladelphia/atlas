@@ -1239,7 +1239,7 @@ var app = (function ()
 
     didGetNearbyActivity: function () {
       // munge, filter, sort, make html
-      var rows = app.state.nearby.data;
+      var rows = app.state.nearby.data,
           // cast distances to nums
           rows = _.map(rows, function (row) {
             var newRow = Object.assign({}, row);
