@@ -1271,6 +1271,8 @@ var app = (function ()
 
       // apply transforms
       app.util.formatTableFields($('#nearby-activity'));
+
+      // TODO: store filtered row in state for display on map
     },
 
     // filterNearbyActivityByTimeframe: function () {

@@ -5,10 +5,13 @@ header.site-header > .row:last-of-type {
 #demo-badge {
   /*text-transform: capitalize;*/
   font-size: 14px;
-  vertical-align: middle;
+  vertical-align: top;
   /*color: #eee;*/
-  line-height: 18px;
-  padding-left: 2px;
+  margin-left: 4px;
+  line-height: 35px;
+  padding: 4px;
+  border-radius: 8px;
+  background: #f3c613;
 }
 
 /*use this for technical or noteworthy terms in a sentence*/
