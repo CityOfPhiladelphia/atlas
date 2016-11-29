@@ -233,8 +233,10 @@ var app = (function ()
 
       // listen for changes to nearby activity dropdown selection
       $('#nearby-activity-type').change(app.getNearbyActivity);
-      $('#nearby-activity-timeframe').change(app.filterNearbyActivityByTimeframe);
-      $('#nearby-activity-sort').change(app.sortNearbyActivity);
+      // $('#nearby-activity-timeframe').change(app.filterNearbyActivityByTimeframe);
+      $('#nearby-activity-timeframe').change(app.didGetNearbyActivity);
+      // $('#nearby-activity-sort').change(app.sortNearbyActivity);
+      $('#nearby-activity-sort').change(app.didGetNearbyActivity);
 
       /*
       ROUTING
@@ -1240,17 +1242,37 @@ var app = (function ()
       var rows = app.state.nearby.data;
       console.log('nearby rows', rows)
 
+      // filter by timeframe
+      var daysBack = $('#nearby-activity-timeframe').val(),
+          label = $('#nearby-activity-type :selected').text(),
+          activityTypes = app.config.nearby.activityTypes,
+          activityTypeDef = _.filter(activityTypes, {label: label})[0],
+          fieldMap = activityTypeDef.fieldMap,
+          dateField = fieldMap.date,
+          rowsFiltered = app.util.filterJsonByTimeframe(rows, dateField, daysBack),
+          sortMethod = $('#nearby-activity-sort').val(),
+          sortField = sortMethod === 'date' ? dateField : 'distance',
+          sortDirection = sortMethod === 'date'? 'desc' : 'asc',
+          rowsSorted = _.orderBy(rowsFiltered, sortField, [sortDirection]),
+          fields = Object.values(fieldMap),
+          tbodyHtml = app.util.makeTableRowsFromJson(rowsSorted, fields);
+
+      $('#nearby-activity > tbody').html(tbodyHtml);
+
+      // update table header
+      $('#nearby-activity-table-title').text(label);
+
       // update counter
-      $('#nearby-activity-count').text(' (' + rows.length + ')');
+      $('#nearby-activity-count').text(' (' + rowsFiltered.length + ')');
     },
 
-    filterNearbyActivityByTimeframe: function () {
-      console.log('filter nearby');
-    },
-
-    sortNearbyActivity: function () {
-      console.log('sort nearby');
-    },
+    // filterNearbyActivityByTimeframe: function () {
+    //   console.log('filter nearby');
+    // },
+    //
+    // sortNearbyActivity: function () {
+    //   console.log('sort nearby');
+    // },
   };
 })();
 

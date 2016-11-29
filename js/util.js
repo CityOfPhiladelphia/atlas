@@ -234,5 +234,15 @@ app.util = (function () {
         .replace(/^-+/, '')             // Trim - from start of text
         .replace(/-+$/, '');            // Trim - from end of text
     },
+
+    filterJsonByTimeframe: function (rows, dateField, daysBack) {
+      var minDate = moment().subtract(daysBack, 'days');
+      return _.filter(rows, function (row) {
+        var rowDateRaw = row[dateField];
+        if (!rowDateRaw) return;
+        var rowDate = moment(rowDateRaw);
+        return minDate < moment(rowDate);
+      });
+    },
   };
 }());

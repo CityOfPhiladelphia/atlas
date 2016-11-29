@@ -2,6 +2,15 @@ header.site-header > .row:last-of-type {
     background: #2176d2;
 }
 
+#demo-badge {
+  /*text-transform: capitalize;*/
+  font-size: 14px;
+  vertical-align: middle;
+  /*color: #eee;*/
+  line-height: 18px;
+  /*padding-left: 10px;*/
+}
+
 /*use this for technical or noteworthy terms in a sentence*/
 .keyword {
     font-family: 'Montserrat';
