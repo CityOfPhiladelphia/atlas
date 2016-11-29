@@ -152,6 +152,9 @@ app.util = (function () {
       'zoning-document-link': function (val) {
         return '<a href="' + val + '">View Scan</a>';
       },
+      'distance': function (val) {
+        return Math.round(val) + ' feet';
+      },
     },
 
     // given an array of fields (table cells), update text using transform

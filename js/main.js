@@ -1239,11 +1239,9 @@ var app = (function ()
     },
 
     didGetNearbyActivity: function () {
-      var rows = app.state.nearby.data;
-      console.log('nearby rows', rows)
-
-      // filter by timeframe
-      var daysBack = $('#nearby-activity-timeframe').val(),
+      // munge, filter, sort, make html
+      var rows = app.state.nearby.data,
+          daysBack = $('#nearby-activity-timeframe').val(),
           label = $('#nearby-activity-type :selected').text(),
           activityTypes = app.config.nearby.activityTypes,
           activityTypeDef = _.filter(activityTypes, {label: label})[0],
@@ -1254,9 +1252,10 @@ var app = (function ()
           sortField = sortMethod === 'date' ? dateField : 'distance',
           sortDirection = sortMethod === 'date'? 'desc' : 'asc',
           rowsSorted = _.orderBy(rowsFiltered, sortField, [sortDirection]),
-          fields = Object.values(fieldMap),
+          fields = Object.values(fieldMap).concat(['distance']),
           tbodyHtml = app.util.makeTableRowsFromJson(rowsSorted, fields);
 
+      // populate table
       $('#nearby-activity > tbody').html(tbodyHtml);
 
       // update table header
@@ -1264,6 +1263,9 @@ var app = (function ()
 
       // update counter
       $('#nearby-activity-count').text(' (' + rowsFiltered.length + ')');
+
+      // apply transforms
+      app.util.formatTableFields($('#nearby-activity'));
     },
 
     // filterNearbyActivityByTimeframe: function () {
