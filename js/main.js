@@ -1217,8 +1217,6 @@ var app = (function ()
       // TODO exclude recordss at the exact address
       // if (liAddressKey) nearbyAppealsWhere += " AND addresskey != '" + liAddressKey + "'";
 
-      // TODO date range
-
       $.ajax({
         url: url,
         data: {
@@ -1240,13 +1238,19 @@ var app = (function ()
 
     didGetNearbyActivity: function () {
       // munge, filter, sort, make html
-      var rows = app.state.nearby.data,
-          daysBack = $('#nearby-activity-timeframe').val(),
+      var rows = app.state.nearby.data;
+          // cast distances to nums
+          rows = _.map(rows, function (row) {
+            var newRow = Object.assign({}, row);
+            newRow.distance = parseFloat(row.distance)
+            return newRow;
+          }),
           label = $('#nearby-activity-type :selected').text(),
           activityTypes = app.config.nearby.activityTypes,
           activityTypeDef = _.filter(activityTypes, {label: label})[0],
           fieldMap = activityTypeDef.fieldMap,
           dateField = fieldMap.date,
+          daysBack = $('#nearby-activity-timeframe').val(),
           rowsFiltered = app.util.filterJsonByTimeframe(rows, dateField, daysBack),
           sortMethod = $('#nearby-activity-sort').val(),
           sortField = sortMethod === 'date' ? dateField : 'distance',
