@@ -1016,98 +1016,99 @@ var app = (function ()
       });
     },
 
-    didGetNearbyAppeals: function () {
-      //console.log('function didGetNearbyAppeals is starting to run')
-      var features = app.state.nearby.appeals,
-          featuresSorted = _.orderBy(features, app.config.li.fieldMap.appeals.date, ['desc']),
-          // sourceFields = _.map(app.config.li.displayFields, function (displayField) {
-          //                   return app.config.li.fieldMap.appeals[displayField];
-          //                 }),
-          // adding address:
-          sourceFields = ['processeddate', 'appealkey', 'address', 'appealgrounds', 'decision',],
-          rowsHtml = app.util.makeTableRowsFromJson(featuresSorted, sourceFields),
-          $table = $('#nearby-appeals'),
-          $tbody = $table.find('tbody');
-      $tbody.html(rowsHtml);
-      $('#nearby-appeals-count').text(' (' + features.length + ')');
-
-      // reset radio button
-      var $dateButton = $('input[name="nearby-appeals-sort-by"][value="date"]');
-      $dateButton.prop({checked: true});
-
-      // TEMP attribute rows with appeal id and distance
-      var sourceIdField = app.config.li.fieldMap.appeals.id;
-      _.forEach($tbody.find('tr'), function (row, i) {
-        var feature = featuresSorted[i];
-        $(row).attr('data-appeal-id', feature[sourceIdField]);
-        $(row).attr('data-appeal-distance', feature.distance);
-        $(row).attr('data-appeal-date', feature.processeddate);
-      });
-
-      // format fields
-      app.util.formatTableFields($table);
-
-      // refresh them on map if topic accordion is open
-      var $targetTopic = $('#topic-nearby');
-      if ($targetTopic.is(':visible')){
-      //if ($('#topic-nearby').attr('style') == 'display: block;') {
-        //console.log($('#topic-nearby').attr('style'));
-        //console.log('refreshing appeals layer');
-        app.map.removeNearbyAppeals();
-        app.map.addNearbyAppealsToMap();
-      };
-
-      // listen for hover
-      $tbody.find('tr').hover(
-        function () {
-          var $this = $(this);
-          $this.css('background', '#ffffff');
-          // tell map to highlight pin
-          var appealId = $this.attr('data-appeal-id');
-          app.map.didHoverOverNearbyAppeal(appealId);
-        },
-        function () {
-          var $this = $(this);
-          $this.css('background', '');
-          var appealId = $this.attr('data-appeal-id');
-          app.map.didMoveOffNearbyAppeal(appealId);
-        }
-      );
-
-      // TODO should sort?
-    },
-
-    sortNearbyAppealsBy: function (sortBy) {
-      // get rows
-      var rows = $('#nearby-appeals > tbody > tr'),
-          rowsSorted = _.sortBy(rows, function (row) {
-            return $(row).attr('data-appeal-' + sortBy);
-          });
-
-      // date should be desc
-      if (sortBy === 'date') rowsSorted = _.reverse(rowsSorted);
-
-      // clobber
-      $('#nearby-appeals > tbody').empty();
-      $('#nearby-appeals > tbody').append(rowsSorted);
-
-      // listen for hover
-      $('#nearby-appeals').find('tr').hover(
-        function () {
-          var $this = $(this);
-          $this.css('background', '#ffffff');
-          // tell map to highlight pin
-          var appealId = $this.attr('data-appeal-id');
-          app.map.didHoverOverNearbyAppeal(appealId);
-        },
-        function () {
-          var $this = $(this);
-          $this.css('background', '');
-          var appealId = $this.attr('data-appeal-id');
-          app.map.didMoveOffNearbyAppeal(appealId);
-        }
-      );
-    },
+    // replaced by didGetNearbyActivity
+    // didGetNearbyAppeals: function () {
+    //   //console.log('function didGetNearbyAppeals is starting to run')
+    //   var features = app.state.nearby.appeals,
+    //       featuresSorted = _.orderBy(features, app.config.li.fieldMap.appeals.date, ['desc']),
+    //       // sourceFields = _.map(app.config.li.displayFields, function (displayField) {
+    //       //                   return app.config.li.fieldMap.appeals[displayField];
+    //       //                 }),
+    //       // adding address:
+    //       sourceFields = ['processeddate', 'appealkey', 'address', 'appealgrounds', 'decision',],
+    //       rowsHtml = app.util.makeTableRowsFromJson(featuresSorted, sourceFields),
+    //       $table = $('#nearby-appeals'),
+    //       $tbody = $table.find('tbody');
+    //   $tbody.html(rowsHtml);
+    //   $('#nearby-appeals-count').text(' (' + features.length + ')');
+    //
+    //   // reset radio button
+    //   var $dateButton = $('input[name="nearby-appeals-sort-by"][value="date"]');
+    //   $dateButton.prop({checked: true});
+    //
+    //   // TEMP attribute rows with appeal id and distance
+    //   var sourceIdField = app.config.li.fieldMap.appeals.id;
+    //   _.forEach($tbody.find('tr'), function (row, i) {
+    //     var feature = featuresSorted[i];
+    //     $(row).attr('data-appeal-id', feature[sourceIdField]);
+    //     $(row).attr('data-appeal-distance', feature.distance);
+    //     $(row).attr('data-appeal-date', feature.processeddate);
+    //   });
+    //
+    //   // format fields
+    //   app.util.formatTableFields($table);
+    //
+      // // refresh them on map if topic accordion is open
+      // var $targetTopic = $('#topic-nearby');
+      // if ($targetTopic.is(':visible')){
+      // //if ($('#topic-nearby').attr('style') == 'display: block;') {
+      //   //console.log($('#topic-nearby').attr('style'));
+      //   //console.log('refreshing appeals layer');
+      //   app.map.removeNearbyAppeals();
+      //   app.map.addNearbyAppealsToMap();
+      // };
+      //
+      // // listen for hover
+      // $tbody.find('tr').hover(
+      //   function () {
+      //     var $this = $(this);
+      //     $this.css('background', '#ffffff');
+      //     // tell map to highlight pin
+      //     var appealId = $this.attr('data-appeal-id');
+      //     app.map.didHoverOverNearbyAppeal(appealId);
+      //   },
+      //   function () {
+      //     var $this = $(this);
+      //     $this.css('background', '');
+      //     var appealId = $this.attr('data-appeal-id');
+      //     app.map.didMoveOffNearbyAppeal(appealId);
+      //   }
+      // );
+    //
+    //   // TODO should sort?
+    // },
+    //
+    // sortNearbyAppealsBy: function (sortBy) {
+    //   // get rows
+    //   var rows = $('#nearby-appeals > tbody > tr'),
+    //       rowsSorted = _.sortBy(rows, function (row) {
+    //         return $(row).attr('data-appeal-' + sortBy);
+    //       });
+    //
+    //   // date should be desc
+    //   if (sortBy === 'date') rowsSorted = _.reverse(rowsSorted);
+    //
+    //   // clobber
+    //   $('#nearby-appeals > tbody').empty();
+    //   $('#nearby-appeals > tbody').append(rowsSorted);
+    //
+    //   // listen for hover
+    //   $('#nearby-appeals').find('tr').hover(
+    //     function () {
+    //       var $this = $(this);
+    //       $this.css('background', '#ffffff');
+    //       // tell map to highlight pin
+    //       var appealId = $this.attr('data-appeal-id');
+    //       app.map.didHoverOverNearbyAppeal(appealId);
+    //     },
+    //     function () {
+    //       var $this = $(this);
+    //       $this.css('background', '');
+    //       var appealId = $this.attr('data-appeal-id');
+    //       app.map.didMoveOffNearbyAppeal(appealId);
+    //     }
+    //   );
+    // },
 
     didGetDorDocuments: function () {
       // have to unpack these differently from geojson/socrata
@@ -1218,6 +1219,8 @@ var app = (function ()
       // TODO exclude recordss at the exact address
       // if (liAddressKey) nearbyAppealsWhere += " AND addresskey != '" + liAddressKey + "'";
 
+      // TODO date range
+
       $.ajax({
         url: url,
         data: {
@@ -1227,8 +1230,12 @@ var app = (function ()
         success: function (data) {
           // TODO set app.state.nearby.activeType to whatever's selected
 
+          // rows need to have unique ids for coordination with map
+          var dataWithIds = app.util.addIdsToRows(data);
+
           // if (!app.state.nearby.data) app.state.nearby.data = {};
-          app.state.nearby.data = data;
+          app.state.nearby.data = dataWithIds;
+
           app.didGetNearbyActivity();
         },
         error: function (err) {
@@ -1240,28 +1247,23 @@ var app = (function ()
     didGetNearbyActivity: function () {
       // munge, filter, sort, make html
       var rows = app.state.nearby.data,
-          // cast distances to nums
-          rows = _.map(rows, function (row) {
-            var newRow = Object.assign({}, row);
-            newRow.distance = parseFloat(row.distance)
-            return newRow;
-          }),
+          daysBack = $('#nearby-activity-timeframe').val(),
           label = $('#nearby-activity-type :selected').text(),
           activityTypes = app.config.nearby.activityTypes,
           activityTypeDef = _.filter(activityTypes, {label: label})[0],
           fieldMap = activityTypeDef.fieldMap,
           dateField = fieldMap.date,
-          daysBack = $('#nearby-activity-timeframe').val(),
           rowsFiltered = app.util.filterJsonByTimeframe(rows, dateField, daysBack),
           sortMethod = $('#nearby-activity-sort').val(),
           sortField = sortMethod === 'date' ? dateField : 'distance',
           sortDirection = sortMethod === 'date'? 'desc' : 'asc',
           rowsSorted = _.orderBy(rowsFiltered, sortField, [sortDirection]),
           fields = Object.values(fieldMap).concat(['distance']),
-          tbodyHtml = app.util.makeTableRowsFromJson(rowsSorted, fields);
+          tbodyHtml = app.util.makeTableRowsFromJson(rowsSorted, fields),
+          $tbody = $('#nearby-activity > tbody');
 
       // populate table
-      $('#nearby-activity > tbody').html(tbodyHtml);
+      $tbody.html(tbodyHtml);
 
       // update table header
       $('#nearby-activity-table-title').text(label);
@@ -1272,16 +1274,44 @@ var app = (function ()
       // apply transforms
       app.util.formatTableFields($('#nearby-activity'));
 
-      // TODO: store filtered row in state for display on map
-    },
+      // TEMP attribute rows with appeal id and distance
+      _.forEach($tbody.find('tr'), function (row, i) {
+        var dataRow = rowsSorted[i],
+            id = dataRow.id,
+            $tableRow = $(row);
+        $tableRow.attr('data-id', dataRow.id);
+      });
 
-    // filterNearbyActivityByTimeframe: function () {
-    //   console.log('filter nearby');
-    // },
-    //
-    // sortNearbyActivity: function () {
-    //   console.log('sort nearby');
-    // },
+      // render on map
+      // app.map.renderNearbyActivity(rowsFiltered);
+
+      // refresh them on map if topic accordion is open
+      var $targetTopic = $('#topic-nearby');
+      if ($targetTopic.is(':visible')){
+      //if ($('#topic-nearby').attr('style') == 'display: block;') {
+        //console.log($('#topic-nearby').attr('style'));
+        //console.log('refreshing appeals layer');
+        // app.map.removeNearbyActivity();
+        app.map.addNearbyActivity(rowsSorted);
+      };
+
+      // listen for hover
+      $tbody.find('tr').hover(
+        function () {
+          var $this = $(this);
+          $this.css('background', '#ffffff');
+          // tell map to highlight pin
+          var id = $this.attr('data-id');
+          app.map.didMouseOverNearbyActivityRow(id);
+        },
+        function () {
+          var $this = $(this);
+          $this.css('background', '');
+          var id = $this.attr('data-id');
+          app.map.didMouseOffNearbyActivityRow(id);
+        }
+      );
+    },
   };
 })();
 

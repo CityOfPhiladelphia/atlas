@@ -247,5 +247,13 @@ app.util = (function () {
         return minDate < moment(rowDate);
       });
     },
+
+    addIdsToRows: function (rows) {
+      return _.map(rows, function (row, i) {
+        var rowWithId = Object.assign({}, row);
+        rowWithId.id = i;
+        return rowWithId;
+      });
+    },
   };
 }());

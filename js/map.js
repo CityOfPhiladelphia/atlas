@@ -43,7 +43,7 @@ app.map = (function ()
       _labelLayerGroup = new L.LayerGroup(),
       _overlayLayerGroup = new L.LayerGroup(),
 
-      _appealsLayerGroup = new L.LayerGroup(),
+      _nearbyActivityLayerGroup = new L.LayerGroup(),
       // create an empty layer group for the parcel query layer
       _parcelLayerGroup = new L.LayerGroup(),
       _cycloFeatureGroup = new L.FeatureGroup().on('click', function(){
@@ -214,7 +214,7 @@ app.map = (function ()
       // The next 4 are not used initially
       _overlayLayerGroup.addTo(_map);
       _parcelLayerGroup.addTo(_map);
-      _appealsLayerGroup.addTo(_map);
+      _nearbyActivityLayerGroup.addTo(_map);
       _cycloFeatureGroup.addTo(_map);
       _stViewMarkersLayerGroup.addTo(_map);
 
@@ -800,8 +800,7 @@ app.map = (function ()
           break;
         case 'nearby':
           console.log('didActivateTopic for case "nearby"')
-					// TODO: handle various types of nearby
-          // app.map.addNearbyAppealsToMap();
+          app.map.addNearbyActivity();
         default:
           // console.log('unhandled topic:', topic);
       }
@@ -825,47 +824,121 @@ app.map = (function ()
           break;
         case 'nearby':
           console.log('didDisactivateTopic ran for case "nearby"')
-          _appealsLayerGroup.clearLayers();
+          _nearbyActivityLayerGroup.clearLayers();
         //default:
         //  console.log('unhandled topic:', topic);
       }
     },
 
-    removeNearbyAppeals: function () {
-      _appealsLayerGroup.clearLayers();
+    // removeNearbyAppeals: function () {
+    //   _nearbyActivityLayerGroup.clearLayers();
+    // },
+
+		removeNearbyActivity: function () {
+			// console.log('remove nearby activity');
+
+			_nearbyActivityLayerGroup.clearLayers();
     },
 
-    addNearbyAppealsToMap: function (id) {
-      for (i = 0; i < app.state.nearby.appeals.length; i++) {
-        var lon = app.state.nearby.appeals[i].shape.coordinates[0];
-        var lat = app.state.nearby.appeals[i].shape.coordinates[1];
-        var newMarker = L.marker([lat, lon], {
-          title: 'Zoning Appeal ' + app.state.nearby.appeals[i].appealkey,
-          icon: blueMarker,
-          name: app.state.nearby.appeals[i].appealkey,
-          type: 'appealsMarker',
-        });
-        _appealsLayerGroup.addLayer(newMarker);
-        // this might have been useless
-        app.map.domLayerList();
-      }
-    },
+    // addNearbyAppealsToMap: function (id) {
+    //   for (i = 0; i < app.state.nearby.appeals.length; i++) {
+    //     var lon = app.state.nearby.appeals[i].shape.coordinates[0];
+    //     var lat = app.state.nearby.appeals[i].shape.coordinates[1];
+    //     var newMarker = L.marker([lat, lon], {
+    //       title: 'Zoning Appeal ' + app.state.nearby.appeals[i].appealkey,
+    //       icon: blueMarker,
+    //       name: app.state.nearby.appeals[i].appealkey,
+    //       type: 'appealsMarker',
+    //     });
+    //     _nearbyActivityLayerGroup.addLayer(newMarker);
+    //     // this might have been useless
+    //     app.map.domLayerList();
+    //   }
+    // },
 
-    didHoverOverNearbyAppeal: function (id) {
-      _map.eachLayer(function(layer){
-        if (id == layer.options.name) {
-          layer.setIcon(bigRedMarker);
-        }
+		addNearbyActivity: function (rows) {
+			// console.log('add nearby activity');
+
+			// if no rows were passed in, get them from state
+			if (!rows) {
+					app.state.map.nearbyActivity = app.state.map.nearbyActivity || {};
+					rows = app.state.map.nearbyActivity.data;
+			} else {
+				app.state.map.nearbyActivity.data = rows;
+			}
+
+			// TODO clear existing
+			this.removeNearbyActivity();
+
+			_.forEach(rows, function (row) {
+				var lon = row.shape.coordinates[0],
+						lat = row.shape.coordinates[1],
+						newMarker = L.marker([lat, lon], {
+							// title: 'Zoning Appeal ' + row.appealkey
+							title: 'TODO',
+							icon: blueMarker,
+							// custom attr to link with data rows
+							rowId: row.id,
+							// type: 'nearby-activity-marker',
+						});
+				_nearbyActivityLayerGroup.addLayer(newMarker);
+				// this might have been useless
+				app.map.domLayerList();
+			});
+
+		},
+
+    // didHoverOverNearbyAppeal: function (id) {
+    //   _map.eachLayer(function(layer){
+    //     if (id == layer.options.name) {
+    //       layer.setIcon(bigRedMarker);
+    //     }
+    //   })
+    // },
+
+		// didHoverOverNearbyActivityRow: function (id) {
+			// _map.eachLayer(function(layer){
+			// 	if (id == layer.options.name) {
+			// 		layer.setIcon(bigRedMarker);
+			// 	}
+			// })
+		// },
+
+		didMouseOverNearbyActivityRow: function (id) {
+			// console.log('did mouse over nearby activity row')
+			_map.eachLayer(function (layer) {
+				// make sure it's a nearby marker
+				var layerRowId = layer.options.rowId;
+				if (!layerRowId) return;
+
+				// set red icon
+				if (id == layerRowId) {
+					layer.setIcon(bigRedMarker);
+				}
+			})
+		},
+
+		didMouseOffNearbyActivityRow: function (id) {
+			// console.log('did mouse off nearby activity row')
+			_map.eachLayer(function (layer) {
+				// make sure it's a nearby marker
+				var layerRowId = layer.options.rowId;
+				if (!layerRowId) return;
+
+				// set blue icon
+				if (id == layerRowId) {
+					layer.setIcon(blueMarker);
+				}
       })
-    },
+		},
 
-    didMoveOffNearbyAppeal: function (id) {
-      _map.eachLayer(function(layer){
-        if (id == layer.options.name) {
-          layer.setIcon(blueMarker);
-        }
-      })
-    },
+    // didMoveOffNearbyAppeal: function (id) {
+    //   _map.eachLayer(function(layer){
+    //     if (id == layer.options.name) {
+    //       layer.setIcon(blueMarker);
+    //     }
+    //   })
+    // },
 
     calculateConeCoords: function(options) {
       var hFov = app.state.stViewHfov;
