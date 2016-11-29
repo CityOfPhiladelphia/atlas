@@ -726,6 +726,16 @@ app.map = (function ()
 			localStorage.setItem('cycloCoords', [lat, lng]);
 		},
 
+		LSdraggedMarker: function(lat, lng){
+			console.log('LSdraggedMarker is running ', lat, lng);
+			//localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
+			app.state.theX = lng;
+			app.state.theY = lat;
+			localStorage.setItem('theX', lng);
+			localStorage.setItem('theY', lat);
+			localStorage.setItem('cycloCoords', [lat, lng]);
+		},
+
     drawStViewMarkers: function(){
       //console.log('about to create _stViewHfovMarker');
       _stViewHfovMarker = L.marker([app.state.stViewY, app.state.stViewX], {
@@ -740,9 +750,15 @@ app.map = (function ()
       //console.log('about to create _stViewCameraMarker');
       _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
         icon: camera,
-        rotationAngle: app.state.stViewYaw
+        rotationAngle: app.state.stViewYaw,
+				draggable: true
       }).on('click', function(){
 				console.log('clicked camera');
+			}).on('dragend', function(data){
+				app.state.dragdata = data;
+				app.state.draggedX = data.target._latlng.lng;
+				app.state.draggedY = data.target._latlng.lat;
+				app.map.LSdraggedMarker(app.state.draggedY, app.state.draggedX);
 			});
       _stViewCameraMarker.addTo(_stViewMarkersLayerGroup);
       _stViewHfovMarker.addTo(_stViewMarkersLayerGroup);
