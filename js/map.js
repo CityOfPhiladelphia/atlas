@@ -59,6 +59,7 @@ app.map = (function ()
     initMap : function () {
       app.state.map = {};
       app.state.map.clickedOnMap = false;
+			localStorage.setItem('clickedOnMap', false);
       // the next 2 variables hold names for checking what is on the map
       app.state.map.nameBaseLayer;
       app.state.map.nameLabelsLayer;
@@ -458,6 +459,7 @@ app.map = (function ()
         if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == 'false') {
             _stViewMarkersLayerGroup.clearLayers();
             _cycloFeatureGroup.clearLayers();
+						localStorage.setItem('circlesOn', false);
         };
         if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == 'true') {
           app.map.LSretrieve();
@@ -521,6 +523,7 @@ app.map = (function ()
     didClickMap: function (e) {
       // set state
       app.state.map.clickedOnMap = true
+			localStorage.setItem('clickedOnMap', true);
       app.state.map.shouldPan = false;
 
       // query parcel layer
@@ -550,7 +553,8 @@ app.map = (function ()
         // if this is the result of a map click, query ais for the address
         if (app.state.map.clickedOnMap) {
           app.searchForAddress(parcelAddress);
-          app.state.map.clickedOnMap = false;
+          app.state.map.clickedOnMap = true; //andy changed this 11/29
+					//localStorage.setItem('clickedOnMap', true);
         }
 
         // render parcel
@@ -596,8 +600,9 @@ app.map = (function ()
         _map.fitBounds(boundsPadded);
         // or need to use parcel centroid instead of center of map
         // set new state and localStorage
-        app.map.LSinit();
       };
+			app.map.LSinit();
+
       // add to map
       _parcelLayerGroup.addLayer(parcelPoly);
 
@@ -682,7 +687,7 @@ app.map = (function ()
       app.state.theY = app.state.theCenter.lat;
       localStorage.setItem('theX', app.state.theX);
       localStorage.setItem('theY', app.state.theY);
-      localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
+      //localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
       localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
     },
 
@@ -710,6 +715,16 @@ app.map = (function ()
       app.state.stViewHfov = localStorage.getItem('stViewHfov');
       app.state.stViewConeCoords = app.map.calculateConeCoords();
     },
+
+		LSclickedCircle: function(lat, lng){
+			console.log('LSclickedCircle is running ', lat, lng);
+			//localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
+			app.state.theX = lng;
+			app.state.theY = lat;
+			localStorage.setItem('theX', lng);
+			localStorage.setItem('theY', lat);
+			localStorage.setItem('cycloCoords', [lat, lng]);
+		},
 
     drawStViewMarkers: function(){
       //console.log('about to create _stViewHfovMarker');
@@ -871,15 +886,18 @@ app.map = (function ()
           var blueCircle = new L.circle(coord, 1.2, {
             color: '#3388ff',
             weight: 1,
-          }).on('click', function(){
-            console.log('circle click happened')
+          }).on('click', function(coord){
+            console.log('circle click happened ', coord.latlng.lat, ' ', coord.latlng.lng);
             app.state.map.clickedCircle = true;
+						app.map.LSclickedCircle(coord.latlng.lat, coord.latlng.lng);
           });
           //blueCircle.on({click: console.log('clicked a circle')});
           blueCircle.addTo(_cycloFeatureGroup);
         }
         _cycloFeatureGroup.bringToFront();
       }
+			// set "circles on" in localStorage
+			localStorage.setItem('circlesOn', true);
     },
 
 		addOpacitySlider: function(opacityLayer) {

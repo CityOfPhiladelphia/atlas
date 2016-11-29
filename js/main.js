@@ -295,7 +295,8 @@ var app = (function ()
     },
 
     didClickSearch: function () {
-      app.state.clickedOnMap = false;
+      app.state.map.clickedOnMap = false;
+      localStorage.setItem('clickedOnMap', false);
       app.state.map.shouldPan = true;
 
       var val = $('#search-input').val();
