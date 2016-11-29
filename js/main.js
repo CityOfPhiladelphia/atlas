@@ -92,6 +92,40 @@ var app = (function ()
         displayFields:        ['date', 'id', 'description', 'status',],
       },
 
+      nearby: {
+        activityTypes: [
+          {
+            label: '311 Requests',
+            socrataId: '4t9v-rppq',
+            fieldMap: {
+              date: 'requested_datetime',
+              location: 'address',
+              description: 'service_name',
+              // geom:
+            },
+          },
+          {
+            label: 'Crime Incidents',
+            socrataId: 'sspu-uyfa',
+            fieldMap: {
+              date: 'dispatch_date_time',
+              location: 'location_block',
+              description: 'text_general_code',
+            },
+          },
+          {
+            label: 'Zoning Appeals',
+            socrataId: '3tq7-6fj4',
+            fieldMap: {
+              date: 'processeddate',
+              location: 'address',
+              description: 'appealgrounds',
+            },
+          },
+        ],
+        radius: 500,
+      },
+
       map: {},
 
       topicRecordLimit: 5,
@@ -114,19 +148,15 @@ var app = (function ()
       socrata: {
         baseUrl: '//data.phila.gov/resource/',
       },
-
-      nearby: {
-        // in feet
-        radius: 500,
-      },
-
-      // DEBUG: DEBUG,
     },
 
     // global app state
     state: {
       // prevent topics from opening until we've completed a search
       shouldOpenTopics: false,
+      nearby: {
+        activeType: undefined,
+      }
     },
 
     // start app
@@ -178,7 +208,7 @@ var app = (function ()
       });
 
       // make "Street View" button open Cyclomedia window
-      $('#cyclo-button').on('click', function (e){
+      $('#cyclo-button').on('click', function (e) {
         e.preventDefault();
         window.open(app.config.cyclomedia.url, app.config.cyclomedia.url);
         return false
@@ -187,8 +217,30 @@ var app = (function ()
       // clear active topic in localStorage
       localStorage.removeItem('activeTopic');
 
-      // listen for hash changes
-      // $(window).on('hashchange', app.route);
+      /*
+      NEARBY
+      */
+
+      // populate dropdown
+      _.forEach(app.config.nearby.activityTypes, function (activityType) {
+        var $option = $('<option>'),
+            label = activityType.label,
+            slug = app.util.slugify(label);
+        $option.attr({value: slug});
+        $option.text(label);
+        $('#nearby-activity-type').append($option);
+      });
+
+      // listen for changes to nearby activity dropdown selection
+      $('#nearby-activity-type').change(app.getNearbyActivity);
+      // $('#nearby-activity-timeframe').change(app.filterNearbyActivityByTimeframe);
+      $('#nearby-activity-timeframe').change(app.didGetNearbyActivity);
+      // $('#nearby-activity-sort').change(app.sortNearbyActivity);
+      $('#nearby-activity-sort').change(app.didGetNearbyActivity);
+
+      /*
+      ROUTING
+      */
 
       // listen for back button
       window.onpopstate = function () {
@@ -557,7 +609,9 @@ var app = (function ()
         },
       });
 
-      // get zoning
+      /*
+      ZONING
+      */
       var aisGeom = app.state.ais.features[0].geometry;
 
       var zoningBaseQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/6/'});
@@ -568,45 +622,63 @@ var app = (function ()
       zoningOverlayQuery.contains(aisGeom);
       zoningOverlayQuery.run(app.didGetZoningOverlayResult);
 
+      // get scanned documents ("zoning archive")
+      $.ajax({
+        url: '//data.phila.gov/resource/spcr-thsm.json',
+        data: {
+          address: aisAddress,
+        },
+        success: function (data) {
+          // console.log('got zoning docs', data);
+          app.state.zoningDocuments = data;
+          app.didGetZoningDocuments();
+        },
+        error: function (err) {
+          console.log('zoning docs error:', err);
+        },
+      });
+
       /*
       NEARBY
       */
 
       // appeals
-      var aisX = aisGeom.coordinates[0],
-          aisY = aisGeom.coordinates[1],
-          radiusMeters = app.config.nearby.radius * 0.3048,
-          nearbyAppealsUrl = app.config.socrata.baseUrl + app.config.li.socrataIds.appeals + '.json',
-          // nearbyAppealsQuery = 'DISTANCE_IN_METERS(location, POINT(' + aisX + ',' + aisY + ')) <= ' + radiusMeters;
-          nearbyAppealsWhere = 'within_circle(' + ['shape', aisY, aisX, radiusMeters].join(', ') + ')',
-          nearbyAppealsSelectComps = [
-            'processeddate',
-            'appealkey',
-            'address',
-            'appealgrounds',
-            'decision',
-            'shape',
-            "DISTANCE_IN_METERS(shape, 'POINT(" + aisX + ' ' + aisY + ")') * 3.28084 AS distance",
-          ],
-          nearbyAppealsSelect = nearbyAppealsSelectComps.join(', ');
-      // exclude appeals at the exact address
-      if (liAddressKey) nearbyAppealsWhere += " AND addresskey != '" + liAddressKey + "'";
+      // var aisX = aisGeom.coordinates[0],
+      //     aisY = aisGeom.coordinates[1],
+      //     radiusMeters = app.config.nearby.radius * 0.3048,
+      //     nearbyAppealsUrl = app.config.socrata.baseUrl + app.config.li.socrataIds.appeals + '.json',
+      //     // nearbyAppealsQuery = 'DISTANCE_IN_METERS(location, POINT(' + aisX + ',' + aisY + ')) <= ' + radiusMeters;
+      //     nearbyAppealsWhere = 'within_circle(' + ['shape', aisY, aisX, radiusMeters].join(', ') + ')',
+      //     nearbyAppealsSelectComps = [
+      //       'processeddate',
+      //       'appealkey',
+      //       'address',
+      //       'appealgrounds',
+      //       'decision',
+      //       'shape',
+      //       "DISTANCE_IN_METERS(shape, 'POINT(" + aisX + ' ' + aisY + ")') * 3.28084 AS distance",
+      //     ],
+      //     nearbyAppealsSelect = nearbyAppealsSelectComps.join(', ');
+      // // exclude appeals at the exact address
+      // if (liAddressKey) nearbyAppealsWhere += " AND addresskey != '" + liAddressKey + "'";
+      //
+      // $.ajax({
+      //   url: nearbyAppealsUrl,
+      //   data: {
+      //     $where: nearbyAppealsWhere,
+      //     $select: nearbyAppealsSelect,
+      //   },
+      //   success: function (data) {
+      //     if (!app.state.nearby) app.state.nearby = {};
+      //     app.state.nearby.appeals = data;
+      //     app.didGetNearbyAppeals();
+      //   },
+      //   error: function (err) {
+      //     console.log('nearby appeals error', err);
+      //   },
+      // });
 
-      $.ajax({
-        url: nearbyAppealsUrl,
-        data: {
-          $where: nearbyAppealsWhere,
-          $select: nearbyAppealsSelect,
-        },
-        success: function (data) {
-          if (!app.state.nearby) app.state.nearby = {};
-          app.state.nearby.appeals = data;
-          app.didGetNearbyAppeals();
-        },
-        error: function (err) {
-          console.log('nearby appeals error', err);
-        },
-      });
+      app.getNearbyActivity();
 
       // show topics
       $('#topic-list').show();
@@ -1086,6 +1158,124 @@ var app = (function ()
       // format date col
       app.util.formatTableFields($table);
     },
+
+    didGetZoningDocuments: function () {
+      var features = app.state.zoningDocuments,
+          // TODO sort by date
+          idConstructor = function (row) {
+            var id = row.app_id + '-' + row.document_id;
+            return id;
+          },
+          linkConstructor = function (row) {
+            var address = row.address,
+                appId = row.app_id.length === 2 ? '0' + String(row.app_id) : row.app_id,
+                docType = row.document_type,
+                docId = row.document_id,
+                numPages = row.num_pages,
+                url = '//www.phila.gov/zoningarchive/Preview.aspx?address=' + address + '&&docType=' + docType + '&numofPages=' + numPages + '&docID=' + docId + '&app=' + appId;
+            return url;
+          },
+          FIELDS = ['scan_date', idConstructor, 'document_type', 'num_pages', linkConstructor],
+          rowsHtml = app.util.makeTableRowsFromJson(features, FIELDS),
+          $table = $('#zoning-documents'),
+          $tbody = $table.find('tbody');
+      $tbody.html(rowsHtml);
+
+      // update count
+      var count = features.length;
+      $('#zoning-documents-count').text(' (' + count + ')');
+
+      // format fields
+      app.util.formatTableFields($table);
+    },
+
+    getNearbyActivity: function () {
+      var $nearbyActivityType = $('#nearby-activity-type'),
+          $selected = $nearbyActivityType.find(':selected'),
+          label = $('#nearby-activity-type :selected').text();
+
+      // console.log('get activity for: ', label);
+
+      var aisGeom = app.state.ais.features[0].geometry,
+          aisX = aisGeom.coordinates[0],
+          aisY = aisGeom.coordinates[1],
+          radiusMeters = app.config.nearby.radius * 0.3048,
+          activityTypes = app.config.nearby.activityTypes,
+          activityType = _.filter(activityTypes, {label: label})[0],
+          socrataId = activityType.socrataId,
+          url = app.config.socrata.baseUrl + socrataId + '.json',
+
+          // form query
+          query = 'DISTANCE_IN_METERS(location, POINT(' + aisX + ',' + aisY + ')) <= ' + radiusMeters;
+          where = 'within_circle(' + ['shape', aisY, aisX, radiusMeters].join(', ') + ')',
+          fieldMap = activityType.fieldMap,
+          selectComps = Object.values(fieldMap).concat([
+                          'shape',
+                          "DISTANCE_IN_METERS(shape, 'POINT(" + aisX + ' ' + aisY + ")') * 3.28084 AS distance"
+                        ]);
+          select = selectComps.join(', ');
+
+      // TODO exclude recordss at the exact address
+      // if (liAddressKey) nearbyAppealsWhere += " AND addresskey != '" + liAddressKey + "'";
+
+      // TODO date range
+
+      $.ajax({
+        url: url,
+        data: {
+          $where: where,
+          $select: select,
+        },
+        success: function (data) {
+          // TODO set app.state.nearby.activeType to whatever's selected
+
+          // if (!app.state.nearby.data) app.state.nearby.data = {};
+          app.state.nearby.data = data;
+          app.didGetNearbyActivity();
+        },
+        error: function (err) {
+          console.log('nearby error', err);
+        },
+      });
+    },
+
+    didGetNearbyActivity: function () {
+      // munge, filter, sort, make html
+      var rows = app.state.nearby.data,
+          daysBack = $('#nearby-activity-timeframe').val(),
+          label = $('#nearby-activity-type :selected').text(),
+          activityTypes = app.config.nearby.activityTypes,
+          activityTypeDef = _.filter(activityTypes, {label: label})[0],
+          fieldMap = activityTypeDef.fieldMap,
+          dateField = fieldMap.date,
+          rowsFiltered = app.util.filterJsonByTimeframe(rows, dateField, daysBack),
+          sortMethod = $('#nearby-activity-sort').val(),
+          sortField = sortMethod === 'date' ? dateField : 'distance',
+          sortDirection = sortMethod === 'date'? 'desc' : 'asc',
+          rowsSorted = _.orderBy(rowsFiltered, sortField, [sortDirection]),
+          fields = Object.values(fieldMap).concat(['distance']),
+          tbodyHtml = app.util.makeTableRowsFromJson(rowsSorted, fields);
+
+      // populate table
+      $('#nearby-activity > tbody').html(tbodyHtml);
+
+      // update table header
+      $('#nearby-activity-table-title').text(label);
+
+      // update counter
+      $('#nearby-activity-count').text(' (' + rowsFiltered.length + ')');
+
+      // apply transforms
+      app.util.formatTableFields($('#nearby-activity'));
+    },
+
+    // filterNearbyActivityByTimeframe: function () {
+    //   console.log('filter nearby');
+    // },
+    //
+    // sortNearbyActivity: function () {
+    //   console.log('sort nearby');
+    // },
   };
 })();
 

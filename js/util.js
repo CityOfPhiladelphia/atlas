@@ -66,7 +66,13 @@ app.util = (function () {
       var rowsHtml =  _.map(rows, function (row) {
         // loop over fields
         var valsHtml = _.map(fields, function (field) {
-          var val = row[field] || '';
+          // if a function is passed in, run it against the row
+          if (typeof field === 'function') {
+            val = field(row);
+          }
+          else {
+            var val = row[field] || '';
+          }
 
           // truncate long strings
           if ((typeof val === 'string' || val instanceof String) && val.length > 150) {
@@ -143,6 +149,12 @@ app.util = (function () {
         var url = '//li.phila.gov/#details?entity=zoningboardappeals&eid=' + val;
         return '<a href="' + url + '">' + val + '</a>';
       },
+      'zoning-document-link': function (val) {
+        return '<a href="' + val + '">View Scan</a>';
+      },
+      'distance': function (val) {
+        return Math.round(val) + ' feet';
+      },
     },
 
     // given an array of fields (table cells), update text using transform
@@ -215,6 +227,25 @@ app.util = (function () {
         params[key] = value;
       });
       return params;
+    },
+
+    slugify: function (text) {
+      return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace(/-+$/, '');            // Trim - from end of text
+    },
+
+    filterJsonByTimeframe: function (rows, dateField, daysBack) {
+      var minDate = moment().subtract(daysBack, 'days');
+      return _.filter(rows, function (row) {
+        var rowDateRaw = row[dateField];
+        if (!rowDateRaw) return;
+        var rowDate = moment(rowDateRaw);
+        return minDate < moment(rowDate);
+      });
     },
   };
 }());

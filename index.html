@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Atlas - Beta Version | phila.gov</title>
+        <title>Atlas [Demo] | phila.gov</title>
         <link rel='icon' type='image/x-icon' href="//cityofphiladelphia.github.io/patterns/images/favicon.ico">
         <meta name="description" content="">
 
@@ -40,10 +40,8 @@
                     <div class="large-16 columns">
                         <p>
                             Thanks for trying out this demo of Atlas.
-                            Let us know what you think with this
-                            <a class="external" href="//philagsg.typeform.com/to/uuW3nj" target="_blank">quick survey<span class="accessible"> Opens in new window</span></a>.
-                            If something's not working, please
-                            <a class="external" href="//philagsg.typeform.com/to/lcocM3" target="_blank">report a bug<span class="accessible"> Opens in new window</span></a>.
+                            We're still working on this app and would like to
+                            <a class="external" href="//philagsg.typeform.com/to/v0xlIR" target="_blank">get your feedback<span class="accessible"> Opens in new window</span></a>.
                         </p>
                     </div>
                 </div>
@@ -58,9 +56,12 @@
                   </a>
                   <div class="page-title-container">
                     <a href="#/">
-                      <h1 class="page-title">Atlas - Beta Version</h1>
+                      <h1 class="page-title">Atlas
+                        <span id="demo-badge">DEMO</span>
+                      </h1>
                       <!--<h2 class="page-subtitle">Explore and visualize addresses in the City of Philadelphia.</h2>-->
-                      <h2 class="page-subtitle">Philadelphia in 360&deg - data, street and sky</h2>
+                      <!-- <h2 class="page-subtitle">Philadelphia in 360 Degrees: Data, Street and Sky [Demo]</h2> -->
+                      <h2 class="page-subtitle">Explore Philadelphia in 360&deg;</h2>
                     </a>
                   </div>
                   <div id="search-container">
@@ -402,6 +403,26 @@
                                 <tbody></tbody>
                             </table>
 
+                            <h4>
+                              <!-- <span class="has-tip" title="Also known as the Zoning Archive">Documents</span> -->
+                              Documents
+                              <span id="zoning-documents-count"></span>
+                              <span class="table-subheader">aka "Zoning Archive"</span>
+                            </h4>
+                            <!-- <p class="callout">Also known as the "Zoning Archive"</p> -->
+                            <table id="zoning-documents" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" data-field-type="date">Date</th>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col"># Pages</th>
+                                        <th scope="col" data-field-type="zoning-document-link">Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+
                         </div>
 
                         <!--<a class="topic-link" href="/#/trash/"><span class="topic-link-icon flaticon-garbage"></span>Trash + Recycling</a>-->
@@ -473,30 +494,60 @@
                         <!--NEARBY-->
                         <a id="topic-link-nearby" class="topic-link" href="#"><span class="topic-link-icon flaticon-placeholder-1"></span>Nearby Activity</a>
                         <div id="topic-nearby" class="topic">
-                            <div class="callout">
-                                <p>
+                            <!-- <div class="callout"> -->
+                                <!-- <p>
                                     Looking for construction and development activity around this address? Below are zoning appeals within a 500 feet radius. You can either sort by date (most recent first) or
                                     distance (closest first).
-                                </p>
+                                </p> -->
+                                <!-- <p>
+                                  Use the dropdown below to see public
+                                  safety, 311, and zoning events near this
+                                  address within the last 90 days.
+                                </p> -->
+                            <!-- </div> -->
+
+                            <div id="nearby-activity-selector-wrapper" class="center">
+                              <h3>What activity would you like to see?</h3>
+                              <select id="nearby-activity-type" style="margin: 10px; width: 250px"></select>
+                              from the last
+                              <select id="nearby-activity-timeframe" style="margin: 10px; width: 125px">
+                                <option value="30">30 days</option>
+                                <option value="90">90 days</option>
+                                <option value="365">year</option>
+                              </select>
+                              sorted by
+                              <select id="nearby-activity-sort" style="margin: 10px; width: 125px">
+                                <option value="date">date</option>
+                                <option value="distance">distance</option>
+                              </select>
                             </div>
 
-                            <div id="nearby-appeals-header">
-                                <h4>
+                            <!-- <div id="nearby-activity-header"> -->
+                                <!-- <h4>
                                     Zoning Appeals<span id="nearby-appeals-count"></span>
-                                </h4>
-                                <div id="nearby-appeals-sort-container">
+                                </h4> -->
+                                <!-- <select id="nearby-activity-select" style="width: 300px">
+                                  <option value="311-requests">311 Requests</option>
+                                  <option value="crimes-part-1">Crimes (Part 1)</option>
+                                  <option value="crimes-part-2">Crimes (Part 2)</option>
+                                  <option value="zoning-appeals">Zoning Appeals</option>
+                                </select> -->
+
+                                <!-- <div id="nearby-activity-sort-container">
                                     <input type="radio" name="nearby-appeals-sort-by" value="date" checked="checked">sort by date
                                     <input type="radio" name="nearby-appeals-sort-by" value="distance">sort by distance
-                                </div>
-                            </div>
-                            <table id="nearby-appeals" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                                </div> -->
+                            <!-- </div> -->
+                            <h4 style="margin-top: 20px">
+                                <span id="nearby-activity-table-title"></span><span id="nearby-activity-count"></span>
+                            </h4>
+                            <table id="nearby-activity" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                 <thead>
                                     <tr>
                                         <th scope="col" class="date-col" data-field-type="date">Date</th>
-                                        <th scope="col" data-field-type="zoning-appeal-id">ID</th>
                                         <th scope="col">Address</th>
                                         <th scope="col">Description</th>
-                                        <th scope="col">Status</th>
+                                        <th scope="col" data-field-type="distance">Distance</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
