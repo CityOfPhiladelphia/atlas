@@ -255,5 +255,9 @@ app.util = (function () {
         return rowWithId;
       });
     },
+
+    numberWithCommas: function (x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
   };
 }());

@@ -1339,17 +1339,23 @@ var app = (function ()
           accounts = item.Accounts;
 
       // parcel-level stuff
-      $('#water-impervious-area').text(parcel.ImpervArea);
+      $('#water-impervious-area').text(app.util.numberWithCommas(parcel.ImpervArea));
       $('#water-parcel-id').text(parcel.ParcelID);
       $('#water-parcel-address').text(parcel.Address);
       $('#water-parcel-building-type').text(parcel.BldgType);
       // $('#water-parcel-impervious-area').text(parcel.ImpervArea + ' sq ft');
-      $('#water-parcel-gross-area').text(parcel.GrossArea + ' sq ft');
+      $('#water-parcel-gross-area').text(app.util.numberWithCommas(parcel.GrossArea) + ' sq ft');
       $('#water-parcel-cap-eligible').text(parcel.CAPEligible ? 'Yes' : 'No');
 
       // populate accounts
       $('#water-accounts-count').text(' (' + accounts.length + ')');
-      var FIELDS = ['AccountNumber', 'CustomerName', 'AcctStatus', 'ServiceTypeLabel', 'MeterSize'],
+      var meterSizeGetter = function (row) {
+        var rawMeterSize = row.MeterSize,
+            meterSizeMatch = rawMeterSize.match(/\d(\/\d)?"/),
+            meterSize = meterSizeMatch && meterSizeMatch.length > 0 ? meterSizeMatch[0] : '';
+        return meterSize;
+      };
+      var FIELDS = ['AccountNumber', 'CustomerName', 'AcctStatus', 'ServiceTypeLabel', meterSizeGetter, 'StormwaterStatus'],
           rowsHtml = app.util.makeTableRowsFromJson(accounts, FIELDS);
       $('#water-accounts > tbody').html(rowsHtml);
     },
