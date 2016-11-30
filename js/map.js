@@ -1,5 +1,5 @@
 /* global app, L */
-
+//localStorage.clear();
 app.cyclomedia = {};
 app.cyclomedia.wfsClient = new WFSClient(
 	"https://atlas.cyclomedia.com/Recordings/wfs",
@@ -601,6 +601,7 @@ app.map = (function ()
         // or need to use parcel centroid instead of center of map
         // set new state and localStorage
       };
+			// calling LSinit will alert Pictometry and Cyclomedia to change
 			app.map.LSinit();
 
       // add to map
@@ -646,36 +647,35 @@ app.map = (function ()
     // on init, put center and zoom in LocalStorage, in case
     // Pictometry or Cyclomedia are used
     LSinit: function() {
-      //console.log('running LSinit');
-      //console.log('clickedOnMap is ' + app.state.map.clickedOnMap);
+			app.state.theCenter = _map.getCenter();
+			app.state.leafletCenterX = app.state.theCenter.lng;
+			app.state.leafletCenterY = app.state.theCenter.lat;
       if (app.state.map.clickedOnMap == true){
-        //console.log('setting app.state.theX and theY from parcelCentroid');
-        app.state.theX = app.state.theParcelCentroid.lng;
-        app.state.theY = app.state.theParcelCentroid.lat;
+        app.state.leafletForCycloX = app.state.theParcelCentroid.lng;
+        app.state.leafletForCycloY = app.state.theParcelCentroid.lat;
       } else {
-        //console.log('setting app.state.theX and theY from map center');
-        app.state.theCenter = _map.getCenter();
-        app.state.theX = app.state.theCenter.lng;
-        app.state.theY = app.state.theCenter.lat;
+				app.state.leafletForCycloX = app.state.theCenter.lng;
+        app.state.leafletForCycloY = app.state.theCenter.lat;
       }
-      //console.log('setting the rest of the variables')
       app.state.theZoom = _map.getZoom();
       localStorage.setItem('theZoom', app.state.theZoom);
-      localStorage.setItem('theX', app.state.theX);
-      localStorage.setItem('theY', app.state.theY);
-      localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
-      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
+			localStorage.setItem('leafletCenterX', app.state.leafletCenterX);
+      localStorage.setItem('leafletCenterY', app.state.leafletCenterY);
+      localStorage.setItem('leafletForCycloX', app.state.leafletForCycloX);
+      localStorage.setItem('leafletForCycloY', app.state.leafletForCycloY);
+      localStorage.setItem('cycloCoords', [app.state.leafletForCycloX, app.state.leafletForCycloY]);
+      localStorage.setItem('pictCoordsZoom', [app.state.leafletCenterX, app.state.leafletCenterY, app.state.theZoom]);
     },
 
     // while map is dragged, constantly reset center in localStorage
     // this will move Pictometry with it, but not Cyclomedia
     LSdrag: function() {
       app.state.theCenter = _map.getCenter();
-      app.state.theX = app.state.theCenter.lng;
-      app.state.theY = app.state.theCenter.lat;
-      localStorage.setItem('theX', app.state.theX);
-      localStorage.setItem('theY', app.state.theY);
-      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
+      app.state.leafletCenterX = app.state.theCenter.lng;
+      app.state.leafletCenterY = app.state.theCenter.lat;
+      localStorage.setItem('leafletCenterX', app.state.leafletCenterX);
+      localStorage.setItem('leafletCenterY', app.state.leafletCenterY);
+      localStorage.setItem('pictCoordsZoom', [app.state.leafletCenterX, app.state.leafletCenterY, app.state.theZoom]);
     },
 
     // when map is finished being dragged, 1 more time reset
@@ -683,12 +683,11 @@ app.map = (function ()
     // this will move Pictometry AND Cyclomedia
     LSdragend: function() {
       app.state.theCenter = _map.getCenter();
-      app.state.theX = app.state.theCenter.lng;
-      app.state.theY = app.state.theCenter.lat;
-      localStorage.setItem('theX', app.state.theX);
-      localStorage.setItem('theY', app.state.theY);
-      //localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
-      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
+      app.state.leafletCenterX = app.state.theCenter.lng;
+      app.state.leafletCenterY = app.state.theCenter.lat;
+      localStorage.setItem('leafletCenterX', app.state.leafletCenterX);
+      localStorage.setItem('leafletCenterY', app.state.leafletCenterY);
+      localStorage.setItem('pictCoordsZoom', [app.state.leafletCenterX, app.state.leafletCenterY, app.state.theZoom]);
     },
 
     // when map is zoomed, reset zoom in localStorage
@@ -696,16 +695,16 @@ app.map = (function ()
     LSzoomend: function() {
       app.state.theZoom = _map.getZoom();
       localStorage.setItem('theZoom', app.state.theZoom);
-      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
+      localStorage.setItem('pictCoordsZoom', [app.state.leafletCenterX, app.state.leafletCenterY, app.state.theZoom]);
     },
 
     LSmoveend: function() {
       app.state.theCenter = _map.getCenter();
-      app.state.theX = app.state.theCenter.lng;
-      app.state.theY = app.state.theCenter.lat;
-      localStorage.setItem('theX', app.state.theX);
-      localStorage.setItem('theY', app.state.theY);
-      localStorage.setItem('pictCoordsZoom', [app.state.theX, app.state.theY, app.state.theZoom]);
+      app.state.leafletCenterX = app.state.theCenter.lng;
+      app.state.leafletCenterY = app.state.theCenter.lat;
+      localStorage.setItem('leafletCenterX', app.state.leafletCenterX);
+      localStorage.setItem('leafletCenterY', app.state.leafletCenterY);
+      localStorage.setItem('pictCoordsZoom', [app.state.leafletCenterX, app.state.leafletCenterY, app.state.theZoom]);
     },
 
     LSretrieve: function(){
@@ -717,22 +716,18 @@ app.map = (function ()
     },
 
 		LSclickedCircle: function(lat, lng){
-			console.log('LSclickedCircle is running ', lat, lng);
-			//localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
-			app.state.theX = lng;
-			app.state.theY = lat;
-			localStorage.setItem('theX', lng);
-			localStorage.setItem('theY', lat);
+			app.state.leafletForCycloX = lng;
+			app.state.leafletForCycloY = lat;
+			localStorage.setItem('leafletForCycloX', lng);
+			localStorage.setItem('leafletForCycloY', lat);
 			localStorage.setItem('cycloCoords', [lat, lng]);
 		},
 
 		LSdraggedMarker: function(lat, lng){
-			console.log('LSdraggedMarker is running ', lat, lng);
-			//localStorage.setItem('cycloCoords', [app.state.theX, app.state.theY]);
-			app.state.theX = lng;
-			app.state.theY = lat;
-			localStorage.setItem('theX', lng);
-			localStorage.setItem('theY', lat);
+			app.state.leafletForCycloX = lng;
+			app.state.leafletForCycloY = lat;
+			localStorage.setItem('leafletForCycloX', lng);
+			localStorage.setItem('leafletForCycloY', lat);
 			localStorage.setItem('cycloCoords', [lat, lng]);
 		},
 
