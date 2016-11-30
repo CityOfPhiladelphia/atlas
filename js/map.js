@@ -763,14 +763,15 @@ app.map = (function ()
       // console.log('did change topic', prevTopic, '=>', nextTopic);
 
       if (prevTopic) {
-        app.map.didDisactivateTopic(prevTopic);
+        app.map.didDeactivateTopic(prevTopic);
       }
 
       if (nextTopic) {
         app.map.didActivateTopic(nextTopic);
       }
 
-      localStorage.setItem('activeTopic', nextTopic);
+			localStorage.setItem('previousTopic', prevTopic);
+			localStorage.setItem('activeTopic', nextTopic);
     },
 
     // called when the active topic in the topic panel changes
@@ -801,16 +802,16 @@ app.map = (function ()
       }
     },
 
-    didDisactivateTopic: function (topic) {
+    didDeactivateTopic: function (topic) {
       localStorage.setItem('activeTopic', null);
-      // console.log('didDisactivateTopic', topic, localStorage);
+      // console.log('didDeactivateTopic', topic, localStorage);
 
       switch (topic) {
         case 'deeds':
           // code here
           break;
         case 'zoning':
-          console.log('didDisactivateTopic ran for case "zoning"')
+          console.log('didDeactivateTopic ran for case "zoning"')
           if (app.state.map.namesOverLayers.includes('zoningMap')){
             _overlayLayerGroup.clearLayers();
             app.map.domLayerList();
@@ -818,7 +819,7 @@ app.map = (function ()
           }
           break;
         case 'nearby':
-          console.log('didDisactivateTopic ran for case "nearby"')
+          console.log('didDeactivateTopic ran for case "nearby"')
           _nearbyActivityLayerGroup.clearLayers();
         //default:
         //  console.log('unhandled topic:', topic);

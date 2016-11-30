@@ -423,7 +423,7 @@ var app = (function ()
       if ($targetTopic.is(':visible')){
         $targetTopic.slideUp(350);
         app.map.didChangeTopic(targetTopicName, null);
-        // app.map.didDisactivateTopic(targetTopicName);
+        // app.map.didDeactivateTopic(targetTopicName);
 
         // remove topic from url
         var hashNoTopic = location.hash.split('/').slice(0, 2).join('/');
