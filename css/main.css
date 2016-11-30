@@ -136,33 +136,26 @@ header.site-header > .row:last-of-type {
      margin-bottom: 20px;
 }
 
-#zoning-badge {
+.topic-badge {
     width: 300px;
     padding: 0;
     margin: 0 auto;
     margin-bottom: 10px;
 }
 
-#zoning-badge > h4 {
+.topic-badge > h4 {
     background: #58c04d;
     color: #eee;
-    text-align: center;
     margin: 0;
-
+    text-align: center;
 }
 
-#zoning-badge > #zoning-badge-body {
-    /*padding-top: 10px;*/
-    /*padding-bottom: 10px;*/
+.topic-badge-body {
     padding: 10px;
 }
 
-#zoning-badge > #zoning-badge-body > #zoning-code {
-    /*display: inline-block;*/
+.topic-badge-body > h1 {
     margin: 0;
-    /*margin-top: 7px;*/
-    /*margin-bottom: 7px;*/
-    /*margin-bottom: 5px;*/
     margin-bottom: 5px;
 }
 

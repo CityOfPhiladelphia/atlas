@@ -346,13 +346,13 @@
                         <a id="topic-link-zoning" class="topic-link" href="/#/zoning/"><span class="topic-link-icon flaticon-industrial-zone"></span>Zoning</a>
                         <div id="topic-zoning" class="topic">
                             <!--OPTION 1: Zoning Badge-->
-                            <div id="zoning-badge" class="panel center">
-                                <h4 id="zoning-badge-header" class="alternate">Base District</h4>
-                                <div id="zoning-badge-body">
+                            <div class="topic-badge panel center">
+                                <h4 class="alternate">Base District</h4>
+                                <div class="topic-badge-body">
                                     <h1 id="zoning-code"></h1>
                                     <strong><span id="zoning-description"><span></strong>
                                 </div>
-                                <!--<div id="zoning-badge-footer"></div>-->
+                                <!--<div class="topic-badge-footer"></div>-->
                             </div>
 
                             <!--OPTION 2: A Regular Table-->
@@ -382,9 +382,6 @@
                                     <tr>
                                         <th scope="col">Name</th>
                                         <th scope="col">Code Section</th>
-                                        <!--<th scope="col">Sunset Date</th>-->
-                                        <!--<th scope="col">Pending</th>-->
-                                        <!--<th scope="col">Pending Bill</th>-->
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -422,7 +419,73 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
+                        </div>
 
+                        <a id="topic-link-water" class="topic-link" href="/#/water/"><span class="topic-link-icon flaticon-drop"></span>Water</a>
+                        <div id="topic-water" class="topic">
+                            <div class="topic-content">
+                                <div class="topic-badge panel center">
+                                    <h4 class="alternate">Impervious Area</h4>
+                                    <div class="topic-badge-body">
+                                        <h1><span id="water-impervious-area"></span> sq ft</h1>
+                                            <span id="water-impervious-badge-description"
+                                                  aria-haspopup="true"
+                                                  class="has-tip"
+                                                  title="This is the total surface area of the property covered by materials such as asphalt or concrete,
+                                                         which do not allow water to drain into the ground. This number is used to calculate your stormwater bill."
+                                            >
+                                              What does this mean?
+                                            </span>
+                                    </div>
+                                </div>
+
+
+                                <h4>Parcel</h4>
+                                <table>
+                                    <tr>
+                                        <th>Parcel ID</th>
+                                        <td id="water-parcel-id"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Address</th>
+                                        <td id="water-parcel-address"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Building Type</th>
+                                        <td id="water-parcel-building-type"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Gross Area</th>
+                                        <td id="water-parcel-gross-area"></td>
+                                    </tr>
+                                    <!-- <tr>
+                                        <th>Impervious Area</th>
+                                        <td id="water-parcel-impervious-area"></td>
+                                    </tr> -->
+                                    <tr>
+                                        <th>CAP Eligble</th>
+                                        <td id="water-parcel-cap-eligible"></td>
+                                    </tr>
+                                </table>
+
+                                <h4>Accounts <span id="water-accounts-count"></span></h4>
+                                <table id="water-accounts">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Account #</th>
+                                            <th scope="col">Customer</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Service Type</th>
+                                            <th scope="col">Meter Size</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                            <div class="topic-content-not-found">
+                                No water accounts were found at this address.
+                            </div>
                         </div>
 
                         <!--<a class="topic-link" href="/#/trash/"><span class="topic-link-icon flaticon-garbage"></span>Trash + Recycling</a>-->

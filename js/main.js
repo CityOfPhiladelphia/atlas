@@ -520,8 +520,10 @@ var app = (function ()
       // doing this in route now
       // $('#topic-list').show();
 
-      var aisProps = app.state.ais.features[0].properties,
-          aisAddress = aisProps.street_address;
+      var aisFeature = app.state.ais.features[0],
+          aisProps = aisFeature.properties,
+          aisAddress = aisProps.street_address,
+          aisGeom = aisFeature.geometry;
 
       // opa
       var opaAccountNum = aisProps.opa_account_num;
@@ -612,8 +614,6 @@ var app = (function ()
       /*
       ZONING
       */
-      var aisGeom = app.state.ais.features[0].geometry;
-
       var zoningBaseQuery = L.esri.query({url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/6/'});
       zoningBaseQuery.contains(aisGeom);
       zoningBaseQuery.run(app.didGetZoningBaseResult);
@@ -679,6 +679,23 @@ var app = (function ()
       // });
 
       app.getNearbyActivity();
+
+      // water
+      // this needs cors headers. using a cached sample for now.
+      var waterUrl = '//api.phila.gov/stormwater/v1/';
+      $.ajax({
+        url: waterUrl,
+        data: {
+          search: aisAddress,
+        },
+        success: function (data) {
+          app.state.water = JSON.parse(data);
+          app.didGetWater();
+        },
+        error: function (err) {
+          console.log('water error', err);
+        },
+      });
 
       // show topics
       $('#topic-list').show();
@@ -1311,6 +1328,30 @@ var app = (function ()
           app.map.didMouseOffNearbyActivityRow(id);
         }
       );
+    },
+
+    didGetWater: function () {
+      // the stormwater api seems to return a list of opa matches
+      // however, there seems to (generally) be just one item
+      var data = app.state.water,  // this is actually a list of matches
+          item = data[0],
+          parcel = item.Parcel,
+          accounts = item.Accounts;
+
+      // parcel-level stuff
+      $('#water-impervious-area').text(parcel.ImpervArea);
+      $('#water-parcel-id').text(parcel.ParcelID);
+      $('#water-parcel-address').text(parcel.Address);
+      $('#water-parcel-building-type').text(parcel.BldgType);
+      // $('#water-parcel-impervious-area').text(parcel.ImpervArea + ' sq ft');
+      $('#water-parcel-gross-area').text(parcel.GrossArea + ' sq ft');
+      $('#water-parcel-cap-eligible').text(parcel.CAPEligible ? 'Yes' : 'No');
+
+      // populate accounts
+      $('#water-accounts-count').text(' (' + accounts.length + ')');
+      var FIELDS = ['AccountNumber', 'CustomerName', 'AcctStatus', 'ServiceTypeLabel', 'MeterSize'],
+          rowsHtml = app.util.makeTableRowsFromJson(accounts, FIELDS);
+      $('#water-accounts > tbody').html(rowsHtml);
     },
   };
 })();
