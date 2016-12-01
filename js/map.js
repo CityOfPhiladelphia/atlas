@@ -39,11 +39,13 @@ app.map = (function ()
         iconAnchor: [12, 41],
       }),
 			blueSvgIcon = L.divIcon.svgIcon({
+					className: 'svg-icon-noClick',
 					circleRatio: 0,
 					fillOpacity: .5,
 					iconSize: L.point(22,40),
 			}),
 			redSvgIcon = L.divIcon.svgIcon({
+					className: 'svg-icon-noClick',
 					color: 'rgb(255,30,100)',
 					circleRatio: 0,
 					fillColor: 'rgb(255,102,0)',
@@ -818,6 +820,7 @@ app.map = (function ()
 					app.map.addOpacitySlider(app.state.map.mapServices.ZoningMap);
           break;
         case 'nearby':
+					console.log('running addNearbyActivity from map.js')
           app.map.addNearbyActivity();
 					break;
 				case 'water':
@@ -864,8 +867,6 @@ app.map = (function ()
     // },
 
 		removeNearbyActivity: function () {
-			// console.log('remove nearby activity');
-
 			_nearbyActivityLayerGroup.clearLayers();
     },
 
@@ -889,6 +890,7 @@ app.map = (function ()
 			// if no rows were passed in, get them from state
 			if (!rows) {
 					app.state.map.nearbyActivity = app.state.map.nearbyActivity || {};
+					app.state.map.nearbyActivity.data = app.state.nearby.rowsSorted || {};
 					rows = app.state.map.nearbyActivity.data;
 			} else {
 				app.state.map.nearbyActivity.data = rows;

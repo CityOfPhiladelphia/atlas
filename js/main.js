@@ -1291,6 +1291,7 @@ var app = (function ()
           fields = Object.values(fieldMap).concat(['distance']),
           tbodyHtml = app.util.makeTableRowsFromJson(rowsSorted, fields),
           $tbody = $('#nearby-activity > tbody');
+      app.state.nearby.rowsSorted = rowsSorted
 
       // populate table
       $tbody.html(tbodyHtml);
