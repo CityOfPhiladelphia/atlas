@@ -326,7 +326,7 @@ var app = (function ()
     // fires ais search
     searchForAddress: function (address) {
       var url = app.config.ais.url + encodeURIComponent(address);
-      if (HOST == '192.168.105.195'){
+      if (HOST == 'atlas.phila.gov'){
         var params = {
           gatekeeperKey: app.config.ais.gatekeeperKey,
           // include_units: '',
