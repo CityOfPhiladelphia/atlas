@@ -337,7 +337,6 @@ var app = (function ()
           // include_units: '',
         };
       }
-      console.log(params);
       $.ajax({
         url: url,
         data: params,
