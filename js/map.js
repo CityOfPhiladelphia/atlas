@@ -53,7 +53,6 @@ app.map = (function ()
 					iconSize: L.point(32,50),
 			}),
 
-
       _baseLayerGroup = new L.LayerGroup(),
       _labelLayerGroup = new L.LayerGroup(),
       _overlayLayerGroup = new L.LayerGroup(),
@@ -71,6 +70,9 @@ app.map = (function ()
       _stViewCameraMarker
   return {
     //theObject: queryParcel,
+		smallMarker: L.point(22,40),
+		largeMarker: L.point(32,50),
+
     initMap : function () {
       app.state.map = {};
       app.state.map.clickedOnMap = false;
@@ -902,13 +904,50 @@ app.map = (function ()
 			_.forEach(rows, function (row) {
 				var lon = row.shape.coordinates[0],
 						lat = row.shape.coordinates[1],
-						newMarker = new L.Marker([lat, lon], {
-							icon: blueSvgIcon,
+						newMarker = new L.Marker.SVGMarker([lat, lon], {
+							"iconOptions": {
+								className: 'svg-icon-noClick',
+								circleRatio: 0,
+								color: 'rgb(0,102,255)',
+								fillColor: 'rgb(0,102,255)',
+								fillOpacity: 0.5,
+								iconSize: app.map.smallMarker,
+							},
 							title: 'TODO',
 							// custom attr to link with data rows
 							rowId: row.id,
 						}).on('click', 	function(){
 							console.log('clicked a marker');
+						}).on('mouseover', function(){
+
+							// this part is for scrolling to the row
+							check(row.id);
+							//var tp = $('#topic-panel');
+							//var theRow = $('[data-id ='+row.id+']')
+							//theRow.get(0).scrollIntoView();							
+							/*if (theRow.length){
+								//tp.scrollTop(theRow.offset().top - (tp.height()/2));
+								tp.scrollTop(theRow.offset().top - theRow.offset().top/5);
+							}*/
+							newMarker.setStyle({
+								"iconOptions": {
+									color: 'rgb(255,30,100)',
+									fillColor: 'rgb(255,102,0)',
+									iconSize: app.map.largeMarker,
+									iconAnchor: [app.map.largeMarker.x/2, app.map.largeMarker.y],
+				        }
+							})
+							$('[data-id ='+row.id+']').css('background', '#ffff00');
+						}).on('mouseout', function(){
+							newMarker.setStyle({
+								"iconOptions": {
+									color: 'rgb(0,102,255)',
+									fillColor: 'rgb(0,102,255)',
+									iconSize: app.map.smallMarker,
+									iconAnchor: [app.map.smallMarker.x/2, app.map.smallMarker.y],
+				        }
+							})
+							$('[data-id ='+row.id+']').css('background', '');
 						});
 				_nearbyActivityLayerGroup.addLayer(newMarker);
 				// this might have been useless
@@ -943,20 +982,16 @@ app.map = (function ()
 				if (id == layerRowId) {
 					console.log('found blue marker to remove');
 					markerlatlng = layer._latlng
-					// remove marker
-					layer.remove();
+					layer.setStyle({
+						"iconOptions": {
+							color: 'rgb(255,30,100)',
+							fillColor: 'rgb(255,102,0)',
+							iconSize: app.map.largeMarker,
+							iconAnchor: [app.map.largeMarker.x/2, app.map.largeMarker.y],
+		        }
+					});
 				}
 			}) // end of loop
-			var newMarker = new L.Marker(markerlatlng, {
-				icon: redSvgIcon,
-				title: 'TODO',
-				// custom attr to link with data rows
-				rowId: id,
-			}).on('click', 	function(){
-				console.log('clicked a marker');
-			});
-			_nearbyActivityLayerGroup.addLayer(newMarker);
-			console.log('adding red marker');
 		},
 
 		didMouseOffNearbyActivityRow: function (id) {
@@ -969,20 +1004,16 @@ app.map = (function ()
 				if (id == layerRowId) {
 					console.log('found red marker to remove');
 					markerlatlng = layer._latlng
-					// remove marker
-					layer.remove();
+					layer.setStyle({
+						"iconOptions": {
+							color: 'rgb(0,102,255)',
+							fillColor: 'rgb(0,102,255)',
+							iconSize: app.map.smallMarker,
+							iconAnchor: [app.map.smallMarker.x/2, app.map.smallMarker.y],
+						}
+					});
 				}
       }) // end of loop
-			var newMarker = new L.Marker(markerlatlng, {
-				icon: blueSvgIcon,
-				title: 'TODO',
-				// custom attr to link with data rows
-				rowId: id,
-			}).on('click', 	function(){
-				console.log('clicked a marker');
-			});
-			_nearbyActivityLayerGroup.addLayer(newMarker);
-			console.log('adding blue marker');
 		},
 
     // didMoveOffNearbyAppeal: function (id) {
