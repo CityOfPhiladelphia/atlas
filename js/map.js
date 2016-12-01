@@ -38,6 +38,19 @@ app.map = (function ()
         iconSize: [25, 41],
         iconAnchor: [12, 41],
       }),
+			blueSvgIcon = L.divIcon.svgIcon({
+					circleRatio: 0,
+					fillOpacity: .5,
+					iconSize: L.point(22,40),
+			}),
+			redSvgIcon = L.divIcon.svgIcon({
+					color: 'rgb(255,30,100)',
+					circleRatio: 0,
+					fillColor: 'rgb(255,102,0)',
+					fillOpacity: .5,
+					iconSize: L.point(32,50),
+			}),
+
 
       _baseLayerGroup = new L.LayerGroup(),
       _labelLayerGroup = new L.LayerGroup(),
@@ -67,6 +80,7 @@ app.map = (function ()
       // the next 2 objects hold the actual layers
       app.state.map.tileLayers = {};
       app.state.map.mapServices = {};
+			app.state.map.shouldPan = true;
 
       //app.state.map.appealsLayerGroup = new L.LayerGroup();
 
@@ -77,6 +91,7 @@ app.map = (function ()
          zoomControl: false,
          // measureControl: true,
       });
+			// add routing fix
       _map.setView(CITY_HALL, 17);
 
       // make measure control
@@ -871,8 +886,6 @@ app.map = (function ()
     // },
 
 		addNearbyActivity: function (rows) {
-			// console.log('add nearby activity');
-
 			// if no rows were passed in, get them from state
 			if (!rows) {
 					app.state.map.nearbyActivity = app.state.map.nearbyActivity || {};
@@ -887,13 +900,13 @@ app.map = (function ()
 			_.forEach(rows, function (row) {
 				var lon = row.shape.coordinates[0],
 						lat = row.shape.coordinates[1],
-						newMarker = L.marker([lat, lon], {
-							// title: 'Zoning Appeal ' + row.appealkey
+						newMarker = new L.Marker([lat, lon], {
+							icon: blueSvgIcon,
 							title: 'TODO',
-							icon: blueMarker,
 							// custom attr to link with data rows
 							rowId: row.id,
-							// type: 'nearby-activity-marker',
+						}).on('click', 	function(){
+							console.log('clicked a marker');
 						});
 				_nearbyActivityLayerGroup.addLayer(newMarker);
 				// this might have been useless
@@ -919,31 +932,55 @@ app.map = (function ()
 		// },
 
 		didMouseOverNearbyActivityRow: function (id) {
-			// console.log('did mouse over nearby activity row')
-			_map.eachLayer(function (layer) {
+			var markerlatlng
+			_nearbyActivityLayerGroup.eachLayer(function (layer) {
 				// make sure it's a nearby marker
 				var layerRowId = layer.options.rowId;
-				if (!layerRowId) return;
+				if (!layerRowId) console.log('layerRowId not found');
 
-				// set red icon
 				if (id == layerRowId) {
-					layer.setIcon(bigRedMarker);
+					console.log('found blue marker to remove');
+					markerlatlng = layer._latlng
+					// remove marker
+					layer.remove();
 				}
-			})
+			}) // end of loop
+			var newMarker = new L.Marker(markerlatlng, {
+				icon: redSvgIcon,
+				title: 'TODO',
+				// custom attr to link with data rows
+				rowId: id,
+			}).on('click', 	function(){
+				console.log('clicked a marker');
+			});
+			_nearbyActivityLayerGroup.addLayer(newMarker);
+			console.log('adding red marker');
 		},
 
 		didMouseOffNearbyActivityRow: function (id) {
-			// console.log('did mouse off nearby activity row')
-			_map.eachLayer(function (layer) {
+			var markerlatlng;
+			_nearbyActivityLayerGroup.eachLayer(function (layer) {
 				// make sure it's a nearby marker
 				var layerRowId = layer.options.rowId;
-				if (!layerRowId) return;
+				if (!layerRowId) console.log('layerRowId not found');
 
-				// set blue icon
 				if (id == layerRowId) {
-					layer.setIcon(blueMarker);
+					console.log('found red marker to remove');
+					markerlatlng = layer._latlng
+					// remove marker
+					layer.remove();
 				}
-      })
+      }) // end of loop
+			var newMarker = new L.Marker(markerlatlng, {
+				icon: blueSvgIcon,
+				title: 'TODO',
+				// custom attr to link with data rows
+				rowId: id,
+			}).on('click', 	function(){
+				console.log('clicked a marker');
+			});
+			_nearbyActivityLayerGroup.addLayer(newMarker);
+			console.log('adding blue marker');
 		},
 
     // didMoveOffNearbyAppeal: function (id) {
