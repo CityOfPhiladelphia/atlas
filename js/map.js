@@ -202,6 +202,14 @@ app.map = (function ()
         zIndex: 13,
       });
 
+			app.state.map.mapServices.Water = L.esri.dynamicMapLayer({
+				url: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer',
+				maxZoom: 22,
+				name: 'water',
+				type: 'overlay',
+				zIndex: 14,
+			})
+
 
 
 
@@ -795,8 +803,12 @@ app.map = (function ()
 					app.map.addOpacitySlider(app.state.map.mapServices.ZoningMap);
           break;
         case 'nearby':
-          console.log('didActivateTopic for case "nearby"')
           app.map.addNearbyActivity();
+					break;
+				case 'water':
+					_overlayLayerGroup.addLayer(app.state.map.mapServices.Water);
+					app.map.domLayerList();
+					app.map.addOpacitySlider(app.state.map.mapServices.Water);
         default:
           // console.log('unhandled topic:', topic);
       }
@@ -811,7 +823,6 @@ app.map = (function ()
           // code here
           break;
         case 'zoning':
-          console.log('didDeactivateTopic ran for case "zoning"')
           if (app.state.map.namesOverLayers.includes('zoningMap')){
             _overlayLayerGroup.clearLayers();
             app.map.domLayerList();
@@ -821,6 +832,13 @@ app.map = (function ()
         case 'nearby':
           console.log('didDeactivateTopic ran for case "nearby"')
           _nearbyActivityLayerGroup.clearLayers();
+					break;
+				case 'water':
+				if (app.state.map.namesOverLayers.includes('water')){
+					_overlayLayerGroup.clearLayers();
+					app.map.domLayerList();
+					app.map.removeOpacitySlider();
+				}
         //default:
         //  console.log('unhandled topic:', topic);
       }
