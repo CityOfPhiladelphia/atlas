@@ -472,6 +472,10 @@ var app = (function ()
       var line2 = 'PHILADELPHIA, PA ' + props.zip_code;
       if (props.zip_4) line2 += '-' + props.zip_4;
 
+      // the full mailing address is useful for other things (like elections),
+      // so keep it in state
+      app.state.ais.mailingAddress = streetAddress + ', ' + line2;
+
       // hide greeting if it's there
       var $topicPanelHeaderGreeting = $('#topic-panel-header-greeting');
       if ($topicPanelHeaderGreeting.is(':visible')) {
@@ -693,9 +697,10 @@ var app = (function ()
 
       app.getNearbyActivity();
 
-      // water
-      // this needs cors headers. using a cached sample for now.
-      var waterUrl = '//api.phila.gov/stormwater/v1/';
+      /*
+      WATER
+      */
+      var waterUrl = '//api.phila.gov/stormwater';
       $.ajax({
         url: waterUrl,
         data: {
@@ -707,6 +712,49 @@ var app = (function ()
         },
         error: function (err) {
           console.log('water error', err);
+        },
+      });
+
+      /*
+      ELECTIONS
+      */
+      var electionsUrl = '//api.phila.gov/elections',
+          electionsWard = aisProps.political_ward,
+          // TODO divisions in AIS are prefixed with the ward num; slice it out
+          // apparently this is called the `division_id` in the elections API
+          electionsDivision = aisProps.political_division.substring(2);
+
+      $.ajax({
+        url: electionsUrl,
+        data: {
+          option: 'com_pollingplaces',
+          view: 'json',
+          ward: electionsWard,
+          division: electionsDivision,
+        },
+        success: function (jsonString) {
+          // no json headers set on this
+          var data = JSON.parse(jsonString);
+
+          if (!data.features || data.features.length < 1) {
+            // does this work?
+            console.log('elections no features, trying to call error callback');
+            this.error();
+          }
+
+          console.log('elections', data);
+          app.state.elections = data;
+          app.didGetElections();
+
+          $('#topic-election .topic-content').show();
+          $('#topic-election .topic-content-not-found').hide();
+        },
+        error: function (err) {
+          console.log('elections error', err);
+          app.state.elections = null;
+
+          $('#topic-election .topic-content').hide();
+          $('#topic-election .topic-content-not-found').show();
         },
       });
 
@@ -1372,6 +1420,28 @@ var app = (function ()
       var FIELDS = ['AccountNumber', 'CustomerName', 'AcctStatus', 'ServiceTypeLabel', meterSizeGetter, 'StormwaterStatus'],
           rowsHtml = app.util.makeTableRowsFromJson(accounts, FIELDS);
       $('#water-accounts > tbody').html(rowsHtml);
+    },
+
+    didGetElections: function () {
+      var data = app.state.elections,
+          attrs = data.features[0].attributes,
+          name = attrs.location,
+          address = attrs.display_address + ', ' + attrs.zip_code,
+          accessibility = attrs.building,  // TODO decode
+          parking = attrs.parking,
+          ward = attrs.ward,
+          division = attrs.division;
+
+      $('#elections-location-name strong').text(name);
+      $('#elections-location-address').text(address);
+      $('#elections-location-accessibility').text(accessibility);
+      $('#elections-location-parking').text(parking);
+      $('#elections-ward').text(ward);
+      $('#elections-division').text(division);
+
+      var aisAddress = app.state.ais.mailingAddress,
+          seeMoreUrl = 'http://www.philadelphiavotes.com/index.php?option=com_voterapp&tmpl=component&address=' + encodeURIComponent(aisAddress);
+      $('#elections-link').attr({href: seeMoreUrl});
     },
   };
 })();
