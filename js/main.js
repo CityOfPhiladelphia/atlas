@@ -41,6 +41,7 @@ var app = (function ()
       ais: {
         url: '//api.phila.gov/ais/v1/addresses/',
         gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
+        betsyKey: '35ae5b7bf8f0ff2613134935ce6b4c1e',
       },
       // l&i config, denormalized by section for convenience
       li: {
@@ -137,6 +138,8 @@ var app = (function ()
 
       //parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0',
       parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
+
+      divisionLayerUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22',
 
       pictometry: {
         url: constructLocalUrl(HOST, '/pictometry'),
@@ -324,11 +327,18 @@ var app = (function ()
 
     // fires ais search
     searchForAddress: function (address) {
-      var url = app.config.ais.url + encodeURIComponent(address),
-          params = {
-            gatekeeperKey: app.config.ais.gatekeeperKey,
-            // include_units: '',
-          };
+      var url = app.config.ais.url + encodeURIComponent(address);
+      if (HOST == 'atlas.phila.gov'){
+        var params = {
+          gatekeeperKey: app.config.ais.gatekeeperKey,
+          // include_units: '',
+        };
+      } else {
+        var params = {
+          gatekeeperKey: app.config.ais.betsyKey,
+          // include_units: '',
+        };
+      }
       $.ajax({
         url: url,
         data: params,
@@ -404,7 +414,7 @@ var app = (function ()
 
       // only activate if it's not already active
       if ($targetTopic.is($activeTopic)) {
-        console.log('activate topic, but its already active');
+        //console.log('activate topic, but its already active');
         return;
       }
 
@@ -463,6 +473,10 @@ var app = (function ()
       // if (props.zip_4) mailingAddress += '-' + props.zip_4;
       var line2 = 'PHILADELPHIA, PA ' + props.zip_code;
       if (props.zip_4) line2 += '-' + props.zip_4;
+
+      // the full mailing address is useful for other things (like elections),
+      // so keep it in state
+      app.state.ais.mailingAddress = streetAddress + ', ' + line2;
 
       // hide greeting if it's there
       var $topicPanelHeaderGreeting = $('#topic-panel-header-greeting');
@@ -685,9 +699,10 @@ var app = (function ()
 
       app.getNearbyActivity();
 
-      // water
-      // this needs cors headers. using a cached sample for now.
-      var waterUrl = '//api.phila.gov/stormwater/v1/';
+      /*
+      WATER
+      */
+      var waterUrl = '//api.phila.gov/stormwater';
       $.ajax({
         url: waterUrl,
         data: {
@@ -699,6 +714,49 @@ var app = (function ()
         },
         error: function (err) {
           console.log('water error', err);
+        },
+      });
+
+      /*
+      ELECTIONS
+      */
+      var electionsUrl = '//api.phila.gov/elections',
+          electionsWard = aisProps.political_ward,
+          // TODO divisions in AIS are prefixed with the ward num; slice it out
+          // apparently this is called the `division_id` in the elections API
+          electionsDivision = aisProps.political_division.substring(2);
+
+      $.ajax({
+        url: electionsUrl,
+        data: {
+          option: 'com_pollingplaces',
+          view: 'json',
+          ward: electionsWard,
+          division: electionsDivision,
+        },
+        success: function (jsonString) {
+          // no json headers set on this
+          var data = JSON.parse(jsonString);
+
+          if (!data.features || data.features.length < 1) {
+            // does this work?
+            console.log('elections no features, trying to call error callback');
+            this.error();
+          }
+
+          //console.log('elections', data);
+          app.state.elections = data;
+          app.didGetElections();
+
+          $('#topic-election .topic-content').show();
+          $('#topic-election .topic-content-not-found').hide();
+        },
+        error: function (err) {
+          console.log('elections error', err);
+          app.state.elections = null;
+
+          $('#topic-election .topic-content').hide();
+          $('#topic-election .topic-content-not-found').show();
         },
       });
 
@@ -1283,6 +1341,7 @@ var app = (function ()
           fields = Object.values(fieldMap).concat(['distance']),
           tbodyHtml = app.util.makeTableRowsFromJson(rowsSorted, fields),
           $tbody = $('#nearby-activity > tbody');
+      app.state.nearby.rowsSorted = rowsSorted
 
       // populate table
       $tbody.html(tbodyHtml);
@@ -1368,6 +1427,32 @@ var app = (function ()
       // update see more link
       var stormwaterUrl = '//www.phila.gov/water/swmap/Parcel.aspx?parcel_id=' + parcelId;
       $('#water-link').attr({href: stormwaterUrl});
+    },
+
+    didGetElections: function () {
+      console.log('did get elections');
+
+      var data = app.state.elections,
+          attrs = data.features[0].attributes,
+          name = attrs.location,
+          address = attrs.display_address + ', ' + attrs.zip_code,
+          accessibility = attrs.building,  // TODO decode
+          parking = attrs.parking,
+          ward = attrs.ward,
+          division = attrs.division;
+
+      $('#elections-location-name strong').text(name);
+      $('#elections-location-address').text(address);
+      $('#elections-location-accessibility').text(accessibility);
+      $('#elections-location-parking').text(parking);
+      $('#elections-ward').text(ward);
+      $('#elections-division').text(division);
+
+      var aisAddress = app.state.ais.mailingAddress,
+          seeMoreUrl = 'http://www.philadelphiavotes.com/index.php?option=com_voterapp&tmpl=component&address=' + encodeURIComponent(aisAddress);
+      $('#elections-link').attr({href: seeMoreUrl});
+
+      if (app.state.activeTopic == 'elections') app.map.addElectionInfo();
     },
   };
 })();

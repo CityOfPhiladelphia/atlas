@@ -38,16 +38,31 @@ app.map = (function ()
         iconSize: [25, 41],
         iconAnchor: [12, 41],
       }),
+			blueSvgIcon = L.divIcon.svgIcon({
+					className: 'svg-icon-noClick',
+					circleRatio: 0,
+					fillOpacity: .5,
+					iconSize: L.point(22,40),
+			}),
+			redSvgIcon = L.divIcon.svgIcon({
+					className: 'svg-icon-noClick',
+					color: 'rgb(255,30,100)',
+					circleRatio: 0,
+					fillColor: 'rgb(255,102,0)',
+					fillOpacity: .5,
+					iconSize: L.point(32,50),
+			}),
 
       _baseLayerGroup = new L.LayerGroup(),
       _labelLayerGroup = new L.LayerGroup(),
       _overlayLayerGroup = new L.LayerGroup(),
 
-      _nearbyActivityLayerGroup = new L.LayerGroup(),
+      _nearbyActivityLayerGroup = new L.FeatureGroup(),
       // create an empty layer group for the parcel query layer
       _parcelLayerGroup = new L.LayerGroup(),
+			_electionFeatureGroup = new L.FeatureGroup(),
       _cycloFeatureGroup = new L.FeatureGroup().on('click', function(){
-        console.log('clicked a member of the group');
+        //console.log('clicked a member of the group');
       }),
 
       // create window level placeholder for _stViewHfovMarker
@@ -56,6 +71,9 @@ app.map = (function ()
       _stViewCameraMarker
   return {
     //theObject: queryParcel,
+		smallMarker: L.point(22,40),
+		largeMarker: L.point(32,50),
+
     initMap : function () {
       app.state.map = {};
       app.state.map.clickedOnMap = false;
@@ -67,6 +85,7 @@ app.map = (function ()
       // the next 2 objects hold the actual layers
       app.state.map.tileLayers = {};
       app.state.map.mapServices = {};
+			app.state.map.shouldPan = true;
 
       //app.state.map.appealsLayerGroup = new L.LayerGroup();
 
@@ -77,6 +96,7 @@ app.map = (function ()
          zoomControl: false,
          // measureControl: true,
       });
+			// add routing fix
       _map.setView(CITY_HALL, 17);
 
       // make measure control
@@ -90,7 +110,15 @@ app.map = (function ()
 
       // Basemaps
       app.state.map.tileLayers.baseMapLight = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer",
+        maxZoom: 22,
+        name: 'baseMapLight',
+        type: 'base',
+        zIndex: 1,
+      });
+
+			app.state.map.tileLayers.baseMapDORParcels = L.esri.tiledMapLayer({
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap/MapServer",
         maxZoom: 22,
         name: 'baseMapLight',
         type: 'base',
@@ -98,7 +126,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2016 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2016',
         type: 'base',
@@ -106,7 +134,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2015 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2015',
         type: 'base',
@@ -114,7 +142,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2012 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2012_3in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2012_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2012',
         type: 'base',
@@ -122,7 +150,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2010 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2010_3in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2010_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2010',
         type: 'base',
@@ -130,7 +158,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2008 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2008_3in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2008_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2008',
         type: 'base',
@@ -138,7 +166,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2004 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2004_6in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2004_6in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2004',
         type: 'base',
@@ -146,7 +174,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery1996 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_1996_6in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_1996_6in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery1996',
         type: 'base',
@@ -171,6 +199,14 @@ app.map = (function ()
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer',
         maxZoom: 22,
         name: 'overlayBaseLabels',
+        type: 'labels',
+        zIndex: 100,
+      });
+
+			app.state.map.tileLayers.overlayBaseDORLabels = L.esri.tiledMapLayer({
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap_Labels/MapServer',
+        maxZoom: 22,
+        name: 'overlayBaseLabelsDOR',
         type: 'labels',
         zIndex: 100,
       });
@@ -202,6 +238,22 @@ app.map = (function ()
         zIndex: 13,
       });
 
+			app.state.map.mapServices.Water = L.esri.dynamicMapLayer({
+				url: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer',
+				maxZoom: 22,
+				name: 'water',
+				type: 'overlay',
+				zIndex: 14,
+			});
+
+			app.state.map.mapServices.PoliticalDivisions = L.esri.dynamicMapLayer({
+				url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22',
+				maxZoom: 22,
+				name: 'politicalDivisions',
+				type: 'overlay',
+				zIndex: 15,
+			});
+
 
 
 
@@ -211,10 +263,11 @@ app.map = (function ()
       _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayBaseLabels);
       _labelLayerGroup.addTo(_map);
 
-      // The next 4 are not used initially
+      // The next are not used initially
       _overlayLayerGroup.addTo(_map);
       _parcelLayerGroup.addTo(_map);
       _nearbyActivityLayerGroup.addTo(_map);
+			_electionFeatureGroup.addTo(_map);
       _cycloFeatureGroup.addTo(_map);
       _stViewMarkersLayerGroup.addTo(_map);
 
@@ -385,9 +438,7 @@ app.map = (function ()
       function toggleBasemap() {
         if (app.state.map.nameBaseLayer == 'baseMapLight') {
           _baseLayerGroup.clearLayers();
-          //app.state.map.tileLayers.overlayBaseLabels.remove();
           _labelLayerGroup.clearLayers();
-          // This has to change, it is loading 2016 every time
           if (app.state.map.lastYearViewed) {
             _baseLayerGroup.addLayer(app.state.map.lastYearViewed);
             _baseLayerGroup.addLayer(app.state.map.tileLayers.Parcels);
@@ -395,17 +446,19 @@ app.map = (function ()
             _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapImagery2016);
             _baseLayerGroup.addLayer(app.state.map.tileLayers.Parcels);
           }
-          //app.state.map.tileLayers.overlayImageryLabels.addTo(_map);
           _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayImageryLabels);
           theEasyBar.addTo(_map);
 
         } else {
           _baseLayerGroup.clearLayers();
-          //app.state.map.tileLayers.overlayImageryLabels.remove();
           _labelLayerGroup.clearLayers();
-          _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapLight);
-          //app.state.map.tileLayers.overlayBaseLabels.addTo(_map);
-          _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayBaseLabels);
+					if(app.state.activeTopic != 'deeds'){
+	          _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapLight);
+	          _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayBaseLabels);
+					} else {
+						app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
+						app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
+					}
           theEasyBar.remove();
         }
         app.map.domLayerList();
@@ -518,6 +571,10 @@ app.map = (function ()
 
     renderAisResult: function (obj) {
       if (app.state.dor) this.drawParcel();
+			// if (app.state.activeTopic == 'elections') {
+			// 	app.map.removeElectionInfo();
+			// 	app.map.addElectionInfo();
+			// }
     },
 
     didClickMap: function (e) {
@@ -587,6 +644,7 @@ app.map = (function ()
           }),
           parcelCentroid = parcelPoly.getBounds().getCenter();
 
+			app.state.parcelPoly = parcelPoly
       app.state.theParcelCentroid = parcelCentroid;
       // clear existing parcel
       _parcelLayerGroup.clearLayers();
@@ -786,7 +844,10 @@ app.map = (function ()
 
       switch (topic) {
         case 'deeds':
-          // code here
+          _baseLayerGroup.clearLayers();
+					_labelLayerGroup.clearLayers();
+					app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
+					app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
           break;
         case 'zoning':
           _overlayLayerGroup.addLayer(app.state.map.mapServices.ZoningMap);
@@ -795,8 +856,16 @@ app.map = (function ()
 					app.map.addOpacitySlider(app.state.map.mapServices.ZoningMap);
           break;
         case 'nearby':
-          console.log('didActivateTopic for case "nearby"')
+					console.log('running addNearbyActivity from map.js')
           app.map.addNearbyActivity();
+					break;
+				case 'water':
+					_overlayLayerGroup.addLayer(app.state.map.mapServices.Water);
+					app.map.domLayerList();
+					app.map.addOpacitySlider(app.state.map.mapServices.Water);
+					break;
+				case 'elections':
+					app.map.addElectionInfo();
         default:
           // console.log('unhandled topic:', topic);
       }
@@ -808,10 +877,12 @@ app.map = (function ()
 
       switch (topic) {
         case 'deeds':
-          // code here
+					_baseLayerGroup.clearLayers();
+					_labelLayerGroup.clearLayers();
+					app.state.map.tileLayers.baseMapLight.addTo(_baseLayerGroup);
+					app.state.map.tileLayers.overlayBaseLabels.addTo(_labelLayerGroup);
           break;
         case 'zoning':
-          console.log('didDeactivateTopic ran for case "zoning"')
           if (app.state.map.namesOverLayers.includes('zoningMap')){
             _overlayLayerGroup.clearLayers();
             app.map.domLayerList();
@@ -821,18 +892,33 @@ app.map = (function ()
         case 'nearby':
           console.log('didDeactivateTopic ran for case "nearby"')
           _nearbyActivityLayerGroup.clearLayers();
+					break;
+				case 'water':
+					if (app.state.map.namesOverLayers.includes('water')){
+						_overlayLayerGroup.clearLayers();
+						app.map.domLayerList();
+						app.map.removeOpacitySlider();
+					}
+					break;
+				case 'elections':
+				_electionFeatureGroup.clearLayers();
+				var boundsPadded = app.state.parcelPoly.getBounds().pad(1.15);
+				_map.fitBounds(boundsPadded);
+				app.map.domLayerList();
+					break;
         //default:
         //  console.log('unhandled topic:', topic);
       }
     },
 
-    // removeNearbyAppeals: function () {
-    //   _nearbyActivityLayerGroup.clearLayers();
-    // },
+		removeElectionInfo: function () {
+			_electionFeatureGroup.clearLayers();
+			var boundsPadded = app.state.parcelPoly.getBounds().pad(1.15);
+			_map.fitBounds(boundsPadded);
+			app.map.domLayerList();
+		},
 
 		removeNearbyActivity: function () {
-			// console.log('remove nearby activity');
-
 			_nearbyActivityLayerGroup.clearLayers();
     },
 
@@ -852,12 +938,60 @@ app.map = (function ()
     //   }
     // },
 
-		addNearbyActivity: function (rows) {
-			// console.log('add nearby activity');
+		addElectionInfo: function() {
+			_electionFeatureGroup.clearLayers();
 
+			console.log('addElectionInfo was called');
+
+			var ward = app.state.elections.features[0].attributes.ward,
+					division = app.state.elections.features[0].attributes.division;
+			$.ajax({
+        url: app.config.divisionLayerUrl + '/query',
+        data: {
+          where: "DIVISION_NUM = '" + ward.concat(division)+"'",
+          outSR: 4326,
+          outFields: '*',
+          f: 'json',
+        },
+        success: function (data) {
+          // AGO returns json with plaintext headers, so parse
+
+          data = JSON.parse(data);
+					app.state.elections.geoCoords = data.features[0].geometry.rings;
+					var coords = app.util.flipCoords(app.state.elections.geoCoords)
+					//app.state.elections.coords = coords;
+					var DivisionPoly = L.polygon(coords, {
+						color: 'red',
+						weight: 2,
+						title: 'Ward ' + ward + ' Division ' + division,
+					});
+					_electionFeatureGroup.addLayer(DivisionPoly);
+					var location = app.state.elections.features[0].attributes.location,
+						lat = app.state.elections.features[0].attributes.lat,
+						lon = app.state.elections.features[0].attributes.lng,
+						newMarker = new L.Marker.SVGMarker([lat, lon], {
+							"iconOptions": {
+								className: 'svg-icon-noClick',
+								circleRatio: 0,
+								color: 'rgb(0,102,255)',
+								fillColor: 'rgb(0,102,255)',
+								fillOpacity: 0.5,
+								iconSize: app.map.smallMarker,
+							},
+							title: location
+						});
+					_electionFeatureGroup.addLayer(newMarker);
+					_map.fitBounds(_electionFeatureGroup.getBounds());
+					app.map.domLayerList();
+				}
+			});
+		},
+
+		addNearbyActivity: function (rows) {
 			// if no rows were passed in, get them from state
 			if (!rows) {
 					app.state.map.nearbyActivity = app.state.map.nearbyActivity || {};
+					app.state.map.nearbyActivity.data = app.state.nearby.rowsSorted || {};
 					rows = app.state.map.nearbyActivity.data;
 			} else {
 				app.state.map.nearbyActivity.data = rows;
@@ -869,19 +1003,55 @@ app.map = (function ()
 			_.forEach(rows, function (row) {
 				var lon = row.shape.coordinates[0],
 						lat = row.shape.coordinates[1],
-						newMarker = L.marker([lat, lon], {
-							// title: 'Zoning Appeal ' + row.appealkey
+						newMarker = new L.Marker.SVGMarker([lat, lon], {
+							"iconOptions": {
+								className: 'svg-icon-noClick',
+								circleRatio: 0,
+								color: 'rgb(0,102,255)',
+								fillColor: 'rgb(0,102,255)',
+								fillOpacity: 0.5,
+								iconSize: app.map.smallMarker,
+							},
 							title: 'TODO',
-							icon: blueMarker,
 							// custom attr to link with data rows
 							rowId: row.id,
-							// type: 'nearby-activity-marker',
+						}).on('click', 	function(){
+							console.log('clicked a marker');
+						}).on('mouseover', function(){
+
+							// this part is for scrolling to the row
+							check(row.id);
+							//var tp = $('#topic-panel');
+							//var theRow = $('[data-id ='+row.id+']')
+							//theRow.get(0).scrollIntoView();
+							/*if (theRow.length){
+								//tp.scrollTop(theRow.offset().top - (tp.height()/2));
+								tp.scrollTop(theRow.offset().top - theRow.offset().top/5);
+							}*/
+							newMarker.setStyle({
+								"iconOptions": {
+									color: 'rgb(255,30,100)',
+									fillColor: 'rgb(255,102,0)',
+									iconSize: app.map.largeMarker,
+									iconAnchor: [app.map.largeMarker.x/2, app.map.largeMarker.y],
+				        }
+							})
+							$('[data-id ='+row.id+']').css('background', '#ffff00');
+						}).on('mouseout', function(){
+							newMarker.setStyle({
+								"iconOptions": {
+									color: 'rgb(0,102,255)',
+									fillColor: 'rgb(0,102,255)',
+									iconSize: app.map.smallMarker,
+									iconAnchor: [app.map.smallMarker.x/2, app.map.smallMarker.y],
+				        }
+							})
+							$('[data-id ='+row.id+']').css('background', '');
 						});
 				_nearbyActivityLayerGroup.addLayer(newMarker);
-				// this might have been useless
-				app.map.domLayerList();
 			});
-
+			_map.fitBounds(_nearbyActivityLayerGroup.getBounds());
+			app.map.domLayerList();
 		},
 
     // didHoverOverNearbyAppeal: function (id) {
@@ -901,31 +1071,47 @@ app.map = (function ()
 		// },
 
 		didMouseOverNearbyActivityRow: function (id) {
-			// console.log('did mouse over nearby activity row')
-			_map.eachLayer(function (layer) {
+			var markerlatlng
+			_nearbyActivityLayerGroup.eachLayer(function (layer) {
 				// make sure it's a nearby marker
 				var layerRowId = layer.options.rowId;
-				if (!layerRowId) return;
+				if (!layerRowId) console.log('layerRowId not found');
 
-				// set red icon
 				if (id == layerRowId) {
-					layer.setIcon(bigRedMarker);
+					console.log('found blue marker to remove');
+					markerlatlng = layer._latlng
+					layer.setStyle({
+						"iconOptions": {
+							color: 'rgb(255,30,100)',
+							fillColor: 'rgb(255,102,0)',
+							iconSize: app.map.largeMarker,
+							iconAnchor: [app.map.largeMarker.x/2, app.map.largeMarker.y],
+		        }
+					});
 				}
-			})
+			}) // end of loop
 		},
 
 		didMouseOffNearbyActivityRow: function (id) {
-			// console.log('did mouse off nearby activity row')
-			_map.eachLayer(function (layer) {
+			var markerlatlng;
+			_nearbyActivityLayerGroup.eachLayer(function (layer) {
 				// make sure it's a nearby marker
 				var layerRowId = layer.options.rowId;
-				if (!layerRowId) return;
+				if (!layerRowId) console.log('layerRowId not found');
 
-				// set blue icon
 				if (id == layerRowId) {
-					layer.setIcon(blueMarker);
+					console.log('found red marker to remove');
+					markerlatlng = layer._latlng
+					layer.setStyle({
+						"iconOptions": {
+							color: 'rgb(0,102,255)',
+							fillColor: 'rgb(0,102,255)',
+							iconSize: app.map.smallMarker,
+							iconAnchor: [app.map.smallMarker.x/2, app.map.smallMarker.y],
+						}
+					});
 				}
-      })
+      }) // end of loop
 		},
 
     // didMoveOffNearbyAppeal: function (id) {

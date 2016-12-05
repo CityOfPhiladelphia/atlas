@@ -11,7 +11,7 @@ L.DivIcon.SVGIcon = L.DivIcon.extend({
         "circleColor": null, //defaults to color
         "circleOpacity": null, // defaults to opacity
         "circleFillColor": "rgb(255,255,255)",
-        "circleFillOpacity": null, //default to opacity 
+        "circleFillOpacity": null, //default to opacity
         "circleRatio": 0.5,
         "circleWeight": null, //defaults to weight
         "color": "rgb(0,102,255)",
@@ -44,11 +44,11 @@ L.DivIcon.SVGIcon = L.DivIcon.extend({
         if (!options.circleWeight) {
             options.circleWeight = options.weight
         }
-        if (!options.fillColor) { 
+        if (!options.fillColor) {
             options.fillColor = options.color
         }
         if (!options.fontSize) {
-            options.fontSize = Number(options.iconSize.x/4) 
+            options.fontSize = Number(options.iconSize.x/4)
         }
         if (!options.iconAnchor) {
             options.iconAnchor = L.point(Number(options.iconSize.x)/2, Number(options.iconSize.y))
@@ -63,7 +63,7 @@ L.DivIcon.SVGIcon = L.DivIcon.extend({
         options.html = this._createSVG()
     },
     _createCircle: function() {
-        var cx = Number(this.options.circleAnchor.x) 
+        var cx = Number(this.options.circleAnchor.x)
         var cy = Number(this.options.circleAnchor.y)
         var radius = this.options.iconSize.x/2 * Number(this.options.circleRatio)
         var fill = this.options.circleFillColor.replace("rgb(", "rgba(").replace(")", "," + this.options.circleFillOpacity + ")")
@@ -118,7 +118,7 @@ L.DivIcon.SVGIcon = L.DivIcon.extend({
         var lineHeight = Number(this.options.fontSize)
 
         var x = Number(this.options.iconSize.x) / 2
-        var y = x + (lineHeight * 0.35) //35% was found experimentally 
+        var y = x + (lineHeight * 0.35) //35% was found experimentally
         var circleText = this.options.circleText
         var textColor = this.options.fontColor.replace("rgb(", "rgba(").replace(")", "," + this.options.fontOpacity + ")")
 
