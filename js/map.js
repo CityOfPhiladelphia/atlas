@@ -60,8 +60,9 @@ app.map = (function ()
       _nearbyActivityLayerGroup = new L.LayerGroup(),
       // create an empty layer group for the parcel query layer
       _parcelLayerGroup = new L.LayerGroup(),
+			_electionFeatureGroup = new L.FeatureGroup(),
       _cycloFeatureGroup = new L.FeatureGroup().on('click', function(){
-        console.log('clicked a member of the group');
+        //console.log('clicked a member of the group');
       }),
 
       // create window level placeholder for _stViewHfovMarker
@@ -245,6 +246,14 @@ app.map = (function ()
 				zIndex: 14,
 			});
 
+			app.state.map.mapServices.PoliticalDivisions = L.esri.dynamicMapLayer({
+				url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22',
+				maxZoom: 22,
+				name: 'politicalDivisions',
+				type: 'overlay',
+				zIndex: 15,
+			});
+
 
 
 
@@ -254,10 +263,11 @@ app.map = (function ()
       _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayBaseLabels);
       _labelLayerGroup.addTo(_map);
 
-      // The next 4 are not used initially
+      // The next are not used initially
       _overlayLayerGroup.addTo(_map);
       _parcelLayerGroup.addTo(_map);
       _nearbyActivityLayerGroup.addTo(_map);
+			_electionFeatureGroup.addTo(_map);
       _cycloFeatureGroup.addTo(_map);
       _stViewMarkersLayerGroup.addTo(_map);
 
@@ -561,6 +571,10 @@ app.map = (function ()
 
     renderAisResult: function (obj) {
       if (app.state.dor) this.drawParcel();
+			// if (app.state.activeTopic == 'elections') {
+			// 	app.map.removeElectionInfo();
+			// 	app.map.addElectionInfo();
+			// }
     },
 
     didClickMap: function (e) {
@@ -630,6 +644,7 @@ app.map = (function ()
           }),
           parcelCentroid = parcelPoly.getBounds().getCenter();
 
+			app.state.parcelPoly = parcelPoly
       app.state.theParcelCentroid = parcelCentroid;
       // clear existing parcel
       _parcelLayerGroup.clearLayers();
@@ -848,6 +863,9 @@ app.map = (function ()
 					_overlayLayerGroup.addLayer(app.state.map.mapServices.Water);
 					app.map.domLayerList();
 					app.map.addOpacitySlider(app.state.map.mapServices.Water);
+					break;
+				case 'elections':
+					app.map.addElectionInfo();
         default:
           // console.log('unhandled topic:', topic);
       }
@@ -876,11 +894,18 @@ app.map = (function ()
           _nearbyActivityLayerGroup.clearLayers();
 					break;
 				case 'water':
-				if (app.state.map.namesOverLayers.includes('water')){
-					_overlayLayerGroup.clearLayers();
-					app.map.domLayerList();
-					app.map.removeOpacitySlider();
-				}
+					if (app.state.map.namesOverLayers.includes('water')){
+						_overlayLayerGroup.clearLayers();
+						app.map.domLayerList();
+						app.map.removeOpacitySlider();
+					}
+					break;
+				case 'elections':
+				_electionFeatureGroup.clearLayers();
+				var boundsPadded = app.state.parcelPoly.getBounds().pad(1.15);
+				_map.fitBounds(boundsPadded);
+				app.map.domLayerList();
+					break;
         //default:
         //  console.log('unhandled topic:', topic);
       }
@@ -889,6 +914,12 @@ app.map = (function ()
     // removeNearbyAppeals: function () {
     //   _nearbyActivityLayerGroup.clearLayers();
     // },
+		removeElectionInfo: function () {
+			_electionFeatureGroup.clearLayers();
+			var boundsPadded = app.state.parcelPoly.getBounds().pad(1.15);
+			_map.fitBounds(boundsPadded);
+			app.map.domLayerList();
+		},
 
 		removeNearbyActivity: function () {
 			_nearbyActivityLayerGroup.clearLayers();
@@ -909,6 +940,56 @@ app.map = (function ()
     //     app.map.domLayerList();
     //   }
     // },
+
+		addElectionInfo: function() {
+			//this.removeElectionInfo();
+			_electionFeatureGroup.clearLayers();
+
+			console.log('addElectionInfo was called');
+
+			var ward = app.state.elections.features[0].attributes.ward,
+					division = app.state.elections.features[0].attributes.division;
+			$.ajax({
+        url: app.config.divisionLayerUrl + '/query',
+        data: {
+          where: "DIVISION_NUM = '" + ward.concat(division)+"'",
+          outSR: 4326,
+          outFields: '*',
+          f: 'json',
+        },
+        success: function (data) {
+          // AGO returns json with plaintext headers, so parse
+
+          data = JSON.parse(data);
+					app.state.elections.geoCoords = data.features[0].geometry.rings;
+					var coords = app.util.flipCoords(app.state.elections.geoCoords)
+					//app.state.elections.coords = coords;
+					var DivisionPoly = L.polygon(coords, {
+						color: 'red',
+						weight: 2,
+						title: 'Ward ' + ward + ' Division ' + division,
+					});
+					_electionFeatureGroup.addLayer(DivisionPoly);
+					var location = app.state.elections.features[0].attributes.location,
+						lat = app.state.elections.features[0].attributes.lat,
+						lon = app.state.elections.features[0].attributes.lng,
+						newMarker = new L.Marker.SVGMarker([lat, lon], {
+							"iconOptions": {
+								className: 'svg-icon-noClick',
+								circleRatio: 0,
+								color: 'rgb(0,102,255)',
+								fillColor: 'rgb(0,102,255)',
+								fillOpacity: 0.5,
+								iconSize: app.map.smallMarker,
+							},
+							title: location
+						});
+					_electionFeatureGroup.addLayer(newMarker);
+					_map.fitBounds(_electionFeatureGroup.getBounds());
+					app.map.domLayerList();
+				}
+			});
+		},
 
 		addNearbyActivity: function (rows) {
 			// if no rows were passed in, get them from state

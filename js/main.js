@@ -139,6 +139,8 @@ var app = (function ()
       //parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0',
       parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
 
+      divisionLayerUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22',
+
       pictometry: {
         url: constructLocalUrl(HOST, '/pictometry'),
       },
@@ -412,7 +414,7 @@ var app = (function ()
 
       // only activate if it's not already active
       if ($targetTopic.is($activeTopic)) {
-        console.log('activate topic, but its already active');
+        //console.log('activate topic, but its already active');
         return;
       }
 
@@ -742,7 +744,7 @@ var app = (function ()
             this.error();
           }
 
-          console.log('elections', data);
+          //console.log('elections', data);
           app.state.elections = data;
           app.didGetElections();
 
@@ -1423,6 +1425,8 @@ var app = (function ()
     },
 
     didGetElections: function () {
+      console.log('did get elections');
+
       var data = app.state.elections,
           attrs = data.features[0].attributes,
           name = attrs.location,
@@ -1442,6 +1446,8 @@ var app = (function ()
       var aisAddress = app.state.ais.mailingAddress,
           seeMoreUrl = 'http://www.philadelphiavotes.com/index.php?option=com_voterapp&tmpl=component&address=' + encodeURIComponent(aisAddress);
       $('#elections-link').attr({href: seeMoreUrl});
+
+      if (app.state.activeTopic == 'elections') app.map.addElectionInfo();
     },
   };
 })();
