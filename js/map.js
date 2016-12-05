@@ -109,7 +109,15 @@ app.map = (function ()
 
       // Basemaps
       app.state.map.tileLayers.baseMapLight = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer",
+        maxZoom: 22,
+        name: 'baseMapLight',
+        type: 'base',
+        zIndex: 1,
+      });
+
+			app.state.map.tileLayers.baseMapDORParcels = L.esri.tiledMapLayer({
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap/MapServer",
         maxZoom: 22,
         name: 'baseMapLight',
         type: 'base',
@@ -117,7 +125,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2016 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2016',
         type: 'base',
@@ -125,7 +133,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2015 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2015',
         type: 'base',
@@ -133,7 +141,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2012 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2012_3in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2012_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2012',
         type: 'base',
@@ -141,7 +149,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2010 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2010_3in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2010_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2010',
         type: 'base',
@@ -149,7 +157,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2008 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2008_3in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2008_3in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2008',
         type: 'base',
@@ -157,7 +165,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2004 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2004_6in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2004_6in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery2004',
         type: 'base',
@@ -165,7 +173,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery1996 = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_1996_6in/MapServer",
+        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_1996_6in/MapServer",
         maxZoom: 22,
         name: 'baseMapImagery1996',
         type: 'base',
@@ -190,6 +198,14 @@ app.map = (function ()
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer',
         maxZoom: 22,
         name: 'overlayBaseLabels',
+        type: 'labels',
+        zIndex: 100,
+      });
+
+			app.state.map.tileLayers.overlayBaseDORLabels = L.esri.tiledMapLayer({
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap_Labels/MapServer',
+        maxZoom: 22,
+        name: 'overlayBaseLabelsDOR',
         type: 'labels',
         zIndex: 100,
       });
@@ -227,7 +243,7 @@ app.map = (function ()
 				name: 'water',
 				type: 'overlay',
 				zIndex: 14,
-			})
+			});
 
 
 
@@ -412,9 +428,7 @@ app.map = (function ()
       function toggleBasemap() {
         if (app.state.map.nameBaseLayer == 'baseMapLight') {
           _baseLayerGroup.clearLayers();
-          //app.state.map.tileLayers.overlayBaseLabels.remove();
           _labelLayerGroup.clearLayers();
-          // This has to change, it is loading 2016 every time
           if (app.state.map.lastYearViewed) {
             _baseLayerGroup.addLayer(app.state.map.lastYearViewed);
             _baseLayerGroup.addLayer(app.state.map.tileLayers.Parcels);
@@ -422,17 +436,19 @@ app.map = (function ()
             _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapImagery2016);
             _baseLayerGroup.addLayer(app.state.map.tileLayers.Parcels);
           }
-          //app.state.map.tileLayers.overlayImageryLabels.addTo(_map);
           _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayImageryLabels);
           theEasyBar.addTo(_map);
 
         } else {
           _baseLayerGroup.clearLayers();
-          //app.state.map.tileLayers.overlayImageryLabels.remove();
           _labelLayerGroup.clearLayers();
-          _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapLight);
-          //app.state.map.tileLayers.overlayBaseLabels.addTo(_map);
-          _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayBaseLabels);
+					if(app.state.activeTopic != 'deeds'){
+	          _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapLight);
+	          _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayBaseLabels);
+					} else {
+						app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
+						app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
+					}
           theEasyBar.remove();
         }
         app.map.domLayerList();
@@ -813,7 +829,10 @@ app.map = (function ()
 
       switch (topic) {
         case 'deeds':
-          // code here
+          _baseLayerGroup.clearLayers();
+					_labelLayerGroup.clearLayers();
+					app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
+					app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
           break;
         case 'zoning':
           _overlayLayerGroup.addLayer(app.state.map.mapServices.ZoningMap);
@@ -840,7 +859,10 @@ app.map = (function ()
 
       switch (topic) {
         case 'deeds':
-          // code here
+					_baseLayerGroup.clearLayers();
+					_labelLayerGroup.clearLayers();
+					app.state.map.tileLayers.baseMapLight.addTo(_baseLayerGroup);
+					app.state.map.tileLayers.overlayBaseLabels.addTo(_labelLayerGroup);
           break;
         case 'zoning':
           if (app.state.map.namesOverLayers.includes('zoningMap')){
@@ -924,7 +946,7 @@ app.map = (function ()
 							check(row.id);
 							//var tp = $('#topic-panel');
 							//var theRow = $('[data-id ='+row.id+']')
-							//theRow.get(0).scrollIntoView();							
+							//theRow.get(0).scrollIntoView();
 							/*if (theRow.length){
 								//tp.scrollTop(theRow.offset().top - (tp.height()/2));
 								tp.scrollTop(theRow.offset().top - theRow.offset().top/5);
