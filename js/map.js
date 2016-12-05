@@ -57,7 +57,7 @@ app.map = (function ()
       _labelLayerGroup = new L.LayerGroup(),
       _overlayLayerGroup = new L.LayerGroup(),
 
-      _nearbyActivityLayerGroup = new L.LayerGroup(),
+      _nearbyActivityLayerGroup = new L.FeatureGroup(),
       // create an empty layer group for the parcel query layer
       _parcelLayerGroup = new L.LayerGroup(),
 			_electionFeatureGroup = new L.FeatureGroup(),
@@ -911,9 +911,6 @@ app.map = (function ()
       }
     },
 
-    // removeNearbyAppeals: function () {
-    //   _nearbyActivityLayerGroup.clearLayers();
-    // },
 		removeElectionInfo: function () {
 			_electionFeatureGroup.clearLayers();
 			var boundsPadded = app.state.parcelPoly.getBounds().pad(1.15);
@@ -942,7 +939,6 @@ app.map = (function ()
     // },
 
 		addElectionInfo: function() {
-			//this.removeElectionInfo();
 			_electionFeatureGroup.clearLayers();
 
 			console.log('addElectionInfo was called');
@@ -1053,10 +1049,9 @@ app.map = (function ()
 							$('[data-id ='+row.id+']').css('background', '');
 						});
 				_nearbyActivityLayerGroup.addLayer(newMarker);
-				// this might have been useless
-				app.map.domLayerList();
 			});
-
+			_map.fitBounds(_nearbyActivityLayerGroup.getBounds());
+			app.map.domLayerList();
 		},
 
     // didHoverOverNearbyAppeal: function (id) {
