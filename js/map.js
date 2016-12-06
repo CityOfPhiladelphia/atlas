@@ -669,8 +669,8 @@ app.map = (function ()
 						"iconOptions": {
 							className: 'svg-icon-noClick',
 							circleRatio: 0,
-							color: 'rgb(255,200,50)',
-							fillColor: 'rgb(255,200,50)',
+							color: 'rgb(255,30,30)',//'rgb(255,200,50)',
+							fillColor: 'rgb(255,60,30)',//'rgb(255,200,50)',
 							fillOpacity: 0.8,
 							iconSize: app.map.largeMarker,
 						},
@@ -968,8 +968,10 @@ app.map = (function ()
 					break;
 				case 'elections':
 				_electionFeatureGroup.clearLayers();
-				var boundsPadded = app.state.parcelPoly.getBounds().pad(1.15);
-				_map.fitBounds(boundsPadded);
+				if (app.state.activeTopic != 'nearby') {
+					var boundsPadded = app.state.parcelPoly.getBounds().pad(1.15);
+					_map.fitBounds(boundsPadded);
+				}
 				app.map.domLayerList();
 				app.map.toggleParcelMarker();
 					break;
@@ -1116,8 +1118,8 @@ app.map = (function ()
 							}*/
 							newMarker.setStyle({
 								"iconOptions": {
-									color: 'rgb(255,30,100)',
-									fillColor: 'rgb(255,102,0)',
+									color: 'rgb(243, 198, 19)',//'rgb(255,30,100)',
+									fillColor: 'rgb(243, 198, 19)',//'rgb(255,102,0)',
 									iconSize: app.map.largeMarker,
 									iconAnchor: [app.map.largeMarker.x/2, app.map.largeMarker.y],
 				        }
@@ -1138,7 +1140,15 @@ app.map = (function ()
 						});
 				_nearbyActivityLayerGroup.addLayer(newMarker);
 			});
-			_map.fitBounds(_nearbyActivityLayerGroup.getBounds());
+			//app.state.map.bounds = _map.getBounds();
+			//app.state.map.activitybounds = _nearbyActivityLayerGroup.getBounds();
+			if (_map.getBounds().contains(_nearbyActivityLayerGroup.getBounds())) {
+				console.log('map bounds contain nearby activity bounds');
+			} else {
+				console.log('map bounds do not contain activity bounds');
+				_map.fitBounds(_nearbyActivityLayerGroup.getBounds());
+				//_map.panInsideBounds(_nearbyActivityLayerGroup.getBounds());
+			}
 			app.map.domLayerList();
 		},
 
@@ -1166,12 +1176,11 @@ app.map = (function ()
 				if (!layerRowId) console.log('layerRowId not found');
 
 				if (id == layerRowId) {
-					console.log('found blue marker to remove');
 					markerlatlng = layer._latlng
 					layer.setStyle({
 						"iconOptions": {
-							color: 'rgb(255,30,100)',
-							fillColor: 'rgb(255,102,0)',
+							color: 'rgb(243, 198, 19)',
+							fillColor: 'rgb(243, 198, 19)',
 							iconSize: app.map.largeMarker,
 							iconAnchor: [app.map.largeMarker.x/2, app.map.largeMarker.y],
 		        }
@@ -1188,7 +1197,6 @@ app.map = (function ()
 				if (!layerRowId) console.log('layerRowId not found');
 
 				if (id == layerRowId) {
-					console.log('found red marker to remove');
 					markerlatlng = layer._latlng
 					layer.setStyle({
 						"iconOptions": {
