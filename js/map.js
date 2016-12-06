@@ -1102,10 +1102,9 @@ app.map = (function ()
 							title: 'TODO',
 							// custom attr to link with data rows
 							rowId: row.id,
-						}).on('click', 	function(){
-							console.log('clicked a marker');
-						}).on('mouseover', function(){
-
+						}).on('click', 	function () {
+							// console.log('clicked a marker');
+						}).on('mouseover', function () {
 							// this part is for scrolling to the row
 							check(row.id);
 							//var tp = $('#topic-panel');
@@ -1122,8 +1121,9 @@ app.map = (function ()
 									iconSize: app.map.largeMarker,
 									iconAnchor: [app.map.largeMarker.x/2, app.map.largeMarker.y],
 				        }
-							})
-							$('[data-id ='+row.id+']').css('background', '#ffff00');
+							});
+							// $('[data-id =' + row.id + ']').css('background', '#F3D661');
+							$('[data-id =' + row.id + ']').trigger('mouseenter');
 						}).on('mouseout', function(){
 							newMarker.setStyle({
 								"iconOptions": {
@@ -1133,7 +1133,8 @@ app.map = (function ()
 									iconAnchor: [app.map.smallMarker.x/2, app.map.smallMarker.y],
 				        }
 							})
-							$('[data-id ='+row.id+']').css('background', '');
+							// $('[data-id ='+row.id+']').css('background', '');
+							$('[data-id =' + row.id + ']').trigger('mouseout');
 						});
 				_nearbyActivityLayerGroup.addLayer(newMarker);
 			});

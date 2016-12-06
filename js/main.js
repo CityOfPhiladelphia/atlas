@@ -1381,7 +1381,8 @@ var app = (function ()
       $tbody.find('tr').hover(
         function () {
           var $this = $(this);
-          $this.css('background', '#ffffff');
+          // $this.css('background', '#ffffff');
+          $this.css('background', '#F3D661');
           // tell map to highlight pin
           var id = $this.attr('data-id');
           app.map.didMouseOverNearbyActivityRow(id);
@@ -1405,12 +1406,13 @@ var app = (function ()
           accounts = item.Accounts;
 
       // parcel-level stuff
-      $('#water-impervious-area').text(app.util.numberWithCommas(parcel.ImpervArea));
-      $('#water-gross-area').text(app.util.numberWithCommas(parcel.GrossArea));
+      // $('#water-impervious-area').text(app.util.numberWithCommas(parcel.ImpervArea));
+      // $('#water-gross-area').text(app.util.numberWithCommas(parcel.GrossArea));
       $('#water-parcel-id').text(parcelId);
       $('#water-parcel-address').text(parcel.Address);
       $('#water-parcel-building-type').text(parcel.BldgType);
-      // $('#water-parcel-impervious-area').text(parcel.ImpervArea + ' sq ft');
+      $('#water-parcel-impervious-area').text(parcel.ImpervArea + ' sq ft');
+      $('#water-parcel-gross-area').text(parcel.GrossArea + ' sq ft');
       $('#water-parcel-cap-eligible').text(parcel.CAPEligible ? 'Yes' : 'No');
 
       // populate accounts
