@@ -1380,7 +1380,8 @@ var app = (function ()
       $tbody.find('tr').hover(
         function () {
           var $this = $(this);
-          $this.css('background', '#ffffff');
+          // $this.css('background', '#ffffff');
+          $this.css('background', '#F3D661');
           // tell map to highlight pin
           var id = $this.attr('data-id');
           app.map.didMouseOverNearbyActivityRow(id);
