@@ -120,7 +120,7 @@ app.map = (function ()
 			app.state.map.tileLayers.baseMapDORParcels = L.esri.tiledMapLayer({
         url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap/MapServer",
         maxZoom: 22,
-        name: 'baseMapLight',
+        name: 'baseMapDOR',
         type: 'base',
         zIndex: 1,
       });
@@ -436,7 +436,7 @@ app.map = (function ()
 
       // adds and removes baseLayer and overlay
       function toggleBasemap() {
-        if (app.state.map.nameBaseLayer == 'baseMapLight') {
+        if (app.state.map.nameBaseLayer == 'baseMapLight' || app.state.map.nameBaseLayer == 'baseMapDOR') {
           _baseLayerGroup.clearLayers();
           _labelLayerGroup.clearLayers();
           if (app.state.map.lastYearViewed) {
@@ -844,10 +844,13 @@ app.map = (function ()
 
       switch (topic) {
         case 'deeds':
-          _baseLayerGroup.clearLayers();
-					_labelLayerGroup.clearLayers();
-					app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
-					app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
+					if (app.state.map.nameBaseLayer == 'baseMapLight') {
+	          _baseLayerGroup.clearLayers();
+						_labelLayerGroup.clearLayers();
+						app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
+						app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
+						app.map.domLayerList();
+					}
           break;
         case 'zoning':
           _overlayLayerGroup.addLayer(app.state.map.mapServices.ZoningMap);
@@ -877,10 +880,13 @@ app.map = (function ()
 
       switch (topic) {
         case 'deeds':
-					_baseLayerGroup.clearLayers();
-					_labelLayerGroup.clearLayers();
-					app.state.map.tileLayers.baseMapLight.addTo(_baseLayerGroup);
-					app.state.map.tileLayers.overlayBaseLabels.addTo(_labelLayerGroup);
+					if (app.state.map.nameBaseLayer == 'baseMapDOR') {
+						_baseLayerGroup.clearLayers();
+						_labelLayerGroup.clearLayers();
+						app.state.map.tileLayers.baseMapLight.addTo(_baseLayerGroup);
+						app.state.map.tileLayers.overlayBaseLabels.addTo(_labelLayerGroup);
+						app.map.domLayerList();
+					}
           break;
         case 'zoning':
           if (app.state.map.namesOverLayers.includes('zoningMap')){
