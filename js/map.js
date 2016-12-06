@@ -890,9 +890,9 @@ app.map = (function ()
 						_labelLayerGroup.clearLayers();
 						app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
 						app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
-						app.map.domLayerList();
-						app.map.toggleParcelMarker();
 					}
+					app.map.domLayerList();
+					app.map.toggleParcelMarker();
           break;
         case 'zoning':
           _overlayLayerGroup.addLayer(app.state.map.mapServices.ZoningMap);
@@ -942,9 +942,9 @@ app.map = (function ()
 						_labelLayerGroup.clearLayers();
 						app.state.map.tileLayers.baseMapLight.addTo(_baseLayerGroup);
 						app.state.map.tileLayers.overlayBaseLabels.addTo(_labelLayerGroup);
-						app.map.domLayerList();
-						app.map.toggleParcelMarker();
 					}
+					app.map.domLayerList();
+					app.map.toggleParcelMarker();
           break;
         case 'zoning':
           if (app.state.map.namesOverLayers.includes('zoningMap')){
