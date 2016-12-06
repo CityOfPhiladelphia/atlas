@@ -164,6 +164,11 @@ header.site-header > .row:last-of-type {
   font-size: 14px;
 }
 
+/* for imagery instructions */
+.callout li {
+  color: #a1a1a1;
+}
+
 /*#zoning-badge > #zoning-badge-body > #zoning-description {*/
     /*display: inline-block;*/
     /*margin-bottom:*/

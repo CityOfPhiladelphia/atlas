@@ -1400,28 +1400,33 @@ var app = (function ()
       var data = app.state.water,  // this is actually a list of matches
           item = data[0],
           parcel = item.Parcel,
+          parcelId = parcel.ParcelID,
           accounts = item.Accounts;
 
       // parcel-level stuff
       $('#water-impervious-area').text(app.util.numberWithCommas(parcel.ImpervArea));
-      $('#water-parcel-id').text(parcel.ParcelID);
+      $('#water-gross-area').text(app.util.numberWithCommas(parcel.GrossArea));
+      $('#water-parcel-id').text(parcelId);
       $('#water-parcel-address').text(parcel.Address);
       $('#water-parcel-building-type').text(parcel.BldgType);
       // $('#water-parcel-impervious-area').text(parcel.ImpervArea + ' sq ft');
-      $('#water-parcel-gross-area').text(app.util.numberWithCommas(parcel.GrossArea) + ' sq ft');
       $('#water-parcel-cap-eligible').text(parcel.CAPEligible ? 'Yes' : 'No');
 
       // populate accounts
       $('#water-accounts-count').text(' (' + accounts.length + ')');
       var meterSizeGetter = function (row) {
-        var rawMeterSize = row.MeterSize,
-            meterSizeMatch = rawMeterSize.match(/\d(\/\d)?"/),
-            meterSize = meterSizeMatch && meterSizeMatch.length > 0 ? meterSizeMatch[0] : '';
-        return meterSize;
-      };
-      var FIELDS = ['AccountNumber', 'CustomerName', 'AcctStatus', 'ServiceTypeLabel', meterSizeGetter, 'StormwaterStatus'],
+            var rawMeterSize = row.MeterSize,
+                meterSizeMatch = rawMeterSize.match(/\d(\/\d)?"/),
+                meterSize = meterSizeMatch && meterSizeMatch.length > 0 ? meterSizeMatch[0] : '';
+            return meterSize;
+          },
+          FIELDS = ['AccountNumber', 'CustomerName', 'AcctStatus', 'ServiceTypeLabel', meterSizeGetter, 'StormwaterStatus'],
           rowsHtml = app.util.makeTableRowsFromJson(accounts, FIELDS);
       $('#water-accounts > tbody').html(rowsHtml);
+
+      // update see more link
+      var stormwaterUrl = '//www.phila.gov/water/swmap/Parcel.aspx?parcel_id=' + parcelId;
+      $('#water-link').attr({href: stormwaterUrl});
     },
 
     didGetElections: function () {
