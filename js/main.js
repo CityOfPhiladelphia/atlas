@@ -138,6 +138,7 @@ var app = (function ()
 
       //parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0',
       parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
+      parcelLayerWaterUrl: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer/0',
 
       divisionLayerUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22',
 
@@ -593,6 +594,7 @@ var app = (function ()
       // DOR
       // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
       var aisParcelId = app.state.ais.features[0].properties.dor_parcel_id,
+          waterParcelId = app.state.ais.features[0].properties.pwd_parcel_id,
           stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
 
       // clear els
@@ -607,8 +609,8 @@ var app = (function ()
       }
       // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
       else if (aisParcelId) {
-        app.getParcelById(aisParcelId, function () {
-          // console.log('got parcel by id', app.state.dor);
+        app.getParcelById(aisParcelId, waterParcelId, function () {
+          //console.log('got parcel by id', app.state.dor);
           app.renderParcelTopic();
           app.map.drawParcel();
         });
@@ -1021,7 +1023,8 @@ var app = (function ()
     },
 
     // get a parcel by parcel id
-    getParcelById: function (id, callback) {
+    getParcelById: function (id, waterId, callback) {
+      console.log('started running getParcelById');
       if (!id) {
         console.log('get parcel by id, but null');
         return;
@@ -1061,6 +1064,34 @@ var app = (function ()
         error: function (err) {
           console.log('get parcel by id error', err);
           app.hideContentForTopic('deeds');
+        },
+      });
+
+      $.ajax({
+        url: app.config.parcelLayerWaterUrl + '/query',
+        data: {
+          where: "PARCELID = '" + waterId + "'",
+          outSR: 4326,
+          outFields: '*',
+          f: 'json',
+        },
+        success: function (data) {
+          // AGO returns json with plaintext headers, so parse
+          data = JSON.parse(data);
+
+          // check data
+          if (data.features.length === 0) {
+            console.log('got water parcel but 0 features', this.url);
+          }
+
+          app.state.waterGIS = data;
+          //callback && callback();
+
+          //app.showContentForTopic('deeds');
+        },
+        error: function (err) {
+          console.log('get parcel by id error', err);
+          //app.hideContentForTopic('deeds');
         },
       });
     },
