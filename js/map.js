@@ -269,7 +269,13 @@ app.map = (function ()
 				zIndex: 15,
 			});
 
-
+			/*app.state.map.mapServices.WaterParcels = L.esri.dynamicMapLayer({
+				url: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer/0',
+				maxZoom: 22,
+				name: 'waterParcels',
+				type: 'overlay',
+				zIndex: 14,
+			});*/
 
 
       // Now add to map
@@ -641,11 +647,11 @@ app.map = (function ()
     drawParcel: function () {
       // if there's no parcel in state, clear the map and don't render
       // TODO zoom to AIS xy
-      var parcel, geom, center;
+      var parcelDOR, geomDOR, center;
       try {
-        parcel = app.state.dor.features[0];
-        if (!parcel) throw 'no parcel';
-        geom = parcel.geometry;
+        parcelDOR = app.state.dor.features[0];
+        if (!parcelDOR) throw 'no parcel';
+        geomDOR = parcelDOR.geometry;
 				//center = geom.getBounds().getCenter();
 				//app.state.center = center;
       }
@@ -656,14 +662,24 @@ app.map = (function ()
         return;
       }
 
-      var coords = app.util.flipCoords(geom.coordinates),
-          parcelPoly = L.polygon([coords], {
+			var parcelWater = app.state.waterGIS.features[0]
+			var geomWater = parcelWater.geometry.rings;
+
+      var coordsDOR = app.util.flipCoords(geomDOR.coordinates),
+					coordsWater = app.util.flipCoords(geomWater),
+          parcelPolyDOR = L.polygon([coordsDOR], {
             color: 'blue',
             weight: 2,
-						name: 'parcelPoly',
+						name: 'parcelPolyDOR',
 		        type: 'parcel',
           }),
-          parcelCentroid = parcelPoly.getBounds().getCenter(),
+					parcelPolyWater = L.polygon([coordsWater], {
+						color: 'blue',
+            weight: 2,
+						name: 'parcelPolyWater',
+		        type: 'parcel',
+					}),
+          parcelCentroid = parcelPolyDOR.getBounds().getCenter(),
 					parcelMarker = new L.Marker.SVGMarker([parcelCentroid.lat, parcelCentroid.lng], {
 					//parcelMarker = new L.Marker.SVGMarker([39.952388, -75.163596], {
 						"iconOptions": {
@@ -679,7 +695,8 @@ app.map = (function ()
 		        type: 'parcel',
 					});
 
-			app.state.parcelPoly = parcelPoly;
+			app.state.parcelPolyDOR = parcelPolyDOR;
+			app.state.parcelPolyWater = parcelPolyWater;
       app.state.theParcelCentroid = parcelCentroid;
 			app.state.parcelMarker = parcelMarker;
       // clear existing parcel
@@ -689,7 +706,7 @@ app.map = (function ()
       // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
       if (app.state.map.shouldPan) {
         // zoom to bounds of parcel poly plus some buffer
-        var boundsPadded = parcelPoly.getBounds().pad(1.15);
+        var boundsPadded = parcelPolyDOR.getBounds().pad(1.15);
         // _map.fitBounds(bounds, {padding: ['20%', '20%']});
         _map.fitBounds(boundsPadded);
         // or need to use parcel centroid instead of center of map
@@ -699,15 +716,17 @@ app.map = (function ()
 			app.map.LSinit();
 
       // add to map
-			if (app.state.activeTopic == 'deeds' || app.state.activeTopic == 'water') {
-	      _parcelLayerGroup.addLayer(parcelPoly);
+			if (app.state.activeTopic == 'deeds') {
+	      _parcelLayerGroup.addLayer(parcelPolyDOR);
+			} else if (app.state.activeTopic == 'water') {
+				_parcelLayerGroup.addLayer(parcelPolyWater);
 			} else {
 				_parcelLayerGroup.addLayer(parcelMarker);
 			}
 			app.map.domLayerList();
 
       // area method 2
-      var areaRequestGeom = '[' + JSON.stringify(geom).replace('"type":"Polygon","coordinates"', '"rings"') + ']';
+      var areaRequestGeom = '[' + JSON.stringify(geomDOR).replace('"type":"Polygon","coordinates"', '"rings"') + ']';
       $.ajax({
         url: '//gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/areasAndLengths',
         data: {
@@ -895,6 +914,12 @@ app.map = (function ()
 					app.map.toggleParcelMarker();
           break;
         case 'zoning':
+					if (app.state.map.nameBaseLayer == 'baseMapLight') {
+						_baseLayerGroup.clearLayers();
+						_labelLayerGroup.clearLayers();
+						app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
+						app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
+					}
           _overlayLayerGroup.addLayer(app.state.map.mapServices.ZoningMap);
           // add name "zoningMap" to the DOM list
           app.map.domLayerList();
@@ -947,6 +972,12 @@ app.map = (function ()
 					app.map.toggleParcelMarker();
           break;
         case 'zoning':
+					if (app.state.map.nameBaseLayer == 'baseMapDOR') {
+						_baseLayerGroup.clearLayers();
+						_labelLayerGroup.clearLayers();
+						app.state.map.tileLayers.baseMapLight.addTo(_baseLayerGroup);
+						app.state.map.tileLayers.overlayBaseLabels.addTo(_labelLayerGroup);
+					}
           if (app.state.map.namesOverLayers.includes('zoningMap')){
             _overlayLayerGroup.clearLayers();
             app.map.domLayerList();
@@ -969,7 +1000,7 @@ app.map = (function ()
 				case 'elections':
 				_electionFeatureGroup.clearLayers();
 				if (app.state.activeTopic != 'nearby') {
-					var boundsPadded = app.state.parcelPoly.getBounds().pad(1.15);
+					var boundsPadded = app.state.parcelPolyDOR.getBounds().pad(1.15);
 					_map.fitBounds(boundsPadded);
 				}
 				app.map.domLayerList();
@@ -984,16 +1015,32 @@ app.map = (function ()
 
 		toggleParcelMarker: function() {
 			if (app.state.map.nameParcelLayer == 'parcelMarker') {
-				if (app.state.activeTopic == 'deeds' || app.state.activeTopic == 'water') {
+				if (app.state.activeTopic == 'deeds') {
 					_parcelLayerGroup.clearLayers();
-					_parcelLayerGroup.addLayer(app.state.parcelPoly);
+					_parcelLayerGroup.addLayer(app.state.parcelPolyDOR);
+				} else if (app.state.activeTopic == 'water') {
+					_parcelLayerGroup.clearLayers();
+					_parcelLayerGroup.addLayer(app.state.parcelPolyWater);
 				}
 			}
-			if (app.state.map.nameParcelLayer == 'parcelPoly') {
-				console.log(app.state.activeTopic);
-				console.log(app.state.map.nameParcelLayer);
-				if (app.state.activeTopic != 'deeds' && app.state.activeTopic != 'water' || app.state.activeTopic === null) {
-				//if (app.state.activeTopic === null) {
+			if (app.state.map.nameParcelLayer == 'parcelPolyDOR') {
+				//console.log(app.state.activeTopic);
+				//console.log(app.state.map.nameParcelLayer);
+				if (app.state.activeTopic == 'water') {
+					_parcelLayerGroup.clearLayers();
+					_parcelLayerGroup.addLayer(app.state.parcelPolyWater);
+				} else if (app.state.activeTopic != 'deeds' || app.state.activeTopic === null) {
+					_parcelLayerGroup.clearLayers();
+					_parcelLayerGroup.addLayer(app.state.parcelMarker);
+				}
+			}
+			if (app.state.map.nameParcelLayer == 'parcelPolyWater') {
+				//console.log(app.state.activeTopic);
+				//console.log(app.state.map.nameParcelLayer);
+				if (app.state.activeTopic == 'deeds') {
+					_parcelLayerGroup.clearLayers();
+					_parcelLayerGroup.addLayer(app.state.parcelPolyDOR);
+				} else if (app.state.activeTopic != 'water' || app.state.activeTopic === null) {
 					_parcelLayerGroup.clearLayers();
 					_parcelLayerGroup.addLayer(app.state.parcelMarker);
 				}
@@ -1002,7 +1049,7 @@ app.map = (function ()
 
 		removeElectionInfo: function () {
 			_electionFeatureGroup.clearLayers();
-			var boundsPadded = app.state.parcelPoly.getBounds().pad(1.15);
+			var boundsPadded = app.state.parcelPolyDOR.getBounds().pad(1.15);
 			_map.fitBounds(boundsPadded);
 			app.map.domLayerList();
 		},
