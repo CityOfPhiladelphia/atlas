@@ -269,6 +269,13 @@ app.map = (function ()
 				zIndex: 15,
 			});
 
+			app.state.map.zoningOpacitySlider = new L.Control.opacitySlider();
+			//app.state.map.zoningOpacitySlider.setOpacityLayer(app.state.map.mapServices.ZoningMap);
+			//app.state.map.zoningOpacitySlider.setPosition('topleft');
+			app.state.map.waterOpacitySlider = new L.Control.opacitySlider();
+			//app.state.map.waterOpacitySlider.setOpacityLayer(app.state.map.mapServices.Water);
+			//app.state.map.waterOpacitySlider.setPosition('topleft');
+
 			/*app.state.map.mapServices.WaterParcels = L.esri.dynamicMapLayer({
 				url: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer/0',
 				maxZoom: 22,
@@ -924,7 +931,7 @@ app.map = (function ()
           // add name "zoningMap" to the DOM list
           app.map.domLayerList();
 					app.map.toggleParcelMarker();
-					app.map.addOpacitySlider(app.state.map.mapServices.ZoningMap);
+					app.map.addOpacitySlider('zoning', app.state.map.mapServices.ZoningMap);
           break;
         case 'nearby':
 					console.log('running addNearbyActivity from map.js')
@@ -935,7 +942,7 @@ app.map = (function ()
 					_overlayLayerGroup.addLayer(app.state.map.mapServices.Water);
 					app.map.domLayerList();
 					app.map.toggleParcelMarker();
-					app.map.addOpacitySlider(app.state.map.mapServices.Water);
+					app.map.addOpacitySlider('water', app.state.map.mapServices.Water);
 					app.map.waterLegend.onAdd = function () {
 						var div = L.DomUtil.create('div', 'info legend'),
 							grades = ['#FEFF7F', '#F2DCFF'],
@@ -982,7 +989,7 @@ app.map = (function ()
             _overlayLayerGroup.clearLayers();
             app.map.domLayerList();
 						app.map.toggleParcelMarker();
-						app.map.removeOpacitySlider();
+						app.map.removeOpacitySlider('zoning');
           }
           break;
         case 'nearby':
@@ -993,7 +1000,7 @@ app.map = (function ()
 						_overlayLayerGroup.clearLayers();
 						app.map.domLayerList();
 						app.map.toggleParcelMarker();
-						app.map.removeOpacitySlider();
+						app.map.removeOpacitySlider('water');
 						app.map.waterLegend.remove();
 					}
 					break;
@@ -1314,16 +1321,38 @@ app.map = (function ()
 			localStorage.setItem('circlesOn', true);
     },
 
-		addOpacitySlider: function(opacityLayer) {
-			app.state.map.opacitySlider = new L.Control.opacitySlider();
-			_map.addControl(app.state.map.opacitySlider);
-			app.state.map.opacitySlider.setOpacityLayer(opacityLayer);
-			app.state.map.opacitySlider.setPosition('topleft');
+		addOpacitySlider: function(topic, opacityLayer) {
+			//app.state.map.opacitySlider = new L.Control.opacitySlider();
+			switch (topic) {
+        case 'zoning':
+					_map.addControl(app.state.map.zoningOpacitySlider);
+					app.state.map.zoningOpacitySlider.setOpacityLayer(opacityLayer);
+					app.state.map.zoningOpacity = opacityLayer.options.opacity;
+					app.state.map.zoningOpacitySlider.setPosition('topleft');
+					$('.ui-slider-range').attr('style', 'height: '+opacityLayer.options.opacity*100+'%');
+					$('.ui-slider-handle').attr('style', 'bottom: '+opacityLayer.options.opacity*100+'%');
+					break;
+				case 'water':
+					_map.addControl(app.state.map.waterOpacitySlider);
+					app.state.map.waterOpacitySlider.setOpacityLayer(opacityLayer);
+					app.state.map.waterOpacity = opacityLayer.options.opacity;
+					app.state.map.waterOpacitySlider.setPosition('topleft');
+					$('.ui-slider-range').attr('style', 'height: '+opacityLayer.options.opacity*100+'%');
+					$('.ui-slider-handle').attr('style', 'bottom: '+opacityLayer.options.opacity*100+'%');
+					break;
+			};
 			//opacityLayer.setOpacityLayer(1.0);
 		},
 
-		removeOpacitySlider: function() {
-			_map.removeControl(app.state.map.opacitySlider);
+		removeOpacitySlider: function(topic) {
+			switch (topic) {
+        case 'zoning':
+					_map.removeControl(app.state.map.zoningOpacitySlider);
+					break;
+				case 'water':
+					_map.removeControl(app.state.map.waterOpacitySlider);
+					break;
+			};
 		}
 
   }; // end of return
