@@ -838,6 +838,7 @@ var app = (function ()
 
       // NEW METHOD: do this manually, because some vals have to be handled manually
       var vals = {
+        'property-address':             props.location || 'None',
         'property-account-num':         props.parcel_number || 'None',
         'property-sale-date':           props.sale_date || 'None',
         'property-sale-price':          props.sale_price || 'None',
