@@ -23,6 +23,7 @@ app.map = (function ()
         iconSize: [40,40],
         iconAnchor: [20, 30],
       }),*/
+
       camera = L.icon({
         iconUrl: 'css/images/camera_04.png',
         iconSize: [26, 16],
@@ -52,6 +53,14 @@ app.map = (function ()
 					fillOpacity: .5,
 					iconSize: L.point(32,50),
 			}),
+			yellowSvgIcon = L.divIcon.svgIcon({
+					className: 'svg-icon-noClick',
+					color: 'rgb(100,255,100)',
+					circleRatio: 0,
+					fillColor: 'rgb(255,102,0)',
+					fillOpacity: .5,
+					iconSize: L.point(42,60),
+			}),
 
       _baseLayerGroup = new L.LayerGroup(),
       _labelLayerGroup = new L.LayerGroup(),
@@ -69,10 +78,15 @@ app.map = (function ()
       _stViewMarkersLayerGroup = new L.LayerGroup(),
       _stViewHfovMarker,
       _stViewCameraMarker
+
+
   return {
+
+		waterLegend : L.control({position: 'bottomleft'}),
     //theObject: queryParcel,
 		smallMarker: L.point(22,40),
 		largeMarker: L.point(32,50),
+		xLargeMarker: L.point(42,60),
 
     initMap : function () {
       app.state.map = {};
@@ -81,6 +95,7 @@ app.map = (function ()
       // the next 2 variables hold names for checking what is on the map
       app.state.map.nameBaseLayer;
       app.state.map.nameLabelsLayer;
+			app.state.map.nameParcelLayer;
       app.state.map.namesOverLayers = [];
       // the next 2 objects hold the actual layers
       app.state.map.tileLayers = {};
@@ -553,7 +568,9 @@ app.map = (function ()
           app.state.map.nameBaseLayer = layer.options.name;
         } else if (layer.options.name && layer.options.type == 'labels') {
           app.state.map.nameLabelsLayer = layer.options.name;
-        }
+        } else if (layer.options.name && layer.options.type == 'parcel') {
+					app.state.map.nameParcelLayer = layer.options.name;
+				}
       });
       app.state.map.namesOverLayers = [];
       _map.eachLayer(function(layer){
@@ -624,11 +641,13 @@ app.map = (function ()
     drawParcel: function () {
       // if there's no parcel in state, clear the map and don't render
       // TODO zoom to AIS xy
-      var parcel, geom;
+      var parcel, geom, center;
       try {
         parcel = app.state.dor.features[0];
         if (!parcel) throw 'no parcel';
         geom = parcel.geometry;
+				//center = geom.getBounds().getCenter();
+				//app.state.center = center;
       }
       catch(err) {
         console.log('draw parcel, but could not get parcel from state', err);
@@ -640,12 +659,29 @@ app.map = (function ()
       var coords = app.util.flipCoords(geom.coordinates),
           parcelPoly = L.polygon([coords], {
             color: 'blue',
-            weight: 2
+            weight: 2,
+						name: 'parcelPoly',
+		        type: 'parcel',
           }),
-          parcelCentroid = parcelPoly.getBounds().getCenter();
+          parcelCentroid = parcelPoly.getBounds().getCenter(),
+					parcelMarker = new L.Marker.SVGMarker([parcelCentroid.lat, parcelCentroid.lng], {
+					//parcelMarker = new L.Marker.SVGMarker([39.952388, -75.163596], {
+						"iconOptions": {
+							className: 'svg-icon-noClick',
+							circleRatio: 0,
+							color: 'rgb(255,30,30)',//'rgb(255,200,50)',
+							fillColor: 'rgb(255,60,30)',//'rgb(255,200,50)',
+							fillOpacity: 0.8,
+							iconSize: app.map.largeMarker,
+						},
+						title: 'current parcel',
+						name: 'parcelMarker',
+		        type: 'parcel',
+					});
 
-			app.state.parcelPoly = parcelPoly
+			app.state.parcelPoly = parcelPoly;
       app.state.theParcelCentroid = parcelCentroid;
+			app.state.parcelMarker = parcelMarker;
       // clear existing parcel
       _parcelLayerGroup.clearLayers();
 
@@ -663,7 +699,12 @@ app.map = (function ()
 			app.map.LSinit();
 
       // add to map
-      _parcelLayerGroup.addLayer(parcelPoly);
+			if (app.state.activeTopic == 'deeds' || app.state.activeTopic == 'water') {
+	      _parcelLayerGroup.addLayer(parcelPoly);
+			} else {
+				_parcelLayerGroup.addLayer(parcelMarker);
+			}
+			app.map.domLayerList();
 
       // area method 2
       var areaRequestGeom = '[' + JSON.stringify(geom).replace('"type":"Polygon","coordinates"', '"rings"') + ']';
@@ -849,29 +890,45 @@ app.map = (function ()
 						_labelLayerGroup.clearLayers();
 						app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
 						app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
-						app.map.domLayerList();
 					}
+					app.map.domLayerList();
+					app.map.toggleParcelMarker();
           break;
         case 'zoning':
           _overlayLayerGroup.addLayer(app.state.map.mapServices.ZoningMap);
           // add name "zoningMap" to the DOM list
           app.map.domLayerList();
+					app.map.toggleParcelMarker();
 					app.map.addOpacitySlider(app.state.map.mapServices.ZoningMap);
           break;
         case 'nearby':
 					console.log('running addNearbyActivity from map.js')
           app.map.addNearbyActivity();
+					app.map.toggleParcelMarker();
 					break;
 				case 'water':
 					_overlayLayerGroup.addLayer(app.state.map.mapServices.Water);
 					app.map.domLayerList();
+					app.map.toggleParcelMarker();
 					app.map.addOpacitySlider(app.state.map.mapServices.Water);
+					app.map.waterLegend.onAdd = function () {
+						var div = L.DomUtil.create('div', 'info legend'),
+							grades = ['#FEFF7F', '#F2DCFF'],
+							labels = ['Roof', 'Other Impervious Surface'];
+						for (var i = 0; i < 2; i++) {
+							div.innerHTML += '<i style="background:' + grades[i] + '"></i> ' + labels[i] + '<br>'
+						}
+						return div;
+					};
+					app.map.waterLegend.addTo(_map);
 					break;
 				case 'elections':
 					app.map.addElectionInfo();
+					app.map.toggleParcelMarker();
         default:
           // console.log('unhandled topic:', topic);
       }
+			//app.map.toggleParcelMarker();
     },
 
     didDeactivateTopic: function (topic) {
@@ -885,37 +942,63 @@ app.map = (function ()
 						_labelLayerGroup.clearLayers();
 						app.state.map.tileLayers.baseMapLight.addTo(_baseLayerGroup);
 						app.state.map.tileLayers.overlayBaseLabels.addTo(_labelLayerGroup);
-						app.map.domLayerList();
 					}
+					app.map.domLayerList();
+					app.map.toggleParcelMarker();
           break;
         case 'zoning':
           if (app.state.map.namesOverLayers.includes('zoningMap')){
             _overlayLayerGroup.clearLayers();
             app.map.domLayerList();
+						app.map.toggleParcelMarker();
 						app.map.removeOpacitySlider();
           }
           break;
         case 'nearby':
-          console.log('didDeactivateTopic ran for case "nearby"')
           _nearbyActivityLayerGroup.clearLayers();
 					break;
 				case 'water':
 					if (app.state.map.namesOverLayers.includes('water')){
 						_overlayLayerGroup.clearLayers();
 						app.map.domLayerList();
+						app.map.toggleParcelMarker();
 						app.map.removeOpacitySlider();
+						app.map.waterLegend.remove();
 					}
 					break;
 				case 'elections':
 				_electionFeatureGroup.clearLayers();
-				var boundsPadded = app.state.parcelPoly.getBounds().pad(1.15);
-				_map.fitBounds(boundsPadded);
+				if (app.state.activeTopic != 'nearby') {
+					var boundsPadded = app.state.parcelPoly.getBounds().pad(1.15);
+					_map.fitBounds(boundsPadded);
+				}
 				app.map.domLayerList();
+				app.map.toggleParcelMarker();
 					break;
         //default:
         //  console.log('unhandled topic:', topic);
       }
+			//console.log('deactivated a topic - running toggleParcelMarker');
+			//app.map.toggleParcelMarker();
     },
+
+		toggleParcelMarker: function() {
+			if (app.state.map.nameParcelLayer == 'parcelMarker') {
+				if (app.state.activeTopic == 'deeds' || app.state.activeTopic == 'water') {
+					_parcelLayerGroup.clearLayers();
+					_parcelLayerGroup.addLayer(app.state.parcelPoly);
+				}
+			}
+			if (app.state.map.nameParcelLayer == 'parcelPoly') {
+				console.log(app.state.activeTopic);
+				console.log(app.state.map.nameParcelLayer);
+				if (app.state.activeTopic != 'deeds' && app.state.activeTopic != 'water' || app.state.activeTopic === null) {
+				//if (app.state.activeTopic === null) {
+					_parcelLayerGroup.clearLayers();
+					_parcelLayerGroup.addLayer(app.state.parcelMarker);
+				}
+			}
+		},
 
 		removeElectionInfo: function () {
 			_electionFeatureGroup.clearLayers();
@@ -1035,8 +1118,8 @@ app.map = (function ()
 							}*/
 							newMarker.setStyle({
 								"iconOptions": {
-									color: 'rgb(255,30,100)',
-									fillColor: 'rgb(255,102,0)',
+									color: 'rgb(243, 198, 19)',//'rgb(255,30,100)',
+									fillColor: 'rgb(243, 198, 19)',//'rgb(255,102,0)',
 									iconSize: app.map.largeMarker,
 									iconAnchor: [app.map.largeMarker.x/2, app.map.largeMarker.y],
 				        }
@@ -1057,7 +1140,15 @@ app.map = (function ()
 						});
 				_nearbyActivityLayerGroup.addLayer(newMarker);
 			});
-			_map.fitBounds(_nearbyActivityLayerGroup.getBounds());
+			//app.state.map.bounds = _map.getBounds();
+			//app.state.map.activitybounds = _nearbyActivityLayerGroup.getBounds();
+			if (_map.getBounds().contains(_nearbyActivityLayerGroup.getBounds())) {
+				console.log('map bounds contain nearby activity bounds');
+			} else {
+				console.log('map bounds do not contain activity bounds');
+				_map.fitBounds(_nearbyActivityLayerGroup.getBounds());
+				//_map.panInsideBounds(_nearbyActivityLayerGroup.getBounds());
+			}
 			app.map.domLayerList();
 		},
 
@@ -1085,12 +1176,11 @@ app.map = (function ()
 				if (!layerRowId) console.log('layerRowId not found');
 
 				if (id == layerRowId) {
-					console.log('found blue marker to remove');
 					markerlatlng = layer._latlng
 					layer.setStyle({
 						"iconOptions": {
-							color: 'rgb(255,30,100)',
-							fillColor: 'rgb(255,102,0)',
+							color: 'rgb(243, 198, 19)',
+							fillColor: 'rgb(243, 198, 19)',
 							iconSize: app.map.largeMarker,
 							iconAnchor: [app.map.largeMarker.x/2, app.map.largeMarker.y],
 		        }
@@ -1107,7 +1197,6 @@ app.map = (function ()
 				if (!layerRowId) console.log('layerRowId not found');
 
 				if (id == layerRowId) {
-					console.log('found red marker to remove');
 					markerlatlng = layer._latlng
 					layer.setStyle({
 						"iconOptions": {

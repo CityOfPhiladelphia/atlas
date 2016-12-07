@@ -436,6 +436,7 @@ var app = (function ()
 
       // if it's already visible, hide it
       if ($targetTopic.is(':visible')){
+        app.state.activeTopic = null
         $targetTopic.slideUp(350);
         app.map.didChangeTopic(targetTopicName, null);
         // app.map.didDeactivateTopic(targetTopicName);
@@ -444,7 +445,7 @@ var app = (function ()
         var hashNoTopic = location.hash.split('/').slice(0, 2).join('/');
         history.pushState(history.state, '', hashNoTopic);
 
-        app.state.activeTopic = null;
+        //app.state.activeTopic = null;
       }
 
       // otherwise, activate
