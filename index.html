@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Atlas [Demo] | phila.gov</title>
+        <title>Atlas | phila.gov</title>
         <link rel='icon' type='image/x-icon' href="//cityofphiladelphia.github.io/patterns/images/favicon.ico">
         <meta name="description" content="">
 
@@ -133,12 +133,21 @@
                         <!--</div>-->
 
                         <!-- PROPERTY -->
-                        <a id="topic-link-property" class="topic-link" href="#"><span class="topic-link-icon flaticon-house"></span>Property Snapshot</a>
+                        <a id="topic-link-property" class="topic-link" href="#"><span class="topic-link-icon flaticon-house"></span>Property Assessments</a>
                         <div id="topic-property" class="topic">
                             <div class="topic-content">
+                                <div class="callout">
+                                  <p>
+                                      This information is provided by the Office of Property Assessments (<span class="keyword">OPA</span>),
+                                      the agency responsible for estimating property values
+                                      in the City of Philadelphia. OPA was formerly a part of the
+                                      Bureau of Revision of Taxes (<span class="keyword">BRT</span>) and some City websites
+                                      may still use that name.
+                                  </p>
+                                </div>
                                 <table id="topic-property-table">
                                     <tr>
-                                        <th>Tax Account #</th>
+                                        <th>OPA Account #</th>
                                         <td id="property-account-num"></td>
                                     </tr>
                                     <tr>
@@ -212,15 +221,19 @@
                             <div class="topic-content">
                                 <div class="callout">
                                   <p>
-                                    The parcels shown on the map reflect the
-                                    legal bounds of the property as recorded
-                                    by the Department of Records.
+                                    This information is provided by the Department of
+                                    Records (<span class="keyword">DOR</span>), the agency
+                                    which records real estate documents in the City of Philadelphia.
+                                    The parcel boundaries shown on the map are a
+                                    graphic representation of the deed and should not be used in place of
+                                    legal documents such as deeds or land
+                                    surveys.
                                   </p>
                                 </div>
 
                                 <table>
                                     <tr>
-                                        <th>Parcel ID (aka "Mapreg")</th>
+                                        <th>Map Registry #</th>
                                         <td id="deeds-id"></td>
                                     </tr>
                                     <tr>
@@ -432,6 +445,19 @@
                         <a id="topic-link-water" class="topic-link" href="/#/water/"><span class="topic-link-icon flaticon-drop"></span>Water</a>
                         <div id="topic-water" class="topic">
                             <div class="topic-content">
+                                <div class="callout">
+                                    <p>
+                                        This information is provided by the Philadelphia Water Department (<span class="keyword">PWD</span>).
+                                        The parcels shown on the map have been
+                                        simplified for stormwater billing purposes
+                                        and may not represent the legal bounds
+                                        of the property. For the deeded
+                                        parcel, see the <span class="keyword">
+                                        Deeds</span> tab.
+
+                                    </p>
+                                </div>
+
                                 <!-- <div class="topic-badge panel center">
                                     <h4 class="alternate">Impervious Area</h4>
                                     <div class="topic-badge-body">
@@ -460,17 +486,6 @@
                                         </span>
                                     </div>
                                 </div> -->
-
-                                <div class="callout">
-                                  <p>
-                                    The parcels shown on the map have been
-                                    simplified for stormwater billing purposes
-                                    and may not represent the legal bounds
-                                    of the property. For the official
-                                    recording, see the <span class="keyword">
-                                    Deeds</span> tab.
-                                  </p>
-                                </div>
 
                                 <h4>Parcel</h4>
                                 <table>
@@ -642,7 +657,7 @@
                         </div>
 
                         <!--NEARBY-->
-                        <a id="topic-link-nearby" class="topic-link" href="#"><span class="topic-link-icon flaticon-placeholder-1"></span>Nearby Activity</a>
+                        <a id="topic-link-nearby" class="topic-link" href="#"><span class="topic-link-icon flaticon-placeholder-1"></span>Nearby</a>
                         <div id="topic-nearby" class="topic">
                             <!-- <div class="callout"> -->
                                 <!-- <p>
