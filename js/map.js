@@ -10,7 +10,7 @@ app.cyclomedia.wfsClient = new WFSClient(
 
 L.Control.BaseToolTip = L.Control.extend({
 	options: {
-		position: 'topright',
+		position: 'bottomleft',
 	},
 	onAdd: function() {
 		this._div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-load basetooltip');
