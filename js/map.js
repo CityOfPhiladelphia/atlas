@@ -8,6 +8,26 @@ app.cyclomedia.wfsClient = new WFSClient(
 	""
 );
 
+L.Control.BaseToolTip = L.Control.extend({
+	options: {
+		position: 'topright',
+	},
+	onAdd: function() {
+		this._div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-load basetooltip');
+		this._div.innerHTML = '<a href="#">i</a>';
+		L.DomEvent.disableClickPropagation(this._div);
+  	return this._div;
+	},
+	onMouseover: function(data) {
+		$('.basetooltip').html('<div>'+data+'</div>');
+		$('.basetooltip').attr('class', 'leaflet-bar leaflet-control leaflet-control-load basetooltip2')
+	},
+	onMouseout: function(data) {
+		$('.basetooltip2').html('<a href="#">i</a>');
+		$('.basetooltip2').attr('class', 'leaflet-bar leaflet-control leaflet-control-load basetooltip')
+	}
+});
+
 app.map = (function ()
 {
   // the leaflet map object
@@ -79,10 +99,11 @@ app.map = (function ()
       _stViewHfovMarker,
       _stViewCameraMarker
 
-
   return {
 
 		waterLegend : L.control({position: 'bottomleft'}),
+		baseToolTip : new L.Control.BaseToolTip,
+
     //theObject: queryParcel,
 		smallMarker: L.point(22,40),
 		largeMarker: L.point(32,50),
@@ -113,6 +134,30 @@ app.map = (function ()
       });
 			// add routing fix
       _map.setView(CITY_HALL, 17);
+
+			/*app.map.baseToolTip.onAdd = function () {
+				var div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-load basetooltip');
+				div.innerHTML = 'i';
+				//div.title = "enter tooltip here"
+				return div;
+			};*/
+			app.map.baseToolTip.addTo(_map);
+			app.state.map.waterDisclaimer = 'The property boundaries displayed on the map are for reference only and may not be used in place of recorded deeds or land surveys. Boundaries are generalized for ease of visualization. Source: Philadelphia Water'
+			app.state.map.DORDisclaimer = 'The property boundaries displayed on the map are for reference only and may not be used in place of recorded deeds or land surveys.  Source: Department of Records.'
+
+			$('.basetooltip').on('mouseover', function(){
+				if (!app.state.activeTopic || app.state.activeTopic != 'deeds' && app.state.activeTopic != 'zoning'){
+					app.map.baseToolTip.onMouseover(app.state.map.waterDisclaimer);
+				} else {
+					app.map.baseToolTip.onMouseover(app.state.map.DORDisclaimer);
+				}
+			});
+			$('.basetooltip').on('mouseout', function(){
+				app.map.baseToolTip.onMouseout();
+			})
+			/*app.map.baseToolTip.on('mouseover', function(){
+				console.log('mouseover happening');
+			});*/
 
       // make measure control
       var measureControl = new L.Control.Measure({
@@ -1353,6 +1398,10 @@ app.map = (function ()
 					_map.removeControl(app.state.map.waterOpacitySlider);
 					break;
 			};
+		},
+
+		toggleBaseToolTip: function(topic) {
+			console.log('toggleBaseToolTip is starting');
 		}
 
   }; // end of return

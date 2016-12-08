@@ -258,3 +258,24 @@ table {
     margin-right: 8px;
     opacity: 1;
 }
+
+.basetooltip {
+    width: 26px;
+    height: 26px;
+    font: 20px/22px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,1);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+.basetooltip2 {
+    width: 90%;
+    height: 20%;
+    padding: 3px 10px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,1);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
