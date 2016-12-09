@@ -8,6 +8,26 @@ app.cyclomedia.wfsClient = new WFSClient(
 	""
 );
 
+L.Control.BaseToolTip = L.Control.extend({
+	options: {
+		position: 'bottomleft',
+	},
+	onAdd: function() {
+		this._div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-load basetooltip');
+		this._div.innerHTML = '<a href="#">i</a>';
+		L.DomEvent.disableClickPropagation(this._div);
+  	return this._div;
+	},
+	onMouseover: function(data) {
+		$('.basetooltip').html('<div>'+data+'</div>');
+		$('.basetooltip').attr('class', 'leaflet-bar leaflet-control leaflet-control-load basetooltip2')
+	},
+	onMouseout: function(data) {
+		$('.basetooltip2').html('<a href="#">i</a>');
+		$('.basetooltip2').attr('class', 'leaflet-bar leaflet-control leaflet-control-load basetooltip')
+	}
+});
+
 app.map = (function ()
 {
   // the leaflet map object
@@ -79,10 +99,11 @@ app.map = (function ()
       _stViewHfovMarker,
       _stViewCameraMarker
 
-
   return {
 
 		waterLegend : L.control({position: 'bottomleft'}),
+		baseToolTip : new L.Control.BaseToolTip,
+
     //theObject: queryParcel,
 		smallMarker: L.point(22,40),
 		largeMarker: L.point(32,50),
@@ -114,6 +135,30 @@ app.map = (function ()
 			// add routing fix
       _map.setView(CITY_HALL, 17);
 
+			/*app.map.baseToolTip.onAdd = function () {
+				var div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-load basetooltip');
+				div.innerHTML = 'i';
+				//div.title = "enter tooltip here"
+				return div;
+			};*/
+			app.map.baseToolTip.addTo(_map);
+			app.state.map.waterDisclaimer = 'The property boundaries displayed on the map are for reference only and may not be used in place of recorded deeds or land surveys. Boundaries are generalized for ease of visualization. Source: Philadelphia Water'
+			app.state.map.DORDisclaimer = 'The property boundaries displayed on the map are for reference only and may not be used in place of recorded deeds or land surveys.  Source: Department of Records.'
+
+			$('.basetooltip').on('mouseover', function(){
+				if (!app.state.activeTopic || app.state.activeTopic != 'deeds' && app.state.activeTopic != 'zoning'){
+					app.map.baseToolTip.onMouseover(app.state.map.waterDisclaimer);
+				} else {
+					app.map.baseToolTip.onMouseover(app.state.map.DORDisclaimer);
+				}
+			});
+			$('.basetooltip').on('mouseout', function(){
+				app.map.baseToolTip.onMouseout();
+			})
+			/*app.map.baseToolTip.on('mouseover', function(){
+				console.log('mouseover happening');
+			});*/
+
       // make measure control
       var measureControl = new L.Control.Measure({
         primaryLengthUnit: 'feet',
@@ -125,7 +170,7 @@ app.map = (function ()
 
       // Basemaps
       app.state.map.tileLayers.baseMapLight = L.esri.tiledMapLayer({
-        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer",
+        url: app.config.esri.baseMapLightUrl,
         maxZoom: 22,
         name: 'baseMapLight',
         type: 'base',
@@ -133,7 +178,7 @@ app.map = (function ()
       });
 
 			app.state.map.tileLayers.baseMapDORParcels = L.esri.tiledMapLayer({
-        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap/MapServer",
+        url: app.config.esri.baseMapDORParcelsUrl,
         maxZoom: 22,
         name: 'baseMapDOR',
         type: 'base',
@@ -141,7 +186,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2016 = L.esri.tiledMapLayer({
-        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer",
+        url: app.config.esri.baseMapImagery2016Url,
         maxZoom: 22,
         name: 'baseMapImagery2016',
         type: 'base',
@@ -149,7 +194,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2015 = L.esri.tiledMapLayer({
-        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer",
+        url: app.config.esri.baseMapImagery2015Url,
         maxZoom: 22,
         name: 'baseMapImagery2015',
         type: 'base',
@@ -157,15 +202,15 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2012 = L.esri.tiledMapLayer({
-        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2012_3in/MapServer",
-        maxZoom: 22,
+        url: app.config.esri.baseMapImagery2012Url,
+				maxZoom: 22,
         name: 'baseMapImagery2012',
         type: 'base',
         zIndex: 4,
       });
 
       app.state.map.tileLayers.baseMapImagery2010 = L.esri.tiledMapLayer({
-        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2010_3in/MapServer",
+        url: app.config.esri.baseMapImagery2010Url,
         maxZoom: 22,
         name: 'baseMapImagery2010',
         type: 'base',
@@ -173,7 +218,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2008 = L.esri.tiledMapLayer({
-        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2008_3in/MapServer",
+        url: app.config.esri.baseMapImagery2008Url,
         maxZoom: 22,
         name: 'baseMapImagery2008',
         type: 'base',
@@ -181,7 +226,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery2004 = L.esri.tiledMapLayer({
-        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2004_6in/MapServer",
+        url: app.config.esri.baseMapImagery2004Url,
         maxZoom: 22,
         name: 'baseMapImagery2004',
         type: 'base',
@@ -189,29 +234,24 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.baseMapImagery1996 = L.esri.tiledMapLayer({
-        url: "//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_1996_6in/MapServer",
+        url: app.config.esri.baseMapImagery1996Url,
         maxZoom: 22,
         name: 'baseMapImagery1996',
         type: 'base',
         zIndex: 8,
       });
 
-      app.state.map.tileLayers.Parcels = L.esri.tiledMapLayer({
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ParcleTile/MapServer',
+      app.state.map.tileLayers.parcels = L.esri.tiledMapLayer({
+        url: app.config.esri.parcelsUrl,
         maxZoom: 22,
         name: 'parcelOverlay',
         type: 'overlay',
         zIndex: 9,
       });
 
-      /*var baseMapDark = L.esri.tiledMapLayer({
-        url: "https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Slate/MapServer",
-        maxZoom: 22
-      });*/
-
       // Overlays - Labels
       app.state.map.tileLayers.overlayBaseLabels = L.esri.tiledMapLayer({
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer',
+        url: app.config.esri.overlayBaseLabelsUrl,
         maxZoom: 22,
         name: 'overlayBaseLabels',
         type: 'labels',
@@ -219,7 +259,7 @@ app.map = (function ()
       });
 
 			app.state.map.tileLayers.overlayBaseDORLabels = L.esri.tiledMapLayer({
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap_Labels/MapServer',
+        url: app.config.esri.overlayBaseDORLabelsUrl,
         maxZoom: 22,
         name: 'overlayBaseLabelsDOR',
         type: 'labels',
@@ -227,7 +267,7 @@ app.map = (function ()
       });
 
       app.state.map.tileLayers.overlayImageryLabels = L.esri.tiledMapLayer({
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_Labels/MapServer',
+        url: app.config.esri.overlayImageryLabelsUrl,
         maxZoom: 22,
         name: 'overlayImageryLabels',
         type: 'labels',
@@ -237,7 +277,7 @@ app.map = (function ()
       // Overlays - Other
       // right now this is not used
       app.state.map.tileLayers.overlayZoning = L.esri.tiledMapLayer({
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer',
+        url: app.config.esri.overlayZoningUrl,
         maxZoom: 22,
         name: 'overlayZoning',
         type: 'overlay',
@@ -245,24 +285,24 @@ app.map = (function ()
       });
 
       // right now this is used, and set to dynamicMapLayer instead of FeatureLayer
-      app.state.map.mapServices.ZoningMap = L.esri.dynamicMapLayer({
-        url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer',
+      app.state.map.mapServices.zoningMap = L.esri.dynamicMapLayer({
+        url: app.config.esri.zoningMapUrl,
         maxZoom: 22,
         name: 'zoningMap',
         type: 'overlay',
         zIndex: 13,
       });
 
-			app.state.map.mapServices.Water = L.esri.dynamicMapLayer({
-				url: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer',
+			app.state.map.mapServices.water = L.esri.dynamicMapLayer({
+				url: app.config.esri.waterUrl,
 				maxZoom: 22,
 				name: 'water',
 				type: 'overlay',
 				zIndex: 14,
 			});
 
-			app.state.map.mapServices.PoliticalDivisions = L.esri.dynamicMapLayer({
-				url: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22',
+			app.state.map.mapServices.politicalDivisions = L.esri.dynamicMapLayer({
+				url: app.config.esri.politicalDivisionsUrl,
 				maxZoom: 22,
 				name: 'politicalDivisions',
 				type: 'overlay',
@@ -270,13 +310,13 @@ app.map = (function ()
 			});
 
 			app.state.map.zoningOpacitySlider = new L.Control.opacitySlider();
-			//app.state.map.zoningOpacitySlider.setOpacityLayer(app.state.map.mapServices.ZoningMap);
+			//app.state.map.zoningOpacitySlider.setOpacityLayer(app.state.map.mapServices.zoningMap);
 			//app.state.map.zoningOpacitySlider.setPosition('topleft');
 			app.state.map.waterOpacitySlider = new L.Control.opacitySlider();
-			//app.state.map.waterOpacitySlider.setOpacityLayer(app.state.map.mapServices.Water);
+			//app.state.map.waterOpacitySlider.setOpacityLayer(app.state.map.mapServices.water);
 			//app.state.map.waterOpacitySlider.setPosition('topleft');
 
-			/*app.state.map.mapServices.WaterParcels = L.esri.dynamicMapLayer({
+			/*app.state.map.mapServices.waterParcels = L.esri.dynamicMapLayer({
 				url: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer/0',
 				maxZoom: 22,
 				name: 'waterParcels',
@@ -469,10 +509,10 @@ app.map = (function ()
           _labelLayerGroup.clearLayers();
           if (app.state.map.lastYearViewed) {
             _baseLayerGroup.addLayer(app.state.map.lastYearViewed);
-            _baseLayerGroup.addLayer(app.state.map.tileLayers.Parcels);
+            _baseLayerGroup.addLayer(app.state.map.tileLayers.parcels);
           } else {
             _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapImagery2016);
-            _baseLayerGroup.addLayer(app.state.map.tileLayers.Parcels);
+            _baseLayerGroup.addLayer(app.state.map.tileLayers.parcels);
           }
           _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayImageryLabels);
           theEasyBar.addTo(_map);
@@ -501,7 +541,7 @@ app.map = (function ()
         };
         _baseLayerGroup.clearLayers();
         _baseLayerGroup.addLayer(requestedLayer);
-        _baseLayerGroup.addLayer(app.state.map.tileLayers.Parcels);
+        _baseLayerGroup.addLayer(app.state.map.tileLayers.parcels);
 
         // highlight current button
         control.state('dateSelected');
@@ -623,11 +663,18 @@ app.map = (function ()
       } else {
 
       app.getParcelByLatLng(e.latlng, function () {
-        var parcel = app.state.dor.features[0],
-            parcelAddress = app.util.concatDorAddress(parcel);
 
-        // if the parcel address is null or falsy, don't proceed
-        var parcelHouseNumber = app.util.cleanDorAttribute(parcel.properties.HOUSE);
+				if(app.state.activeTopic == 'deeds' || app.state.activeTopic == 'zoning') {
+					var parcel = app.state.dor.features[0],
+	            parcelAddress = app.util.concatDorAddress(parcel);
+
+	        // if the parcel address is null or falsy, don't proceed
+	        var parcelHouseNumber = app.util.cleanDorAttribute(parcel.properties.HOUSE);
+				} else {
+					var parcel = app.state.waterGIS.features[0],
+						parcelAddress = parcel.properties.ADDRESS;
+						parcelHouseNumber = parcelAddress
+				}
         if (!parcelAddress || parcelAddress.length === 0 || !parcelHouseNumber) {
           console.log('no parcel address', parcel);
           // show error
@@ -670,10 +717,10 @@ app.map = (function ()
       }
 
 			var parcelWater = app.state.waterGIS.features[0]
-			var geomWater = parcelWater.geometry.rings;
+			var geomWater = parcelWater.geometry;//.rings;
 
       var coordsDOR = app.util.flipCoords(geomDOR.coordinates),
-					coordsWater = app.util.flipCoords(geomWater),
+					coordsWater = app.util.flipCoords(geomWater.coordinates),
           parcelPolyDOR = L.polygon([coordsDOR], {
             color: 'blue',
             weight: 2,
@@ -927,11 +974,11 @@ app.map = (function ()
 						app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
 						app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
 					}
-          _overlayLayerGroup.addLayer(app.state.map.mapServices.ZoningMap);
+          _overlayLayerGroup.addLayer(app.state.map.mapServices.zoningMap);
           // add name "zoningMap" to the DOM list
           app.map.domLayerList();
 					app.map.toggleParcelMarker();
-					app.map.addOpacitySlider('zoning', app.state.map.mapServices.ZoningMap);
+					app.map.addOpacitySlider('zoning', app.state.map.mapServices.zoningMap);
           break;
         case 'nearby':
 					console.log('running addNearbyActivity from map.js')
@@ -939,10 +986,10 @@ app.map = (function ()
 					app.map.toggleParcelMarker();
 					break;
 				case 'water':
-					_overlayLayerGroup.addLayer(app.state.map.mapServices.Water);
+					_overlayLayerGroup.addLayer(app.state.map.mapServices.water);
 					app.map.domLayerList();
 					app.map.toggleParcelMarker();
-					app.map.addOpacitySlider('water', app.state.map.mapServices.Water);
+					app.map.addOpacitySlider('water', app.state.map.mapServices.water);
 					app.map.waterLegend.onAdd = function () {
 						var div = L.DomUtil.create('div', 'info legend'),
 							grades = ['#FEFF7F', '#F2DCFF'],
@@ -1089,7 +1136,7 @@ app.map = (function ()
 			var ward = app.state.elections.features[0].attributes.ward,
 					division = app.state.elections.features[0].attributes.division;
 			$.ajax({
-        url: app.config.divisionLayerUrl + '/query',
+        url: app.config.esri.divisionLayerUrl + '/query',
         data: {
           where: "DIVISION_NUM = '" + ward.concat(division)+"'",
           outSR: 4326,
@@ -1353,6 +1400,10 @@ app.map = (function ()
 					_map.removeControl(app.state.map.waterOpacitySlider);
 					break;
 			};
+		},
+
+		toggleBaseToolTip: function(topic) {
+			console.log('toggleBaseToolTip is starting');
 		}
 
   }; // end of return
