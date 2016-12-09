@@ -137,10 +137,28 @@ var app = (function ()
       topicRecordLimit: 5,
 
       //parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0',
-      parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
-      parcelLayerWaterUrl: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer/0',
-
-      divisionLayerUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22',
+      esri: {
+        parcelLayerDORUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
+        parcelLayerWaterUrl: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer/0',
+        divisionLayerUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22',
+        baseMapLightUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer',
+        baseMapDORParcelsUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap/MapServer',
+        baseMapImagery2016Url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer',
+        baseMapImagery2015Url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer',
+        baseMapImagery2012Url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2012_3in/MapServer',
+        baseMapImagery2010Url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2010_3in/MapServer',
+        baseMapImagery2008Url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2008_3in/MapServer',
+        baseMapImagery2004Url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2004_6in/MapServer',
+        baseMapImagery1996Url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_1996_6in/MapServer',
+        parcelsUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ParcleTile/MapServer',
+        overlayBaseLabelsUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer',
+        overlayBaseDORLabelsUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap_Labels/MapServer',
+        overlayImageryLabelsUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_Labels/MapServer',
+        overlayZoningUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer',
+        zoningMapUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer',
+        waterUrl: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer',
+        politicalDivisionsUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22'
+      },
 
       pictometry: {
         url: constructLocalUrl(HOST, '/pictometry'),
@@ -1040,7 +1058,7 @@ var app = (function ()
       // app.state.dor = undefined;
 
       $.ajax({
-        url: app.config.parcelLayerUrl + '/query',
+        url: app.config.esri.parcelLayerDORUrl + '/query',
         data: {
           where: "MAPREG = '" + id + "' AND STATUS IN (1, 3)" ,
           outSR: 4326,
@@ -1050,6 +1068,7 @@ var app = (function ()
         success: function (data) {
           // AGO returns json with plaintext headers, so parse
           data = JSON.parse(data);
+          console.log('got DOR data ', data);
 
           // check data
           if (data.features.length === 0) {
@@ -1067,47 +1086,9 @@ var app = (function ()
         },
       });
 
-      $.ajax({
-        url: app.config.parcelLayerWaterUrl + '/query',
-        data: {
-          where: "PARCELID = '" + waterId + "'",
-          outSR: 4326,
-          outFields: '*',
-          f: 'json',
-        },
-        success: function (data) {
-          // AGO returns json with plaintext headers, so parse
-          data = JSON.parse(data);
-
-          // check data
-          if (data.features.length === 0) {
-            console.log('got water parcel but 0 features', this.url);
-          }
-
-          app.state.waterGIS = data;
-          //callback && callback();
-
-          //app.showContentForTopic('deeds');
-        },
-        error: function (err) {
-          console.log('get parcel by id error', err);
-          //app.hideContentForTopic('deeds');
-        },
-      });
-    },
-
-    // get a parcel by a leaflet latlng
-    getParcelByLatLng: function (latLng, callback) {
-      console.log('get parcel by latlng');
-
-      // clear state
-      // disabling this because if the new query doesn't return anything,
-      // we don't want to flush out the current dor parcel
-      // app.state.dor = undefined;
-
-      var parcelQuery = L.esri.query({url: app.config.parcelLayerUrl});
-      parcelQuery.contains(latLng);
-      parcelQuery.where('STATUS IN (1, 3)')
+      var parcelQuery = L.esri.query({url: app.config.esri.parcelLayerWaterUrl});
+      //parcelQuery.contains(latLng);
+      parcelQuery.where('PARCELID = ' + waterId)
       parcelQuery.run(function (error, featureCollection, response) {
         if (error || !featureCollection) {
           console.log('get parcel by latlng error', error);
@@ -1122,11 +1103,93 @@ var app = (function ()
         }
 
         // update state
-        app.state.dor = featureCollection;
-
+        app.state.waterGIS = featureCollection;
         // if there's a callback, call it
-        callback && callback();
+        //callback && callback();
       });
+      /*$.ajax({
+        url: app.config.esri.parcelLayerWaterUrl + '/query',
+        data: {
+          where: "PARCELID = '" + waterId + "'",
+          outSR: 4326,
+          outFields: '*',
+          f: 'json',
+        },
+        success: function (data) {
+          // AGO returns json with plaintext headers, so parse
+          data = JSON.parse(data);
+          console.log('got water data ' + data);
+
+          // check data
+          if (data.features.length === 0) {
+            console.log('got water parcel but 0 features', this.url);
+          }
+
+          app.state.waterGIS = data;
+          //callback && callback();
+
+          //app.showContentForTopic('deeds');
+        },
+        error: function (err) {
+          console.log('get water parcel by id error', err);
+          //app.hideContentForTopic('deeds');
+        },
+      });*/
+    },
+
+    // get a parcel by a leaflet latlng
+    getParcelByLatLng: function (latLng, callback) {
+      console.log('get parcel by latlng');
+
+      // clear state
+      // disabling this because if the new query doesn't return anything,
+      // we don't want to flush out the current dor parcel
+      // app.state.dor = undefined;
+      if(app.state.activeTopic == 'deeds' || app.state.activeTopic == 'zoning'){
+        var parcelQuery = L.esri.query({url: app.config.esri.parcelLayerDORUrl});
+        parcelQuery.contains(latLng);
+        parcelQuery.where('STATUS IN (1, 3)')
+        parcelQuery.run(function (error, featureCollection, response) {
+          if (error || !featureCollection) {
+            console.log('get parcel by latlng error', error);
+            return;
+          }
+
+          // if empty response
+          if (featureCollection.features.length === 0) {
+            // show alert
+            $('#no-results-modal').foundation('open');
+            return;
+          }
+
+          // update state
+          app.state.dor = featureCollection;
+          // if there's a callback, call it
+          callback && callback();
+        })
+      } else {
+          var parcelQuery = L.esri.query({url: app.config.esri.parcelLayerWaterUrl});
+          parcelQuery.contains(latLng);
+          //parcelQuery.where('STATUS IN (1, 3)')
+          parcelQuery.run(function (error, featureCollection, response) {
+            if (error || !featureCollection) {
+              console.log('get parcel by latlng error', error);
+              return;
+            }
+
+            // if empty response
+            if (featureCollection.features.length === 0) {
+              // show alert
+              $('#no-results-modal').foundation('open');
+              return;
+            }
+
+            // update state
+            app.state.waterGIS = featureCollection;
+            // if there's a callback, call it
+            callback && callback();
+        })
+      }
     },
 
     // replaced by didGetNearbyActivity
