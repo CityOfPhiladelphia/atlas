@@ -763,6 +763,13 @@ var app = (function ()
         },
       });
 
+      /*
+      PUBLIC SAFETY
+      */
+
+      // Get nearest evacuation route
+      // var evacQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/EvacuationRoute/FeatureServer/0'});
+
       // show topics
       $('#topic-list').show();
 
