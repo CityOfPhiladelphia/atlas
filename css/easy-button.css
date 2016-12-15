@@ -78,6 +78,11 @@
     width: 40px;
 }
 
+#zoomFullExtentButton {
+    height: 40px;
+    width: 40px;
+}
+
 .easy-button-button.dateNotSelected-active {
     height: 30px;
     width: 40px;

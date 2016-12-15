@@ -280,13 +280,17 @@ var app = (function ()
     },
 
     route: function () {
+      console.log('route is starting to run');
       var hash = location.hash,
           params = app.util.getQueryParams(),
           comps = hash.split('/');
 
+      console.log('params is ' + params);
+      console.log('comps is ' + comps);
       // if there are query params
       var searchParam = params.search;
       if (searchParam) {
+        console.log('searchParam is ' +  searchParam);
         app.searchForAddress(searchParam);
         // TODO fix url
         return;
@@ -308,6 +312,7 @@ var app = (function ()
 
       // if there's no ais in state, go get it
       if (!(state && state.ais)) {
+        console.log('going to run searchForAddress');
         app.searchForAddress(address);
         return;
       }
@@ -346,6 +351,7 @@ var app = (function ()
 
     // fires ais search
     searchForAddress: function (address) {
+      console.log('searchForAddress started');
       var url = app.config.ais.url + encodeURIComponent(address);
       if (HOST == 'atlas.phila.gov'){
         var params = {
@@ -412,7 +418,7 @@ var app = (function ()
     // takes a topic (formerly "data row") name and activates the corresponding
     // section in the data panel
     activateTopic: function (targetTopicName) {
-      // console.log('activate topic', targetTopicName);
+      console.log('running activateTopic with ' + targetTopicName);
       // prevent topics from opening until we have at least AIS (arbitrary , but should work)
       var ais = app.state.ais;
       // if (!ais) return;
@@ -468,7 +474,10 @@ var app = (function ()
       }
 
       // otherwise, activate
-      else app.activateTopic(targetTopicName);
+      else {
+        console.log('toggleTopic is calling activateTopic with ' + targetTopicName);
+        app.activateTopic(targetTopicName);
+      }
     },
 
     didGetAisResult: function () {
@@ -530,6 +539,7 @@ var app = (function ()
 
       // if no topic is active, activate property
       // if (!app.state.nextTopic) {}
+      console.log('didGetAisResult is running activateTopic with ' + nextTopic);
       app.activateTopic(nextTopic);
     },
 
@@ -630,6 +640,7 @@ var app = (function ()
         app.getParcelById(aisParcelId, waterParcelId, function () {
           //console.log('got parcel by id', app.state.dor);
           app.renderParcelTopic();
+          console.log('getTopics is calling drawParcel');
           app.map.drawParcel();
         });
       }
