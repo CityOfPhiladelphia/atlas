@@ -39,9 +39,11 @@ var app = (function ()
   return {
     config: {
       ais: {
-        url: '//api.phila.gov/ais/v1/addresses/',
+        // url: '//api.phila.gov/ais/v1/addresses/',
+        url: '//api.phila.gov/ais/v1/search/',
         gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
         betsyKey: '35ae5b7bf8f0ff2613134935ce6b4c1e',
+        // include_units: true,
       },
       // l&i config, denormalized by section for convenience
       li: {
@@ -346,18 +348,18 @@ var app = (function ()
 
     // fires ais search
     searchForAddress: function (address) {
-      var url = app.config.ais.url + encodeURIComponent(address);
-      if (HOST == 'atlas.phila.gov'){
-        var params = {
-          gatekeeperKey: app.config.ais.gatekeeperKey,
-          // include_units: '',
-        };
+      var url = app.config.ais.url + encodeURIComponent(address),
+          params = {};
+
+      // set gatekeeper key based on hostnme
+      if (HOST == 'atlas.phila.gov') {
+        params.gatekeeperKey = app.config.ais.gatekeeperKey;
       } else {
-        var params = {
-          gatekeeperKey: app.config.ais.betsyKey,
-          // include_units: '',
-        };
+        params.gatekeeperKey = app.config.ais.betsyKey;
       }
+
+      params.include_units = true;
+
       $.ajax({
         url: url,
         data: params,

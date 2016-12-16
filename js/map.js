@@ -653,49 +653,45 @@ app.map = (function ()
 			localStorage.setItem('clickedOnMap', true);
       app.state.map.shouldPan = false;
 
-      // query parcel layer
-      // var parcelQuery = L.esri.query({url: app.config.parcelLayerUrl});
-      // parcelQuery.contains(e.latlng)
-      // parcelQuery.run(app.didGetParcelQueryResult);
-      if (app.state.map.clickedCircle){
-        console.log('clicked a circle');
+      // if this was a cyclomedia circle click, don't do anything
+      if (app.state.map.clickedCircle) {
+        // console.log('clicked a circle');
         app.state.map.clickedCircle = false;
-      } else {
+				return;
+      }
 
+			// otherwise, it was a parcel click. get the parcel ID and query AIS.
       app.getParcelByLatLng(e.latlng, function () {
+				// which parcels are being displayed?
+				var activeTopic = app.state.activeTopic,
+						DOR_TOPICS = ['deeds', 'zoning'],
+						parcelLayer = DOR_TOPICS.indexOf(activeTopic) > -1 ? 'dor' : 'pwd',
+						parcelId;
 
-				if(app.state.activeTopic == 'deeds' || app.state.activeTopic == 'zoning') {
-					var parcel = app.state.dor.features[0],
-	            parcelAddress = app.util.concatDorAddress(parcel);
-
-	        // if the parcel address is null or falsy, don't proceed
-	        var parcelHouseNumber = app.util.cleanDorAttribute(parcel.properties.HOUSE);
-				} else {
-					var parcel = app.state.waterGIS.features[0],
-						parcelAddress = parcel.properties.ADDRESS;
-						parcelHouseNumber = parcelAddress
+				switch (parcelLayer) {
+					case 'dor':
+						var parcel = app.state.dor.features[0];
+						parcelId = parcel.properties.MAPREG;
+						console.log('dor parcel, id:', parcelId);
+						break;
+					case 'pwd':
+						var parcel = app.state.waterGIS.features[0];
+						parcelId = parcel.properties.PARCELID;
+						console.log('pwd parcel, id:', parcelId);
+						break;
+					default:
+						console.log('unknown parcel layer:', parcelLayer)
+						break;
 				}
-        if (!parcelAddress || parcelAddress.length === 0 || !parcelHouseNumber) {
-          console.log('no parcel address', parcel);
-          // show error
-          $noParcelAddressModal = $('#no-parcel-address-modal');
-          $noParcelAddressModal.find('#parcel-id').text(parcelAddress || '<empty>');
-          $noParcelAddressModal.foundation('open');
-          return;
-        }
 
         // if this is the result of a map click, query ais for the address
         if (app.state.map.clickedOnMap) {
-          app.searchForAddress(parcelAddress);
+					// this is a little kludgy b/c technically we don't have an address,
+					// but should work anyway.
+          app.searchForAddress(parcelId);
           app.state.map.clickedOnMap = true; //andy changed this 11/29
-					//localStorage.setItem('clickedOnMap', true);
         }
-
-        // render parcel
-        // disabling this so we only draw the parcel after we get an ais result
-        // app.map.drawParcel();
       });
-    }
     },
 
     drawParcel: function () {
