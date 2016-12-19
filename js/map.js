@@ -143,7 +143,7 @@ app.map = (function ()
 			};*/
 			app.map.baseToolTip.addTo(_map);
 			app.state.map.waterDisclaimer = 'The property boundaries displayed on the map are for reference only and may not be used in place of recorded deeds or land surveys. Boundaries are generalized for ease of visualization. Source: Philadelphia Water'
-			app.state.map.DORDisclaimer = 'The property boundaries displayed on the map are for reference only and may not be used in place of recorded deeds or land surveys.  Source: Department of Records.'
+			app.state.map.DORDisclaimer = 'The property boundaries displayed on the map are for reference only and may not be used in place of recorded deeds or land surveys. Dimension lengths are calculated using the GIS feature. Source: Department of Records.'
 
 			$('.basetooltip').on('mouseover', function(){
 				if (!app.state.activeTopic || app.state.activeTopic != 'deeds' && app.state.activeTopic != 'zoning'){
@@ -640,6 +640,7 @@ app.map = (function ()
     },
 
     renderAisResult: function (obj) {
+			console.log('starting to run renderAisResult');
       if (app.state.dor) this.drawParcel();
 			// if (app.state.activeTopic == 'elections') {
 			// 	app.map.removeElectionInfo();
@@ -695,6 +696,7 @@ app.map = (function ()
     },
 
     drawParcel: function () {
+			console.log('starting to run drawParcel');
       // if there's no parcel in state, clear the map and don't render
       // TODO zoom to AIS xy
       var parcelDOR, geomDOR, center;
@@ -731,7 +733,6 @@ app.map = (function ()
 					}),
           parcelCentroid = parcelPolyDOR.getBounds().getCenter(),
 					parcelMarker = new L.Marker.SVGMarker([parcelCentroid.lat, parcelCentroid.lng], {
-					//parcelMarker = new L.Marker.SVGMarker([39.952388, -75.163596], {
 						"iconOptions": {
 							className: 'svg-icon-noClick',
 							circleRatio: 0,
@@ -771,6 +772,7 @@ app.map = (function ()
 			} else if (app.state.activeTopic == 'water') {
 				_parcelLayerGroup.addLayer(parcelPolyWater);
 			} else {
+				console.log('placing marker')
 				_parcelLayerGroup.addLayer(parcelMarker);
 			}
 			app.map.domLayerList();
