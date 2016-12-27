@@ -696,7 +696,8 @@ app.map = (function ()
     },
 
     drawParcel: function () {
-			console.log('starting to run drawParcel');
+			// console.log('draw parcel');
+
       // if there's no parcel in state, clear the map and don't render
       // TODO zoom to AIS xy
       var parcelDOR, geomDOR, center;
@@ -772,7 +773,7 @@ app.map = (function ()
 			} else if (app.state.activeTopic == 'water') {
 				_parcelLayerGroup.addLayer(parcelPolyWater);
 			} else {
-				console.log('placing marker')
+				// console.log('placing marker')
 				_parcelLayerGroup.addLayer(parcelMarker);
 			}
 			app.map.domLayerList();

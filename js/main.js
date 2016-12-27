@@ -282,17 +282,14 @@ var app = (function ()
     },
 
     route: function () {
-      console.log('route is starting to run');
+      // console.log('route');
       var hash = location.hash,
           params = app.util.getQueryParams(),
           comps = hash.split('/');
 
-      console.log('params is ' + params);
-      console.log('comps is ' + comps);
       // if there are query params
       var searchParam = params.search;
       if (searchParam) {
-        console.log('searchParam is ' +  searchParam);
         app.searchForAddress(searchParam);
         // TODO fix url
         return;
@@ -485,19 +482,25 @@ var app = (function ()
     didGetAisResult: function () {
       // console.log('did get ais result');
 
-      // set app state
-      // app.state.ais = data;
-      var data = app.state.ais;
-
-      // get values
-      var selectedAddress = app.state.selectedAddress,
+      var data = app.state.ais,
+          selectedAddress = app.state.selectedAddress,
           obj;
       if (selectedAddress) {
         obj = _.filter(data.features, {properties: {street_address: selectedAddress}})[0];
       }
-      else obj = data.features[0]
+      else obj = data.features[0];
       var props = obj.properties,
-          streetAddress = props.street_address;
+          streetAddress = props.street_address,
+          matchType = obj.match_type;
+
+      // check for a "good" result. for now let's say this is any address with
+      // an XY in AIS. in the future we may want to handle addresses that can't
+      // be geocoded but have some amount of related data.
+      if (!matchType || ['parsed', 'estimated',].indexOf(matchType) > -1) {
+          // show error and bail out
+          $('#no-results-modal').foundation('open');
+          return;
+      }
 
       // make mailing address
       // var mailingAddress = streetAddress + '<br>PHILADELPHIA, PA ' + props.zip_code;
@@ -529,8 +532,10 @@ var app = (function ()
       // render map for this address
       if (selectedAddress) app.map.renderAisResult(obj);
 
+      // clear out data in topic views
+      app.resetTopicViews();
+
       // get topics
-      // app.getTopics(props);
       app.getTopics();
 
       // push state
@@ -561,6 +566,14 @@ var app = (function ()
           $topicContentNotFound = $(topicDivId + ' > .topic-content-not-found');
       $topicContent.hide();
       $topicContentNotFound.show();
+    },
+
+    // clears out data rendered in topics
+    resetTopicViews: function () {
+      console.log('reset topic views');
+
+      var topicCells = $('.topic td');
+      topicCells.empty();
     },
 
     // initiates requests to topic APIs (OPA, L&I, etc.)
@@ -754,45 +767,50 @@ var app = (function ()
       /*
       ELECTIONS
       */
-      var electionsUrl = '//api.phila.gov/elections',
-          electionsWard = aisProps.political_ward,
-          // TODO divisions in AIS are prefixed with the ward num; slice it out
-          // apparently this is called the `division_id` in the elections API
-          electionsDivision = aisProps.political_division.substring(2);
+      if (aisProps.political_ward && aisProps.political_division) {
+        var electionsUrl = '//api.phila.gov/elections',
+        electionsWard = aisProps.political_ward,
+        // TODO divisions in AIS are prefixed with the ward num; slice it out
+        // apparently this is called the `division_id` in the elections API
+        electionsDivision = aisProps.political_division.substring(2);
 
-      $.ajax({
-        url: electionsUrl,
-        data: {
-          option: 'com_pollingplaces',
-          view: 'json',
-          ward: electionsWard,
-          division: electionsDivision,
-        },
-        success: function (jsonString) {
-          // no json headers set on this
-          var data = JSON.parse(jsonString);
+        $.ajax({
+          url: electionsUrl,
+          data: {
+            option: 'com_pollingplaces',
+            view: 'json',
+            ward: electionsWard,
+            division: electionsDivision,
+          },
+          success: function (jsonString) {
+            // no json headers set on this
+            var data = JSON.parse(jsonString);
 
-          if (!data.features || data.features.length < 1) {
-            // does this work?
-            console.log('elections no features, trying to call error callback');
-            this.error();
-          }
+            if (!data.features || data.features.length < 1) {
+              // does this work?
+              console.log('elections no features, trying to call error callback');
+              this.error();
+            }
 
-          //console.log('elections', data);
-          app.state.elections = data;
-          app.didGetElections();
+            //console.log('elections', data);
+            app.state.elections = data;
+            app.didGetElections();
 
-          $('#topic-election .topic-content').show();
-          $('#topic-election .topic-content-not-found').hide();
-        },
-        error: function (err) {
-          console.log('elections error', err);
-          app.state.elections = null;
+            $('#topic-election .topic-content').show();
+            $('#topic-election .topic-content-not-found').hide();
+          },
+          error: function (err) {
+            console.log('elections error', err);
+            app.state.elections = null;
 
-          $('#topic-election .topic-content').hide();
-          $('#topic-election .topic-content-not-found').show();
-        },
-      });
+            $('#topic-election .topic-content').hide();
+            $('#topic-election .topic-content-not-found').show();
+          },
+        });
+      }
+      else {
+        // TODO clean up elections content
+      }
 
       /*
       PUBLIC SAFETY
@@ -1393,8 +1411,12 @@ var app = (function ()
 
       // console.log('get activity for: ', label);
 
-      var aisGeom = app.state.ais.features[0].geometry,
-          aisX = aisGeom.coordinates[0],
+      // make sure we have an XY first
+      // TODO clear out 'nearby' content if no XY.
+      var aisGeom = app.state.ais.features[0].geometry;
+      if (!aisGeom.geocode_type) return;
+
+      var aisX = aisGeom.coordinates[0],
           aisY = aisGeom.coordinates[1],
           radiusMeters = app.config.nearby.radius * 0.3048,
           activityTypes = app.config.nearby.activityTypes,
