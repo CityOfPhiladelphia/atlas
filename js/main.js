@@ -29,7 +29,8 @@ var app = (function ()
         }));
       })(),
       // DEBUG_ADDRESS = DEBUG_ADDRESSES[HOST] || '1234 market st',
-      DEBUG_ADDRESS = '1234 market st',
+      // DEBUG_ADDRESS = '1234 market st',
+      DEBUG_ADDRESS = 'n 3rd st & market st',
     // dynamically form a url based on the current hostname
     // this can't go in app.util because it hasn't been defined yet
       constructLocalUrl = function (host, path) {
@@ -350,7 +351,7 @@ var app = (function ()
 
     // fires ais search
     searchForAddress: function (address) {
-
+      console.log('search for address', address);
       var url = app.config.ais.url + encodeURIComponent(address),
           params = {};
 
@@ -367,16 +368,35 @@ var app = (function ()
         url: url,
         data: params,
         success: function (data) {
-          // console.log('got ais', data);
+          console.log('got ais', data);
           app.state.shouldOpenTopics = true;
           app.state.ais = data;
 
           // if more than one address result, show a modal
-          if (data.features.length > 1) app.showMultipleAisResultModal();
-          else {
-            app.state.selectedAddress = data.features[0].properties.street_address;
-            app.didGetAisResult();
+          if (data.features.length > 1) {
+            app.showMultipleAisResultModal();
+            return;
           }
+
+          var feature = data.features[0],
+              aisFeatureType = feature.ais_feature_type,
+              selectedAddress;
+
+          switch(aisFeatureType) {
+            case 'address':
+              selectedAddress = feature.properties.street_address;
+              break;
+            case 'intersection':
+              // selectedAddress = data.normalized[0];
+              selectedAddress = null;
+              break;
+            default:
+              console.log('unhandled feature type:', aisFeatureType);
+              break;
+          }
+
+          app.state.selectedAddress = selectedAddress;
+          app.didGetAisResult();
         },
         error: function (err) {
           console.log('ais error', err);
@@ -480,23 +500,24 @@ var app = (function ()
     },
 
     didGetAisResult: function () {
-      // console.log('did get ais result');
+      console.log('did get ais result');
 
       var data = app.state.ais,
           selectedAddress = app.state.selectedAddress,
           obj;
+
       if (selectedAddress) {
         obj = _.filter(data.features, {properties: {street_address: selectedAddress}})[0];
       }
       else obj = data.features[0];
       var props = obj.properties,
-          streetAddress = props.street_address,
-          matchType = obj.match_type;
+          aisFeatureType = obj.ais_feature_type,
+          streetAddress = aisFeatureType === 'address' ? props.street_address : data.normalized[0];
 
       // check for a "good" result. for now let's say this is any address with
       // an XY in AIS. in the future we may want to handle addresses that can't
       // be geocoded but have some amount of related data.
-      if (!matchType || ['parsed', 'estimated',].indexOf(matchType) > -1) {
+      if (!obj.geometry.geocode_type) {
           // show error and bail out
           $('#no-results-modal').foundation('open');
           return;
@@ -530,7 +551,8 @@ var app = (function ()
       // $('#zoning-code').text(props.zoning);
 
       // render map for this address
-      if (selectedAddress) app.map.renderAisResult(obj);
+      // if (selectedAddress) app.map.renderAisResult(obj);
+      app.map.didSelectAddress();
 
       // clear out data in topic views
       app.resetTopicViews();

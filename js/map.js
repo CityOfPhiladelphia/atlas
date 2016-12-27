@@ -639,8 +639,9 @@ app.map = (function ()
       })
     },
 
-    renderAisResult: function (obj) {
-			console.log('starting to run renderAisResult');
+    didSelectAddress: function () {
+			console.log('did select address');
+
       if (app.state.dor) this.drawParcel();
 			// if (app.state.activeTopic == 'elections') {
 			// 	app.map.removeElectionInfo();
