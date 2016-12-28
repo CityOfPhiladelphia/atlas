@@ -85,6 +85,7 @@ app.map = (function ()
       _baseLayerGroup = new L.LayerGroup(),
       _labelLayerGroup = new L.LayerGroup(),
       _overlayLayerGroup = new L.LayerGroup(),
+			//_markerLayerGroup = new L.LayerGroup(),
 
       _nearbyActivityLayerGroup = new L.FeatureGroup(),
       // create an empty layer group for the parcel query layer
@@ -333,6 +334,7 @@ app.map = (function ()
 
       // The next are not used initially
       _overlayLayerGroup.addTo(_map);
+			//_markerLayerGroup.addTo(_map);
       _parcelLayerGroup.addTo(_map);
       _nearbyActivityLayerGroup.addTo(_map);
 			_electionFeatureGroup.addTo(_map);
@@ -640,9 +642,10 @@ app.map = (function ()
     },
 
     didSelectAddress: function () {
-			console.log('did select address');
+			console.log('did select address is calling createAddressMarkers');
+			this.createAddressMarkers();
 
-      if (app.state.dor) this.drawParcel();
+      //if (app.state.dor) this.drawParcel();
 			// if (app.state.activeTopic == 'elections') {
 			// 	app.map.removeElectionInfo();
 			// 	app.map.addElectionInfo();
@@ -677,7 +680,7 @@ app.map = (function ()
 						console.log('dor parcel, id:', parcelId);
 						break;
 					case 'pwd':
-						var parcel = app.state.waterGIS.features[0];
+						var parcel = app.state.pwd.features[0];
 						parcelId = parcel.properties.PARCELID;
 						console.log('pwd parcel, id:', parcelId);
 						break;
@@ -696,8 +699,15 @@ app.map = (function ()
       });
     },
 
-    drawParcel: function () {
-			// console.log('draw parcel');
+		createAddressMarkers: function () {
+			console.log('running createAddressMarkers');
+
+			// make sure we have both dor and pwd in state. otherwise, return.
+			if (!(app.state.dor && app.state.pwd)) {
+				console.log('create address markers, but we dont have parcels yet')
+				return;
+			}
+			else console.log('create address markers, and we have parcels yay!')
 
       // if there's no parcel in state, clear the map and don't render
       // TODO zoom to AIS xy
@@ -716,7 +726,7 @@ app.map = (function ()
         return;
       }
 
-			var parcelWater = app.state.waterGIS.features[0]
+			var parcelWater = app.state.pwd.features[0]
 			var geomWater = parcelWater.geometry;//.rings;
 
       var coordsDOR = app.util.flipCoords(geomDOR.coordinates),
@@ -734,7 +744,8 @@ app.map = (function ()
 		        type: 'parcel',
 					}),
           parcelCentroid = parcelPolyDOR.getBounds().getCenter(),
-					parcelMarker = new L.Marker.SVGMarker([parcelCentroid.lat, parcelCentroid.lng], {
+					aisGeom = app.state.aisFeature.geometry,
+					aisMarker = new L.Marker.SVGMarker([aisGeom.coordinates[1], aisGeom.coordinates[0]], {
 						"iconOptions": {
 							className: 'svg-icon-noClick',
 							circleRatio: 0,
@@ -748,10 +759,22 @@ app.map = (function ()
 		        type: 'parcel',
 					});
 
-			app.state.parcelPolyDOR = parcelPolyDOR;
-			app.state.parcelPolyWater = parcelPolyWater;
-      app.state.theParcelCentroid = parcelCentroid;
-			app.state.parcelMarker = parcelMarker;
+			app.state.theParcelCentroid = parcelCentroid;
+			app.state.map.addressMarkers = {};
+
+			app.state.map.addressMarkers.parcelPolyDOR = parcelPolyDOR;
+			app.state.map.addressMarkers.parcelPolyWater = parcelPolyWater;
+			app.state.map.addressMarkers.aisMarker = aisMarker;
+
+			console.log('created address markers')
+
+			// calling LSinit will alert Pictometry and Cyclomedia to change
+			app.map.LSinit();
+		},
+
+    drawParcel: function () {
+			console.log('running drawParcel');
+
       // clear existing parcel
       _parcelLayerGroup.clearLayers();
 
@@ -759,7 +782,7 @@ app.map = (function ()
       // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
       if (app.state.map.shouldPan) {
         // zoom to bounds of parcel poly plus some buffer
-        var boundsPadded = parcelPolyDOR.getBounds().pad(1.15);
+        var boundsPadded = app.state.map.addressMarkers.parcelPolyDOR.getBounds().pad(1.15);
         // _map.fitBounds(bounds, {padding: ['20%', '20%']});
         _map.fitBounds(boundsPadded);
         // or need to use parcel centroid instead of center of map
@@ -932,23 +955,60 @@ app.map = (function ()
     },
 
     didChangeTopic: function (prevTopic, nextTopic) {
+			console.log('did change topic', prevTopic, '=>', nextTopic);
+
+			// if we don't have both parcels, don't do anything
+			if (!(app.state.dor && app.state.pwd)) {
+				console.log('did change topic, but we dont have parcels yet, returning')
+				return;
+			}
+
       // console.log('did change topic', prevTopic, '=>', nextTopic);
 
       if (prevTopic) {
+				console.log('deactivating ' + prevTopic);
         app.map.didDeactivateTopic(prevTopic);
       }
 
       if (nextTopic) {
+				console.log('activating ' + nextTopic);
         app.map.didActivateTopic(nextTopic);
       }
 
 			localStorage.setItem('previousTopic', prevTopic);
 			localStorage.setItem('activeTopic', nextTopic);
+			console.log('got to end of didChangeTopic');
     },
+
+		showAddressMarker: function (markerType) {
+			console.log('show address marker', markerType);
+
+			if (!app.state.map.addressMarkers) {
+				console.log('show address marker, but we havent created them yet');
+				return;
+			}
+
+			_parcelLayerGroup.clearLayers();
+
+			var marker = app.state.map.addressMarkers[markerType];
+			marker.addTo(_parcelLayerGroup);
+			app.map.domLayerList();
+
+			// pan map
+      // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
+      if (app.state.map.shouldPan) {
+        // zoom to bounds of parcel poly plus some buffer
+        var boundsPadded = app.state.map.addressMarkers.parcelPolyDOR.getBounds().pad(1.15);
+        // _map.fitBounds(bounds, {padding: ['20%', '20%']});
+        _map.fitBounds(boundsPadded);
+        // or need to use parcel centroid instead of center of map
+        // set new state and localStorage
+      };
+		},
 
     // called when the active topic in the topic panel changes
     didActivateTopic: function (topic) {
-      // console.log('did activate topic', topic);
+      console.log('did activate topic', topic);
 
       // save to localstorage for pictometry viewer
       // localStorage.setItem('activeTopic', topic);
@@ -956,16 +1016,23 @@ app.map = (function ()
       _overlayLayerGroup.clearLayers();
       app.map.domLayerList();
 
+			var markerType = 'aisMarker';
+
       switch (topic) {
         case 'deeds':
 					if (app.state.map.nameBaseLayer == 'baseMapLight') {
+						console.log('dor checked while it is baseMapLight')
 	          _baseLayerGroup.clearLayers();
 						_labelLayerGroup.clearLayers();
 						app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
 						app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
 					}
+					console.log('finished if');
 					app.map.domLayerList();
+					console.log('finished domLayerList');
 					app.map.toggleParcelMarker();
+					console.log('finished toggleParcelMarker');
+					markerType = 'parcelPolyDOR';
           break;
         case 'zoning':
 					if (app.state.map.nameBaseLayer == 'baseMapLight') {
@@ -1000,6 +1067,7 @@ app.map = (function ()
 						return div;
 					};
 					app.map.waterLegend.addTo(_map);
+					markerType = 'parcelPolyWater';
 					break;
 				case 'elections':
 					app.map.addElectionInfo();
@@ -1008,6 +1076,10 @@ app.map = (function ()
           // console.log('unhandled topic:', topic);
       }
 			//app.map.toggleParcelMarker();
+
+			// add marker to map
+			console.log('didActivateTopic is calling showAddressMarker with type', markerType);
+			this.showAddressMarker(markerType);
     },
 
     didDeactivateTopic: function (topic) {
@@ -1017,13 +1089,17 @@ app.map = (function ()
       switch (topic) {
         case 'deeds':
 					if (app.state.map.nameBaseLayer == 'baseMapDOR') {
+						console.log('deactivating deeds, basemap is baseMapDOR');
 						_baseLayerGroup.clearLayers();
 						_labelLayerGroup.clearLayers();
 						app.state.map.tileLayers.baseMapLight.addTo(_baseLayerGroup);
 						app.state.map.tileLayers.overlayBaseLabels.addTo(_labelLayerGroup);
 					}
+					console.log('finished did deactivate topic deeds if');
 					app.map.domLayerList();
+					console.log('finished domLayerList');
 					app.map.toggleParcelMarker();
+					console.log('finished toggleParcelMarker');
           break;
         case 'zoning':
 					if (app.state.map.nameBaseLayer == 'baseMapDOR') {
@@ -1071,21 +1147,23 @@ app.map = (function ()
 			if (app.state.map.nameParcelLayer == 'parcelMarker') {
 				if (app.state.activeTopic == 'deeds') {
 					_parcelLayerGroup.clearLayers();
-					_parcelLayerGroup.addLayer(app.state.parcelPolyDOR);
+					_parcelLayerGroup.addLayer(app.state.map.addressMarkers.parcelPolyDOR);
 				} else if (app.state.activeTopic == 'water') {
 					_parcelLayerGroup.clearLayers();
-					_parcelLayerGroup.addLayer(app.state.parcelPolyWater);
+					_parcelLayerGroup.addLayer(app.state.map.addressMarkers.parcelPolyWater);
 				}
 			}
 			if (app.state.map.nameParcelLayer == 'parcelPolyDOR') {
 				//console.log(app.state.activeTopic);
-				//console.log(app.state.map.nameParcelLayer);
+				console.log('in toggleParcleMarker, app.state.map.nameParcelLayer is ' + app.state.map.nameParcelLayer);
 				if (app.state.activeTopic == 'water') {
+					console.log('activeTopic is water');
 					_parcelLayerGroup.clearLayers();
-					_parcelLayerGroup.addLayer(app.state.parcelPolyWater);
+					_parcelLayerGroup.addLayer(app.state.map.addressMarkers.parcelPolyWater);
 				} else if (app.state.activeTopic != 'deeds' || app.state.activeTopic === null) {
+					console.log('activeTopic is otherwise');
 					_parcelLayerGroup.clearLayers();
-					_parcelLayerGroup.addLayer(app.state.parcelMarker);
+					_parcelLayerGroup.addLayer(app.state.map.addressMarkers.aisMarker);
 				}
 			}
 			if (app.state.map.nameParcelLayer == 'parcelPolyWater') {
@@ -1093,10 +1171,10 @@ app.map = (function ()
 				//console.log(app.state.map.nameParcelLayer);
 				if (app.state.activeTopic == 'deeds') {
 					_parcelLayerGroup.clearLayers();
-					_parcelLayerGroup.addLayer(app.state.parcelPolyDOR);
+					_parcelLayerGroup.addLayer(app.state.map.addressMarkers.parcelPolyDOR);
 				} else if (app.state.activeTopic != 'water' || app.state.activeTopic === null) {
 					_parcelLayerGroup.clearLayers();
-					_parcelLayerGroup.addLayer(app.state.parcelMarker);
+					_parcelLayerGroup.addLayer(app.state.map.addressMarkers.aisMarker);
 				}
 			}
 		},

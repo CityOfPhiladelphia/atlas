@@ -481,6 +481,7 @@ var app = (function ()
       } else {
         prevTopic = null;
       }
+      console.log('activateTopic is calling didChangeTopic');
       app.map.didChangeTopic(prevTopic, targetTopicName);
     },
 
@@ -491,6 +492,7 @@ var app = (function ()
       if ($targetTopic.is(':visible')){
         app.state.activeTopic = null
         $targetTopic.slideUp(350);
+        console.log('toggleTopic is calling didChangeTopic');
         app.map.didChangeTopic(targetTopicName, null);
         // app.map.didDeactivateTopic(targetTopicName);
 
@@ -579,7 +581,65 @@ var app = (function ()
 
       // if no topic is active, activate property
       // if (!app.state.nextTopic) {}
-      app.activateTopic(nextTopic);
+      console.log('didGetAisResult is calling activateTopic');
+      // app.activateTopic(nextTopic);
+
+      // get pwd and dor parcels
+      app.state.dor = app.state.pwd = null;
+
+      app.getParcels(function () {
+        console.log('get parcels finished, letting map.js know');
+
+        // activate the next topic (note this triggers a callback in map.js)
+        app.activateTopic(nextTopic);
+
+        // tell map it's ok to create markers
+        app.map.createAddressMarkers();
+      });
+    },
+
+    getParcels: function (callback) {
+      console.log('get parcels');
+
+      /*
+      DOR
+      */
+
+      // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
+      var aisFeature = app.state.aisFeature,
+          aisParcelId = aisFeature.properties.dor_parcel_id,
+          waterParcelId = aisFeature.properties.pwd_parcel_id,
+          stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
+
+      // clear els
+      _.forEach(['id', 'address', 'status', 'air-rights', 'condo'], function (tag) {
+        var $el = $('#deeds-' + tag);
+        $el.empty();
+      });
+
+      // if we already have the parcel
+      if (stateParcel && stateParcel.properties.MAPREG === aisParcelId) {
+        app.renderParcelTopic();
+      }
+      // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
+      else if (aisParcelId) {
+        app.getParcelById(aisParcelId, waterParcelId, function () {
+          //console.log('got parcel by id', app.state.dor);
+          app.renderParcelTopic();
+          console.log('get parcels (dor callback) is calling createAddressMarkers');
+          app.map.createAddressMarkers();
+
+          app.map.didActivateTopic(app.state.activeTopic);
+        });
+      }
+
+      /*
+      PWD
+      */
+
+      // actually this is happening elsewhere in the code
+
+      callback();
     },
 
     showContentForTopic: function (topic) {
@@ -668,30 +728,30 @@ var app = (function ()
 
       // DOR
       // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
-      var aisFeature = app.state.aisFeature,
-          aisParcelId = aisFeature.properties.dor_parcel_id,
-          waterParcelId = aisFeature.properties.pwd_parcel_id,
-          stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
-
-      // clear els
-      _.forEach(['id', 'address', 'status', 'air-rights', 'condo'], function (tag) {
-        var $el = $('#deeds-' + tag);
-        $el.empty();
-      });
+      // var aisFeature = app.state.aisFeature,
+      //     aisParcelId = aisFeature.properties.dor_parcel_id,
+      //     waterParcelId = aisFeature.properties.pwd_parcel_id,
+      //     stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
+      //
+      // // clear els
+      // _.forEach(['id', 'address', 'status', 'air-rights', 'condo'], function (tag) {
+      //   var $el = $('#deeds-' + tag);
+      //   $el.empty();
+      // });
 
       // if we already have the parcel
-      if (stateParcel && stateParcel.properties.MAPREG === aisParcelId) {
-        app.renderParcelTopic();
-      }
-      // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
-      else if (aisParcelId) {
-        app.getParcelById(aisParcelId, waterParcelId, function () {
-          //console.log('got parcel by id', app.state.dor);
-          app.renderParcelTopic();
-          console.log('getTopics is calling drawParcel');
-          app.map.drawParcel();
-        });
-      }
+      // if (stateParcel && stateParcel.properties.MAPREG === aisParcelId) {
+      //   app.renderParcelTopic();
+      // }
+      // // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
+      // else if (aisParcelId) {
+      //   app.getParcelById(aisParcelId, waterParcelId, function () {
+      //     //console.log('got parcel by id', app.state.dor);
+      //     app.renderParcelTopic();
+      //     console.log('getTopics is calling createAddressMarkers');
+      //     app.map.createAddressMarkers();
+      //   });
+      // }
 
       // get dor documents
       $.ajax({
@@ -789,7 +849,7 @@ var app = (function ()
           search: aisAddress,
         },
         success: function (data) {
-          app.state.water = JSON.parse(data);
+          app.state.stormwater = JSON.parse(data);
           app.didGetWater();
         },
         error: function (err) {
@@ -1174,9 +1234,17 @@ var app = (function ()
         }
 
         // update state
-        app.state.waterGIS = featureCollection;
+        app.state.pwd = featureCollection;
         // if there's a callback, call it
         //callback && callback();
+
+        // tell map to create address markers
+        console.log('get parcel by id (pwd callback) is calling createAddressMarkers')
+        app.map.createAddressMarkers();
+
+        // now trigger did activate topic so the marker is shown
+        console.log('get parcel by id (pwd callback) is calling didActivateTopic')
+        app.map.didActivateTopic(app.state.activeTopic);
       });
       /*$.ajax({
         url: app.config.esri.parcelLayerWaterUrl + '/query',
@@ -1196,7 +1264,7 @@ var app = (function ()
             console.log('got water parcel but 0 features', this.url);
           }
 
-          app.state.waterGIS = data;
+          app.state.pwd = data;
           //callback && callback();
 
           //app.showContentForTopic('deeds');
@@ -1256,7 +1324,7 @@ var app = (function ()
             }
 
             // update state
-            app.state.waterGIS = featureCollection;
+            app.state.pwd = featureCollection;
             // if there's a callback, call it
             callback && callback();
         })
@@ -1569,7 +1637,7 @@ var app = (function ()
     didGetWater: function () {
       // the stormwater api seems to return a list of opa matches
       // however, there seems to (generally) be just one item
-      var data = app.state.water,  // this is actually a list of matches
+      var data = app.state.stormwater,  // this is actually a list of matches
           item = data[0],
           parcel = item.Parcel,
           parcelId = parcel.ParcelID,
