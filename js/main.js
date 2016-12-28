@@ -29,8 +29,8 @@ var app = (function ()
         }));
       })(),
       // DEBUG_ADDRESS = DEBUG_ADDRESSES[HOST] || '1234 market st',
-      // DEBUG_ADDRESS = '1234 market st',
-      DEBUG_ADDRESS = 'n 3rd st & market st',
+      DEBUG_ADDRESS = '1234 market st',
+      // DEBUG_ADDRESS = 'n 3rd st & market st',
     // dynamically form a url based on the current hostname
     // this can't go in app.util because it hasn't been defined yet
       constructLocalUrl = function (host, path) {
@@ -203,7 +203,6 @@ var app = (function ()
         e.preventDefault();
         var $this = $(this),
             topicName = $this.attr('id').replace('topic-link-', '');
-            console.log('topicName is ' + topicName);
         app.toggleTopic(topicName);
       });
 
@@ -319,8 +318,8 @@ var app = (function ()
       }
 
       // rehydrate state
-      var ais = state.ais;
-      app.state.ais = ais;
+      var aisFeature = state.aisFeature;
+      app.state.aisFeature = aisFeature;
       app.didGetAisResult();
 
       // get topics
@@ -371,32 +370,29 @@ var app = (function ()
         success: function (data) {
           console.log('got ais', data);
           app.state.shouldOpenTopics = true;
-          app.state.ais = data;
+          // app.state.ais = data;
 
           // if more than one address result, show a modal
           if (data.features.length > 1) {
-            app.showMultipleAisResultModal();
+            app.showMultipleAisResultModal(data);
             return;
           }
 
-          var feature = data.features[0],
-              aisFeatureType = feature.ais_feature_type,
-              selectedAddress;
-
-          switch(aisFeatureType) {
-            case 'address':
-              selectedAddress = feature.properties.street_address;
-              break;
-            case 'intersection':
-              // selectedAddress = data.normalized[0];
-              selectedAddress = null;
-              break;
-            default:
-              console.log('unhandled feature type:', aisFeatureType);
-              break;
+          // this shouldn't happen, but just in case
+          if (data.features.length === 0) {
+            console.error('got ais but no features');
+            return;
           }
 
-          app.state.selectedAddress = selectedAddress;
+          var aisFeature = data.features[0];
+
+          // if it's an intersection, create a dummy `street_address` prop
+          // to make this easier to work with
+          if (aisFeature.ais_feature_type === 'intersection') {
+            aisFeature.properties.street_address = data.normalized[0];
+          }
+
+          app.state.aisFeature = aisFeature;
           app.didGetAisResult();
         },
         error: function (err) {
@@ -406,9 +402,9 @@ var app = (function ()
       });
     },
 
-    showMultipleAisResultModal: function (callback) {
+    showMultipleAisResultModal: function (data, callback) {
       // console.log('show multiple ais modal');
-      var data = app.state.ais;
+      // var data = app.state.ais;
 
       $('#addressList').empty();
 
@@ -426,11 +422,20 @@ var app = (function ()
         $('#addressModal').foundation('close');
         $('#addressList').empty()
 
-        // store selected address in state
+        // store ais feature in state
         var selectedIndex = $(this).attr('number'),
-            selectedAddressObj = data.features[selectedIndex],
-            selectedAddress = selectedAddressObj.properties.street_address;
-        app.state.selectedAddress = selectedAddress;
+            aisFeature = data.features[selectedIndex];
+            // selectedAddress = selectedAddressObj.properties.street_address;
+        // app.state.selectedAddress = selectedAddress;
+
+        // if it's an intersection, create a dummy `street_address` prop
+        // to make this easier to work with
+        if (aisFeature.ais_feature_type === 'intersection') {
+          aisFeature.properties.street_address = data.normalized[0];
+        }
+
+        app.state.aisFeature = aisFeature;
+
         app.didGetAisResult();
       });
     },
@@ -438,16 +443,19 @@ var app = (function ()
     // takes a topic (formerly "data row") name and activates the corresponding
     // section in the data panel
     activateTopic: function (targetTopicName) {
-      console.log('running activateTopic with ' + targetTopicName);
+      console.log('activate topic:', targetTopicName);
+
       // prevent topics from opening until we have at least AIS (arbitrary , but should work)
-      var ais = app.state.ais;
+      // var ais = app.state.ais;
       // if (!ais) return;
 
       // update url, eg /#/1234 MARKET ST/property
-      var address = app.state.ais.features[0].properties.street_address,
+      // var address = app.state.ais.features[0].properties.street_address,
+      var aisFeature = app.state.aisFeature,
+          address = aisFeature.properties.street_address,
           hash = app.util.constructHash(address, targetTopicName),
           // pare down state to something serializable
-          state = {ais: ais};
+          state = {aisFeature: aisFeature};
       history.replaceState(state, '', hash);
 
       app.state.activeTopic = targetTopicName;
@@ -501,24 +509,26 @@ var app = (function ()
     },
 
     didGetAisResult: function () {
-      console.log('did get ais result');
+      console.log('did get ais result', app.state.aisFeature);
 
-      var data = app.state.ais,
-          selectedAddress = app.state.selectedAddress,
-          obj;
+      var aisFeature = app.state.aisFeature;
+          // selectedAddress = app.state.selectedAddress,
+          // obj;
 
-      if (selectedAddress) {
-        obj = _.filter(data.features, {properties: {street_address: selectedAddress}})[0];
-      }
-      else obj = data.features[0];
-      var props = obj.properties,
-          aisFeatureType = obj.ais_feature_type,
-          streetAddress = aisFeatureType === 'address' ? props.street_address : data.normalized[0];
+      // if (selectedAddress) {
+      //   obj = _.filter(data.features, {properties: {street_address: selectedAddress}})[0];
+      // }
+      // else obj = data.features[0];
+      var props = aisFeature.properties,
+          aisFeatureType = aisFeature.ais_feature_type,
+          streetAddress = props.street_address;
+
+      console.log('street address', streetAddress, aisFeature)
 
       // check for a "good" result. for now let's say this is any address with
       // an XY in AIS. in the future we may want to handle addresses that can't
       // be geocoded but have some amount of related data.
-      if (!obj.geometry.geocode_type) {
+      if (!aisFeature.geometry.geocode_type) {
           // show error and bail out
           $('#no-results-modal').foundation('open');
           return;
@@ -532,7 +542,7 @@ var app = (function ()
 
       // the full mailing address is useful for other things (like elections),
       // so keep it in state
-      app.state.ais.mailingAddress = streetAddress + ', ' + line2;
+      app.state.mailingAddress = streetAddress + ', ' + line2;
 
       // hide greeting if it's there
       var $topicPanelHeaderGreeting = $('#topic-panel-header-greeting');
@@ -548,7 +558,7 @@ var app = (function ()
       $('#topic-panel-header-address-line-1').html(streetAddress);
       $('#topic-panel-header-address-line-2').html(line2);
 
-      $('#address-info-street-code').text(data.features[0].properties.street_code);
+      $('#address-info-street-code').text(props.street_code);
       // $('#zoning-code').text(props.zoning);
 
       // render map for this address
@@ -562,14 +572,13 @@ var app = (function ()
       app.getTopics();
 
       // push state
-      var nextState = {ais: app.state.ais},
+      var nextState = {aisFeature: app.state.aisFeature},
           nextTopic = app.state.activeTopic || 'property',
           nextHash = app.util.constructHash(streetAddress, nextTopic);
       history.pushState(nextState, null, nextHash);
 
       // if no topic is active, activate property
       // if (!app.state.nextTopic) {}
-      console.log('didGetAisResult is running activateTopic with ' + nextTopic);
       app.activateTopic(nextTopic);
     },
 
@@ -607,7 +616,7 @@ var app = (function ()
       // doing this in route now
       // $('#topic-list').show();
 
-      var aisFeature = app.state.ais.features[0],
+      var aisFeature = app.state.aisFeature,
           aisProps = aisFeature.properties,
           aisAddress = aisProps.street_address,
           aisGeom = aisFeature.geometry;
@@ -659,8 +668,9 @@ var app = (function ()
 
       // DOR
       // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
-      var aisParcelId = app.state.ais.features[0].properties.dor_parcel_id,
-          waterParcelId = app.state.ais.features[0].properties.pwd_parcel_id,
+      var aisFeature = app.state.aisFeature,
+          aisParcelId = aisFeature.properties.dor_parcel_id,
+          waterParcelId = aisFeature.properties.pwd_parcel_id,
           stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
 
       // clear els
@@ -1436,7 +1446,7 @@ var app = (function ()
 
       // make sure we have an XY first
       // TODO clear out 'nearby' content if no XY.
-      var aisGeom = app.state.ais.features[0].geometry;
+      var aisGeom = app.state.aisFeature.geometry;
       if (!aisGeom.geocode_type) return;
 
       var aisX = aisGeom.coordinates[0],
@@ -1611,7 +1621,7 @@ var app = (function ()
       $('#elections-ward').text(ward);
       $('#elections-division').text(division);
 
-      var aisAddress = app.state.ais.mailingAddress,
+      var aisAddress = app.state.mailingAddress,
           seeMoreUrl = 'http://www.philadelphiavotes.com/index.php?option=com_voterapp&tmpl=component&address=' + encodeURIComponent(aisAddress);
       $('#elections-link').attr({href: seeMoreUrl});
 
