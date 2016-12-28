@@ -312,7 +312,6 @@ var app = (function ()
 
       // if there's no ais in state, go get it
       if (!(state && state.ais)) {
-        console.log('going to run searchForAddress');
         app.searchForAddress(address);
         return;
       }
@@ -380,11 +379,19 @@ var app = (function ()
 
           // this shouldn't happen, but just in case
           if (data.features.length === 0) {
-            console.error('got ais but no features');
+            console.error('got ais, but no features');
+            $('#no-results-modal').foundation('open');
             return;
           }
 
           var aisFeature = data.features[0];
+
+          // make sure it has geometry
+          if (!aisFeature.geometry.geocode_type) {
+            console.log('got ais, but address did not have an xy');
+            $('#no-results-modal').foundation('open');
+            return;
+          }
 
           // if it's an intersection, create a dummy `street_address` prop
           // to make this easier to work with
@@ -525,16 +532,16 @@ var app = (function ()
           aisFeatureType = aisFeature.ais_feature_type,
           streetAddress = props.street_address;
 
-      console.log('street address', streetAddress, aisFeature)
-
       // check for a "good" result. for now let's say this is any address with
       // an XY in AIS. in the future we may want to handle addresses that can't
       // be geocoded but have some amount of related data.
-      if (!aisFeature.geometry.geocode_type) {
-          // show error and bail out
-          $('#no-results-modal').foundation('open');
-          return;
-      }
+      // actually we should do this in the callback for the API call. turning
+      // off here for now.
+      // if (!aisFeature.geometry.geocode_type) {
+      //     // show error and bail out
+      //     $('#no-results-modal').foundation('open');
+      //     return;
+      // }
 
       // make mailing address
       // var mailingAddress = streetAddress + '<br>PHILADELPHIA, PA ' + props.zip_code;
@@ -565,7 +572,7 @@ var app = (function ()
 
       // render map for this address
       // if (selectedAddress) app.map.renderAisResult(obj);
-      app.map.didSelectAddress();
+      // app.map.didSelectAddress();
 
       // clear out data in topic views
       app.resetTopicViews();
@@ -581,34 +588,30 @@ var app = (function ()
 
       // if no topic is active, activate property
       // if (!app.state.nextTopic) {}
-      console.log('didGetAisResult is calling activateTopic');
+      // console.log('didGetAisResult is calling activateTopic');
       // app.activateTopic(nextTopic);
 
-      // get pwd and dor parcels
+      /*
+      PARCELS
+      */
+
+      // reset state
       app.state.dor = app.state.pwd = null;
 
-      app.getParcels(function () {
-        console.log('get parcels finished, letting map.js know');
-
-        // activate the next topic (note this triggers a callback in map.js)
-        app.activateTopic(nextTopic);
-
-        // tell map it's ok to create markers
-        app.map.createAddressMarkers();
-      });
+      // go get both parcels
+      console.log('didGetAisResult is calling getParcels');
+      app.getParcels();
     },
 
-    getParcels: function (callback) {
+    // this gets pwd and dor parcels and then runs a callback. kind of overlaps
+    // with getParcelById function. they should probably be merged eventually.
+    getParcels: function () {
       console.log('get parcels');
-
-      /*
-      DOR
-      */
 
       // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
       var aisFeature = app.state.aisFeature,
-          aisParcelId = aisFeature.properties.dor_parcel_id,
-          waterParcelId = aisFeature.properties.pwd_parcel_id,
+          dorParcelId = aisFeature.properties.dor_parcel_id,
+          pwdParcelId = aisFeature.properties.pwd_parcel_id,
           stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
 
       // clear els
@@ -618,28 +621,29 @@ var app = (function ()
       });
 
       // if we already have the parcel
-      if (stateParcel && stateParcel.properties.MAPREG === aisParcelId) {
+      if (stateParcel && stateParcel.properties.MAPREG === dorParcelId) {
         app.renderParcelTopic();
-      }
       // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
-      else if (aisParcelId) {
-        app.getParcelById(aisParcelId, waterParcelId, function () {
+      } else if (dorParcelId) {
+        // the function we're about to call is kind of the same thing as the
+        // current function and should probably be merged at some point
+        app.getParcelsWithIds(dorParcelId, pwdParcelId, function () {
+          console.log('got parcels by id')
           //console.log('got parcel by id', app.state.dor);
           app.renderParcelTopic();
-          console.log('get parcels (dor callback) is calling createAddressMarkers');
-          app.map.createAddressMarkers();
+          // console.log('getparcelById callback is calling createAddressMarkers');
 
-          app.map.didActivateTopic(app.state.activeTopic);
+          // tell map we finished getting parcels and it's ok to do stuff
+          // that depends on them
+          // app.map.createAddressMarkers();
+          // app.map.didActivateTopic(app.state.activeTopic);
+          console.log('calling getParcels callback')
+          app.map.didGetParcels();
         });
+      } else {
+        console.log('get parcels but no dor parcel id, calling map.didGetParcels')
+        app.map.didGetParcels();
       }
-
-      /*
-      PWD
-      */
-
-      // actually this is happening elsewhere in the code
-
-      callback();
     },
 
     showContentForTopic: function (topic) {
@@ -662,7 +666,7 @@ var app = (function ()
 
     // clears out data rendered in topics
     resetTopicViews: function () {
-      console.log('reset topic views');
+      // console.log('reset topic views');
 
       var topicCells = $('.topic td');
       topicCells.empty();
@@ -745,7 +749,7 @@ var app = (function ()
       // }
       // // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
       // else if (aisParcelId) {
-      //   app.getParcelById(aisParcelId, waterParcelId, function () {
+      //   app.getParcelsWithIds(aisParcelId, waterParcelId, function () {
       //     //console.log('got parcel by id', app.state.dor);
       //     app.renderParcelTopic();
       //     console.log('getTopics is calling createAddressMarkers');
@@ -1171,81 +1175,107 @@ var app = (function ()
       if (desc) $('#zoning-description').html(desc);
     },
 
-    // get a parcel by parcel id
-    getParcelById: function (id, waterId, callback) {
-      console.log('started running getParcelById');
-      if (!id) {
-        console.log('get parcel by id, but null');
-        return;
+    getParcelsWithIds: function (dorParcelId, pwdParcelId, callback) {
+      console.log('getParcelsWithIds');
+
+      // use this to fire the callback after both requests have finished
+      // (not sure if esri leaflet returns promises)
+      var didFinishDorRequest = false,
+          didFinishPwdRequest = false;
+
+      /*
+      DOR
+      */
+
+      // only query for dor parcel if we have an id
+      if (dorParcelId) {
+        $.ajax({
+          url: app.config.esri.parcelLayerDORUrl + '/query',
+          data: {
+            where: "MAPREG = '" + dorParcelId + "' AND STATUS IN (1, 3)" ,
+            outSR: 4326,
+            outFields: '*',
+            f: 'geojson',
+          },
+          success: function (data) {
+            // AGO returns json with plaintext headers, so parse
+            data = JSON.parse(data);
+            console.log('got DOR data ', data);
+
+            // check data
+            if (data.features.length === 0) {
+              console.log('got parcel but 0 features', this.url);
+            }
+
+            app.state.dor = data;
+
+            // call callback if we already finished the pwd request
+            if (didFinishPwdRequest) {
+              console.log('get parcels: pwd finished then dor, calling callback')
+              callback();
+            }
+            else {
+              didFinishDorRequest = true;
+            }
+
+            app.showContentForTopic('deeds');
+          },
+          error: function (err) {
+            console.log('get parcel by id error', err);
+            app.hideContentForTopic('deeds');
+            didFinishDorRequest = true;
+          },
+        });
+
+      // no DOR parcel id, so don't query
+      } else {
+        console.log('no dor parcel id specified');
       }
-      // console.log('get parcel by id: ', id);
 
-      // OLD METHOD
-      // var parcelQuery = L.esri.query({url: app.config.map.parcelLayerUrl});
-      // parcelQuery.where("MAPREG = '" + id + "'");
-      // parcelQuery.run(app.didGetParcelQueryResult);
+      /*
+      PWD
+      */
 
-      // clear state
-      // app.state.dor = undefined;
-
-      $.ajax({
-        url: app.config.esri.parcelLayerDORUrl + '/query',
-        data: {
-          where: "MAPREG = '" + id + "' AND STATUS IN (1, 3)" ,
-          outSR: 4326,
-          outFields: '*',
-          f: 'geojson',
-        },
-        success: function (data) {
-          // AGO returns json with plaintext headers, so parse
-          data = JSON.parse(data);
-          console.log('got DOR data ', data);
-
-          // check data
-          if (data.features.length === 0) {
-            console.log('got parcel but 0 features', this.url);
+      // only query if we have a pwd parcel id
+      if (pwdParcelId) {
+        var parcelQuery = L.esri.query({url: app.config.esri.parcelLayerWaterUrl});
+        parcelQuery.where('PARCELID = ' + pwdParcelId)
+        parcelQuery.run(function (error, featureCollection, response) {
+          if (error || !featureCollection) {
+            console.log('get pwd parcel by id error:', error);
+            didFinishPwdRequest = true;
+            return;
           }
 
-          app.state.dor = data;
-          callback && callback();
+          // if empty response
+          if (featureCollection.features.length === 0) {
+            console.log('get pwd parcel no features');
 
-          app.showContentForTopic('deeds');
-        },
-        error: function (err) {
-          console.log('get parcel by id error', err);
-          app.hideContentForTopic('deeds');
-        },
-      });
+            // show alert
+            $('#no-results-modal').foundation('open');
 
-      var parcelQuery = L.esri.query({url: app.config.esri.parcelLayerWaterUrl});
-      //parcelQuery.contains(latLng);
-      parcelQuery.where('PARCELID = ' + waterId)
-      parcelQuery.run(function (error, featureCollection, response) {
-        if (error || !featureCollection) {
-          console.log('get parcel by latlng error', error);
-          return;
-        }
+            didFinishPwdRequest = true;
+            return;
+          }
 
-        // if empty response
-        if (featureCollection.features.length === 0) {
-          // show alert
-          $('#no-results-modal').foundation('open');
-          return;
-        }
+          // update state
+          // TODO put this in a specific parcel object
+          app.state.pwd = featureCollection;
 
-        // update state
-        app.state.pwd = featureCollection;
-        // if there's a callback, call it
-        //callback && callback();
+          // call callback if we're all done
+          if (didFinishDorRequest) {
+            console.log('get parcels: dor finished then pwd, calling callback')
+            callback();
+          } else {
+            didFinishPwdRequest = true;
+          }
+        });
 
-        // tell map to create address markers
-        console.log('get parcel by id (pwd callback) is calling createAddressMarkers')
-        app.map.createAddressMarkers();
+      // no pwd parcel id, don't do anything
+      } else {
+        console.log('no pwd parcel id specified');
+      }
 
-        // now trigger did activate topic so the marker is shown
-        console.log('get parcel by id (pwd callback) is calling didActivateTopic')
-        app.map.didActivateTopic(app.state.activeTopic);
-      });
       /*$.ajax({
         url: app.config.esri.parcelLayerWaterUrl + '/query',
         data: {

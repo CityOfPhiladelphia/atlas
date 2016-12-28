@@ -641,16 +641,26 @@ app.map = (function ()
       })
     },
 
-    didSelectAddress: function () {
-			console.log('did select address is calling createAddressMarkers');
+    // didSelectAddress: function () {
+		// 	console.log('did select address is calling createAddressMarkers');
+		// 	this.createAddressMarkers();
+		//
+    //   //if (app.state.dor) this.drawParcel();
+		// 	// if (app.state.activeTopic == 'elections') {
+		// 	// 	app.map.removeElectionInfo();
+		// 	// 	app.map.addElectionInfo();
+		// 	// }
+    // },
+
+		// this is called after user has searched and we got both
+		// dor and pwd parcels
+		didGetParcels: function () {
+			// make markers
 			this.createAddressMarkers();
 
-      //if (app.state.dor) this.drawParcel();
-			// if (app.state.activeTopic == 'elections') {
-			// 	app.map.removeElectionInfo();
-			// 	app.map.addElectionInfo();
-			// }
-    },
+			// call activate topic, which will call showAddressMarker
+			this.didActivateTopic(app.state.activeTopic);
+		},
 
     didClickMap: function (e) {
       // set state
@@ -700,64 +710,74 @@ app.map = (function ()
     },
 
 		createAddressMarkers: function () {
-			console.log('running createAddressMarkers');
+			console.log('create address markers');
 
 			// make sure we have both dor and pwd in state. otherwise, return.
-			if (!(app.state.dor && app.state.pwd)) {
-				console.log('create address markers, but we dont have parcels yet')
-				return;
+			// if (!(app.state.dor && app.state.pwd)) {
+			// 	console.log('create address markers, but we dont have parcels yet')
+			// 	return;
+			// }
+
+			var parcelPolyDOR, parcelPolyWater, aisMarker, parcelCentroid;
+
+			if (app.state.dor) {
+				// if there's no parcel in state, clear the map and don't render
+				// TODO zoom to AIS xy
+				var parcelDOR, geomDOR;
+
+				try {
+					parcelDOR = app.state.dor.features[0];
+					if (!parcelDOR) throw 'no parcel';
+					geomDOR = parcelDOR.geometry;
+					//center = geom.getBounds().getCenter();
+					//app.state.center = center;
+				}
+				catch(err) {
+					console.log('draw parcel, but could not get parcel from state', err);
+					// clear parcel
+					_parcelLayerGroup.clearLayers();
+					return;
+				}
+
+				var coordsDOR = app.util.flipCoords(geomDOR.coordinates);
+				parcelPolyDOR = L.polygon([coordsDOR], {
+					color: 'blue',
+					weight: 2,
+					name: 'parcelPolyDOR',
+					type: 'parcel',
+				});
+				parcelCentroid = parcelPolyDOR.getBounds().getCenter();
 			}
-			else console.log('create address markers, and we have parcels yay!')
 
-      // if there's no parcel in state, clear the map and don't render
-      // TODO zoom to AIS xy
-      var parcelDOR, geomDOR, center;
-      try {
-        parcelDOR = app.state.dor.features[0];
-        if (!parcelDOR) throw 'no parcel';
-        geomDOR = parcelDOR.geometry;
-				//center = geom.getBounds().getCenter();
-				//app.state.center = center;
-      }
-      catch(err) {
-        console.log('draw parcel, but could not get parcel from state', err);
-        // clear parcel
-        _parcelLayerGroup.clearLayers();
-        return;
-      }
+			if (app.state.pwd) {
+				var parcelWater = app.state.pwd.features[0],
+						geomWater = parcelWater.geometry,
+						coordsWater = app.util.flipCoords(geomWater.coordinates);
+				parcelPolyWater = L.polygon([coordsWater], {
+					color: 'blue',
+					weight: 2,
+					name: 'parcelPolyWater',
+					type: 'parcel',
+				});
+			}
 
-			var parcelWater = app.state.pwd.features[0]
-			var geomWater = parcelWater.geometry;//.rings;
+			var aisGeom = app.state.aisFeature.geometry;
 
-      var coordsDOR = app.util.flipCoords(geomDOR.coordinates),
-					coordsWater = app.util.flipCoords(geomWater.coordinates),
-          parcelPolyDOR = L.polygon([coordsDOR], {
-            color: 'blue',
-            weight: 2,
-						name: 'parcelPolyDOR',
-		        type: 'parcel',
-          }),
-					parcelPolyWater = L.polygon([coordsWater], {
-						color: 'blue',
-            weight: 2,
-						name: 'parcelPolyWater',
-		        type: 'parcel',
-					}),
-          parcelCentroid = parcelPolyDOR.getBounds().getCenter(),
-					aisGeom = app.state.aisFeature.geometry,
-					aisMarker = new L.Marker.SVGMarker([aisGeom.coordinates[1], aisGeom.coordinates[0]], {
-						"iconOptions": {
-							className: 'svg-icon-noClick',
-							circleRatio: 0,
-							color: 'rgb(255,30,30)',//'rgb(255,200,50)',
-							fillColor: 'rgb(255,60,30)',//'rgb(255,200,50)',
-							fillOpacity: 0.8,
-							iconSize: app.map.largeMarker,
-						},
-						title: 'current parcel',
-						name: 'parcelMarker',
-		        type: 'parcel',
-					});
+			if (aisGeom) {
+				aisMarker = new L.Marker.SVGMarker([aisGeom.coordinates[1], aisGeom.coordinates[0]], {
+					"iconOptions": {
+						className: 'svg-icon-noClick',
+						circleRatio: 0,
+						color: 'rgb(255,30,30)',//'rgb(255,200,50)',
+						fillColor: 'rgb(255,60,30)',//'rgb(255,200,50)',
+						fillOpacity: 0.8,
+						iconSize: app.map.largeMarker,
+					},
+					title: 'current parcel',
+					name: 'parcelMarker',
+					type: 'parcel',
+				});
+			}
 
 			app.state.theParcelCentroid = parcelCentroid;
 			app.state.map.addressMarkers = {};
@@ -766,7 +786,7 @@ app.map = (function ()
 			app.state.map.addressMarkers.parcelPolyWater = parcelPolyWater;
 			app.state.map.addressMarkers.aisMarker = aisMarker;
 
-			console.log('created address markers')
+			console.log('created address markers');
 
 			// calling LSinit will alert Pictometry and Cyclomedia to change
 			app.map.LSinit();
@@ -991,19 +1011,36 @@ app.map = (function ()
 			_parcelLayerGroup.clearLayers();
 
 			var marker = app.state.map.addressMarkers[markerType];
+
+			// if there's no corresponding marker, don't do anything
+			if (!marker) return;
+
 			marker.addTo(_parcelLayerGroup);
 			app.map.domLayerList();
 
-			// pan map
+			// don't pan map if we shouldn't
       // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
-      if (app.state.map.shouldPan) {
-        // zoom to bounds of parcel poly plus some buffer
-        var boundsPadded = app.state.map.addressMarkers.parcelPolyDOR.getBounds().pad(1.15);
-        // _map.fitBounds(bounds, {padding: ['20%', '20%']});
-        _map.fitBounds(boundsPadded);
-        // or need to use parcel centroid instead of center of map
-        // set new state and localStorage
-      };
+      if (!app.state.map.shouldPan) return;
+
+			switch(markerType) {
+				// case 'parcelPolyDOR':
+				// 	break;
+				// case 'parcelPolyWater':
+				// 	break;
+				case 'aisMarker':
+					console.log('pan to ais marker')
+					_map.setView(marker.getLatLng());
+					break;
+				// parcels
+				default:
+					// zoom to bounds of parcel poly plus some buffer
+					var boundsPadded = app.state.map.addressMarkers.parcelPolyDOR.getBounds().pad(1.15);
+					// _map.fitBounds(bounds, {padding: ['20%', '20%']});
+					_map.fitBounds(boundsPadded);
+					// or need to use parcel centroid instead of center of map
+					// set new state and localStorage
+					break;
+			}
 		},
 
     // called when the active topic in the topic panel changes
