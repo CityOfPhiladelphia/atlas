@@ -200,6 +200,7 @@ var app = (function ()
         e.preventDefault();
         var $this = $(this),
             topicName = $this.attr('id').replace('topic-link-', '');
+            console.log('topicName is ' + topicName);
         app.toggleTopic(topicName);
       });
 
