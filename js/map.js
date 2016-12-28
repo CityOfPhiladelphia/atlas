@@ -1023,22 +1023,27 @@ app.map = (function ()
       if (!app.state.map.shouldPan) return;
 
 			switch(markerType) {
-				// case 'parcelPolyDOR':
-				// 	break;
-				// case 'parcelPolyWater':
-				// 	break;
-				case 'aisMarker':
-					console.log('pan to ais marker')
-					_map.setView(marker.getLatLng());
-					break;
-				// parcels
-				default:
+				case 'parcelPolyDOR':
 					// zoom to bounds of parcel poly plus some buffer
-					var boundsPadded = app.state.map.addressMarkers.parcelPolyDOR.getBounds().pad(1.15);
-					// _map.fitBounds(bounds, {padding: ['20%', '20%']});
+					var boundsPadded = app.state.map.addressMarkers.parcelPolyDOR
+															.getBounds()
+															.pad(1.15);
 					_map.fitBounds(boundsPadded);
-					// or need to use parcel centroid instead of center of map
-					// set new state and localStorage
+					break;
+
+				case 'parcelPolyWater':
+					var boundsPadded = app.state.map.addressMarkers.parcelPolyWater
+															.getBounds()
+															.pad(1.15);
+					_map.fitBounds(boundsPadded);
+					break;
+
+				case 'aisMarker':
+					_map.setView(marker.getLatLng(), 18);
+					break;
+
+				default:
+					console.log('show address marker: unhandled type')
 					break;
 			}
 		},
