@@ -29,7 +29,8 @@ var app = (function ()
         }));
       })(),
       // DEBUG_ADDRESS = DEBUG_ADDRESSES[HOST] || '1234 market st',
-      DEBUG_ADDRESS = '1234 market st',
+      // DEBUG_ADDRESS = '1234 market st',
+      DEBUG_ADDRESS = 'n 3rd st & market st',
     // dynamically form a url based on the current hostname
     // this can't go in app.util because it hasn't been defined yet
       constructLocalUrl = function (host, path) {
@@ -39,9 +40,11 @@ var app = (function ()
   return {
     config: {
       ais: {
-        url: '//api.phila.gov/ais/v1/addresses/',
+        // url: '//api.phila.gov/ais/v1/addresses/',
+        url: '//api.phila.gov/ais/v1/search/',
         gatekeeperKey: '82fe014b6575b8c38b44235580bc8b11',
         betsyKey: '35ae5b7bf8f0ff2613134935ce6b4c1e',
+        // include_units: true,
       },
       // l&i config, denormalized by section for convenience
       li: {
@@ -281,17 +284,14 @@ var app = (function ()
     },
 
     route: function () {
-      console.log('route is starting to run');
+      // console.log('route');
       var hash = location.hash,
           params = app.util.getQueryParams(),
           comps = hash.split('/');
 
-      console.log('params is ' + params);
-      console.log('comps is ' + comps);
       // if there are query params
       var searchParam = params.search;
       if (searchParam) {
-        console.log('searchParam is ' +  searchParam);
         app.searchForAddress(searchParam);
         // TODO fix url
         return;
@@ -352,33 +352,52 @@ var app = (function ()
 
     // fires ais search
     searchForAddress: function (address) {
-      console.log('searchForAddress started');
-      var url = app.config.ais.url + encodeURIComponent(address);
-      if (HOST == 'atlas.phila.gov'){
-        var params = {
-          gatekeeperKey: app.config.ais.gatekeeperKey,
-          // include_units: '',
-        };
+      console.log('search for address', address);
+      var url = app.config.ais.url + encodeURIComponent(address),
+          params = {};
+
+      // set gatekeeper key based on hostnme
+      if (HOST == 'atlas.phila.gov') {
+        params.gatekeeperKey = app.config.ais.gatekeeperKey;
       } else {
-        var params = {
-          gatekeeperKey: app.config.ais.betsyKey,
-          // include_units: '',
-        };
+        params.gatekeeperKey = app.config.ais.betsyKey;
       }
+
+      params.include_units = true;
+
       $.ajax({
         url: url,
         data: params,
         success: function (data) {
-          // console.log('got ais', data);
+          console.log('got ais', data);
           app.state.shouldOpenTopics = true;
           app.state.ais = data;
 
           // if more than one address result, show a modal
-          if (data.features.length > 1) app.showMultipleAisResultModal();
-          else {
-            app.state.selectedAddress = data.features[0].properties.street_address;
-            app.didGetAisResult();
+          if (data.features.length > 1) {
+            app.showMultipleAisResultModal();
+            return;
           }
+
+          var feature = data.features[0],
+              aisFeatureType = feature.ais_feature_type,
+              selectedAddress;
+
+          switch(aisFeatureType) {
+            case 'address':
+              selectedAddress = feature.properties.street_address;
+              break;
+            case 'intersection':
+              // selectedAddress = data.normalized[0];
+              selectedAddress = null;
+              break;
+            default:
+              console.log('unhandled feature type:', aisFeatureType);
+              break;
+          }
+
+          app.state.selectedAddress = selectedAddress;
+          app.didGetAisResult();
         },
         error: function (err) {
           console.log('ais error', err);
@@ -482,21 +501,28 @@ var app = (function ()
     },
 
     didGetAisResult: function () {
-      // console.log('did get ais result');
+      console.log('did get ais result');
 
-      // set app state
-      // app.state.ais = data;
-      var data = app.state.ais;
-
-      // get values
-      var selectedAddress = app.state.selectedAddress,
+      var data = app.state.ais,
+          selectedAddress = app.state.selectedAddress,
           obj;
+
       if (selectedAddress) {
         obj = _.filter(data.features, {properties: {street_address: selectedAddress}})[0];
       }
-      else obj = data.features[0]
+      else obj = data.features[0];
       var props = obj.properties,
-          streetAddress = props.street_address;
+          aisFeatureType = obj.ais_feature_type,
+          streetAddress = aisFeatureType === 'address' ? props.street_address : data.normalized[0];
+
+      // check for a "good" result. for now let's say this is any address with
+      // an XY in AIS. in the future we may want to handle addresses that can't
+      // be geocoded but have some amount of related data.
+      if (!obj.geometry.geocode_type) {
+          // show error and bail out
+          $('#no-results-modal').foundation('open');
+          return;
+      }
 
       // make mailing address
       // var mailingAddress = streetAddress + '<br>PHILADELPHIA, PA ' + props.zip_code;
@@ -526,10 +552,13 @@ var app = (function ()
       // $('#zoning-code').text(props.zoning);
 
       // render map for this address
-      if (selectedAddress) app.map.renderAisResult(obj);
+      // if (selectedAddress) app.map.renderAisResult(obj);
+      app.map.didSelectAddress();
+
+      // clear out data in topic views
+      app.resetTopicViews();
 
       // get topics
-      // app.getTopics(props);
       app.getTopics();
 
       // push state
@@ -560,6 +589,14 @@ var app = (function ()
           $topicContentNotFound = $(topicDivId + ' > .topic-content-not-found');
       $topicContent.hide();
       $topicContentNotFound.show();
+    },
+
+    // clears out data rendered in topics
+    resetTopicViews: function () {
+      console.log('reset topic views');
+
+      var topicCells = $('.topic td');
+      topicCells.empty();
     },
 
     // initiates requests to topic APIs (OPA, L&I, etc.)
@@ -753,45 +790,50 @@ var app = (function ()
       /*
       ELECTIONS
       */
-      var electionsUrl = '//api.phila.gov/elections',
-          electionsWard = aisProps.political_ward,
-          // TODO divisions in AIS are prefixed with the ward num; slice it out
-          // apparently this is called the `division_id` in the elections API
-          electionsDivision = aisProps.political_division.substring(2);
+      if (aisProps.political_ward && aisProps.political_division) {
+        var electionsUrl = '//api.phila.gov/elections',
+        electionsWard = aisProps.political_ward,
+        // TODO divisions in AIS are prefixed with the ward num; slice it out
+        // apparently this is called the `division_id` in the elections API
+        electionsDivision = aisProps.political_division.substring(2);
 
-      $.ajax({
-        url: electionsUrl,
-        data: {
-          option: 'com_pollingplaces',
-          view: 'json',
-          ward: electionsWard,
-          division: electionsDivision,
-        },
-        success: function (jsonString) {
-          // no json headers set on this
-          var data = JSON.parse(jsonString);
+        $.ajax({
+          url: electionsUrl,
+          data: {
+            option: 'com_pollingplaces',
+            view: 'json',
+            ward: electionsWard,
+            division: electionsDivision,
+          },
+          success: function (jsonString) {
+            // no json headers set on this
+            var data = JSON.parse(jsonString);
 
-          if (!data.features || data.features.length < 1) {
-            // does this work?
-            console.log('elections no features, trying to call error callback');
-            this.error();
-          }
+            if (!data.features || data.features.length < 1) {
+              // does this work?
+              console.log('elections no features, trying to call error callback');
+              this.error();
+            }
 
-          //console.log('elections', data);
-          app.state.elections = data;
-          app.didGetElections();
+            //console.log('elections', data);
+            app.state.elections = data;
+            app.didGetElections();
 
-          $('#topic-election .topic-content').show();
-          $('#topic-election .topic-content-not-found').hide();
-        },
-        error: function (err) {
-          console.log('elections error', err);
-          app.state.elections = null;
+            $('#topic-election .topic-content').show();
+            $('#topic-election .topic-content-not-found').hide();
+          },
+          error: function (err) {
+            console.log('elections error', err);
+            app.state.elections = null;
 
-          $('#topic-election .topic-content').hide();
-          $('#topic-election .topic-content-not-found').show();
-        },
-      });
+            $('#topic-election .topic-content').hide();
+            $('#topic-election .topic-content-not-found').show();
+          },
+        });
+      }
+      else {
+        // TODO clean up elections content
+      }
 
       /*
       PUBLIC SAFETY
@@ -1392,8 +1434,12 @@ var app = (function ()
 
       // console.log('get activity for: ', label);
 
-      var aisGeom = app.state.ais.features[0].geometry,
-          aisX = aisGeom.coordinates[0],
+      // make sure we have an XY first
+      // TODO clear out 'nearby' content if no XY.
+      var aisGeom = app.state.ais.features[0].geometry;
+      if (!aisGeom.geocode_type) return;
+
+      var aisX = aisGeom.coordinates[0],
           aisY = aisGeom.coordinates[1],
           radiusMeters = app.config.nearby.radius * 0.3048,
           activityTypes = app.config.nearby.activityTypes,
