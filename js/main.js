@@ -29,7 +29,8 @@ var app = (function ()
         }));
       })(),
       // DEBUG_ADDRESS = DEBUG_ADDRESSES[HOST] || '1234 market st',
-      DEBUG_ADDRESS = '1234 market st',
+      // DEBUG_ADDRESS = '1234 market st',
+      DEBUG_ADDRESS = '1849 bLAir st',
       // DEBUG_ADDRESS = 'n 3rd st & market st',
     // dynamically form a url based on the current hostname
     // this can't go in app.util because it hasn't been defined yet
@@ -141,7 +142,8 @@ var app = (function ()
 
       //parcelLayerUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS/FeatureServer/0',
       esri: {
-        parcelLayerDORUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
+        parcelLayerDORUrl: '//gis.phila.gov/arcgis/rest/services/DOR_ParcelExplorer/rtt_basemap/MapServer/24',
+        //arcelLayerDORUrl: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Parcel/FeatureServer/0',
         parcelLayerWaterUrl: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer/0',
         divisionLayerUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22',
         baseMapLightUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer',
@@ -157,7 +159,7 @@ var app = (function ()
         overlayBaseLabelsUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer',
         overlayBaseDORLabelsUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap_Labels/MapServer',
         overlayImageryLabelsUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_Labels/MapServer',
-        overlayZoningUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer',
+        // overlayZoningUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer',
         zoningMapUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer',
         waterUrl: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer',
         politicalDivisionsUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22'
@@ -309,6 +311,9 @@ var app = (function ()
       // activate topic
       // topic && app.activateTopic(topic);
       app.state.activeTopic = topic;
+      //var $activeTopic = $('#topic-' + topic);
+      //$activeTopic.attr('class', 'topic:visible');
+      // = $('.topic:visible');
 
       // if there's no ais in state, go get it
       if (!(state && state.ais)) {
@@ -520,6 +525,8 @@ var app = (function ()
     didGetAisResult: function () {
       console.log('did get ais result', app.state.aisFeature);
 
+      app.activateTopic(app.state.activeTopic);
+
       var aisFeature = app.state.aisFeature;
           // selectedAddress = app.state.selectedAddress,
           // obj;
@@ -596,7 +603,13 @@ var app = (function ()
       */
 
       // reset state
-      app.state.dor = app.state.pwd = null;
+      if (!app.state.map.clickedOnMap) {
+        console.log('didnt click map so im clearing the parcel out')
+        app.state.dor = app.state.pwd = null;
+        // get rid of old dadress markers
+        console.log('did not click on map so clear out address markers')
+        app.state.map.addressMarkers = {};
+      }
 
       // go get both parcels
       console.log('didGetAisResult is calling getParcels');
@@ -622,7 +635,9 @@ var app = (function ()
 
       // if we already have the parcel
       if (stateParcel && stateParcel.properties.MAPREG === dorParcelId) {
+        console.log('**********************i have a state parcel and its the right one')
         app.renderParcelTopic();
+        app.map.didGetParcels();
       // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
       } else if (dorParcelId) {
         // the function we're about to call is kind of the same thing as the
@@ -642,8 +657,9 @@ var app = (function ()
         });
       } else {
         console.log('get parcels but no dor parcel id, calling map.didGetParcels')
-        app.map.didGetParcels();
+        // app.map.didGetParcels();
       }
+      // app.map.didGetParcels();
     },
 
     showContentForTopic: function (topic) {
@@ -932,7 +948,7 @@ var app = (function ()
 
     // render deeds (assumes there's a parcel in the state)
     renderParcelTopic: function () {
-      // console.log('render parcel topic');
+      console.log('render parcel topic');
 
       if (!app.state.dor.features[0]) {
         console.log('render parcel topic, but no parcel feature', app.state.dor);
@@ -1188,7 +1204,40 @@ var app = (function ()
       */
 
       // only query for dor parcel if we have an id
-      if (dorParcelId) {
+      if(dorParcelId){
+        var parcelQuery = L.esri.query({url: app.config.esri.parcelLayerDORUrl});
+        //parcelQuery.contains(latLng);
+        parcelQuery.where("MAPREG = '" + dorParcelId + "' AND STATUS IN (1, 3)")
+        parcelQuery.run(function (error, featureCollection, response) {
+          if (error || !featureCollection) {
+            console.log('get parcel by latlng error', error);
+            return;
+          }
+
+          // if empty response
+          if (featureCollection.features.length === 0) {
+            // show alert
+            $('#no-results-modal').foundation('open');
+            return;
+          }
+
+          // sort by status
+          console.log('before', featureCollection);
+          var features = featureCollection.features,
+              featuresSorted = _.sortBy(features, function (feature) {
+                return feature.properties.STATUS;
+              });
+          featureCollection.features = featuresSorted;
+          console.log('after', featureCollection);
+
+          // update state
+          app.state.dor = featureCollection;
+
+          // if there's a callback, call it
+          callback && callback();
+        })
+      }
+      /*if (dorParcelId) {
         $.ajax({
           url: app.config.esri.parcelLayerDORUrl + '/query',
           data: {
@@ -1228,7 +1277,7 @@ var app = (function ()
         });
 
       // no DOR parcel id, so don't query
-      } else {
+    }*/ else {
         console.log('no dor parcel id specified');
       }
 
@@ -1314,10 +1363,10 @@ var app = (function ()
       // disabling this because if the new query doesn't return anything,
       // we don't want to flush out the current dor parcel
       // app.state.dor = undefined;
-      if(app.state.activeTopic == 'deeds' || app.state.activeTopic == 'zoning'){
+      if (app.state.activeTopic == 'deeds' || app.state.activeTopic == 'zoning') {
         var parcelQuery = L.esri.query({url: app.config.esri.parcelLayerDORUrl});
         parcelQuery.contains(latLng);
-        parcelQuery.where('STATUS IN (1, 3)')
+        // parcelQuery.where('STATUS IN (1, 3)')
         parcelQuery.run(function (error, featureCollection, response) {
           if (error || !featureCollection) {
             console.log('get parcel by latlng error', error);
@@ -1331,8 +1380,19 @@ var app = (function ()
             return;
           }
 
+          // sort by status
+          console.log('**before', featureCollection);
+          var features = featureCollection.features,
+              featuresSorted = _.sortBy(features, function (feature) {
+                return feature.properties.STATUS;
+              });
+          featureCollection.features = featuresSorted;
+          console.log('**after', featureCollection);
+
           // update state
           app.state.dor = featureCollection;
+          console.log('saved it to state', app.state.dor)
+
           // if there's a callback, call it
           callback && callback();
         })
