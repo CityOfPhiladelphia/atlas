@@ -414,7 +414,7 @@ var app = (function ()
       });
     },
 
-    showMultipleAisResultModal: function (data, callback) {
+    showMultipleAisResultModal: function (data) {
       // console.log('show multiple ais modal');
       // var data = app.state.ais;
 
@@ -525,7 +525,7 @@ var app = (function ()
     didGetAisResult: function () {
       console.log('did get ais result', app.state.aisFeature);
 
-      app.activateTopic(app.state.activeTopic);
+      app.activateTopic(app.state.activeTopic || 'property');
 
       var aisFeature = app.state.aisFeature;
           // selectedAddress = app.state.selectedAddress,
@@ -635,7 +635,7 @@ var app = (function ()
 
       // if we already have the parcel
       if (stateParcel && stateParcel.properties.MAPREG === dorParcelId) {
-        console.log('**********************i have a state parcel and its the right one')
+        console.log('i have a state parcel and its the right one')
         app.renderParcelTopic();
         app.map.didGetParcels();
       // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
