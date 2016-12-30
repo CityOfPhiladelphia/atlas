@@ -657,7 +657,8 @@ var app = (function ()
         });
       } else {
         console.log('get parcels but no dor parcel id, calling map.didGetParcels')
-        // app.map.didGetParcels();
+        app.map.didGetParcels();
+        app.hideContentForTopic('deeds');
       }
       // app.map.didGetParcels();
     },
@@ -965,6 +966,8 @@ var app = (function ()
       $('#deeds-status').html(app.PARCEL_STATUS[props.STATUS]);
       $('#deeds-air-rights').html(props.SUFFIX === 'A' ? 'Yes' : 'No');
       $('#deeds-condo').html(props.CONDOFLAG === 1 ? 'Yes' : 'No');
+
+      app.showContentForTopic('deeds');
     },
 
     // takes an object of divId => text and renders
@@ -1309,6 +1312,7 @@ var app = (function ()
 
           // update state
           // TODO put this in a specific parcel object
+          console.log('****************setting state pwd', featureCollection)
           app.state.pwd = featureCollection;
 
           // call callback if we're all done
@@ -1323,6 +1327,7 @@ var app = (function ()
       // no pwd parcel id, don't do anything
       } else {
         console.log('no pwd parcel id specified');
+        console.log('ais', app.state.aisFeature)
       }
 
       /*$.ajax({
@@ -1758,6 +1763,8 @@ var app = (function ()
       // update see more link
       var stormwaterUrl = '//www.phila.gov/water/swmap/Parcel.aspx?parcel_id=' + parcelId;
       $('#water-link').attr({href: stormwaterUrl});
+
+      // app.showContentForTopic('water');
     },
 
     didGetElections: function () {

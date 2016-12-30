@@ -989,6 +989,12 @@ app.map = (function ()
 
 			var marker = app.state.map.addressMarkers[markerType];
 
+			// if we tried to get something other than the ais marker and couldn't,
+			// try falling back to ais marker
+			if (!marker && markerType !== 'aisMarker') {
+				marker = app.state.map.addressMarkers['aisMarker'];
+			}
+
 			// if there's no corresponding marker, don't do anything
 			if (!marker) {
 				console.log('show address marker, but we dont have a marker of type', markerType);
