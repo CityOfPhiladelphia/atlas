@@ -602,66 +602,205 @@ var app = (function ()
       PARCELS
       */
 
-      // reset state
-      if (!app.state.map.clickedOnMap) {
-        console.log('didnt click map so im clearing the parcel out')
-        app.state.dor = app.state.pwd = null;
-        // get rid of old dadress markers
-        console.log('did not click on map so clear out address markers')
-        app.state.map.addressMarkers = {};
-      }
+      // the problem is: if the last search yielded a good parcel and the
+      // current one did not, the parcel isn't getting cleared out if clickedOnMap === false.
+
+      // var stateParcelDor = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null,
+      //     dorParcelId = props.dor_parcel_id;
+      //
+      // // if the user searched via the search bar and we have
+      // if (stateParcelDor && stateParcelDor.properties.MAPREG !== dorParcelId) {
+      //   // console.log('**************** state parcel doesnt match current AIS parcel id, clearing out')
+      //   app.state.dor = null;
+      // }
+      //
+      // // check pwd
+      // var stateParcelPwd = app.state.pwd && app.state.pwd.features ? app.state.pwd.features[0] : null,
+      //     pwdParcelId = props.pwd_parcel_id;
+      //
+      // // if the user searched via the search bar and we have
+      // if (stateParcelPwd && stateParcelPwd.properties.PARCELID !== pwdParcelId) {
+      //   // console.log('**************** PWD state parcel doesnt match current AIS parcel id, clearing out')
+      //   app.state.pwd = null;
+      // }
+      //
+      // if (!app.state.map.clickedOnMap) {
+      //   // get rid of old dadress markers
+      //   // app.state.map.addressMarkers = {};
+      // }
 
       // go get both parcels
-      console.log('didGetAisResult is calling getParcels');
-      app.getParcels();
+      // console.log('didGetAisResult is calling getParcels');
+      // app.getParcels();
+      app.state.dor = app.state.pwd = null;
+      app.getDorParcel();
+      app.getPwdParcel();
+
+      // tell map we got an ais result
+      app.map.didGetAisResult();
+    },
+
+    getDorParcel: function () {
+      console.log('get dor parcel');
+
+      var aisFeature = app.state.aisFeature,
+          parcelId = aisFeature.properties.dor_parcel_id;
+
+      if (!parcelId) {
+        console.warn('get dor parcel, but no parcel id');
+        return;
+      }
+
+      var parcelQuery = L.esri.query({url: app.config.esri.parcelLayerDORUrl});
+      //parcelQuery.contains(latLng);
+      parcelQuery.where("MAPREG = '" + parcelId + "' AND STATUS IN (1, 3)")
+      parcelQuery.run(app.didGetDorParcel);
+    },
+
+    didGetDorParcel: function (error, featureCollection, response) {
+      console.log('did get dor parcel');
+
+      if (error || !featureCollection) {
+        console.log('get dor parcel, but error', error);
+        return;
+      }
+
+      // if empty response
+      if (featureCollection.features.length === 0) {
+        console.log('get dor parcel, but no results');
+        // show alert
+        // $('#no-results-modal').foundation('open');
+        app.state.dor = null;
+        return;
+      }
+
+      // sort by status
+      var features = featureCollection.features,
+      featuresSorted = _.sortBy(features, function (feature) {
+        return feature.properties.STATUS;
+      });
+      featureCollection.features = featuresSorted;
+
+      // update state
+      app.state.dor = featureCollection;
+
+      // tell map we got a dor parcel
+      app.map.didGetDorParcel();
+
+      // calculate perimeter and area
+      var geomDOR = featuresSorted[0].geometry,
+          areaRequestGeom = '[' + JSON.stringify(geomDOR).replace('"type":"Polygon","coordinates"', '"rings"') + ']';
+
+      $.ajax({
+        url: '//gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/areasAndLengths',
+        data: {
+          polygons: areaRequestGeom,
+          sr: 4326,
+          calculationType: 'geodesic',
+          f: 'json',
+          areaUnit: '{"areaUnit" : "esriSquareFeet"}',
+          lengthUnit: 9002,
+        },
+        success: function (dataString) {
+          // console.log('got polygon with area', dataString, this.url);
+          var data = JSON.parse(dataString),
+              area = Math.round(data.areas[0]),
+              perimeter = Math.round(data.lengths[0]);
+          $('#deeds-area').text(area + ' sq ft');
+          $('#deeds-perimeter').text(perimeter + ' ft');
+        },
+        error: function (err) {
+          console.log('polygon area error', err);
+        },
+      });
+
+      app.renderParcelTopic();
+    },
+
+    getPwdParcel: function () {
+      var aisFeature = app.state.aisFeature,
+          parcelId = aisFeature.properties.pwd_parcel_id,
+          parcelQuery = L.esri.query({url: app.config.esri.parcelLayerWaterUrl});
+
+      parcelQuery.where('PARCELID = ' + parcelId);
+      parcelQuery.run(app.didGetPwdParcel);
+    },
+
+    didGetPwdParcel: function (error, featureCollection, response) {
+      console.log('did get pwd parcel');
+
+      if (error || !featureCollection) {
+        console.log('get pwd parcel by id error:', error);
+        return;
+      }
+
+      // if empty response
+      if (featureCollection.features.length === 0) {
+        console.log('get pwd parcel, but no results');
+
+        // show alert
+        // $('#no-results-modal').foundation('open');
+
+        app.state.pwd = null;
+
+        return;
+      }
+
+      // update state
+      // TODO put this in a specific parcel object
+      app.state.pwd = featureCollection;
+
+      // tell map we got a pwd parcel
+      app.map.didGetPwdParcel();
     },
 
     // this gets pwd and dor parcels and then runs a callback. kind of overlaps
     // with getParcelById function. they should probably be merged eventually.
-    getParcels: function () {
-      console.log('get parcels');
-
-      // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
-      var aisFeature = app.state.aisFeature,
-          dorParcelId = aisFeature.properties.dor_parcel_id,
-          pwdParcelId = aisFeature.properties.pwd_parcel_id,
-          stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
-
-      // clear els
-      _.forEach(['id', 'address', 'status', 'air-rights', 'condo'], function (tag) {
-        var $el = $('#deeds-' + tag);
-        $el.empty();
-      });
-
-      // if we already have the parcel
-      if (stateParcel && stateParcel.properties.MAPREG === dorParcelId) {
-        console.log('i have a state parcel and its the right one')
-        app.renderParcelTopic();
-        app.map.didGetParcels();
-      // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
-      } else if (dorParcelId) {
-        // the function we're about to call is kind of the same thing as the
-        // current function and should probably be merged at some point
-        app.getParcelsWithIds(dorParcelId, pwdParcelId, function () {
-          console.log('got parcels by id')
-          //console.log('got parcel by id', app.state.dor);
-          app.renderParcelTopic();
-          // console.log('getparcelById callback is calling createAddressMarkers');
-
-          // tell map we finished getting parcels and it's ok to do stuff
-          // that depends on them
-          // app.map.createAddressMarkers();
-          // app.map.didActivateTopic(app.state.activeTopic);
-          console.log('calling getParcels callback')
-          app.map.didGetParcels();
-        });
-      } else {
-        console.log('get parcels but no dor parcel id, calling map.didGetParcels')
-        app.map.didGetParcels();
-        app.hideContentForTopic('deeds');
-      }
-      // app.map.didGetParcels();
-    },
+    // getParcels: function () {
+    //   console.log('get parcels');
+    //
+    //   // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
+    //   var aisFeature = app.state.aisFeature,
+    //       dorParcelId = aisFeature.properties.dor_parcel_id,
+    //       pwdParcelId = aisFeature.properties.pwd_parcel_id;
+    //
+    //   // clear els
+    //   _.forEach(['id', 'address', 'status', 'air-rights', 'condo'], function (tag) {
+    //     var $el = $('#deeds-' + tag);
+    //     $el.empty();
+    //   });
+    //
+    //   // if we already have the parcel
+    //   var stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
+    //   // if the user searched via the search bar and we have
+    //   if (stateParcel && stateParcel.properties.MAPREG === dorParcelId) {
+    //     console.log('i have a state parcel and its the right one')
+    //     app.renderParcelTopic();
+    //     app.map.didGetParcels();
+    //   // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
+    //   } else if (dorParcelId) {
+    //     // the function we're about to call is kind of the same thing as the
+    //     // current function and should probably be merged at some point
+    //     app.getParcelsWithIds(dorParcelId, pwdParcelId, function () {
+    //       console.log('got parcels by id')
+    //       //console.log('got parcel by id', app.state.dor);
+    //       app.renderParcelTopic();
+    //       // console.log('getparcelById callback is calling createAddressMarkers');
+    //
+    //       // tell map we finished getting parcels and it's ok to do stuff
+    //       // that depends on them
+    //       // app.map.createAddressMarkers();
+    //       // app.map.didActivateTopic(app.state.activeTopic);
+    //       console.log('calling getParcels callback')
+    //       app.map.didGetParcels();
+    //     });
+    //   } else {
+    //     console.log('get parcels but no dor parcel id, calling map.didGetParcels')
+    //     app.map.didGetParcels();
+    //     app.hideContentForTopic('deeds');
+    //   }
+    //   // app.map.didGetParcels();
+    // },
 
     showContentForTopic: function (topic) {
       // show "no content"

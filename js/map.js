@@ -111,7 +111,9 @@ app.map = (function ()
 		xLargeMarker: L.point(42,60),
 
     initMap : function () {
-      app.state.map = {};
+      app.state.map = {
+				addressMarkers: {},
+			};
       app.state.map.clickedOnMap = false;
 			localStorage.setItem('clickedOnMap', false);
       // the next 2 variables hold names for checking what is on the map
@@ -652,15 +654,107 @@ app.map = (function ()
 		// 	// }
     // },
 
+		didCreateAddressMarker: function (markerType) {
+			// console.log('********** did create address marker');
+
+			var targetMarkerType = this.addressMarkerTypeForTopic(app.state.activeTopic);
+			if (markerType === targetMarkerType) {
+				// console.log('this is the marker we want to show')
+				this.showAddressMarker(markerType);
+			}
+		},
+
+		didGetAisResult: function () {
+			console.log('MAP: did get ais result');
+
+			// clear out old address markers
+			app.state.map.addressMarkers = {};
+
+			var aisGeom = app.state.aisFeature.geometry;
+			if (aisGeom) {
+				console.log('we have ais geom gonna make the marker')
+				aisMarker = new L.Marker.SVGMarker([aisGeom.coordinates[1], aisGeom.coordinates[0]], {
+					"iconOptions": {
+						className: 'svg-icon-noClick',
+						circleRatio: 0,
+						color: 'rgb(255,30,30)',//'rgb(255,200,50)',
+						fillColor: 'rgb(255,60,30)',//'rgb(255,200,50)',
+						fillOpacity: 0.8,
+						iconSize: app.map.largeMarker,
+					},
+					title: 'current parcel',
+					name: 'parcelMarker',
+					type: 'parcel',
+				});
+			}
+
+			app.state.map.addressMarkers.aisMarker = aisMarker;
+
+			this.didCreateAddressMarker('aisMarker');
+		},
+
+		didGetDorParcel: function () {
+			console.log('MAP: did get dor parcel');
+
+			// if there's no parcel in state, clear the map and don't render
+			// TODO zoom to AIS xy
+			var parcelDOR, geomDOR;
+
+			try {
+				parcelDOR = app.state.dor.features[0];
+				if (!parcelDOR) throw 'no parcel';
+				geomDOR = parcelDOR.geometry;
+				//center = geom.getBounds().getCenter();
+				//app.state.center = center;
+
+				var coordsDOR = app.util.flipCoords(geomDOR.coordinates);
+				parcelPolyDOR = L.polygon([coordsDOR], {
+					color: 'blue',
+					weight: 2,
+					name: 'parcelPolyDOR',
+					type: 'parcel',
+				});
+				parcelCentroid = parcelPolyDOR.getBounds().getCenter();
+			}
+			catch(err) {
+				console.log('draw parcel, but could not get parcel from state', err);
+				// clear parcel
+				// _parcelLayerGroup.clearLayers();
+				// return;
+			}
+
+			app.state.map.addressMarkers.parcelPolyDOR = parcelPolyDOR;
+
+			this.didCreateAddressMarker('parcelPolyDOR');
+		},
+
+		didGetPwdParcel: function () {
+			console.log('MAP: did get pwd parcel');
+
+			var parcelWater = app.state.pwd.features[0],
+					geomWater = parcelWater.geometry,
+					coordsWater = app.util.flipCoords(geomWater.coordinates),
+					parcelPolyWater = L.polygon([coordsWater], {
+						color: 'blue',
+						weight: 2,
+						name: 'parcelPolyWater',
+						type: 'parcel',
+					});
+
+			app.state.map.addressMarkers.parcelPolyWater = parcelPolyWater;
+
+			this.didCreateAddressMarker('parcelPolyWater');
+		},
+
 		// this is called after user has searched and we got both
 		// dor and pwd parcels
-		didGetParcels: function () {
-			// make markers
-			this.createAddressMarkers();
-
-			// call activate topic, which will call showAddressMarker
-			this.didActivateTopic(app.state.activeTopic);
-		},
+		// didGetParcels: function () {
+		// 	// make markers
+		// 	this.createAddressMarkers();
+		//
+		// 	// call activate topic, which will call showAddressMarker
+		// 	this.didActivateTopic(app.state.activeTopic);
+		// },
 
     didClickMap: function (e) {
       // set state
@@ -980,10 +1074,10 @@ app.map = (function ()
 		showAddressMarker: function (markerType) {
 			console.log('show address marker', markerType);
 
-			if (!app.state.map.addressMarkers) {
-				console.log('show address marker, but we havent created them yet');
-				return;
-			}
+			// if (!app.state.map.addressMarkers) {
+			// 	console.log('show address marker, but we havent created them yet');
+			// 	return;
+			// }
 
 			_parcelLayerGroup.clearLayers();
 
@@ -1168,6 +1262,18 @@ app.map = (function ()
 			}
 
 			return 'overlayBaseLabels';
+		},
+
+		parcelLayerForTopic: function (topic) {
+			var parcelLayer;
+
+			if (topic === 'deeds') {
+				parcelLayer = 'dor';
+			} else {
+				parcelLayer = 'pwd';
+			}
+
+			return parcelLayer;
 		},
 
     // called when the active topic in the topic panel changes
