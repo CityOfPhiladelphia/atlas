@@ -694,6 +694,10 @@ app.map = (function ()
 			app.state.map.addressMarkers.aisMarker = aisMarker;
 
 			this.didCreateAddressMarker('aisMarker');
+
+			if (app.state.map.shouldPan){
+				app.map.LSinit();
+			}
 		},
 
 		didGetDorParcel: function () {
@@ -822,7 +826,7 @@ app.map = (function ()
       });
     },
 
-		createAddressMarkers: function () {
+		/*createAddressMarkers: function () {
 			console.log('create address markers');
 
 			// make sure we have both dor and pwd in state. otherwise, return.
@@ -904,9 +908,9 @@ app.map = (function ()
 
 			// calling LSinit will alert Pictometry and Cyclomedia to change
 			app.map.LSinit();
-		},
+		},*/
 
-    drawParcel: function () {
+    /*drawParcel: function () {
 			console.log('running drawParcel');
 
       // clear existing parcel
@@ -962,7 +966,7 @@ app.map = (function ()
           console.log('polygon area error', err);
         },
       });
-    }, // end of drawPolygon
+    }, // end of drawPolygon*/
 
     getGeomFromLatLon : function(latlon){
       //console.log('it did getGeom')
@@ -978,6 +982,7 @@ app.map = (function ()
     // on init, put center and zoom in LocalStorage, in case
     // Pictometry or Cyclomedia are used
     LSinit: function() {
+			console.log('LSinit is running');
 			app.state.theCenter = _map.getCenter();
 			app.state.leafletCenterX = app.state.theCenter.lng;
 			app.state.leafletCenterY = app.state.theCenter.lat;
