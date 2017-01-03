@@ -655,13 +655,16 @@ app.map = (function ()
     // },
 
 		didCreateAddressMarker: function (markerType) {
-			// console.log('********** did create address marker');
+			console.log('********** did create address marker', markerType);
 
 			var targetMarkerType = this.addressMarkerTypeForTopic(app.state.activeTopic);
 			if (markerType === targetMarkerType) {
 				// console.log('this is the marker we want to show')
 				this.showAddressMarker(markerType);
 			}
+			// else if (app.state.map.addressMarkers.aisMarker) {
+			// 	this.showAddressMarker('aisMarker');
+			// }
 		},
 
 		didGetAisResult: function () {
@@ -726,6 +729,8 @@ app.map = (function ()
 			app.state.map.addressMarkers.parcelPolyDOR = parcelPolyDOR;
 
 			this.didCreateAddressMarker('parcelPolyDOR');
+
+			this.didGetParcel('dor');
 		},
 
 		didGetPwdParcel: function () {
@@ -744,6 +749,20 @@ app.map = (function ()
 			app.state.map.addressMarkers.parcelPolyWater = parcelPolyWater;
 
 			this.didCreateAddressMarker('parcelPolyWater');
+
+			this.didGetParcel('pwd');
+		},
+
+		didGetParcel: function (parcelLayer) {
+			// console.log('MAP: did get parcel', parcelLayer);
+
+			var didGetResult = !!app.state[parcelLayer],
+					otherRequest = parcelLayer === 'pwd' ? 'didFinishDorRequest' : 'didFinishPwdRequest',
+					otherRequestFinished = app.state[otherRequest];
+
+			if (otherRequestFinished && !didGetResult) {
+				this.showAddressMarker('aisMarker');
+			}
 		},
 
 		// this is called after user has searched and we got both

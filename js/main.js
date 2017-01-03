@@ -188,7 +188,9 @@ var app = (function ()
       shouldOpenTopics: false,
       nearby: {
         activeType: undefined,
-      }
+      },
+      didFinishDorRequest: false,
+      didFinishPwdRequest: false,
     },
 
     // start app
@@ -633,6 +635,7 @@ var app = (function ()
       // console.log('didGetAisResult is calling getParcels');
       // app.getParcels();
       app.state.dor = app.state.pwd = null;
+      app.state.didFinishPwdRequest = app.state.didFinishDorRequest = null;
       app.getDorParcel();
       app.getPwdParcel();
 
@@ -648,6 +651,12 @@ var app = (function ()
 
       if (!parcelId) {
         console.warn('get dor parcel, but no parcel id');
+
+        app.state.didFinishDorRequest = true;
+
+        // show no content message
+        app.hideContentForTopic('deeds');
+
         return;
       }
 
@@ -660,6 +669,8 @@ var app = (function ()
     didGetDorParcel: function (error, featureCollection, response) {
       console.log('did get dor parcel');
 
+      app.state.didFinishDorRequest = true;
+
       if (error || !featureCollection) {
         console.log('get dor parcel, but error', error);
         return;
@@ -671,8 +682,14 @@ var app = (function ()
         // show alert
         // $('#no-results-modal').foundation('open');
         app.state.dor = null;
+
+        // show no content message
+        app.hideContentForTopic('deeds');
+
         return;
       }
+
+      app.showContentForTopic('deeds');
 
       // sort by status
       var features = featureCollection.features,
@@ -722,12 +739,20 @@ var app = (function ()
           parcelId = aisFeature.properties.pwd_parcel_id,
           parcelQuery = L.esri.query({url: app.config.esri.parcelLayerWaterUrl});
 
+      if (!parcelId) {
+        console.warn('get pwd parcel, but no id');
+        app.state.didFinishPwdRequest = true;
+        return;
+      }
+
       parcelQuery.where('PARCELID = ' + parcelId);
       parcelQuery.run(app.didGetPwdParcel);
     },
 
     didGetPwdParcel: function (error, featureCollection, response) {
       console.log('did get pwd parcel');
+
+      app.state.didFinishPwdRequest = true;
 
       if (error || !featureCollection) {
         console.log('get pwd parcel by id error:', error);
