@@ -959,7 +959,7 @@ var app = (function ()
                 app.state.li[liStateKey] = data;
 
                 // check for complete results
-                var liStateKeys = Object.keys(app.config.li.socrataIds),
+                var liStateKeys = _.keys(app.config.li.socrataIds),
                     shouldContinue = _.every(_.map(liStateKeys, function (liStateKey) {
                       return app.state.li[liStateKey];
                     }));
@@ -1265,7 +1265,7 @@ var app = (function ()
 
     didGetAllLiResults: function ()
     {
-      var stateKeys = Object.keys(app.config.li.socrataIds),
+      var stateKeys = _.keys(app.config.li.socrataIds),
           displayFields = app.config.li.displayFields,
           liState = app.state.li,
           fieldMap = app.config.li.fieldMap,
@@ -1853,7 +1853,7 @@ var app = (function ()
           query = 'DISTANCE_IN_METERS(location, POINT(' + aisX + ',' + aisY + ')) <= ' + radiusMeters;
           where = 'within_circle(' + ['shape', aisY, aisX, radiusMeters].join(', ') + ')',
           fieldMap = activityType.fieldMap,
-          selectComps = Object.values(fieldMap).concat([
+          selectComps = _.values(fieldMap).concat([
                           'shape',
                           "DISTANCE_IN_METERS(shape, 'POINT(" + aisX + ' ' + aisY + ")') * 3.28084 AS distance"
                         ]);
@@ -1901,7 +1901,7 @@ var app = (function ()
           sortField = sortMethod === 'date' ? dateField : 'distance',
           sortDirection = sortMethod === 'date'? 'desc' : 'asc',
           rowsSorted = _.orderBy(rowsFiltered, sortField, [sortDirection]),
-          fields = Object.values(fieldMap).concat(['distance']),
+          fields = _.values(fieldMap).concat(['distance']),
           tbodyHtml = app.util.makeTableRowsFromJson(rowsSorted, fields),
           $tbody = $('#nearby-activity > tbody');
       app.state.nearby.rowsSorted = rowsSorted
