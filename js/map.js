@@ -673,7 +673,7 @@ app.map = (function ()
 			// clear out old address markers
 			app.state.map.addressMarkers = {};
 
-			var aisGeom = app.state.aisFeature.geometry;
+			var aisGeom = app.state.ais.feature.geometry;
 			if (aisGeom) {
 				console.log('we have ais geom gonna make the marker')
 				aisMarker = new L.Marker.SVGMarker([aisGeom.coordinates[1], aisGeom.coordinates[0]], {
@@ -878,7 +878,7 @@ app.map = (function ()
 				});
 			}
 
-			var aisGeom = app.state.aisFeature.geometry;
+			var aisGeom = app.state.ais.feature.geometry;
 			console.log('create marker is about to check ais geom', app.state);
 			if (aisGeom) {
 				console.log('we have ais geom gonna make the marker')
@@ -987,8 +987,8 @@ app.map = (function ()
 			app.state.leafletCenterX = app.state.theCenter.lng;
 			app.state.leafletCenterY = app.state.theCenter.lat;
       if (app.state.map.clickedOnMap == true){
-        app.state.leafletForCycloX = app.state.aisFeature.geometry.coordinates[0];
-        app.state.leafletForCycloY = app.state.aisFeature.geometry.coordinates[1];
+        app.state.leafletForCycloX = app.state.ais.feature.geometry.coordinates[0];
+        app.state.leafletForCycloY = app.state.ais.feature.geometry.coordinates[1];
       } else {
 				app.state.leafletForCycloX = app.state.theCenter.lng;
         app.state.leafletForCycloY = app.state.theCenter.lat;

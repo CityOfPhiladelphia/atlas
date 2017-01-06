@@ -182,8 +182,9 @@ var app = (function ()
       },
     },
 
-    // global app state
+    // initial app state
     state: {
+      ais: {},
       // prevent topics from opening until we've completed a search
       shouldOpenTopics: false,
       nearby: {
@@ -308,7 +309,8 @@ var app = (function ()
 
       var address = decodeURIComponent(comps[1]),
           topic = comps.length > 2 ? decodeURIComponent(comps[2]) : null,
-          state = history.state;
+          state = history.state,
+          aisState = state ? state.ais : null;
 
       // activate topic
       // topic && app.activateTopic(topic);
@@ -318,14 +320,15 @@ var app = (function ()
       // = $('.topic:visible');
 
       // if there's no ais in state, go get it
-      if (!(state && state.ais)) {
+      if (!aisState) {
         app.searchForAddress(address);
         return;
       }
 
-      // rehydrate state
-      var aisFeature = state.aisFeature;
-      app.state.aisFeature = aisFeature;
+      // otherwise rehydrate state
+      console.log('rehydrate state', aisState);
+      app.state.ais = aisState;
+
       app.didGetAisResult();
 
       // get topics
@@ -374,27 +377,24 @@ var app = (function ()
         url: url,
         data: params,
         success: function (data) {
-          console.log('got ais', data);
-          app.state.shouldOpenTopics = true;
-          // app.state.ais = data;
+          console.log('got ais');
 
-          // if more than one address result, show a modal
-          if (data.features.length > 1) {
-            app.showMultipleAisResultModal(data);
-            return;
-          }
+          var features = data.features;
 
           // this shouldn't happen, but just in case
-          if (data.features.length === 0) {
+          if (features.length === 0) {
             console.error('got ais, but no features');
             $('#no-results-modal').foundation('open');
             return;
           }
 
-          var aisFeature = data.features[0];
+          var feature = features[0],
+              // slice off first feature and reject range children
+              relatedFeatures = _.reject(features.slice(1),
+                                        {match_type: 'range_child'});
 
           // make sure it has geometry
-          if (!aisFeature.geometry.geocode_type) {
+          if (!feature.geometry.geocode_type) {
             console.log('got ais, but address did not have an xy');
             $('#no-results-modal').foundation('open');
             return;
@@ -402,11 +402,16 @@ var app = (function ()
 
           // if it's an intersection, create a dummy `street_address` prop
           // to make this easier to work with
-          if (aisFeature.ais_feature_type === 'intersection') {
-            aisFeature.properties.street_address = data.normalized[0];
+          if (feature.ais_feature_type === 'intersection') {
+            feature.properties.street_address = data.normalized[0];
           }
 
-          app.state.aisFeature = aisFeature;
+          // set state
+          app.state.ais = {
+            feature: feature,
+            related: relatedFeatures
+          };
+
           app.didGetAisResult();
         },
         error: function (err) {
@@ -448,7 +453,7 @@ var app = (function ()
           aisFeature.properties.street_address = data.normalized[0];
         }
 
-        app.state.aisFeature = aisFeature;
+        app.state.ais.feature = aisFeature;
 
         app.didGetAisResult();
       });
@@ -465,7 +470,7 @@ var app = (function ()
 
       // update url, eg /#/1234 MARKET ST/property
       // var address = app.state.ais.features[0].properties.street_address,
-      var aisFeature = app.state.aisFeature,
+      var aisFeature = app.state.ais.feature,
           address = aisFeature.properties.street_address,
           hash = app.util.constructHash(address, targetTopicName),
           // pare down state to something serializable
@@ -525,12 +530,15 @@ var app = (function ()
       }
     },
 
+    // this gets called after ais state has been set (either by making an AJAX
+    // call or rehydrating state)
     didGetAisResult: function () {
-      console.log('did get ais result', app.state.aisFeature);
-
+      // open topic
+      app.state.shouldOpenTopics = true;
       app.activateTopic(app.state.activeTopic || 'property');
 
-      var aisFeature = app.state.aisFeature;
+      var aisState = app.state.ais,
+          aisFeature = aisState.feature;
           // selectedAddress = app.state.selectedAddress,
           // obj;
 
@@ -599,8 +607,11 @@ var app = (function ()
       // get topics
       app.getTopics();
 
-      // push state
-      var nextState = {aisFeature: app.state.aisFeature},
+      // push to history
+      console.log('pushing to history', aisState);
+      var nextState = {
+            ais: aisState,
+          },
           nextTopic = app.state.activeTopic || 'property',
           nextHash = app.util.constructHash(streetAddress, nextTopic);
       history.pushState(nextState, null, nextHash);
@@ -651,12 +662,45 @@ var app = (function ()
 
       // tell map we got an ais result
       app.map.didGetAisResult();
+
+      // render related topic
+      app.renderRelated();
+    },
+
+    renderRelated: function () {
+      var features = app.state.ais.related,
+          $relatedList = $('#related-list');
+
+          // console.log('render related addresses', features);
+
+      // clear out old addresses
+      $relatedList.empty();
+
+      // if no related, hide
+      if (features.length === 0) {
+        app.hideContentForTopic('related');
+        return;
+      }
+
+      app.showContentForTopic('related');
+
+      // make links and append to related list
+      _.forEach(features, function (feature) {
+        var address = feature.properties.street_address,
+            href = '#/' + encodeURIComponent(address),
+            $link = $('<a>')
+                      .attr({href: href})
+                      .html(address),
+            $el = $('<li>').html($link);
+
+        $relatedList.append($el);
+      });
     },
 
     getDorParcel: function () {
       console.log('get dor parcel');
 
-      var aisFeature = app.state.aisFeature,
+      var aisFeature = app.state.ais.feature,
           parcelId = aisFeature.properties.dor_parcel_id;
 
       if (!parcelId) {
@@ -745,7 +789,7 @@ var app = (function ()
     },
 
     getPwdParcel: function () {
-      var aisFeature = app.state.aisFeature,
+      var aisFeature = app.state.ais.feature,
           parcelId = aisFeature.properties.pwd_parcel_id,
           parcelQuery = L.esri.query({url: app.config.esri.parcelLayerWaterUrl});
 
@@ -795,7 +839,7 @@ var app = (function ()
     //   console.log('get parcels');
     //
     //   // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
-    //   var aisFeature = app.state.aisFeature,
+    //   var aisFeature = app.state.ais.feature,
     //       dorParcelId = aisFeature.properties.dor_parcel_id,
     //       pwdParcelId = aisFeature.properties.pwd_parcel_id;
     //
@@ -871,7 +915,7 @@ var app = (function ()
       // doing this in route now
       // $('#topic-list').show();
 
-      var aisFeature = app.state.aisFeature,
+      var aisFeature = app.state.ais.feature,
           aisProps = aisFeature.properties,
           aisAddress = aisProps.street_address,
           aisGeom = aisFeature.geometry;
@@ -923,7 +967,7 @@ var app = (function ()
 
       // DOR
       // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
-      // var aisFeature = app.state.aisFeature,
+      // var aisFeature = app.state.ais.feature,
       //     aisParcelId = aisFeature.properties.dor_parcel_id,
       //     waterParcelId = aisFeature.properties.pwd_parcel_id,
       //     stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
@@ -1501,7 +1545,7 @@ var app = (function ()
       // no pwd parcel id, don't do anything
       } else {
         console.log('no pwd parcel id specified');
-        console.log('ais', app.state.aisFeature)
+        console.log('ais', app.state.ais.feature)
       }
 
       /*$.ajax({
@@ -1783,7 +1827,7 @@ var app = (function ()
 
       // make sure we have an XY first
       // TODO clear out 'nearby' content if no XY.
-      var aisGeom = app.state.aisFeature.geometry;
+      var aisGeom = app.state.ais.feature.geometry;
       if (!aisGeom.geocode_type) return;
 
       var aisX = aisGeom.coordinates[0],
