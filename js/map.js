@@ -1096,7 +1096,7 @@ app.map = (function ()
     },
 
 		showAddressMarker: function (markerType) {
-			console.log('show address marker', markerType);
+			// console.log('show address marker', markerType);
 
 			// if (!app.state.map.addressMarkers) {
 			// 	console.log('show address marker, but we havent created them yet');
@@ -1115,7 +1115,7 @@ app.map = (function ()
 
 			// if there's no corresponding marker, don't do anything
 			if (!marker) {
-				console.log('show address marker, but we dont have a marker of type', markerType);
+				// console.log('show address marker, but we dont have a marker of type', markerType);
 				return;
 			}
 
@@ -1179,7 +1179,7 @@ app.map = (function ()
 					nextMarker.addTo(_parcelLayerGroup);
 				}
 				else {
-					console.log('theres no next marker')
+					console.error('did change topic, but no next marker')
 				}
 			}
 
@@ -1204,12 +1204,12 @@ app.map = (function ()
 			// handle labels
 			var prevLabelLayer = this.labelsForTopicAndBasemap(prevTopic, prevBasemapName),
 					nextLabelLayer = this.labelsForTopicAndBasemap(nextTopic, nextBasemapName);
-			console.log('prevTopic is ' +  prevTopic);
-			console.log('prevBasemapName is ' + prevBasemapName);
-			console.log('prevLabelLayer is ' + prevLabelLayer);
-			console.log('nextTopic is ' +  nextTopic);
-			console.log('nextBasemapName is ' + nextBasemapName);
-			console.log('nextLabelLayer is ' + nextLabelLayer);
+			// console.log('prevTopic is ' +  prevTopic);
+			// console.log('prevBasemapName is ' + prevBasemapName);
+			// console.log('prevLabelLayer is ' + prevLabelLayer);
+			// console.log('nextTopic is ' +  nextTopic);
+			// console.log('nextBasemapName is ' + nextBasemapName);
+			// console.log('nextLabelLayer is ' + nextLabelLayer);
 			if (prevLabelLayer !== nextLabelLayer) {
 				// replace labels
 				_labelLayerGroup.clearLayers();
@@ -1234,7 +1234,7 @@ app.map = (function ()
     },
 
 		basemapForTopic: function (topic) {
-			console.log('running basemapForTopic with topic ' + topic);
+			// console.log('running basemapForTopic with topic ' + topic);
 			var basemapName;
 			switch (topic) {
 				case 'deeds':
@@ -1247,7 +1247,7 @@ app.map = (function ()
 					basemapName = 'baseMapLight';
 					break;
 			};
-			console.log('basemapName is ' + basemapName);
+			// console.log('basemapName is ' + basemapName);
 			return basemapName;
 		},
 
@@ -1276,7 +1276,7 @@ app.map = (function ()
 		// labels depend on both the topic and the basemap being shown
 		labelsForTopicAndBasemap: function (topic, basemap) {
 			// always show imagery labels for imagery basemap
-			console.log('basemap is ' + basemap);
+			// console.log('basemap is ' + basemap);
 			if (basemap.indexOf('Imagery') > -1) {
 				return 'overlayImageryLabels';
 			}
@@ -1302,7 +1302,7 @@ app.map = (function ()
 
     // called when the active topic in the topic panel changes
     didActivateTopic: function (topic) {
-      console.log('did activate topic', topic);
+      console.log('MAP: did activate topic', topic);
 
       // save to localstorage for pictometry viewer
       // localStorage.setItem('activeTopic', topic);
@@ -1315,17 +1315,14 @@ app.map = (function ()
 			switch (topic) {
         case 'deeds':
 					if (app.state.map.nameBaseLayer == 'baseMapLight') {
-						console.log('dor checked while it is baseMapLight')
+						// console.log('dor checked while it is baseMapLight')
 	          _baseLayerGroup.clearLayers();
 						_labelLayerGroup.clearLayers();
 						app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
 						app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
 					}
-					console.log('finished if');
 					app.map.domLayerList();
-					console.log('finished domLayerList');
 					//app.map.toggleParcelMarker();
-					// console.log('finished toggleParcelMarker');
 					markerType = 'parcelPolyDOR';
           break;
         case 'zoning':
@@ -1342,7 +1339,7 @@ app.map = (function ()
 					app.map.addOpacitySlider('zoning', app.state.map.mapServices.zoningMap);
           break;
         case 'nearby':
-					console.log('running addNearbyActivity from map.js')
+					// console.log('running addNearbyActivity from map.js')
           app.map.addNearbyActivity();
 					//app.map.toggleParcelMarker();
 					break;
@@ -1372,7 +1369,7 @@ app.map = (function ()
 			//app.map.toggleParcelMarker();
 
 			// add marker to map
-			console.log('didActivateTopic is calling showAddressMarker with type', markerType);
+			// console.log('didActivateTopic is calling showAddressMarker with type', markerType);
 			this.showAddressMarker(markerType);
     },
 
@@ -1384,17 +1381,16 @@ app.map = (function ()
 			switch (topic) {
         case 'deeds':
 					if (app.state.map.nameBaseLayer == 'baseMapDORParcels') {
-						console.log('deactivating deeds, basemap is baseMapDORParcels');
+						// console.log('deactivating deeds, basemap is baseMapDORParcels');
 						_baseLayerGroup.clearLayers();
 						_labelLayerGroup.clearLayers();
 						app.state.map.tileLayers.baseMapLight.addTo(_baseLayerGroup);
 						app.state.map.tileLayers.overlayBaseLabels.addTo(_labelLayerGroup);
 					}
-					console.log('finished did deactivate topic deeds if');
+					// console.log('finished did deactivate topic deeds if');
 					app.map.domLayerList();
-					console.log('finished domLayerList');
+					// console.log('finished domLayerList');
 					//app.map.toggleParcelMarker();
-					console.log('finished toggleParcelMarker');
           break;
         case 'zoning':
 					if (app.state.map.nameBaseLayer == 'baseMapDORParcels') {
