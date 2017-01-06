@@ -390,8 +390,18 @@ var app = (function ()
 
           var feature = features[0],
               // slice off first feature and reject range children
+              // relatedFeatures = _.reject(features.slice(1),
+              //                           {match_type: 'range_child'});
+              // workaround until we have a range_child match type
               relatedFeatures = _.reject(features.slice(1),
-                                        {match_type: 'range_child'});
+                function (relatedFeature) {
+                  // if the main feature is a range, reject anything that isn't also a range
+                  if (!!feature.properties.address_high) {
+                    // console.warn('base addr is a range')
+                    return !relatedFeature.properties.address_high;
+                  }
+                  return false;
+                });
 
           // make sure it has geometry
           if (!feature.geometry.geocode_type) {
