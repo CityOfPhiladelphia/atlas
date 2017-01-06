@@ -481,7 +481,7 @@ var app = (function ()
 
       // only activate if it's not already active
       if ($targetTopic.is($activeTopic)) {
-        //console.log('activate topic, but its already active');
+        console.info('activate topic, but its already active');
         return;
       }
 
@@ -495,8 +495,9 @@ var app = (function ()
       } else {
         prevTopic = null;
       }
-      console.log('activateTopic is calling didChangeTopic');
       app.map.didChangeTopic(prevTopic, targetTopicName);
+
+      console.log('activate topic finished');
     },
 
     toggleTopic: function (targetTopicName) {
@@ -568,6 +569,15 @@ var app = (function ()
         $topicPanelHeaderGreeting.fadeOut(175, function () {
           $('#topic-panel-header-address').fadeIn(175);
         });
+      }
+
+      // show estimated warning if the addrses is estimated
+      var matchType = aisFeature.match_type,
+          $estimatedWarning = $('#estimated-warning');
+      if (['estimated', 'unmatched'].indexOf(matchType) > -1) {
+        $estimatedWarning.slideDown();
+      } else if ($estimatedWarning.is(':visible')) {
+        $estimatedWarning.slideUp();
       }
 
       // render ais data

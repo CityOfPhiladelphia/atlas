@@ -86,6 +86,15 @@ header.site-header > .row:last-of-type {
     margin-bottom: 0;
 }
 
+#estimated-warning {
+  background: rgba(243, 198, 19, 0.28);
+  border: 1px rgba(243, 198, 19, 0.6) solid;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: none;
+}
+
 #topic-list {
     display: none;
 }
