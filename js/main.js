@@ -18,25 +18,25 @@ var app = (function ()
         '10.8.101.67',
         'localhost',
       ],
-      // actually this doesn't work. commenting out for now.
-      // DEBUG_ADDRESSES = {
-      //   '10.8.101.251': '1849 blair st',
-      // },
       HOST = window.location.hostname,
-      DEBUG = (function () {
-        return _.some(_.map(DEBUG_HOSTS, function (debugHost) {
-          return HOST.indexOf(debugHost) >= 0;
-        }));
-      })(),
-      // DEBUG_ADDRESS = DEBUG_ADDRESSES[HOST] || '1234 market st',
-      // DEBUG_ADDRESS = '1234 market st',
-      DEBUG_ADDRESS = '1849 bLAir st',
+      DEBUG = _.some(_.map(DEBUG_HOSTS, function (debugHost) {
+        return HOST.indexOf(debugHost) >= 0;
+      })),
+      DEBUG_ADDRESS = '1234 market st',
+      // DEBUG_ADDRESS = '1849 blair st',
       // DEBUG_ADDRESS = 'n 3rd st & market st',
     // dynamically form a url based on the current hostname
     // this can't go in app.util because it hasn't been defined yet
       constructLocalUrl = function (host, path) {
         return '//' + host + path;
       };
+
+  // disable console if not debugging
+  if (!DEBUG) {
+    _.forEach(['log', 'debug', 'info', 'warn', 'error'], function (method) {
+      console[method] = function () {};
+    });
+  }
 
   return {
     config: {
