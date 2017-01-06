@@ -1765,7 +1765,8 @@ var app = (function ()
         var $idField = $(idField),
             docId = $idField.text(),
             idFieldHtml = $('<a />', {
-              href: 'http://170.115.71.250/picris/detail.jsp?did=' + docId,
+              // href: 'http://170.115.71.250/picris/detail.jsp?did=' + docId,
+              href: 'http://pdx-app01/recorder/eagleweb/viewDoc.jsp?node=DOCC' + docId,
               text: docId,
             });
         $idField.html(idFieldHtml);
