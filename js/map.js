@@ -655,7 +655,7 @@ app.map = (function ()
     // },
 
 		didCreateAddressMarker: function (markerType) {
-			console.log('********** did create address marker', markerType);
+			// console.log('did create address marker', markerType);
 
 			var targetMarkerType = this.addressMarkerTypeForTopic(app.state.activeTopic);
 			if (markerType === targetMarkerType) {
@@ -1162,10 +1162,10 @@ app.map = (function ()
 			console.log('did change topic', prevTopic, '=>', nextTopic);
 
 			// if we don't have both parcels, don't do anything
-			if (!(app.state.dor && app.state.pwd)) {
-				console.warn('did change topic, but we dont have parcels yet, returning')
+			// if (!(app.state.dor && app.state.pwd)) {
+			// 	console.warn('did change topic, but we dont have parcels yet, returning')
 				// return;
-			}
+			// }
 
 			// handle address marker
 			var prevMarkerType = this.addressMarkerTypeForTopic(prevTopic),
@@ -1230,7 +1230,7 @@ app.map = (function ()
 
 			localStorage.setItem('previousTopic', prevTopic);
 			localStorage.setItem('activeTopic', nextTopic);
-			console.log('got to end of didChangeTopic');
+			// console.log('got to end of didChangeTopic');
     },
 
 		basemapForTopic: function (topic) {
@@ -1483,7 +1483,8 @@ app.map = (function ()
 		},
 
 		addressMarkerTypeForTopic: function (topic) {
-			console.log('running addressMarkerTypeForTopic with topic ' + topic);
+			// console.log('running addressMarkerTypeForTopic with topic ' + topic);
+
 			var markerType;
 			if (topic === 'deeds') {
 				markerType = 'parcelPolyDOR';
