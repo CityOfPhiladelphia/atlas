@@ -133,7 +133,7 @@ app.util = (function () {
       // },
       'li-permit-id': function (val) {
         var url = '//li.phila.gov/#details?entity=permits&eid=' + val;
-        return '<a href="' + url + '">' + val + '</a>';
+        return '<a class="external" href="' + url + '">' + val + '</a>';
       },
       'li-inspection-id': function (val) {
         // var url = '//li.phila.gov/#details?entity=permits&eid=' + val;
@@ -147,10 +147,10 @@ app.util = (function () {
       },
       'zoning-appeal-id': function (val) {
         var url = '//li.phila.gov/#details?entity=zoningboardappeals&eid=' + val;
-        return '<a href="' + url + '">' + val + '</a>';
+        return '<a class="external" href="' + url + '">' + val + '</a>';
       },
       'zoning-document-link': function (val) {
-        return '<a href="' + val + '">View Scan</a>';
+        return '<a class="external" href="' + val + '">View Scan</a>';
       },
       'distance': function (val) {
         return Math.round(val) + ' feet';

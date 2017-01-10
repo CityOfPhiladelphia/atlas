@@ -218,16 +218,19 @@ var app = (function ()
       });
 
       // Make ext links open in new window
-      $('a').each(function() {
-         var a = new RegExp('/' + window.location.host + '/');
-         if (!a.test(this.href)) {
-           $(this).click(function (event) {
-             event.preventDefault();
-             event.stopPropagation();
-             window.open(this.href, '_blank');
-           });
-         }
-      });
+      // $('a').each(function() {
+      //    var a = new RegExp('/' + window.location.host + '/');
+      //    if (!a.test(this.href)) {
+      //      $(this).click(function (event) {
+      //        event.preventDefault();
+      //        event.stopPropagation();
+      //        window.open(this.href, '_blank');
+      //      });
+      //    }
+      // });
+
+      // listen for clicks on current and future <a> elements
+      $(document).on('click', 'a', app.didClickLink);
 
       // listen for search
       $('#search-button').click(app.didClickSearch);
@@ -333,6 +336,23 @@ var app = (function ()
 
       // get topics
       // app.getTopics();
+    },
+
+    didClickLink: function (e) {
+      var $this = $(this);
+
+      // console.log('did click link', $this);
+
+      // if the link has the class `external`, open in a new window/tab
+      if ($this.hasClass('external')) {
+        // console.log('external link, opening in new window');
+
+        var href = $this.attr('href');
+        window.open(href);
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
     },
 
     didClickSearch: function () {
@@ -1358,7 +1378,7 @@ var app = (function ()
         // get the code section field
         $codeSectionField = $row.children().last();
         var text = $codeSectionField.text(),
-            newHtml = '<a href="' + url + '">' + text + '</a>';
+            newHtml = '<a class="external" href="' + url + '">' + text + '</a>';
         $codeSectionField.html(newHtml);
       });
 
@@ -1768,6 +1788,7 @@ var app = (function ()
               // href: 'http://170.115.71.250/picris/detail.jsp?did=' + docId,
               href: 'http://pdx-app01/recorder/eagleweb/viewDoc.jsp?node=DOCC' + docId,
               text: docId,
+              class: 'external',
             });
         $idField.html(idFieldHtml);
       });
