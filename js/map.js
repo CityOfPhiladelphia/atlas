@@ -554,6 +554,7 @@ app.map = (function ()
       };
 
       // set map state and localStorage on init, drag, dragend, and zoom
+			console.log('initMap is calling LSinit');
       app.map.LSinit();
 
       // listen for map events
@@ -695,9 +696,10 @@ app.map = (function ()
 
 			this.didCreateAddressMarker('aisMarker');
 
-			if (app.state.map.shouldPan){
-				app.map.LSinit();
-			}
+			//if (app.state.map.shouldPan){
+			console.log('didGetAisResult is running LSinit');
+			app.map.LSinit();
+			//}
 		},
 
 		didGetDorParcel: function () {
@@ -986,7 +988,8 @@ app.map = (function ()
 			app.state.theCenter = _map.getCenter();
 			app.state.leafletCenterX = app.state.theCenter.lng;
 			app.state.leafletCenterY = app.state.theCenter.lat;
-      if (app.state.map.clickedOnMap == true){
+      //if (app.state.map.clickedOnMap == true){
+			if (app.state.ais.feature){
         app.state.leafletForCycloX = app.state.ais.feature.geometry.coordinates[0];
         app.state.leafletForCycloY = app.state.ais.feature.geometry.coordinates[1];
       } else {
