@@ -687,7 +687,7 @@ var app = (function ()
       // console.log('didGetAisResult is calling getParcels');
       // app.getParcels();
       app.state.dor = app.state.pwd = null;
-      app.state.regmaps = null;
+      app.state.regmaps
       app.state.didFinishPwdRequest = app.state.didFinishDorRequest = null;
       app.getDorParcel();
       app.getPwdParcel();
@@ -832,7 +832,7 @@ var app = (function ()
       app.state.regmaps = featureCollection;
 
       var features = featureCollection.features,
-          $list = $('#deeds-regmaps-list');
+          $list = $('#deeds-regmaps');
 
       // clear everything out
       $list.empty();
@@ -842,13 +842,36 @@ var app = (function ()
             id = props.RECMAP,
             $link = $('<a>')
                       .attr({href: '#'})
-                      .html(id),
-            $el = $('<li>')
-                    .html($link);
-        $list.append($el);
+                      .addClass('button hollow')
+                      .html(id)
+                      .on('click', app.didSelectRegmap);
+            // $el = $('<li>')
+            //         .html($link);
+        $list.append($link);
       });
 
       $('#deeds-regmaps-count').html(' (' + features.length + ')')
+    },
+
+    didSelectRegmap: function (e) {
+      var $this = $(this),
+          id = $this.html();
+
+      // TODO if the same regmap was already selected, we should actually unselect it.
+
+      console.log('did select regmap', id);
+
+      // set state
+      app.state.selectedRegmap = id;
+
+      // unhighlight last selected
+      $('#deeds-regmaps a:not(.hollow)').addClass('hollow');
+
+      // highlight button
+      $this.removeClass('hollow');
+      
+      // tell map
+      app.map.didSelectRegmap();
     },
 
     getPwdParcel: function () {
