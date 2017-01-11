@@ -162,7 +162,8 @@ var app = (function ()
         // overlayZoningUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer',
         zoningMapUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer',
         waterUrl: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer',
-        politicalDivisionsUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22'
+        politicalDivisionsUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22',
+        regmapUrl: '//gis.phila.gov/arcgis/rest/services/DOR_ParcelExplorer/rtt_basemap/MapServer/0',
       },
 
       pictometry: {
@@ -816,6 +817,37 @@ var app = (function ()
       });
 
       app.renderParcelTopic();
+
+      // get intersecting regmaps
+      var regmapQuery = new L.esri.Query({url: app.config.esri.regmapUrl})
+                          .intersects(geomDOR);
+      regmapQuery.run(app.didGetRegmaps);
+    },
+
+    didGetRegmaps: function (error, featureCollection, response) {
+      console.log('did get regmaps', featureCollection);
+
+      // set state
+      app.state.regmaps = featureCollection;
+
+      var features = featureCollection.features,
+          $list = $('#deeds-regmaps-list');
+
+      // clear everything out
+      $list.empty();
+
+      _.forEach(features, function (feature) {
+        var props = feature.properties,
+            id = props.RECMAP,
+            $link = $('<a>')
+                      .attr({href: '#'})
+                      .html(id),
+            $el = $('<li>')
+                    .html($link);
+        $list.append($el);
+      });
+
+      $('#deeds-regmaps-count').html(' (' + features.length + ')')
     },
 
     getPwdParcel: function () {
