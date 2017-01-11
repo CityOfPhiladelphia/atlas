@@ -1819,6 +1819,9 @@ app.map = (function ()
 			console.log('toggleBaseToolTip is starting');
 		}
 
+		didSelectRegmap: function () {
+
+		},
   }; // end of return
 })();
 
