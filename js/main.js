@@ -687,6 +687,7 @@ var app = (function ()
       // console.log('didGetAisResult is calling getParcels');
       // app.getParcels();
       app.state.dor = app.state.pwd = null;
+      app.state.regmaps = null;
       app.state.didFinishPwdRequest = app.state.didFinishDorRequest = null;
       app.getDorParcel();
       app.getPwdParcel();
