@@ -554,7 +554,7 @@ app.map = (function ()
       };
 
       // set map state and localStorage on init, drag, dragend, and zoom
-			console.log('initMap is calling LSinit');
+			//console.log('initMap is calling LSinit');
       app.map.LSinit();
 
       // listen for map events
@@ -696,10 +696,8 @@ app.map = (function ()
 
 			this.didCreateAddressMarker('aisMarker');
 
-			//if (app.state.map.shouldPan){
-			console.log('didGetAisResult is running LSinit');
+			//console.log('didGetAisResult is running LSinit');
 			app.map.LSinit();
-			//}
 		},
 
 		didGetDorParcel: function () {
