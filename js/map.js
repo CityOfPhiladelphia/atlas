@@ -1815,8 +1815,19 @@ app.map = (function ()
 
 		toggleBaseToolTip: function(topic) {
 			console.log('toggleBaseToolTip is starting');
-		}
+		},
 
+		didSelectRegmap: function () {
+			var selectedRegmap = app.state.selectedRegmap;
+			console.log('MAP: did select regmap', selectedRegmap)
+
+			// get bounding box of the current map view
+
+			// get the image
+			// (ex. http://gis.phila.gov/arcgis/rest/services/DOR_ParcelExplorer/rtt_basemap/MapServer/export?bbox=2694434.5%2C230128.5%2C2694522%2C230216&bboxSR=2272&layers=show%3A29&layerDefs=29%3ANAME%3D%27g007s21.tif%27%3B&size=512%2C512&imageSR=2272&format=png&transparent=false&dpi=&time=&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=&f=html)
+
+			// overlay on map
+		},
   }; // end of return
 })();
 

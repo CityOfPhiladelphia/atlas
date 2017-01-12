@@ -162,7 +162,8 @@ var app = (function ()
         // overlayZoningUrl: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ZoningMap_tiled/MapServer',
         zoningMapUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer',
         waterUrl: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer',
-        politicalDivisionsUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22'
+        politicalDivisionsUrl: '//gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22',
+        regmapUrl: '//gis.phila.gov/arcgis/rest/services/DOR_ParcelExplorer/rtt_basemap/MapServer/0',
       },
 
       pictometry: {
@@ -686,6 +687,7 @@ var app = (function ()
       // console.log('didGetAisResult is calling getParcels');
       // app.getParcels();
       app.state.dor = app.state.pwd = null;
+      app.state.regmaps
       app.state.didFinishPwdRequest = app.state.didFinishDorRequest = null;
       app.getDorParcel();
       app.getPwdParcel();
@@ -816,6 +818,60 @@ var app = (function ()
       });
 
       app.renderParcelTopic();
+
+      // get intersecting regmaps
+      var regmapQuery = new L.esri.Query({url: app.config.esri.regmapUrl})
+                          .intersects(geomDOR);
+      regmapQuery.run(app.didGetRegmaps);
+    },
+
+    didGetRegmaps: function (error, featureCollection, response) {
+      console.log('did get regmaps', featureCollection);
+
+      // set state
+      app.state.regmaps = featureCollection;
+
+      var features = featureCollection.features,
+          $list = $('#deeds-regmaps');
+
+      // clear everything out
+      $list.empty();
+
+      _.forEach(features, function (feature) {
+        var props = feature.properties,
+            id = props.RECMAP,
+            $link = $('<a>')
+                      .attr({href: '#'})
+                      .addClass('button hollow')
+                      .html(id)
+                      .on('click', app.didSelectRegmap);
+            // $el = $('<li>')
+            //         .html($link);
+        $list.append($link);
+      });
+
+      $('#deeds-regmaps-count').html(' (' + features.length + ')')
+    },
+
+    didSelectRegmap: function (e) {
+      var $this = $(this),
+          id = $this.html();
+
+      // TODO if the same regmap was already selected, we should actually unselect it.
+
+      console.log('did select regmap', id);
+
+      // set state
+      app.state.selectedRegmap = id;
+
+      // unhighlight last selected
+      $('#deeds-regmaps a:not(.hollow)').addClass('hollow');
+
+      // highlight button
+      $this.removeClass('hollow');
+      
+      // tell map
+      app.map.didSelectRegmap();
     },
 
     getPwdParcel: function () {
