@@ -58,6 +58,7 @@ L.Control.opacitySlider = L.Control.extend({
             opacity_layer = layer;
     },
     onAdd: function (map) {
+        //console.log('opacitySlider onAdd is firing, opacity layer is ', opacity_layer);
         var opacity_slider_div = L.DomUtil.create('div', 'opacity_slider_control');
 
         $(opacity_slider_div).slider({
@@ -77,7 +78,9 @@ L.Control.opacitySlider = L.Control.extend({
           slide: function ( event, ui ) {
             var slider_value = ui.value / 100;
             opacity_layer.setOpacity(slider_value);
-          }
+            if (opacity_layer.options.url = 'http://gis.phila.gov/arcgis/rest/services/DOR_ParcelExplorer/rtt_basemap/MapServer/')
+              app.state.map.opacity.regmap = slider_value;
+            }
         });
 
         return opacity_slider_div;

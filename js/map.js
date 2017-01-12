@@ -114,6 +114,11 @@ app.map = (function ()
       app.state.map = {
 				addressMarkers: {},
 			};
+			app.state.map.opacity = {
+				zoning: 1.0,
+				water: 1.0,
+				regmap: 0.5
+			};
       app.state.map.clickedOnMap = false;
 			localStorage.setItem('clickedOnMap', false);
       // the next 2 variables hold names for checking what is on the map
@@ -313,11 +318,13 @@ app.map = (function ()
 			});
 
 			app.state.map.OpacitySlider = new L.Control.opacitySlider();
-			app.state.map.zoningOpacitySlider = new L.Control.opacitySlider();
+			//app.state.map.zoningOpacitySlider = new L.Control.opacitySlider();
+			//app.state.map.waterOpacitySlider = new L.Control.opacitySlider();
+			//app.state.map.regmapOpacitySlider = new L.Control.opacitySlider();
+
 			//app.state.map.zoningOpacitySlider.setOpacityLayer(app.state.map.mapServices.zoningMap);
 			//app.state.map.zoningOpacitySlider.setPosition('topleft');
-			app.state.map.waterOpacitySlider = new L.Control.opacitySlider();
-			app.state.map.regmapOpacitySlider = new L.Control.opacitySlider();
+
 			//app.state.map.waterOpacitySlider.setOpacityLayer(app.state.map.mapServices.water);
 			//app.state.map.waterOpacitySlider.setPosition('topleft');
 
@@ -1207,6 +1214,10 @@ app.map = (function ()
 				nextOverlay.addTo(_overlayLayerGroup);
 			});
 
+			// handle regmaps - unhighlight last selected
+			/*console.log('unhighlighting last selected');
+      $('#deeds-regmaps a:not(.hollow)').addClass('hollow');*/
+
 			// handle labels
 			var prevLabelLayer = this.labelsForTopicAndBasemap(prevTopic, prevBasemapName),
 					nextLabelLayer = this.labelsForTopicAndBasemap(nextTopic, nextBasemapName);
@@ -1342,7 +1353,7 @@ app.map = (function ()
           // add name "zoningMap" to the DOM list
           app.map.domLayerList();
 					//app.map.toggleParcelMarker();
-					app.map.addOpacitySlider(app.state.map.mapServices.zoningMap, 1.0);
+					app.map.addOpacitySlider(app.state.map.mapServices.zoningMap, app.state.map.opacity.zoning);
           break;
         case 'nearby':
 					// console.log('running addNearbyActivity from map.js')
@@ -1353,7 +1364,7 @@ app.map = (function ()
 					_overlayLayerGroup.addLayer(app.state.map.mapServices.water);
 					app.map.domLayerList();
 					//app.map.toggleParcelMarker();
-					app.map.addOpacitySlider(app.state.map.mapServices.water, 1.0);
+					app.map.addOpacitySlider(app.state.map.mapServices.water, app.state.map.opacity.water);
 					app.map.waterLegend.onAdd = function () {
 						var div = L.DomUtil.create('div', 'info legend'),
 							grades = ['#FEFF7F', '#F2DCFF'],
@@ -1396,6 +1407,9 @@ app.map = (function ()
 					// console.log('finished did deactivate topic deeds if');
 					app.map.domLayerList();
 					// console.log('finished domLayerList');
+					console.log('unhighlighting last selected');
+		      $('#deeds-regmaps a:not(.hollow)').addClass('hollow');
+					app.map.removeOpacitySlider();
 					//app.map.toggleParcelMarker();
           break;
         case 'zoning':
@@ -1784,42 +1798,24 @@ app.map = (function ()
 			localStorage.setItem('circlesOn', true);
     },
 
-		addOpacitySlider: function(opacityLayer, startOpacity) {
-			//app.state.map.opacitySlider = new L.Control.opacitySlider();
-			//switch (topic) {
-        //case 'zoning':
-					_map.addControl(app.state.map.OpacitySlider);
-					app.state.map.OpacitySlider.setOpacityLayer(opacityLayer);
-					app.state.map.Opacity = opacityLayer.options.opacity;
-					app.state.map.OpacitySlider.setPosition('topleft');
-					var opacityPercent = startOpacity * 100;
-					$('.ui-slider-range').attr('style', 'height: ' + opacityLayer.options.opacity * opacityPercent + '%');
-					$('.ui-slider-handle').attr('style', 'bottom: ' + opacityLayer.options.opacity * opacityPercent + '%');
+		addOpacitySlider: function(opacityLayer, startOpacity, topic) {
+			_map.addControl(app.state.map.OpacitySlider);
+			app.state.map.OpacitySlider.setOpacityLayer(opacityLayer);
+			//app.state.map.Opacity = opacityLayer.options.opacity;
+			app.state.map.OpacitySlider.setPosition('topleft');
+			//var opacityPercent = startOpacity * 100;
+			$('.ui-slider-range').attr('style', 'height: ' + opacityLayer.options.opacity * 100 + '%');
+			$('.ui-slider-handle').attr('style', 'bottom: ' + opacityLayer.options.opacity * 100 + '%');
 
-					opacityLayer.setOpacity(startOpacity);
-
-					//break;
-				//case 'water':
-					// _map.addControl(app.state.map.waterOpacitySlider);
-					// app.state.map.waterOpacitySlider.setOpacityLayer(opacityLayer);
-					// app.state.map.waterOpacity = opacityLayer.options.opacity;
-					// app.state.map.waterOpacitySlider.setPosition('topleft');
-					// $('.ui-slider-range').attr('style', 'height: '+opacityLayer.options.opacity*100+'%');
-					// $('.ui-slider-handle').attr('style', 'bottom: '+opacityLayer.options.opacity*100+'%');
-					// break;
-			//};
-			//opacityLayer.setOpacityLayer(1.0);
+			if (topic == 'regmap') {
+				opacityLayer.setOpacity(startOpacity);
+				$('.ui-slider-range').attr('style', 'height: ' + startOpacity * 100 + '%');
+				$('.ui-slider-handle').attr('style', 'bottom: ' + startOpacity * 100 + '%');
+			}
 		},
 
 		removeOpacitySlider: function(topic) {
-			//switch (topic) {
-        //case 'zoning':
-					_map.removeControl(app.state.map.OpacitySlider);
-					//break;
-			// 	case 'water':
-			// 		_map.removeControl(app.state.map.waterOpacitySlider);
-			// 		break;
-			// };
+			_map.removeControl(app.state.map.OpacitySlider);
 		},
 
 		toggleBaseToolTip: function(topic) {
@@ -1834,7 +1830,8 @@ app.map = (function ()
 				return;
 			}
 
-			regmapLayer.remove();
+			//regmapLayer.remove();
+			_overlayLayerGroup.clearLayers();
 			app.map.removeOpacitySlider();
 			app.state.map.regmapLayer = null;
 		},
@@ -1861,7 +1858,8 @@ app.map = (function ()
 						transparent: true,
 					});
 
-			nextRegmap.addTo(_map);
+			//nextRegmap.addTo(_map);
+			nextRegmap.addTo(_overlayLayerGroup);
 
 			// set state
 			app.state.map.regmapLayer = nextRegmap;
@@ -1869,7 +1867,7 @@ app.map = (function ()
 			// esri leaflet complains if we try to add the opacity slider before
 			// the tiles hvae loaded.
 			nextRegmap.on('load', function (map) {
-				app.map.addOpacitySlider(nextRegmap, 0.5);
+				app.map.addOpacitySlider(nextRegmap, app.state.map.opacity.regmap, 'regmap');
 			});
 		},
   }; // end of return
