@@ -1348,6 +1348,7 @@ app.map = (function ()
 					//app.map.toggleParcelMarker();
 					markerType = 'parcelPolyDOR';
           break;
+
         case 'zoning':
 					if (app.state.map.nameBaseLayer == 'baseMapLight') {
 						_baseLayerGroup.clearLayers();
@@ -1361,11 +1362,13 @@ app.map = (function ()
 					//app.map.toggleParcelMarker();
 					app.map.addOpacitySlider(app.state.map.mapServices.zoningMap, app.state.map.opacity.zoning);
           break;
+
         case 'nearby':
 					// console.log('running addNearbyActivity from map.js')
           app.map.addNearbyActivity();
 					//app.map.toggleParcelMarker();
 					break;
+
 				case 'water':
 					_overlayLayerGroup.addLayer(app.state.map.mapServices.water);
 					app.map.domLayerList();
@@ -1373,8 +1376,8 @@ app.map = (function ()
 					app.map.addOpacitySlider(app.state.map.mapServices.water, app.state.map.opacity.water);
 					app.map.waterLegend.onAdd = function () {
 						var div = L.DomUtil.create('div', 'info legend'),
-							grades = ['#FEFF7F', '#F2DCFF'],
-							labels = ['Roof', 'Other Impervious Surface'];
+								grades = ['#FEFF7F', '#F2DCFF'],
+								labels = ['Roof', 'Other Impervious Surface'];
 						for (var i = 0; i < 2; i++) {
 							div.innerHTML += '<i style="background:' + grades[i] + '"></i> ' + labels[i] + '<br>'
 						}
@@ -1383,11 +1386,14 @@ app.map = (function ()
 					app.map.waterLegend.addTo(_map);
 					markerType = 'parcelPolyWater';
 					break;
+
 				case 'elections':
+					// check for elections in state before we add it to the map
 					app.map.addElectionInfo();
-					//app.map.toggleParcelMarker();
+					break;
+
         default:
-          // console.log('unhandled topic:', topic);
+          console.log('unhandled topic:', topic);
       }
 			//app.map.toggleParcelMarker();
 
@@ -1564,13 +1570,30 @@ app.map = (function ()
     //   }
     // },
 
-		addElectionInfo: function() {
+		didGetElections: function () {
+			if (app.state.activeTopic === 'elections') {
+				this.addElectionInfo();
+			}
+		},
+
+		addElectionInfo: function () {
 			_electionFeatureGroup.clearLayers();
 
 			console.log('addElectionInfo was called');
 
-			var ward = app.state.elections.features[0].attributes.ward,
-					division = app.state.elections.features[0].attributes.division;
+			var elections = app.state.elections;
+
+			if (!elections) {
+				console.warn('add election info, but no elections yet');
+				return;
+			}
+
+			var feature = elections.features[0],
+					attrs = feature.attributes,
+					ward = attrs.ward,
+					division = attrs.division;
+
+			// get division poly
 			$.ajax({
         url: app.config.esri.divisionLayerUrl + '/query',
         data: {
@@ -1581,33 +1604,47 @@ app.map = (function ()
         },
         success: function (data) {
           // AGO returns json with plaintext headers, so parse
-
           data = JSON.parse(data);
-					app.state.elections.geoCoords = data.features[0].geometry.rings;
-					var coords = app.util.flipCoords(app.state.elections.geoCoords)
-					//app.state.elections.coords = coords;
-					var DivisionPoly = L.polygon(coords, {
-						color: 'red',
-						weight: 2,
-						title: 'Ward ' + ward + ' Division ' + division,
-					});
-					_electionFeatureGroup.addLayer(DivisionPoly);
-					var location = app.state.elections.features[0].attributes.location,
-						lat = app.state.elections.features[0].attributes.lat,
-						lon = app.state.elections.features[0].attributes.lng,
-						newMarker = new L.Marker.SVGMarker([lat, lon], {
-							"iconOptions": {
-								className: 'svg-icon-noClick',
-								circleRatio: 0,
-								color: 'rgb(0,102,255)',
-								fillColor: 'rgb(0,102,255)',
-								fillOpacity: 0.5,
-								iconSize: app.map.smallMarker,
-							},
-							title: location
-						});
-					_electionFeatureGroup.addLayer(newMarker);
+
+					var divFeatures = data.features;
+
+					// TODO check for no features
+
+					var divFeature = data.features[0],
+							divGeom = divFeature.geometry,
+							divCoords = app.util.flipCoords(divGeom.rings),
+							divPoly = L.polygon(divCoords, {
+								color: 'red',
+								weight: 2,
+								title: 'Ward ' + ward + ' Division ' + division,
+							});
+
+					// add div poly to map
+					_electionFeatureGroup.addLayer(divPoly);
+
+					// make polling place marker
+					var pollingLocation = attrs.location,
+							pollingLat = attrs.lat,
+							pollingLng = attrs.lng,
+							pollingMarker = new L.Marker.SVGMarker(
+								[pollingLat, pollingLng],
+								{
+									iconOptions: {
+										className: 'svg-icon-noClick',
+										circleRatio: 0,
+										color: 'rgb(0,102,255)',
+										fillColor: 'rgb(0,102,255)',
+										fillOpacity: 0.5,
+										iconSize: app.map.smallMarker,
+								},
+								title: location
+							});
+
+					// zoom to all election features
+					// TODO this doesn't seem to be accounting for the polling marker?
+					_electionFeatureGroup.addLayer(pollingMarker);
 					_map.fitBounds(_electionFeatureGroup.getBounds());
+
 					app.map.domLayerList();
 				}
 			});

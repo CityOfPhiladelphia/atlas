@@ -697,6 +697,9 @@ var app = (function ()
 
       // render related topic
       app.renderRelated();
+
+      // clear out elections
+      app.state.elections = {};
     },
 
     renderRelated: function () {
@@ -2100,6 +2103,9 @@ var app = (function ()
       $('#elections-link').attr({href: seeMoreUrl});
 
       if (app.state.activeTopic == 'elections') app.map.addElectionInfo();
+
+      // tell map
+      app.map.didGetElections();
     },
   };
 })();
