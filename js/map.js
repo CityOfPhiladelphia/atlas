@@ -367,15 +367,21 @@ app.map = (function ()
           title:     'Toggle To Imagery',
           onClick: function(control) {
             toggleBasemap();
-            control.state('toggletoBasemap');
-          }
+						if (app.state.map.nameBaseLayer != 'baseMapLight' && app.state.map.nameBaseLayer != 'baseMapDORParcels') {
+							console.log('toggling button to basemap');
+	            control.state('toggletoBasemap');
+	          }
+					}
         }, {
           stateName: 'toggletoBasemap',
           icon:      '<img src="css/images/basemap_small.png">',
           title:     'Toggle To Basemap',
           onClick: function(control) {
             toggleBasemap();
-            control.state('toggleToImagery');
+						if (app.state.map.nameBaseLayer == 'baseMapLight' || app.state.map.nameBaseLayer == 'baseMapDORParcels') {
+							console.log('toggling button to imagery');
+							control.state('toggleToImagery');
+						}
           }
         }]
       });

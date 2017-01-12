@@ -78,9 +78,11 @@ L.Control.opacitySlider = L.Control.extend({
           slide: function ( event, ui ) {
             var slider_value = ui.value / 100;
             opacity_layer.setOpacity(slider_value);
-            if (opacity_layer.options.url = 'http://gis.phila.gov/arcgis/rest/services/DOR_ParcelExplorer/rtt_basemap/MapServer/')
+            console.log(opacity_layer.options.url);
+            if (opacity_layer.options.url == 'http://gis.phila.gov/arcgis/rest/services/DOR_ParcelExplorer/rtt_basemap/MapServer/'){
               app.state.map.opacity.regmap = slider_value;
             }
+          }
         });
 
         return opacity_slider_div;
