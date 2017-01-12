@@ -855,23 +855,26 @@ var app = (function ()
 
     didSelectRegmap: function (e) {
       var $this = $(this),
-          id = $this.html();
+          selected = $this.html(),
+          prev = app.state.selectedRegmap,
+          // if we selected the same one again, it's really an unselect
+          next = (prev !== selected ? selected : null);
 
-      // TODO if the same regmap was already selected, we should actually unselect it.
-
-      console.log('did select regmap', id);
+      console.log('did select regmap', prev, '=>', next);
 
       // set state
-      app.state.selectedRegmap = id;
+      app.state.selectedRegmap = next;
 
       // unhighlight last selected
       $('#deeds-regmaps a:not(.hollow)').addClass('hollow');
 
-      // highlight button
-      $this.removeClass('hollow');
-      
       // tell map
-      app.map.didSelectRegmap();
+      app.map.didChangeRegmap(prev, next);
+
+      // highlight selected
+      if (next) {
+        $this.removeClass('hollow');
+      }
     },
 
     getPwdParcel: function () {
