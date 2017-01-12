@@ -292,3 +292,7 @@ table {
 #deeds-regmaps a {
   margin-right: 10px;
 }
+
+#elections-location-name {
+  font-weight: bold;
+}

@@ -2080,18 +2080,18 @@ var app = (function ()
     },
 
     didGetElections: function () {
-      console.log('did get elections');
+      // console.log('did get elections');
 
       var data = app.state.elections,
           attrs = data.features[0].attributes,
           name = attrs.location,
-          address = attrs.display_address + ', ' + attrs.zip_code,
+          address = attrs.display_address.toUpperCase() + ', ' + attrs.zip_code,
           accessibility = attrs.building,  // TODO decode
           parking = attrs.parking,
           ward = attrs.ward,
           division = attrs.division;
 
-      $('#elections-location-name strong').text(name);
+      $('#elections-location-name').text(name);
       $('#elections-location-address').text(address);
       $('#elections-location-accessibility').text(accessibility);
       $('#elections-location-parking').text(parking);
