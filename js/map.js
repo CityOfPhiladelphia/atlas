@@ -312,10 +312,12 @@ app.map = (function ()
 				zIndex: 15,
 			});
 
+			app.state.map.OpacitySlider = new L.Control.opacitySlider();
 			app.state.map.zoningOpacitySlider = new L.Control.opacitySlider();
 			//app.state.map.zoningOpacitySlider.setOpacityLayer(app.state.map.mapServices.zoningMap);
 			//app.state.map.zoningOpacitySlider.setPosition('topleft');
 			app.state.map.waterOpacitySlider = new L.Control.opacitySlider();
+			app.state.map.regmapOpacitySlider = new L.Control.opacitySlider();
 			//app.state.map.waterOpacitySlider.setOpacityLayer(app.state.map.mapServices.water);
 			//app.state.map.waterOpacitySlider.setPosition('topleft');
 
@@ -698,6 +700,9 @@ app.map = (function ()
 
 			//console.log('didGetAisResult is running LSinit');
 			app.map.LSinit();
+
+			// if there's a regmap, remove it
+			this.removeRegmap();
 		},
 
 		didGetDorParcel: function () {
@@ -1337,7 +1342,7 @@ app.map = (function ()
           // add name "zoningMap" to the DOM list
           app.map.domLayerList();
 					//app.map.toggleParcelMarker();
-					app.map.addOpacitySlider('zoning', app.state.map.mapServices.zoningMap);
+					app.map.addOpacitySlider(app.state.map.mapServices.zoningMap, 1.0);
           break;
         case 'nearby':
 					// console.log('running addNearbyActivity from map.js')
@@ -1348,7 +1353,7 @@ app.map = (function ()
 					_overlayLayerGroup.addLayer(app.state.map.mapServices.water);
 					app.map.domLayerList();
 					//app.map.toggleParcelMarker();
-					app.map.addOpacitySlider('water', app.state.map.mapServices.water);
+					app.map.addOpacitySlider(app.state.map.mapServices.water, 1.0);
 					app.map.waterLegend.onAdd = function () {
 						var div = L.DomUtil.create('div', 'info legend'),
 							grades = ['#FEFF7F', '#F2DCFF'],
@@ -1404,7 +1409,7 @@ app.map = (function ()
             _overlayLayerGroup.clearLayers();
             app.map.domLayerList();
 						//app.map.toggleParcelMarker();
-						app.map.removeOpacitySlider('zoning');
+						app.map.removeOpacitySlider();
           }
           break;
         case 'nearby':
@@ -1415,7 +1420,7 @@ app.map = (function ()
 						_overlayLayerGroup.clearLayers();
 						app.map.domLayerList();
 						//app.map.toggleParcelMarker();
-						app.map.removeOpacitySlider('water');
+						app.map.removeOpacitySlider();
 						app.map.waterLegend.remove();
 					}
 					break;
@@ -1779,57 +1784,93 @@ app.map = (function ()
 			localStorage.setItem('circlesOn', true);
     },
 
-		addOpacitySlider: function(topic, opacityLayer) {
+		addOpacitySlider: function(opacityLayer, startOpacity) {
 			//app.state.map.opacitySlider = new L.Control.opacitySlider();
-			switch (topic) {
-        case 'zoning':
-					_map.addControl(app.state.map.zoningOpacitySlider);
-					app.state.map.zoningOpacitySlider.setOpacityLayer(opacityLayer);
-					app.state.map.zoningOpacity = opacityLayer.options.opacity;
-					app.state.map.zoningOpacitySlider.setPosition('topleft');
-					$('.ui-slider-range').attr('style', 'height: '+opacityLayer.options.opacity*100+'%');
-					$('.ui-slider-handle').attr('style', 'bottom: '+opacityLayer.options.opacity*100+'%');
-					break;
-				case 'water':
-					_map.addControl(app.state.map.waterOpacitySlider);
-					app.state.map.waterOpacitySlider.setOpacityLayer(opacityLayer);
-					app.state.map.waterOpacity = opacityLayer.options.opacity;
-					app.state.map.waterOpacitySlider.setPosition('topleft');
-					$('.ui-slider-range').attr('style', 'height: '+opacityLayer.options.opacity*100+'%');
-					$('.ui-slider-handle').attr('style', 'bottom: '+opacityLayer.options.opacity*100+'%');
-					break;
-			};
+			//switch (topic) {
+        //case 'zoning':
+					_map.addControl(app.state.map.OpacitySlider);
+					app.state.map.OpacitySlider.setOpacityLayer(opacityLayer);
+					app.state.map.Opacity = opacityLayer.options.opacity;
+					app.state.map.OpacitySlider.setPosition('topleft');
+					var opacityPercent = startOpacity * 100;
+					$('.ui-slider-range').attr('style', 'height: ' + opacityLayer.options.opacity * opacityPercent + '%');
+					$('.ui-slider-handle').attr('style', 'bottom: ' + opacityLayer.options.opacity * opacityPercent + '%');
+
+					opacityLayer.setOpacity(startOpacity);
+
+					//break;
+				//case 'water':
+					// _map.addControl(app.state.map.waterOpacitySlider);
+					// app.state.map.waterOpacitySlider.setOpacityLayer(opacityLayer);
+					// app.state.map.waterOpacity = opacityLayer.options.opacity;
+					// app.state.map.waterOpacitySlider.setPosition('topleft');
+					// $('.ui-slider-range').attr('style', 'height: '+opacityLayer.options.opacity*100+'%');
+					// $('.ui-slider-handle').attr('style', 'bottom: '+opacityLayer.options.opacity*100+'%');
+					// break;
+			//};
 			//opacityLayer.setOpacityLayer(1.0);
 		},
 
 		removeOpacitySlider: function(topic) {
-			switch (topic) {
-        case 'zoning':
-					_map.removeControl(app.state.map.zoningOpacitySlider);
-					break;
-				case 'water':
-					_map.removeControl(app.state.map.waterOpacitySlider);
-					break;
-			};
+			//switch (topic) {
+        //case 'zoning':
+					_map.removeControl(app.state.map.OpacitySlider);
+					//break;
+			// 	case 'water':
+			// 		_map.removeControl(app.state.map.waterOpacitySlider);
+			// 		break;
+			// };
 		},
 
 		toggleBaseToolTip: function(topic) {
 			console.log('toggleBaseToolTip is starting');
 		},
 
-		didChangeRegmap: function (prev, next) {
-			console.log('MAP: did change regmap', prev, '=>', next);
+		removeRegmap: function () {
+			console.log('remove regmap');
+			var regmapLayer = app.state.map.regmapLayer;
 
-			// if there no `next`, this is really a deselect.
-			if (!next) {
-				// TODO remove the regmap layer from the map
-
+			if (!regmapLayer) {
 				return;
 			}
 
-			// TODO get the image
+			regmapLayer.remove();
+			app.map.removeOpacitySlider();
+			app.state.map.regmapLayer = null;
+		},
 
-			// TODO overlay on map
+		didChangeRegmap: function (prev, next) {
+			console.log('MAP: did change regmap', prev, '=>', next);
+
+			var prevRegmap = app.state.map.regmapLayer;
+
+			if (prevRegmap) {
+				this.removeRegmap();
+			}
+
+			// if there no `next`, this is really a deselect.
+			if (!next) {
+				return;
+			}
+
+			var url = 'http://gis.phila.gov/arcgis/rest/services/DOR_ParcelExplorer/rtt_basemap/MapServer/',
+					nextRegmap = new L.esri.dynamicMapLayer({
+					  url: url,
+						layers: [29],
+						layerDefs: "29:NAME='g" + next.toLowerCase() + ".tif'",
+						transparent: true,
+					});
+
+			nextRegmap.addTo(_map);
+
+			// set state
+			app.state.map.regmapLayer = nextRegmap;
+
+			// esri leaflet complains if we try to add the opacity slider before
+			// the tiles hvae loaded.
+			nextRegmap.on('load', function (map) {
+				app.map.addOpacitySlider(nextRegmap, 0.5);
+			});
 		},
   }; // end of return
 })();
