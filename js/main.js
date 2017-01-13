@@ -136,7 +136,19 @@ var app = (function ()
         radius: 500,
       },
 
-      map: {},
+      map: {
+        opacitySliders: {
+          regmap: {
+            defaultOpacity: 0.5,
+          },
+          zoning: {
+            defaultOpacity: 1.0,
+          },
+          water: {
+            defaultOpacity: 1.0,
+          },
+        }
+      },
 
       topicRecordLimit: 5,
 
@@ -878,6 +890,9 @@ var app = (function ()
       if (next) {
         $this.removeClass('hollow');
       }
+
+      e.preventDefault();
+      e.stopPropagation();
     },
 
     getPwdParcel: function () {
@@ -974,7 +989,8 @@ var app = (function ()
     // },
 
     showContentForTopic: function (topic) {
-      // show "no content"
+      console.log('show content for topic', topic);
+
       var topicDivId = '#topic-' + topic,
           $topicContent = $(topicDivId + ' > .topic-content'),
           $topicNoContent = $(topicDivId + ' > .topic-content-not-found');
