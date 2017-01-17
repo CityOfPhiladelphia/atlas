@@ -114,11 +114,11 @@ app.map = (function ()
       app.state.map = {
 				addressMarkers: {},
 			};
-			app.state.map.opacity = {
-				zoning: 1.0,
-				water: 1.0,
-				regmap: 0.5
-			};
+			// app.state.map.opacity = {
+			// 	zoning: 1.0,
+			// 	water: 1.0,
+			// 	regmap: 0.5
+			// };
       app.state.map.clickedOnMap = false;
 			localStorage.setItem('clickedOnMap', false);
       // the next 2 variables hold names for checking what is on the map
@@ -293,10 +293,10 @@ app.map = (function ()
       // });
 
       // right now this is used, and set to dynamicMapLayer instead of FeatureLayer
-      app.state.map.mapServices.zoningMap = L.esri.dynamicMapLayer({
+      app.state.map.mapServices.zoning = L.esri.dynamicMapLayer({
         url: app.config.esri.zoningMapUrl,
         maxZoom: 22,
-        name: 'zoningMap',
+        name: 'zoning',
         type: 'overlay',
         zIndex: 13,
       });
@@ -317,10 +317,16 @@ app.map = (function ()
 				zIndex: 15,
 			});
 
-			app.state.map.OpacitySlider = new L.Control.opacitySlider();
-			//app.state.map.zoningOpacitySlider = new L.Control.opacitySlider();
-			//app.state.map.waterOpacitySlider = new L.Control.opacitySlider();
-			//app.state.map.regmapOpacitySlider = new L.Control.opacitySlider();
+			// make opacity sliders
+			app.state.map.opacitySliders = {};
+			var opacitySliders = _.forEach(app.config.map.opacitySliders, function (options, layerName) {
+				// add the layer name to options
+				options.layerName = layerName;
+
+				var slider = new L.Control.opacitySlider(options);
+
+				app.state.map.opacitySliders[layerName] = slider;
+			});
 
 			//app.state.map.zoningOpacitySlider.setOpacityLayer(app.state.map.mapServices.zoningMap);
 			//app.state.map.zoningOpacitySlider.setPosition('topleft');
@@ -335,7 +341,6 @@ app.map = (function ()
 				type: 'overlay',
 				zIndex: 14,
 			});*/
-
 
       // Now add to map
       _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapLight);
@@ -1198,26 +1203,32 @@ app.map = (function ()
 					nextMarker.addTo(_parcelLayerGroup);
 				}
 				else {
-					console.error('did change topic, but no next marker')
+					console.warn('did change topic, but no next marker')
 				}
 			}
 
-			// handle basemap
-			var prevBasemapName = this.basemapForTopic(prevTopic),
-					nextBasemapName = this.basemapForTopic(nextTopic);
-			if (prevBasemapName !== nextBasemapName) {
-				// replace the basemap
-				_baseLayerGroup.clearLayers();
-				app.state.map.tileLayers[nextBasemapName].addTo(_baseLayerGroup);
-				// update state
-				app.state.nameBaseLayer = nextBasemapName;
+			// handle basemap (if imagery is not showing)
+			if (app.state.map.nameBaseLayer == 'baseMapLight' || app.state.map.nameBaseLayer == 'baseMapDORParcels') {
+				var prevBasemapName = this.basemapForTopic(prevTopic),
+						nextBasemapName = this.basemapForTopic(nextTopic);
+				if (prevBasemapName !== nextBasemapName) {
+					// replace the basemap
+					_baseLayerGroup.clearLayers();
+					app.state.map.tileLayers[nextBasemapName].addTo(_baseLayerGroup);
+					// update state
+					app.state.nameBaseLayer = nextBasemapName;
+				}
 			}
 
 			// handle overlays
 			_overlayLayerGroup.clearLayers();
 			var nextOverlays = this.overlaysForTopic(nextTopic);
 			_.forEach(nextOverlays, function (nextOverlay) {
-				nextOverlay.addTo(_overlayLayerGroup);
+				//console.log('nextOverlay is ', nextOverlay);
+				if (nextOverlay) {
+					nextOverlay.addTo(_overlayLayerGroup);
+					// nextOverlay.setOpacity
+				}
 			});
 
 			// handle regmaps - unhighlight last selected
@@ -1241,19 +1252,69 @@ app.map = (function ()
 
       // console.log('did change topic', prevTopic, '=>', nextTopic);
 
-      if (prevTopic) {
-				console.log('deactivating ' + prevTopic);
-        app.map.didDeactivateTopic(prevTopic);
-      }
+			// handle opacity sliders
+			var opacitySliders = app.state.map.opacitySliders,
+					prevOverlays = this.overlaysForTopic(prevTopic);
 
-      if (nextTopic) {
-				console.log('activating ' + nextTopic);
-        app.map.didActivateTopic(nextTopic);
-      }
+			// remove existing sliders
+			_.forEach(prevOverlays, function (prevOverlay) {
+				var name = prevOverlay.options.name;
+				if (_.keys(opacitySliders).indexOf(name) > -1) {
+					var opacitySlider = opacitySliders[name];
+					// remove opacity slider
+					opacitySlider.remove();
+				}
+			});
+			// add next slider
+			_.forEach(nextOverlays, function (nextOverlay) {
+				if(nextOverlay){
+					var name = nextOverlay.options.name;
+					if (_.keys(opacitySliders).indexOf(name) > -1) {
+						var opacitySlider = opacitySliders[name];
+						opacitySlider.addTo(_map);
+					}
+				}
+			});
+
+			// handle water
+			if (nextTopic === 'water') {
+				_overlayLayerGroup.addLayer(app.state.map.mapServices.water);
+				app.map.domLayerList();
+				// app.map.addOpacitySlider(app.state.map.mapServices.water, app.state.map.opacity.water);
+				app.map.waterLegend.onAdd = function () {
+					var div = L.DomUtil.create('div', 'info legend'),
+					grades = ['#FEFF7F', '#F2DCFF'],
+					labels = ['Roof', 'Other Impervious Surface'];
+					for (var i = 0; i < 2; i++) {
+						div.innerHTML += '<i style="background:' + grades[i] + '"></i> ' + labels[i] + '<br>'
+					}
+					return div;
+				};
+				app.map.waterLegend.addTo(_map);
+			}
+			else if (prevTopic === 'water') {
+				app.map.waterLegend.remove();
+			}
+
+			// handle elections
+			if (nextTopic === 'elections') {
+				this.addElectionInfo();
+			}
+			else if (prevTopic === 'elections') {
+				this.removeElectionInfo();
+			}
+
+			// handle nearby activity
+			if (nextTopic === 'nearby') {
+				this.addNearbyActivity();
+			}
+			else if (prevTopic === 'nearby') {
+				this.removeNearbyActivity();
+			}
 
 			localStorage.setItem('previousTopic', prevTopic);
 			localStorage.setItem('activeTopic', nextTopic);
-			// console.log('got to end of didChangeTopic');
+			console.log('got to end of didChangeTopic');
     },
 
 		basemapForTopic: function (topic) {
@@ -1280,12 +1341,17 @@ app.map = (function ()
 			switch (topic) {
 				case 'zoning':
 					overlays = [
-						app.state.map.mapServices.zoningMap,
+						app.state.map.mapServices.zoning,
 					];
 					break;
 				case 'water':
 					overlays = [
 						app.state.map.mapServices.water,
+					];
+					break;
+				case 'deeds':
+					overlays = [
+						app.state.map.mapServices.regmap,
 					];
 					break;
 				default:
@@ -1323,151 +1389,7 @@ app.map = (function ()
 			return parcelLayer;
 		},
 
-    // called when the active topic in the topic panel changes
-    didActivateTopic: function (topic) {
-      console.log('MAP: did activate topic', topic);
 
-      // save to localstorage for pictometry viewer
-      // localStorage.setItem('activeTopic', topic);
-
-      _overlayLayerGroup.clearLayers();
-      app.map.domLayerList();
-
-			var markerType = 'aisMarker';
-
-			switch (topic) {
-        case 'deeds':
-					if (app.state.map.nameBaseLayer == 'baseMapLight') {
-						// console.log('dor checked while it is baseMapLight')
-	          _baseLayerGroup.clearLayers();
-						_labelLayerGroup.clearLayers();
-						app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
-						app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
-					}
-					app.map.domLayerList();
-					//app.map.toggleParcelMarker();
-					markerType = 'parcelPolyDOR';
-          break;
-
-        case 'zoning':
-					if (app.state.map.nameBaseLayer == 'baseMapLight') {
-						_baseLayerGroup.clearLayers();
-						_labelLayerGroup.clearLayers();
-						app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
-						app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
-					}
-          _overlayLayerGroup.addLayer(app.state.map.mapServices.zoningMap);
-          // add name "zoningMap" to the DOM list
-          app.map.domLayerList();
-					//app.map.toggleParcelMarker();
-					app.map.addOpacitySlider(app.state.map.mapServices.zoningMap, app.state.map.opacity.zoning);
-          break;
-
-        case 'nearby':
-					// console.log('running addNearbyActivity from map.js')
-          app.map.addNearbyActivity();
-					//app.map.toggleParcelMarker();
-					break;
-
-				case 'water':
-					_overlayLayerGroup.addLayer(app.state.map.mapServices.water);
-					app.map.domLayerList();
-					//app.map.toggleParcelMarker();
-					app.map.addOpacitySlider(app.state.map.mapServices.water, app.state.map.opacity.water);
-					app.map.waterLegend.onAdd = function () {
-						var div = L.DomUtil.create('div', 'info legend'),
-								grades = ['#FEFF7F', '#F2DCFF'],
-								labels = ['Roof', 'Other Impervious Surface'];
-						for (var i = 0; i < 2; i++) {
-							div.innerHTML += '<i style="background:' + grades[i] + '"></i> ' + labels[i] + '<br>'
-						}
-						return div;
-					};
-					app.map.waterLegend.addTo(_map);
-					markerType = 'parcelPolyWater';
-					break;
-
-				case 'elections':
-					// check for elections in state before we add it to the map
-					app.map.addElectionInfo();
-					break;
-
-        default:
-          console.log('unhandled topic:', topic);
-      }
-			//app.map.toggleParcelMarker();
-
-			// add marker to map
-			// console.log('didActivateTopic is calling showAddressMarker with type', markerType);
-			this.showAddressMarker(markerType);
-    },
-
-    didDeactivateTopic: function (topic) {
-      localStorage.setItem('activeTopic', null);
-      // console.log('didDeactivateTopic', topic, localStorage);
-
-
-			switch (topic) {
-        case 'deeds':
-					if (app.state.map.nameBaseLayer == 'baseMapDORParcels') {
-						// console.log('deactivating deeds, basemap is baseMapDORParcels');
-						_baseLayerGroup.clearLayers();
-						_labelLayerGroup.clearLayers();
-						app.state.map.tileLayers.baseMapLight.addTo(_baseLayerGroup);
-						app.state.map.tileLayers.overlayBaseLabels.addTo(_labelLayerGroup);
-					}
-					// console.log('finished did deactivate topic deeds if');
-					app.map.domLayerList();
-					// console.log('finished domLayerList');
-					console.log('unhighlighting last selected');
-		      $('#deeds-regmaps a:not(.hollow)').addClass('hollow');
-					app.map.removeOpacitySlider();
-					//app.map.toggleParcelMarker();
-          break;
-        case 'zoning':
-					if (app.state.map.nameBaseLayer == 'baseMapDORParcels') {
-						_baseLayerGroup.clearLayers();
-						_labelLayerGroup.clearLayers();
-						app.state.map.tileLayers.baseMapLight.addTo(_baseLayerGroup);
-						app.state.map.tileLayers.overlayBaseLabels.addTo(_labelLayerGroup);
-					}
-          if (app.state.map.namesOverLayers.includes('zoningMap')){
-            _overlayLayerGroup.clearLayers();
-            app.map.domLayerList();
-						//app.map.toggleParcelMarker();
-						app.map.removeOpacitySlider();
-          }
-          break;
-        case 'nearby':
-          _nearbyActivityLayerGroup.clearLayers();
-					break;
-				case 'water':
-					if (app.state.map.namesOverLayers.includes('water')){
-						_overlayLayerGroup.clearLayers();
-						app.map.domLayerList();
-						//app.map.toggleParcelMarker();
-						app.map.removeOpacitySlider();
-						app.map.waterLegend.remove();
-					}
-					break;
-				case 'elections':
-				_electionFeatureGroup.clearLayers();
-				if (app.state.activeTopic != 'nearby') {
-					if (app.state.map.addressMarkers.parcelPolyDOR) {
-						//var boundsPadded = app.state.parcelPolyDOR.getBounds().pad(1.15);
-						var boundsPadded = app.state.map.addressMarkers.parcelPolyDOR.getBounds().pad(1.15);
-						_map.fitBounds(boundsPadded);
-					};
-				}
-				app.map.domLayerList();
-				//app.map.toggleParcelMarker();
-					break;
-        //default:
-        //  console.log('unhandled topic:', topic);
-      }
-			//console.log('deactivated a topic - running toggleParcelMarker');
-			//app.map.toggleParcelMarker();
-    },
 
 		toggleParcelMarker: function() {
 			console.warn('starting toggleParcelMarker')
@@ -1841,48 +1763,30 @@ app.map = (function ()
 			localStorage.setItem('circlesOn', true);
     },
 
-		addOpacitySlider: function(opacityLayer, startOpacity, topic) {
-			_map.addControl(app.state.map.OpacitySlider);
-			app.state.map.OpacitySlider.setOpacityLayer(opacityLayer);
-			//app.state.map.Opacity = opacityLayer.options.opacity;
-			app.state.map.OpacitySlider.setPosition('topleft');
-			//var opacityPercent = startOpacity * 100;
-			$('.ui-slider-range').attr('style', 'height: ' + opacityLayer.options.opacity * 100 + '%');
-			$('.ui-slider-handle').attr('style', 'bottom: ' + opacityLayer.options.opacity * 100 + '%');
-
-			if (topic == 'regmap') {
-				opacityLayer.setOpacity(startOpacity);
-				$('.ui-slider-range').attr('style', 'height: ' + startOpacity * 100 + '%');
-				$('.ui-slider-handle').attr('style', 'bottom: ' + startOpacity * 100 + '%');
-			}
-		},
-
-		removeOpacitySlider: function(topic) {
-			_map.removeControl(app.state.map.OpacitySlider);
-		},
-
 		toggleBaseToolTip: function(topic) {
 			console.log('toggleBaseToolTip is starting');
 		},
 
 		removeRegmap: function () {
 			console.log('remove regmap');
-			var regmapLayer = app.state.map.regmapLayer;
+			var regmapLayer = app.state.map.mapServices.regmap,
+					opacitySlider = app.state.map.opacitySliders.regmap;
 
 			if (!regmapLayer) {
 				return;
 			}
 
-			//regmapLayer.remove();
 			_overlayLayerGroup.clearLayers();
-			app.map.removeOpacitySlider();
-			app.state.map.regmapLayer = null;
+
+			opacitySlider.remove();
+
+			app.state.map.mapServices.regmap = null;
 		},
 
 		didChangeRegmap: function (prev, next) {
 			console.log('MAP: did change regmap', prev, '=>', next);
 
-			var prevRegmap = app.state.map.regmapLayer;
+			var prevRegmap = app.state.map.mapServices.regmap;
 
 			if (prevRegmap) {
 				this.removeRegmap();
@@ -1899,19 +1803,32 @@ app.map = (function ()
 						layers: [29],
 						layerDefs: "29:NAME='g" + next.toLowerCase() + ".tif'",
 						transparent: true,
+						name: 'regmap',
 					});
 
-			//nextRegmap.addTo(_map);
 			nextRegmap.addTo(_overlayLayerGroup);
 
 			// set state
-			app.state.map.regmapLayer = nextRegmap;
+			app.state.map.mapServices.regmap = nextRegmap;
+
+			// slight kludge: update layer reference in opacity slider
+			app.state.map.opacitySliders.regmap._layer = nextRegmap;
 
 			// esri leaflet complains if we try to add the opacity slider before
 			// the tiles hvae loaded.
+			var firstLoadEvent = true;
 			nextRegmap.on('load', function (map) {
-				app.map.addOpacitySlider(nextRegmap, app.state.map.opacity.regmap, 'regmap');
+				// only do this when we first load the regmap. we couldn't find an
+				// event that fires only when the layer first loads.
+				if (firstLoadEvent) {
+					var opacitySlider = app.state.map.opacitySliders.regmap;
+					opacitySlider.addTo(_map);
+					nextRegmap.setOpacity(opacitySlider.options.opacity);
+
+					firstLoadEvent = false;
+				}
 			});
+
 		},
   }; // end of return
 })();
