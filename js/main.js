@@ -352,8 +352,7 @@ var app = (function ()
     },
 
     didClickLink: function (e) {
-      console.log($this);
-
+      $this = $(this);
       // console.log('did click link', $this);
 
       // if the link has the class `external`, open in a new window/tab
@@ -607,8 +606,10 @@ var app = (function ()
       // make mailing address
       // var mailingAddress = streetAddress + '<br>PHILADELPHIA, PA ' + props.zip_code;
       // if (props.zip_4) mailingAddress += '-' + props.zip_4;
+
       var line2 = 'PHILADELPHIA, PA ' + props.zip_code;
       if (props.zip_4) line2 += '-' + props.zip_4;
+      if (aisFeature.ais_feature_type == 'intersection') line2 = 'PHILADELPHIA, PA';
 
       // the full mailing address is useful for other things (like elections),
       // so keep it in state
