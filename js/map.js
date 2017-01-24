@@ -720,7 +720,11 @@ app.map = (function ()
 			app.map.LSinit();
 
 			// if there's a regmap, remove it
-			this.removeRegmap();
+			var prevRegmap = app.state.map.mapServices.regmap;
+			if (prevRegmap) {
+				console.warn('didGetAisResult is calling removeRegmap');
+				this.removeRegmap();
+			}
 		},
 
 		didGetDorParcel: function () {
@@ -1221,6 +1225,7 @@ app.map = (function ()
 			}
 
 			// handle overlays
+			console.warn('didChangeTopic is clearing _overlayLayerGroup');
 			_overlayLayerGroup.clearLayers();
 			var nextOverlays = this.overlaysForTopic(nextTopic);
 			_.forEach(nextOverlays, function (nextOverlay) {
@@ -1278,6 +1283,7 @@ app.map = (function ()
 
 			// handle water
 			if (nextTopic === 'water') {
+				console.warn('adding water overlay');
 				_overlayLayerGroup.addLayer(app.state.map.mapServices.water);
 				app.map.domLayerList();
 				// app.map.addOpacitySlider(app.state.map.mapServices.water, app.state.map.opacity.water);
@@ -1776,7 +1782,10 @@ app.map = (function ()
 				return;
 			}
 
-			_overlayLayerGroup.clearLayers();
+			if (app.state.activeTopic == 'deeds') {
+				console.warn('removeRegmap is clearing _overlayLayerGroup');
+				_overlayLayerGroup.clearLayers();
+			}
 
 			opacitySlider.remove();
 
