@@ -111,6 +111,7 @@ app.map = (function ()
 		xLargeMarker: L.point(42,60),
 
     initMap : function () {
+
       app.state.map = {
 				addressMarkers: {},
 			};
@@ -177,144 +178,26 @@ app.map = (function ()
       measureControl.addTo(_map);
 
       // Basemaps
-      app.state.map.tileLayers.baseMapLight = L.esri.tiledMapLayer({
-        url: app.config.esri.baseMapLightUrl,
-        maxZoom: 22,
-        name: 'baseMapLight',
-        type: 'base',
-        zIndex: 1,
-      });
-
-			app.state.map.tileLayers.baseMapDORParcels = L.esri.tiledMapLayer({
-        url: app.config.esri.baseMapDORParcelsUrl,
-        maxZoom: 22,
-        name: 'baseMapDORParcels',
-        type: 'base',
-        zIndex: 1,
-      });
-
-      app.state.map.tileLayers.baseMapImagery2016 = L.esri.tiledMapLayer({
-        url: app.config.esri.baseMapImagery2016Url,
-        maxZoom: 22,
-        name: 'baseMapImagery2016',
-        type: 'base',
-        zIndex: 2,
-      });
-
-      app.state.map.tileLayers.baseMapImagery2015 = L.esri.tiledMapLayer({
-        url: app.config.esri.baseMapImagery2015Url,
-        maxZoom: 22,
-        name: 'baseMapImagery2015',
-        type: 'base',
-        zIndex: 3,
-      });
-
-      app.state.map.tileLayers.baseMapImagery2012 = L.esri.tiledMapLayer({
-        url: app.config.esri.baseMapImagery2012Url,
-				maxZoom: 22,
-        name: 'baseMapImagery2012',
-        type: 'base',
-        zIndex: 4,
-      });
-
-      app.state.map.tileLayers.baseMapImagery2010 = L.esri.tiledMapLayer({
-        url: app.config.esri.baseMapImagery2010Url,
-        maxZoom: 22,
-        name: 'baseMapImagery2010',
-        type: 'base',
-        zIndex: 5,
-      });
-
-      app.state.map.tileLayers.baseMapImagery2008 = L.esri.tiledMapLayer({
-        url: app.config.esri.baseMapImagery2008Url,
-        maxZoom: 22,
-        name: 'baseMapImagery2008',
-        type: 'base',
-        zIndex: 6,
-      });
-
-      app.state.map.tileLayers.baseMapImagery2004 = L.esri.tiledMapLayer({
-        url: app.config.esri.baseMapImagery2004Url,
-        maxZoom: 22,
-        name: 'baseMapImagery2004',
-        type: 'base',
-        zIndex: 7,
-      });
-
-      app.state.map.tileLayers.baseMapImagery1996 = L.esri.tiledMapLayer({
-        url: app.config.esri.baseMapImagery1996Url,
-        maxZoom: 22,
-        name: 'baseMapImagery1996',
-        type: 'base',
-        zIndex: 8,
-      });
-
-      app.state.map.tileLayers.parcels = L.esri.tiledMapLayer({
-        url: app.config.esri.parcelsUrl,
-        maxZoom: 22,
-        name: 'parcelOverlay',
-        type: 'overlay',
-        zIndex: 9,
-      });
-
-      // Overlays - Labels
-      app.state.map.tileLayers.overlayBaseLabels = L.esri.tiledMapLayer({
-        url: app.config.esri.overlayBaseLabelsUrl,
-        maxZoom: 22,
-        name: 'overlayBaseLabels',
-        type: 'labels',
-        zIndex: 100,
-      });
-
-			app.state.map.tileLayers.overlayBaseDORLabels = L.esri.tiledMapLayer({
-        url: app.config.esri.overlayBaseDORLabelsUrl,
-        maxZoom: 22,
-        name: 'overlayBaseLabelsDOR',
-        type: 'labels',
-        zIndex: 100,
-      });
-
-      app.state.map.tileLayers.overlayImageryLabels = L.esri.tiledMapLayer({
-        url: app.config.esri.overlayImageryLabelsUrl,
-        maxZoom: 22,
-        name: 'overlayImageryLabels',
-        type: 'labels',
-        zIndex: 101,
-      })
-
-      // Overlays - Other
-      // right now this is not used
-      // app.state.map.tileLayers.overlayZoning = L.esri.tiledMapLayer({
-      //   url: app.config.esri.overlayZoningUrl,
-      //   maxZoom: 22,
-      //   name: 'overlayZoning',
-      //   type: 'overlay',
-      //   zIndex: 10,
-      // });
-
-      // right now this is used, and set to dynamicMapLayer instead of FeatureLayer
-      app.state.map.mapServices.zoning = L.esri.dynamicMapLayer({
-        url: app.config.esri.zoningMapUrl,
-        maxZoom: 22,
-        name: 'zoning',
-        type: 'overlay',
-        zIndex: 13,
-      });
-
-			app.state.map.mapServices.water = L.esri.dynamicMapLayer({
-				url: app.config.esri.waterUrl,
-				maxZoom: 22,
-				name: 'water',
-				type: 'overlay',
-				zIndex: 14,
+			_.forEach(app.config.esri.tiledLayers, function(layer, i, j) {
+				app.state.map.tileLayers[i] = L.esri.tiledMapLayer({
+	        url: layer.url,
+	        maxZoom: 22,
+	        name: i,
+	        type: layer.type,
+	        zIndex: layer.zIndex,
+	      });
 			});
 
-			app.state.map.mapServices.politicalDivisions = L.esri.dynamicMapLayer({
-				url: app.config.esri.politicalDivisionsUrl,
-				maxZoom: 22,
-				name: 'politicalDivisions',
-				type: 'overlay',
-				zIndex: 15,
+			_.forEach(app.config.esri.dynamicLayers, function(layer, i) {
+				if (i != 'regmap'){
+					app.state.map.mapServices[i] = L.esri.dynamicMapLayer({
+						url: layer.url,
+						maxZoom: 22,
+						name: i,
+						type: layer.type,
+						zIndex: layer.zIndex,
+					});
+				}
 			});
 
 			// make opacity sliders
@@ -327,20 +210,6 @@ app.map = (function ()
 
 				app.state.map.opacitySliders[layerName] = slider;
 			});
-
-			//app.state.map.zoningOpacitySlider.setOpacityLayer(app.state.map.mapServices.zoningMap);
-			//app.state.map.zoningOpacitySlider.setPosition('topleft');
-
-			//app.state.map.waterOpacitySlider.setOpacityLayer(app.state.map.mapServices.water);
-			//app.state.map.waterOpacitySlider.setPosition('topleft');
-
-			/*app.state.map.mapServices.waterParcels = L.esri.dynamicMapLayer({
-				url: '//gis.phila.gov/arcgis/rest/services/Water/pv_data/MapServer/0',
-				maxZoom: 22,
-				name: 'waterParcels',
-				type: 'overlay',
-				zIndex: 14,
-			});*/
 
       // Now add to map
       _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapLight);
@@ -639,7 +508,7 @@ app.map = (function ()
       });
     }, // end of initMap
 
-    // add names of layers on the map to the DOM
+		// add names of layers on the map to the DOM
     domLayerList: function() {
       _map.eachLayer(function(layer){
         if (layer.options.name && layer.options.type == 'base') {
@@ -1523,7 +1392,7 @@ app.map = (function ()
 
 			// get division poly
 			$.ajax({
-        url: app.config.esri.divisionLayerUrl + '/query',
+        url: app.config.esri.otherLayers.divisionLayerUrl + '/query',
         data: {
           where: "DIVISION_NUM = '" + ward.concat(division)+"'",
           outSR: 4326,
@@ -1813,6 +1682,7 @@ app.map = (function ()
 						layerDefs: "29:NAME='g" + next.toLowerCase() + ".tif'",
 						transparent: true,
 						name: 'regmap',
+						zIndex: 4,
 					});
 
 			nextRegmap.addTo(_overlayLayerGroup);
