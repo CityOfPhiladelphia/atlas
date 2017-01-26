@@ -32,61 +32,14 @@ app.map = (function ()
 {
   // the leaflet map object
   var _map,
-
-      /*yellowArrow = L.icon({
-        iconUrl: 'css/images/yellowArrow.png',
-        //iconSize: [38,95],
-        //iconAnchor: [22.94]
-      }),
-      viewcone = L.icon({
-        iconUrl: 'css/images/viewcone.png',
-        iconSize: [40,40],
-        iconAnchor: [20, 30],
-      }),*/
-
       camera = L.icon({
         iconUrl: 'css/images/camera_04.png',
         iconSize: [26, 16],
         iconAnchor: [11,  8],
       }),
-      bigRedMarker = L.icon({
-        iconUrl: 'css/images/marker-red-icon.png',
-        iconSize: [37, 61],
-        iconAnchor: [18, 63],
-      }),
-      blueMarker = L.icon({
-        iconUrl: 'css/images/marker-blue-icon.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-      }),
-			blueSvgIcon = L.divIcon.svgIcon({
-					className: 'svg-icon-noClick',
-					circleRatio: 0,
-					fillOpacity: .5,
-					iconSize: L.point(22,40),
-			}),
-			redSvgIcon = L.divIcon.svgIcon({
-					className: 'svg-icon-noClick',
-					color: 'rgb(255,30,100)',
-					circleRatio: 0,
-					fillColor: 'rgb(255,102,0)',
-					fillOpacity: .5,
-					iconSize: L.point(32,50),
-			}),
-			yellowSvgIcon = L.divIcon.svgIcon({
-					className: 'svg-icon-noClick',
-					color: 'rgb(100,255,100)',
-					circleRatio: 0,
-					fillColor: 'rgb(255,102,0)',
-					fillOpacity: .5,
-					iconSize: L.point(42,60),
-			}),
-
       _baseLayerGroup = new L.LayerGroup(),
       _labelLayerGroup = new L.LayerGroup(),
       _overlayLayerGroup = new L.LayerGroup(),
-			//_markerLayerGroup = new L.LayerGroup(),
-
       _nearbyActivityLayerGroup = new L.FeatureGroup(),
       // create an empty layer group for the parcel query layer
       _parcelLayerGroup = new L.LayerGroup(),
@@ -94,7 +47,6 @@ app.map = (function ()
       _cycloFeatureGroup = new L.FeatureGroup().on('click', function(){
         //console.log('clicked a member of the group');
       }),
-
       // create window level placeholder for _stViewHfovMarker
       _stViewMarkersLayerGroup = new L.LayerGroup(),
       _stViewHfovMarker,
@@ -864,16 +816,6 @@ app.map = (function ()
       });
     }, // end of drawPolygon*/
 
-    getGeomFromLatLon : function(latlon){
-      //console.log('it did getGeom')
-      queryParcel.contains(latlon)
-      queryParcel.run(function (error, featureCollection, response) {
-        app.state.map.curFeatGeo = featureCollection.features[0].geometry
-        // app.gis.flipCoords(app.data.gis.curFeatGeo)
-        // var coordsFlipped =
-      });
-    },
-
     // LocalStorage functions
     // on init, put center and zoom in LocalStorage, in case
     // Pictometry or Cyclomedia are used
@@ -1131,14 +1073,16 @@ app.map = (function ()
 					prevOverlays = this.overlaysForTopic(prevTopic);
 
 			// remove existing sliders
-			_.forEach(prevOverlays, function (prevOverlay) {
-				var name = prevOverlay.options.name;
-				if (_.keys(opacitySliders).indexOf(name) > -1) {
-					var opacitySlider = opacitySliders[name];
-					// remove opacity slider
-					opacitySlider.remove();
-				}
-			});
+			if (prevOverlays !== undefined) {
+				_.forEach(prevOverlays, function (prevOverlay) {
+					var name = prevOverlay.options.name;
+					if (_.keys(opacitySliders).indexOf(name) > -1) {
+						var opacitySlider = opacitySliders[name];
+						// remove opacity slider
+						opacitySlider.remove();
+					}
+				});
+			}
 			// add next slider
 			_.forEach(nextOverlays, function (nextOverlay) {
 				if(nextOverlay){
@@ -1252,7 +1196,7 @@ app.map = (function ()
 			return 'overlayBaseLabels';
 		},
 
-		parcelLayerForTopic: function (topic) {
+		/*parcelLayerForTopic: function (topic) {
 			var parcelLayer;
 
 			if (topic === 'deeds') {
@@ -1263,8 +1207,6 @@ app.map = (function ()
 
 			return parcelLayer;
 		},
-
-
 
 		toggleParcelMarker: function() {
 			console.warn('starting toggleParcelMarker')
@@ -1310,6 +1252,7 @@ app.map = (function ()
 				}
 			}
 		},
+		*/
 
 		addressMarkerTypeForTopic: function (topic) {
 			// console.log('running addressMarkerTypeForTopic with topic ' + topic);
