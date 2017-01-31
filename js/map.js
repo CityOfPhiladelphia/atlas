@@ -1038,7 +1038,9 @@ app.map = (function ()
 			// handle overlays
 			console.warn('didChangeTopic is clearing _overlayLayerGroup');
 			_overlayLayerGroup.clearLayers();
+			console.warn('calling overlaysForTopic to get nextOverlays');
 			var nextOverlays = this.overlaysForTopic(nextTopic);
+			console.log('nextOverlays', nextOverlays);
 			_.forEach(nextOverlays, function (nextOverlay) {
 				//console.log('nextOverlay is ', nextOverlay);
 				if (nextOverlay) {
@@ -1069,12 +1071,15 @@ app.map = (function ()
       // console.log('did change topic', prevTopic, '=>', nextTopic);
 
 			// handle opacity sliders
+			console.log('######## calling overlaysForTopic to get prevTopic');
 			var opacitySliders = app.state.map.opacitySliders,
 					prevOverlays = this.overlaysForTopic(prevTopic);
 
 			// remove existing sliders
-			if (prevOverlays !== undefined) {
+			if (prevOverlays !== undefined && prevOverlays[0] !== undefined && prevOverlays[0] !== null) {
+				console.log('prevOverlays', prevOverlays)
 				_.forEach(prevOverlays, function (prevOverlay) {
+					console.log('$$$$$$$$$$$$$$$ prevOverlay ', prevOverlay)
 					var name = prevOverlay.options.name;
 					if (_.keys(opacitySliders).indexOf(name) > -1) {
 						var opacitySlider = opacitySliders[name];
@@ -1169,9 +1174,11 @@ app.map = (function ()
 					];
 					break;
 				case 'deeds':
+					console.log('overlays for topic DEEDS');
 					overlays = [
 						app.state.map.mapServices.regmap,
 					];
+					console.log('inside overlays for topic function ', overlays);
 					break;
 				default:
 					overlays = [];
