@@ -1,12 +1,12 @@
 /* global app, L */
 //localStorage.clear();
-app.cyclomedia = {};
-app.cyclomedia.wfsClient = new WFSClient(
-	"https://atlas.cyclomedia.com/Recordings/wfs",
+/*app.cyclo = {};
+app.cyclo.wfsClient = new WFSClient(
+	"https://atlas.cyclo.com/Recordings/wfs",
 	"atlas:Recording",
 	"EPSG:3857",
 	""
-);
+);*/
 
 L.Control.BaseToolTip = L.Control.extend({
 	options: {
@@ -410,7 +410,7 @@ app.map = (function ()
         };
       });
 
-      // when map refreshes, if there is already a cyclomedia tab open, place the marker
+      // when map refreshes, if there is already a cyclo tab open, place the marker
       if (localStorage.stViewOpen == 'true') {
         app.map.LSretrieve();
         console.log('map refreshing triggered drawStViewMarkers');
@@ -422,7 +422,8 @@ app.map = (function ()
       //1. stViewOpen, 2. stViewCoords, 3. stViewYaw 4. stViewHfov
       // there is a problem, in that when it reopens all of these things trigger it to redraw
       $(window).bind('storage', function (e) {
-        // if Cyclomedia window closes, remove marker
+				console.warn(e);
+        // if cyclo window closes, remove marker
         if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == 'false') {
             _stViewMarkersLayerGroup.clearLayers();
             _cycloFeatureGroup.clearLayers();
@@ -633,7 +634,7 @@ app.map = (function ()
 			localStorage.setItem('clickedOnMap', true);
       app.state.map.shouldPan = false;
 
-      // if this was a cyclomedia circle click, don't do anything
+      // if this was a cyclo circle click, don't do anything
       if (app.state.map.clickedCircle) {
         // console.log('clicked a circle');
         app.state.map.clickedCircle = false;
@@ -754,7 +755,7 @@ app.map = (function ()
 
 			console.log('created address markers', app.state.map.addressMarkers);
 
-			// calling LSinit will alert Pictometry and Cyclomedia to change
+			// calling LSinit will alert Pictometry and cyclo to change
 			app.map.LSinit();
 		},*/
 
@@ -776,7 +777,7 @@ app.map = (function ()
 	        // set new state and localStorage
 				};
       };
-			// calling LSinit will alert Pictometry and Cyclomedia to change
+			// calling LSinit will alert Pictometry and cyclo to change
 			app.map.LSinit();
 
       // add to map
@@ -818,7 +819,7 @@ app.map = (function ()
 
     // LocalStorage functions
     // on init, put center and zoom in LocalStorage, in case
-    // Pictometry or Cyclomedia are used
+    // Pictometry or cyclo are used
     LSinit: function() {
 			console.log('LSinit is running');
 			app.state.theCenter = _map.getCenter();
@@ -843,7 +844,7 @@ app.map = (function ()
     },
 
     // while map is dragged, constantly reset center in localStorage
-    // this will move Pictometry with it, but not Cyclomedia
+    // this will move Pictometry with it, but not cyclo
     LSdrag: function() {
       app.state.theCenter = _map.getCenter();
       app.state.leafletCenterX = app.state.theCenter.lng;
@@ -855,7 +856,7 @@ app.map = (function ()
 
     // when map is finished being dragged, 1 more time reset
     // the center in localStorage
-    // this will move Pictometry AND Cyclomedia
+    // this will move Pictometry AND cyclo
     LSdragend: function() {
       app.state.theCenter = _map.getCenter();
       app.state.leafletCenterX = app.state.theCenter.lng;
@@ -907,7 +908,7 @@ app.map = (function ()
 		},
 
     drawStViewMarkers: function(){
-      //console.log('about to create _stViewHfovMarker');
+      console.log('drawStViewMarkers is called - about to create _stViewHfovMarker');
       _stViewHfovMarker = L.marker([app.state.stViewY, app.state.stViewX], {
         icon: new L.divIcon.svgIcon.triangleIcon({
           iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
@@ -1557,17 +1558,17 @@ app.map = (function ()
       if (zoomLevel > 18) {
         var newSWCoord = proj4('EPSG:3857', [view._southWest.lng, view._southWest.lat]);
         var newNECoord = proj4('EPSG:3857', [view._northEast.lng, view._northEast.lat]);
-        app.cyclomedia.wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.map.addCycloCircles, app.config.cyclomedia.username, app.config.cyclomedia.password);
+        app.cyclo.wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.map.addCycloCircles, app.config.cyclo.username, app.config.cyclo.password);
       }
     },
 
     addCycloCircles: function() {
       _cycloFeatureGroup.clearLayers();
-      app.cyclomedia.recordings = app.cyclomedia.wfsClient.recordingList;
-      if (app.cyclomedia.recordings.length > 0) {
+      app.cyclo.recordings = app.cyclo.wfsClient.recordingList;
+      if (app.cyclo.recordings.length > 0) {
         var b = [];
-        for (i=0; i < app.cyclomedia.recordings.length; i++) {
-          var rec = app.cyclomedia.recordings[i];
+        for (i=0; i < app.cyclo.recordings.length; i++) {
+          var rec = app.cyclo.recordings[i];
           var coordRaw = [rec.lon, rec.lat];
           var coordNotFlipped = proj4('EPSG:3857', 'EPSG:4326', coordRaw);
           var coord = [coordNotFlipped[1], coordNotFlipped[0]];

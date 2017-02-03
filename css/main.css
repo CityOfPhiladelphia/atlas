@@ -189,7 +189,7 @@ header.site-header > .row:last-of-type {
 /*}*/
 
 #map-panel {
-    height: 100%;
+    height: 50%;
 }
 
 #map {

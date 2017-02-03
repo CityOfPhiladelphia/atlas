@@ -18,6 +18,7 @@
         <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet/1.0.0-beta.2/leaflet.css"-->
         <link rel="stylesheet" href="//ljagis.github.io/leaflet-measure/leaflet-measure.css">
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/cyclo.css">
         <link rel="stylesheet" href="css/flaticon.css">
         <link rel="stylesheet" href="css/easy-button.css">
         <link rel="stylesheet" href="css/opacity.css" />
@@ -781,6 +782,9 @@
                 <div id="map-panel" class="large-12 columns">
                     <div id="map"></div>
                 </div>
+                <div id="cyclo-panel" class="large-12 columns">
+                    <!--<div id="streetsmartAPI1" class="panoramaViewerWindow"></div>-->
+                </div>
             </div>
         </div><!-- End #page -->
 
@@ -824,10 +828,17 @@
         <script src="//momentjs.com/downloads/moment.min.js"></script>
         <script src="js/opacity.js"></script>
 
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react-dom.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.17.1/ol.js"></script>
+        <script type="text/javascript" src="https://streetsmart.cyclomedia.com/api/v16.1/Aperture.js"></script>
+        <script type="text/javascript" src="https://streetsmart.cyclomedia.com/api/v16.1/StreetSmartApi.js"></script>
+
         <!-- JS: LOCAL -->
         <script src="js/config.js"></script>
-        <script src="js/main.js"></script>
         <script src="js/wfsclient.js"></script>
+        <script src="js/cyclo.js"></script>
+        <script src="js/main.js"></script>
         <script src="js/proj4.js"></script>
         <script src="js/util.js"></script>
         <script src="js/map.js"></script>

@@ -57,7 +57,7 @@ var app = _.extend(app || {},
 
     // set pictometry and cyclomedia urls based on host
     app.config.pictometry.url = constructLocalUrl(HOST, '/pictometry');
-    app.config.cyclomedia.url = constructLocalUrl(HOST, '/cyclomedia');
+    //app.config.cyclomedia.url = constructLocalUrl(HOST, '/cyclomedia');
 
     // set up accounting
     accounting.settings.currency.precision = 0;
@@ -104,10 +104,15 @@ var app = _.extend(app || {},
       return false
     });
 
+    // init cyclomedia
+    var cycloPanel = document.getElementById('cyclo-panel');
+    app.cyclo.init(cycloPanel);
+
     // make "Street View" button open Cyclomedia window
     $('#cyclo-button').on('click', function (e) {
       e.preventDefault();
-      window.open(app.config.cyclomedia.url, app.config.cyclomedia.url);
+      //window.open(app.config.cyclomedia.url, app.config.cyclomedia.url);
+      app.showCyclo();
       return false
     });
 
@@ -147,6 +152,10 @@ var app = _.extend(app || {},
 
     // route one time on load
     app.route();
+  },
+
+  showCyclo: function () {
+    localStorage.setItem('stViewOpen', true);
   },
 
   route: function () {

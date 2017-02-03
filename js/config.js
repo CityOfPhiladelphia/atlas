@@ -218,7 +218,7 @@ var app = app || {};
   },
 
   pictometry: {},
-  cyclomedia: {
+  cyclo: {
     username: 'maps@phila.gov',
     password: 'mapscyc01',
     apiKey: 'GfElS3oRuroNivgtibsZqDkpCvItyPUNuv0NmXglen8puXoJanEVarsZyns9ynkJ',
