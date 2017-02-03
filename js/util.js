@@ -250,7 +250,7 @@ app.util = (function () {
 
     addIdsToRows: function (rows) {
       return _.map(rows, function (row, i) {
-        var rowWithId = Object.assign({}, row);
+        var rowWithId = _.extend({}, row);
         rowWithId.id = i;
         return rowWithId;
       });
