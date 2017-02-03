@@ -1800,9 +1800,10 @@ var app = _.extend(app || {},
         query = 'DISTANCE_IN_METERS(location, POINT(' + aisX + ',' + aisY + ')) <= ' + radiusMeters;
         where = 'within_circle(' + ['shape', aisY, aisX, radiusMeters].join(', ') + ')',
         fieldMap = activityType.fieldMap,
+        distanceFn = "DISTANCE_IN_METERS(shape, 'POINT(" + aisX + ' ' + aisY + ")') * 3.28084",
         selectComps = _.values(fieldMap).concat([
                         'shape',
-                        "DISTANCE_IN_METERS(shape, 'POINT(" + aisX + ' ' + aisY + ")') * 3.28084 AS distance"
+                         distanceFn + "AS distance",
                       ]);
         select = selectComps.join(', ');
 
@@ -1816,6 +1817,7 @@ var app = _.extend(app || {},
       data: {
         $where: where,
         $select: select,
+        $order: distanceFn,
       },
       success: function (data) {
         // TODO set app.state.nearby.activeType to whatever's selected
