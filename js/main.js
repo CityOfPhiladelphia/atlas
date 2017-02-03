@@ -1837,6 +1837,8 @@ var app = _.extend(app || {},
   },
 
   didGetNearbyActivity: function () {
+    // console.info('did get nearby activity', app.state.nearby.data);
+
     // munge, filter, sort, make html
     var rows = app.state.nearby.data,
         daysBack = $('#nearby-activity-timeframe').val(),

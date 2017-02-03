@@ -1398,6 +1398,8 @@ app.map = (function ()
 		},
 
 		addNearbyActivity: function (rows) {
+			// console.info('add nearby activity', rows);
+
 			// if no rows were passed in, get them from state
 			if (!rows) {
 					app.state.map.nearbyActivity = app.state.map.nearbyActivity || {};
@@ -1405,6 +1407,12 @@ app.map = (function ()
 					rows = app.state.map.nearbyActivity.data;
 			} else {
 				app.state.map.nearbyActivity.data = rows;
+			}
+
+			// if we still don't have rows, then the app was probably just opened to
+			// the /nearby route. return and wait for the api call to finish.
+			if (_.isEmpty(rows)) {
+				return;
 			}
 
 			// TODO clear existing
@@ -1461,13 +1469,15 @@ app.map = (function ()
 						});
 				_nearbyActivityLayerGroup.addLayer(newMarker);
 			});
-			//app.state.map.bounds = _map.getBounds();
-			//app.state.map.activitybounds = _nearbyActivityLayerGroup.getBounds();
-			if (_map.getBounds().contains(_nearbyActivityLayerGroup.getBounds())) {
-				console.log('map bounds contain nearby activity bounds');
+
+			var mapBounds = _map.getBounds(),
+					layerBounds = _nearbyActivityLayerGroup.getBounds();
+
+			if (mapBounds.contains(layerBounds)) {
+				// console.log('map bounds contain nearby activity bounds');
 			} else {
-				console.log('map bounds do not contain activity bounds');
-				_map.fitBounds(_nearbyActivityLayerGroup.getBounds());
+				// console.log('map bounds do not contain activity bounds');
+				_map.fitBounds(layerBounds);
 				//_map.panInsideBounds(_nearbyActivityLayerGroup.getBounds());
 			}
 			app.map.domLayerList();
