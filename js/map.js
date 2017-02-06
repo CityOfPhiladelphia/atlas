@@ -1,12 +1,12 @@
 /* global app, L */
 //localStorage.clear();
-/*app.cyclo = {};
+/*app.cyclo = {};*/
 app.cyclo.wfsClient = new WFSClient(
 	"https://atlas.cyclo.com/Recordings/wfs",
 	"atlas:Recording",
 	"EPSG:3857",
 	""
-);*/
+);
 
 L.Control.BaseToolTip = L.Control.extend({
 	options: {
@@ -841,6 +841,13 @@ app.map = (function ()
       localStorage.setItem('leafletForCycloY', app.state.leafletForCycloY);
       localStorage.setItem('cycloCoords', [app.state.leafletForCycloX, app.state.leafletForCycloY]);
       localStorage.setItem('pictCoordsZoom', [app.state.leafletCenterX, app.state.leafletCenterY, app.state.theZoom]);
+
+			var e = $.Event('storage');
+			e.originalEvent = {
+				key: 'leafletCenterX',
+				newValue: app.state.leafletCenterX
+			};
+			$(window).trigger(e);
     },
 
     // while map is dragged, constantly reset center in localStorage
@@ -1204,64 +1211,6 @@ app.map = (function ()
 			return 'overlayBaseLabels';
 		},
 
-		/*parcelLayerForTopic: function (topic) {
-			var parcelLayer;
-
-			if (topic === 'deeds') {
-				parcelLayer = 'dor';
-			} else {
-				parcelLayer = 'pwd';
-			}
-
-			return parcelLayer;
-		},
-
-		toggleParcelMarker: function() {
-			console.warn('starting toggleParcelMarker')
-			if (app.state.map.nameParcelLayer == 'parcelMarker') {
-				console.warn('using parcelMarker code');
-				if (app.state.activeTopic == 'deeds') {
-					if (app.state.map.addressMarkers.parcelPolyDOR) {
-						_parcelLayerGroup.clearLayers();
-						_parcelLayerGroup.addLayer(app.state.map.addressMarkers.parcelPolyDOR);
-					};
-				} else if (app.state.activeTopic == 'water') {
-					_parcelLayerGroup.clearLayers();
-					_parcelLayerGroup.addLayer(app.state.map.addressMarkers.parcelPolyWater);
-				}
-			}
-			if (app.state.map.nameParcelLayer == 'parcelPolyDOR') {
-				//console.log(app.state.activeTopic);
-				console.log('in toggleParcleMarker, app.state.map.nameParcelLayer is ' + app.state.map.nameParcelLayer);
-				if (app.state.activeTopic == 'water') {
-					console.log('activeTopic is water');
-					_parcelLayerGroup.clearLayers();
-					_parcelLayerGroup.addLayer(app.state.map.addressMarkers.parcelPolyWater);
-				} else if (app.state.activeTopic != 'deeds' || app.state.activeTopic === null) {
-					console.log('activeTopic is otherwise');
-					_parcelLayerGroup.clearLayers();
-					_parcelLayerGroup.addLayer(app.state.map.addressMarkers.aisMarker);
-				}
-			}
-			if (app.state.map.nameParcelLayer == 'parcelPolyWater') {
-				//console.log(app.state.activeTopic);
-				//console.log(app.state.map.nameParcelLayer);
-				console.warn('using parcelPolyWater');
-				if (app.state.activeTopic == 'deeds') {
-					if (app.state.map.addressMarkers.parcelPolyDOR) {
-						console.warn('activeTopic is deeds')
-						_parcelLayerGroup.clearLayers();
-						console.warn('adding parcelPolyDOR ' + app.state.map.addressMarkers.parcelPolyDOR)
-						_parcelLayerGroup.addLayer(app.state.map.addressMarkers.parcelPolyDOR);
-					};
-				} else if (app.state.activeTopic != 'water' || app.state.activeTopic === null) {
-					_parcelLayerGroup.clearLayers();
-					_parcelLayerGroup.addLayer(app.state.map.addressMarkers.aisMarker);
-				}
-			}
-		},
-		*/
-
 		addressMarkerTypeForTopic: function (topic) {
 			// console.log('running addressMarkerTypeForTopic with topic ' + topic);
 
@@ -1301,22 +1250,6 @@ app.map = (function ()
 		removeNearbyActivity: function () {
 			_nearbyActivityLayerGroup.clearLayers();
     },
-
-    // addNearbyAppealsToMap: function (id) {
-    //   for (i = 0; i < app.state.nearby.appeals.length; i++) {
-    //     var lon = app.state.nearby.appeals[i].shape.coordinates[0];
-    //     var lat = app.state.nearby.appeals[i].shape.coordinates[1];
-    //     var newMarker = L.marker([lat, lon], {
-    //       title: 'Zoning Appeal ' + app.state.nearby.appeals[i].appealkey,
-    //       icon: blueMarker,
-    //       name: app.state.nearby.appeals[i].appealkey,
-    //       type: 'appealsMarker',
-    //     });
-    //     _nearbyActivityLayerGroup.addLayer(newMarker);
-    //     // this might have been useless
-    //     app.map.domLayerList();
-    //   }
-    // },
 
 		didGetElections: function () {
 			if (app.state.activeTopic === 'elections') {
@@ -1474,22 +1407,6 @@ app.map = (function ()
 			app.map.domLayerList();
 		},
 
-    // didHoverOverNearbyAppeal: function (id) {
-    //   _map.eachLayer(function(layer){
-    //     if (id == layer.options.name) {
-    //       layer.setIcon(bigRedMarker);
-    //     }
-    //   })
-    // },
-
-		// didHoverOverNearbyActivityRow: function (id) {
-			// _map.eachLayer(function(layer){
-			// 	if (id == layer.options.name) {
-			// 		layer.setIcon(bigRedMarker);
-			// 	}
-			// })
-		// },
-
 		didMouseOverNearbyActivityRow: function (id) {
 			var markerlatlng
 			_nearbyActivityLayerGroup.eachLayer(function (layer) {
@@ -1532,14 +1449,6 @@ app.map = (function ()
       }) // end of loop
 		},
 
-    // didMoveOffNearbyAppeal: function (id) {
-    //   _map.eachLayer(function(layer){
-    //     if (id == layer.options.name) {
-    //       layer.setIcon(blueMarker);
-    //     }
-    //   })
-    // },
-
     calculateConeCoords: function(options) {
       var hFov = app.state.stViewHfov;
       var scale = 50//options.scale;
@@ -1550,24 +1459,31 @@ app.map = (function ()
     },
 
     prepareCycloBbox: function(evt){
+			console.log('prepareCycloBbox is running');
       var view = _map.getBounds();
       var zoomLevel = _map.getZoom();
       if (zoomLevel < 19) {
         _cycloFeatureGroup.clearLayers();
       };
       if (zoomLevel > 18) {
+				console.log('zoom is > 18');
         var newSWCoord = proj4('EPSG:3857', [view._southWest.lng, view._southWest.lat]);
         var newNECoord = proj4('EPSG:3857', [view._northEast.lng, view._northEast.lat]);
+				console.log(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.config.cyclo.username, app.config.cyclo.password);
         app.cyclo.wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.map.addCycloCircles, app.config.cyclo.username, app.config.cyclo.password);
       }
     },
 
     addCycloCircles: function() {
+			console.log('addCycloCircles is running');
       _cycloFeatureGroup.clearLayers();
       app.cyclo.recordings = app.cyclo.wfsClient.recordingList;
+			console.log('first ', app.cyclo.recordings);
       if (app.cyclo.recordings.length > 0) {
+				console.log('second')
         var b = [];
         for (i=0; i < app.cyclo.recordings.length; i++) {
+					console.log('third: ', i);
           var rec = app.cyclo.recordings[i];
           var coordRaw = [rec.lon, rec.lat];
           var coordNotFlipped = proj4('EPSG:3857', 'EPSG:4326', coordRaw);

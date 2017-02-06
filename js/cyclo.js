@@ -1,9 +1,9 @@
 var app = app || {};
 
 // when tab opens, set localStorage variable 'stViewClosed' to false
-/*$(window).on('load', function(){
+$(window).on('load', function(){
   localStorage.setItem('stViewOpen', true);
-});*/
+});
 
 // when tab closes, set localStorage variable 'stViewClosed' to true
 /*$(window).on('beforeunload', function(){
@@ -23,6 +23,13 @@ app.cyclo = ( function () {
 
   return {
     //resolveNewLocation = $.Deferred(),
+
+    /*wfsClient: new WFSClient(
+    	"https://atlas.cyclo.com/Recordings/wfs",
+    	"atlas:Recording",
+    	"EPSG:3857",
+    	""
+    ),*/
 
     init: function (containerDiv) {
       cycloDiv = $('<div>').addClass('panoramaViewerWindow').attr('id', 'cyclo-viewer')[0];
@@ -92,7 +99,7 @@ app.cyclo = ( function () {
     },
 
     didChangeView: function () {
-      console.log('VIEW_CHANGE occurred');
+      //console.log('VIEW_CHANGE occurred');
       //console.log('stViewYaw was ' + app.state.stViewYaw);
       //console.log('stViewHfov was ' + app.state.stViewHfov);
       app.state.stViewYaw = viewer.props.orientation.yaw * (180/3.14159265359);
@@ -137,7 +144,7 @@ app.cyclo = ( function () {
     },
 
     LSsetImageProps: function () {
-      console.log('running LSsetImageProps');
+      //console.log('running LSsetImageProps');
       localStorage.setItem('stViewX', app.state.stViewX);
       localStorage.setItem('stViewY', app.state.stViewY);
       localStorage.setItem('stViewCoords', [app.state.stViewX, app.state.stViewY]);
