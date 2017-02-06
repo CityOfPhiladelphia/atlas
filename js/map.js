@@ -404,6 +404,7 @@ app.map = (function ()
       _map.on('dragend', app.map.LSdragend);
       _map.on('zoomend', app.map.LSzoomend);
       _map.on('moveend', function(){
+				console.log('move happened');
         app.map.LSmoveend();
         if (localStorage.stViewOpen == 'true') {
           app.map.prepareCycloBbox();

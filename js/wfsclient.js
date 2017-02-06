@@ -65,6 +65,7 @@ WFSClient.prototype.getImageInfo = function (imageId, callback_)
 WFSClient.prototype.loadBbox = function(left, bottom, right, top, callback_, username, password)
 //WFSClient.prototype.loadBbox = function(left, bottom, right, top, callback_, 'andy.rothwell@phila.gov', '8ysnan2r')
 {
+	console.log('loadBbox is running')
 	var postData =  "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\" resultType=\"results\" outputFormat=\"text/xml; subtype=gml/3.1.1\" xmlns:wfs=\"http://www.opengis.net/wfs\">  "+
 				    " <wfs:Query typeName=\"##TYPENAME##\" srsName=\"##SRS##\" xmlns:atlas=\"http://www.cyclomedia.com/atlas\"> "+
 				    "  <ogc:Filter xmlns:ogc=\"http://www.opengis.net/ogc\"> "+
@@ -106,7 +107,8 @@ WFSClient.prototype.loadBbox = function(left, bottom, right, top, callback_, use
 
 		http.open("POST", url , true);
 		http.setRequestHeader("Content-length", postData.length);
-		http.setRequestHeader("Authorization", "Basic " + btoa(app.config.cyclo.username+ ":"+ app.config.cyclo.password));
+		http.setRequestHeader("Authorization", "Basic " + btoa(username+ ":"+ password));
+		//http.setRequestHeader("Authorization", "Basic " + btoa(app.config.cyclo.username+ ":"+ app.config.cyclo.password));
 		http.onreadystatechange = function()
 		{
 			if(http.readyState == 4  /* && http.status == 200 */)
@@ -131,6 +133,7 @@ WFSClient.prototype.loadBbox = function(left, bottom, right, top, callback_, use
 
 WFSClient.prototype.parseXML = function(xml)
 {
+	console.log('parseXML is running');
     /* Do the parsing stuff */
 	var parseXml;
 
@@ -170,7 +173,9 @@ WFSClient.prototype.parseXML = function(xml)
 
 
     var xml = parseXml(xml);
+		console.log(xml);
     var recordings = xml.getElementsByTagNameNS("*","Recording");
+		console.log(recordings);
 
     /* Create new list for recordings */
     this.recordingList = new Array();

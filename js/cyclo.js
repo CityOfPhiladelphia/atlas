@@ -1,7 +1,5 @@
 var app = app || {};
 
-console.log('cyclo.js is being read');
-
 // when tab opens, set localStorage variable 'stViewClosed' to false
 $(window).on('load', function(){
   localStorage.setItem('stViewOpen', true);
