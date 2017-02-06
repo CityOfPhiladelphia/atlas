@@ -404,8 +404,10 @@ app.map = (function ()
       _map.on('dragend', app.map.LSdragend);
       _map.on('zoomend', app.map.LSzoomend);
       _map.on('moveend', function(){
+		console.log('move happened');
         app.map.LSmoveend();
         if (localStorage.stViewOpen == 'true') {
+		  console.log('stView is open');
           app.map.prepareCycloBbox();
         };
       });
@@ -1559,6 +1561,7 @@ app.map = (function ()
     },
 
     prepareCycloBbox: function(evt){
+	  console.log('running prepareCycloBbox');
       var view = _map.getBounds();
       var zoomLevel = _map.getZoom();
       if (zoomLevel < 19) {
@@ -1567,11 +1570,13 @@ app.map = (function ()
       if (zoomLevel > 18) {
         var newSWCoord = proj4('EPSG:3857', [view._southWest.lng, view._southWest.lat]);
         var newNECoord = proj4('EPSG:3857', [view._northEast.lng, view._northEast.lat]);
+		console.log(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.config.cyclomedia.username, app.config.cyclomedia.password);
         app.cyclomedia.wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.map.addCycloCircles, app.config.cyclomedia.username, app.config.cyclomedia.password);
       }
     },
 
     addCycloCircles: function() {
+	  console.log('running addCycloCircles');
       _cycloFeatureGroup.clearLayers();
       app.cyclomedia.recordings = app.cyclomedia.wfsClient.recordingList;
       if (app.cyclomedia.recordings.length > 0) {
