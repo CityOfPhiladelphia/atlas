@@ -10,7 +10,7 @@ $(window).on('load', function(){
   localStorage.setItem('stViewOpen', false);
 });*/
 
-//app.cyclo.resolveNewLocation = $.Deferred();
+//app.state.cyclo.resolveNewLocation = $.Deferred();
 app.default = {};
 // Set default location coordinates
 app.default.leafletForCycloY = 39.952388;
@@ -23,6 +23,13 @@ app.cyclo = ( function () {
 
   return {
     //resolveNewLocation = $.Deferred(),
+
+    /*wfsClient: new WFSClient(
+    	"https://atlas.cyclo.com/Recordings/wfs",
+    	"atlas:Recording",
+    	"EPSG:3857",
+    	""
+    ),*/
 
     init: function (containerDiv) {
       cycloDiv = $('<div>').addClass('panoramaViewerWindow').attr('id', 'cyclo-viewer')[0];
