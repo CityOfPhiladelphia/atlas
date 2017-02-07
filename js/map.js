@@ -2,7 +2,7 @@
 //localStorage.clear();
 /*app.cyclo = {};*/
 app.cyclo.wfsClient = new WFSClient(
-	"https://atlas.cyclo.com/Recordings/wfs",
+	"https://atlas.cyclomedia.com/Recordings/wfs",
 	"atlas:Recording",
 	"EPSG:3857",
 	""
@@ -1460,31 +1460,24 @@ app.map = (function ()
     },
 
     prepareCycloBbox: function(evt){
-			console.log('prepareCycloBbox is running');
       var view = _map.getBounds();
       var zoomLevel = _map.getZoom();
       if (zoomLevel < 19) {
         _cycloFeatureGroup.clearLayers();
       };
       if (zoomLevel > 18) {
-				console.log('zoom is > 18');
         var newSWCoord = proj4('EPSG:3857', [view._southWest.lng, view._southWest.lat]);
         var newNECoord = proj4('EPSG:3857', [view._northEast.lng, view._northEast.lat]);
-				console.log(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.config.cyclo.username, app.config.cyclo.password);
         app.cyclo.wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.map.addCycloCircles, app.config.cyclo.username, app.config.cyclo.password);
       }
     },
 
     addCycloCircles: function() {
-			console.log('addCycloCircles is running');
       _cycloFeatureGroup.clearLayers();
       app.cyclo.recordings = app.cyclo.wfsClient.recordingList;
-			console.log('first ', app.cyclo.recordings);
       if (app.cyclo.recordings.length > 0) {
-				console.log('second')
         var b = [];
         for (i=0; i < app.cyclo.recordings.length; i++) {
-					console.log('third: ', i);
           var rec = app.cyclo.recordings[i];
           var coordRaw = [rec.lon, rec.lat];
           var coordNotFlipped = proj4('EPSG:3857', 'EPSG:4326', coordRaw);
@@ -1493,7 +1486,6 @@ app.map = (function ()
             color: '#3388ff',
             weight: 1,
           }).on('click', function(coord){
-            console.log('circle click happened ', coord.latlng.lat, ' ', coord.latlng.lng);
             app.state.map.clickedCircle = true;
 						app.map.LSclickedCircle(coord.latlng.lat, coord.latlng.lng);
           });
@@ -1505,10 +1497,6 @@ app.map = (function ()
 			// set "circles on" in localStorage
 			localStorage.setItem('circlesOn', true);
     },
-
-		toggleBaseToolTip: function(topic) {
-			console.log('toggleBaseToolTip is starting');
-		},
 
 		removeRegmap: function () {
 			console.log('remove regmap');
