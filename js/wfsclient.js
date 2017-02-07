@@ -44,6 +44,7 @@ WFSClient.prototype.getImageInfo = function (imageId, callback_)
 
 	//Send the proper header information along with the request
 	var url = this.localProxy + this.baseURL;
+	console.warn('DFSDA@#$#$DF#@$#@ ', url);
 
 	http.open("POST", url , true);
 	//http.setRequestHeader("Content-length", postData.length);
@@ -93,6 +94,7 @@ WFSClient.prototype.loadBbox = function(left, bottom, right, top, callback_, use
 
 	var url = this.localProxy + this.baseURL;
     this.callback = callback_;
+	console.warn('34523dfsjdkhfjh ', url);
 
 	//if(BrowserDetect.browser == "Explorer" && BrowserDetect.version == 9){
 		var http = new XMLHttpRequest();
@@ -107,12 +109,15 @@ WFSClient.prototype.loadBbox = function(left, bottom, right, top, callback_, use
 
 		http.open("POST", url , true);
 		http.setRequestHeader("Content-length", postData.length);
+		console.log(postData);
 		http.setRequestHeader("Authorization", "Basic " + btoa(username+ ":"+ password));
 		//http.setRequestHeader("Authorization", "Basic " + btoa(app.config.cyclo.username+ ":"+ app.config.cyclo.password));
 		http.onreadystatechange = function()
 		{
 			if(http.readyState == 4  /* && http.status == 200 */)
 			{
+				console.log('about to call parseXML');
+				console.log(http.responseText);
 				wfsClient.parseXML(http.responseText);
 			}
 		};
@@ -171,7 +176,7 @@ WFSClient.prototype.parseXML = function(xml)
 			return o;
     };
 
-
+		//console.log(xml);
     var xml = parseXml(xml);
 		console.log(xml);
     var recordings = xml.getElementsByTagNameNS("*","Recording");
