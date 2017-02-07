@@ -1561,7 +1561,6 @@ app.map = (function ()
     },
 
     prepareCycloBbox: function(evt){
-	  console.log('running prepareCycloBbox');
       var view = _map.getBounds();
       var zoomLevel = _map.getZoom();
       if (zoomLevel < 19) {
@@ -1570,13 +1569,11 @@ app.map = (function ()
       if (zoomLevel > 18) {
         var newSWCoord = proj4('EPSG:3857', [view._southWest.lng, view._southWest.lat]);
         var newNECoord = proj4('EPSG:3857', [view._northEast.lng, view._northEast.lat]);
-		console.log(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.config.cyclomedia.username, app.config.cyclomedia.password);
         app.cyclomedia.wfsClient.loadBbox(newSWCoord[0], newSWCoord[1], newNECoord[0], newNECoord[1], app.map.addCycloCircles, app.config.cyclomedia.username, app.config.cyclomedia.password);
       }
     },
 
     addCycloCircles: function() {
-	  console.log('running addCycloCircles');
       _cycloFeatureGroup.clearLayers();
       app.cyclomedia.recordings = app.cyclomedia.wfsClient.recordingList;
       if (app.cyclomedia.recordings.length > 0) {
@@ -1590,7 +1587,6 @@ app.map = (function ()
             color: '#3388ff',
             weight: 1,
           }).on('click', function(coord){
-            console.log('circle click happened ', coord.latlng.lat, ' ', coord.latlng.lng);
             app.state.map.clickedCircle = true;
 						app.map.LSclickedCircle(coord.latlng.lat, coord.latlng.lng);
           });
@@ -1602,10 +1598,6 @@ app.map = (function ()
 			// set "circles on" in localStorage
 			localStorage.setItem('circlesOn', true);
     },
-
-		toggleBaseToolTip: function(topic) {
-			console.log('toggleBaseToolTip is starting');
-		},
 
 		removeRegmap: function () {
 			console.log('remove regmap');

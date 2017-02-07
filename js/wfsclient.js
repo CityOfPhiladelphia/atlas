@@ -61,9 +61,7 @@ WFSClient.prototype.getImageInfo = function (imageId, callback_)
 	http.send(postData);
 
 };
-//console.log(app.CycloUsername, app.CycloPassword);
 WFSClient.prototype.loadBbox = function(left, bottom, right, top, callback_, username, password)
-//WFSClient.prototype.loadBbox = function(left, bottom, right, top, callback_, 'andy.rothwell@phila.gov', '8ysnan2r')
 {
 	var postData =  "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\" resultType=\"results\" outputFormat=\"text/xml; subtype=gml/3.1.1\" xmlns:wfs=\"http://www.opengis.net/wfs\">  "+
 				    " <wfs:Query typeName=\"##TYPENAME##\" srsName=\"##SRS##\" xmlns:atlas=\"http://www.cyclomedia.com/atlas\"> "+
@@ -106,14 +104,11 @@ WFSClient.prototype.loadBbox = function(left, bottom, right, top, callback_, use
 
 		http.open("POST", url , true);
 		http.setRequestHeader("Content-length", postData.length);
-		console.log(postData);
 		http.setRequestHeader("Authorization", "Basic " + btoa(app.config.cyclomedia.username+ ":"+ app.config.cyclomedia.password));
 		http.onreadystatechange = function()
 		{
 			if(http.readyState == 4  /* && http.status == 200 */)
 			{
-				console.log('about to call parseXML');
-				console.log(http.responseText);
 				wfsClient.parseXML(http.responseText);
 			}
 		};
