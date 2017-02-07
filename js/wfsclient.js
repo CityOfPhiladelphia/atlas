@@ -106,11 +106,14 @@ WFSClient.prototype.loadBbox = function(left, bottom, right, top, callback_, use
 
 		http.open("POST", url , true);
 		http.setRequestHeader("Content-length", postData.length);
+		console.log(postData);
 		http.setRequestHeader("Authorization", "Basic " + btoa(app.config.cyclomedia.username+ ":"+ app.config.cyclomedia.password));
 		http.onreadystatechange = function()
 		{
 			if(http.readyState == 4  /* && http.status == 200 */)
 			{
+				console.log('about to call parseXML');
+				console.log(http.responseText);
 				wfsClient.parseXML(http.responseText);
 			}
 		};
