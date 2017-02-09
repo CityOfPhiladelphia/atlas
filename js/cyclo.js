@@ -1,13 +1,13 @@
 var app = app || {};
 
-// when tab opens, set localStorage variable 'stViewClosed' to false
+// when tab opens, set localStorage variable 'stViewClosed' to 'false'
 /*$(window).on('load', function(){
   localStorage.setItem('stViewOpen', true);
 });*/
 
 // when tab closes, set localStorage variable 'stViewClosed' to true
 /*$(window).on('beforeunload', function(){
-  localStorage.setItem('stViewOpen', false);
+  localStorage.setItem('stViewOpen', 'false');
 });*/
 
 //app.cyclo.resolveNewLocation = $.Deferred();

@@ -1,6 +1,8 @@
 /* global app, L */
 //localStorage.clear();
 /*app.cyclo = {};*/
+//window.localStorage.clear();
+
 app.cyclo.wfsClient = new WFSClient(
 	"https://atlas.cyclomedia.com/Recordings/wfs",
 	"atlas:Recording",
@@ -89,20 +91,23 @@ app.map = (function ()
 			// 	regmap: 0.5
 			// };
 
-			if (localStorage.stViewOpen) {
+			/*if (localStorage.stViewOpen) {
 				app.state.map.stViewOpen = localStorage.stViewOpen
-			} else {
-				app.state.map.stViewOpen = false;
-			};
+			} else {*/
+			localStorage.stViewOpen = 'false';
+			app.state.map.stViewOpen = 'false';
+
 			if (localStorage.pictometryOpen) {
+				console.log('%%%%%%% ', localStorage.pictometryOpen);
 				app.state.map.pictometryOpen = localStorage.pictometryOpen
 			} else {
-				app.state.map.pictometryOpen = false;
+				localStorage.setItem('pictometryOpen', 'false');
+				app.state.map.pictometryOpen = 'false';
 			};
 
-      app.state.map.clickedOnMap = false;
-			app.state.map.stViewInit = false;
-			localStorage.setItem('clickedOnMap', false);
+      app.state.map.clickedOnMap = 'false';
+			app.state.map.stViewInit = 'false';
+			localStorage.setItem('clickedOnMap', 'false');
       // the next 2 variables hold names for checking what is on the map
       app.state.map.nameBaseLayer;
       app.state.map.nameLabelsLayer;
@@ -111,16 +116,16 @@ app.map = (function ()
       // the next 2 objects hold the actual layers
       app.state.map.tileLayers = {};
       app.state.map.mapServices = {};
-			app.state.map.shouldPan = true;
+			app.state.map.shouldPan = 'true';
 
       //app.state.map.appealsLayerGroup = new L.LayerGroup();
 
-      //app.state.moveMode = true
+      //app.state.moveMode = 'true'
       var CITY_HALL = [39.952388, -75.163596];
 
       _map = L.map('map', {
-         zoomControl: false,
-         // measureControl: true,
+         zoomControl: 'false',
+         // measureControl: 'true',
       });
 			// add routing fix
       _map.setView(CITY_HALL, 17);
@@ -403,7 +408,7 @@ app.map = (function ()
         }]
       });
       app.map.stViewToggleButton.addTo(_map);
-			if (app.state.map.stViewOpen == true){
+			if (app.state.map.stViewOpen == 'true'){
 				app.map.stViewToggleButton.state('toggleOffWidget');
 			};
 
@@ -416,7 +421,7 @@ app.map = (function ()
           title:     'Open Pictometry',
           onClick: function(control) {
 						window.open(app.config.pictometry.url, app.config.pictometry.url);
-						localStorage.setItem('pictometryOpen', true);
+						localStorage.setItem('pictometryOpen', 'true');
 						control.state('toggleOffWidget');
 					}
 				}, {
@@ -490,13 +495,13 @@ app.map = (function ()
       _map.on('zoomend', app.map.LSzoomend);
       _map.on('moveend', function(){
         app.map.LSmoveend();
-        if (app.state.map.stViewOpen && localStorage.stViewOpen == true) {
+        if (app.state.map.stViewOpen && localStorage.stViewOpen == 'true') {
           app.map.prepareCycloBbox();
         };
       });
 
       // if cyclo is in outside tab, when map refreshes, if there is already a cyclo tab open, place the marker
-      if (app.state.map.stViewOpen && localStorage.stViewOpen == true) {
+      if (app.state.map.stViewOpen && localStorage.stViewOpen == 'true') {
         app.map.LSretrieve();
         console.log('map refreshing triggered drawStViewMarkers');
         app.map.drawStViewMarkers();
@@ -509,8 +514,8 @@ app.map = (function ()
 				var cycloPanel = document.getElementById('cyclo-panel');
 				//var $cycloPanel = $('#cyclo-panel');
 				if (app.state.map.stViewOpen == 'false') {
-					app.state.map.stViewOpen = true;
-			    localStorage.setItem('stViewOpen', true);
+					app.state.map.stViewOpen = 'true';
+			    localStorage.setItem('stViewOpen', 'true');
 					//console.log(app.state.map.stViewOpen);
 					$('#map-panel').animate({
 						height: '50%'
@@ -518,20 +523,20 @@ app.map = (function ()
 						_map.invalidateSize()
 					});
 					$('#cyclo-panel').show('slide', {direction: 'down'}, 350);
-					if (app.state.map.stViewInit == false) {
+					if (app.state.map.stViewInit == 'false') {
 				  	app.cyclo.init(cycloPanel);
-						app.state.map.stViewInit = true;
+						app.state.map.stViewInit = 'true';
 					} else {
 
 						app.state.stViewConeCoords = app.map.calculateConeCoords();
 						app.map.drawStViewMarkers();
 						app.cyclo.LSsetImageProps();
 					}
-					localStorage.setItem('circlesOn', true);
+					localStorage.setItem('circlesOn', 'true');
 
 				} else {
-					app.state.map.stViewOpen = false;
-					localStorage.setItem('stViewOpen', false);
+					app.state.map.stViewOpen = 'false';
+					localStorage.setItem('stViewOpen', 'false');
 					//console.log(app.state.map.stViewOpen);
 					$('#map-panel').css('height', '100%');
 					$('#map-panel').animate({
@@ -542,7 +547,7 @@ app.map = (function ()
 					$('#cyclo-panel').hide('slide', {direction: 'down'}, 350);
 					_stViewMarkersLayerGroup.clearLayers();
 					_cycloFeatureGroup.clearLayers();
-					localStorage.setItem('circlesOn', false);
+					localStorage.setItem('circlesOn', 'false');
 				}
 			};
 
@@ -554,28 +559,32 @@ app.map = (function ()
 				// if pictometry window closes, change widget icon color
 				if (e.originalEvent.key == 'pictometryOpen') {
 					if (e.originalEvent.newValue == 'false') {
-						//console.log('!!!!!!! ', e.originalEvent.newValue);
+						console.log('!!!!!!! ', e.originalEvent.newValue);
           	app.map.pictometryOpenButton.state('toggleOnWidget');
 					}
 					if (e.originalEvent.newValue == 'true') {
-						//console.log('!!!!!!! ', e.originalEvent.newValue);
+						console.log('!!!!!!! ', e.originalEvent.newValue);
           	app.map.pictometryOpenButton.state('toggleOffWidget');
 					}
         };
         // if cyclo window closes, remove marker
-        if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == false) {
-          _stViewMarkersLayerGroup.clearLayers();
-          _cycloFeatureGroup.clearLayers();
-					localStorage.setItem('circlesOn', false);
-        };
-        if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == 'true') {
-          app.map.LSretrieve();
-          console.log('change to stViewOpen triggered drawStViewMarkers');
-          // this happens too quickly, or shouldn't happen if it already has been open, because you get
-          // a marker right away that is wrong, and then it slowly moves to the right place.
-          // need to set some kind of deferred...
-          app.map.drawStViewMarkers();
-          app.map.prepareCycloBbox();
+        if (e.originalEvent.key == 'stViewOpen') {
+					if (e.originalEvent.newValue == 'false') {
+						console.log('stView closed');
+          	_stViewMarkersLayerGroup.clearLayers();
+          	_cycloFeatureGroup.clearLayers();
+						localStorage.setItem('circlesOn', 'false');
+        	}
+					if (e.originalEvent.newValue == 'true') {
+						console.log('stView opened');
+	          app.map.LSretrieve();
+	          console.log('change to stViewOpen triggered drawStViewMarkers');
+	          // this happens too quickly, or shouldn't happen if it already has been open, because you get
+	          // a marker right away that is wrong, and then it slowly moves to the right place.
+	          // need to set some kind of deferred...
+	          app.map.drawStViewMarkers();
+	          app.map.prepareCycloBbox();
+					}
         };
         if (e.originalEvent.key == 'stViewCoords'){
           app.state.stViewX = localStorage.getItem('stViewX');
@@ -679,7 +688,7 @@ app.map = (function ()
 
 			//console.log('didGetAisResult is running LSinit');
 			app.map.LSinit();
-			if (app.state.map.stViewOpen == true){
+			if (app.state.map.stViewOpen == 'true'){
 				app.cyclo.setNewLocation();
 			}
 
@@ -772,14 +781,14 @@ app.map = (function ()
 
     didClickMap: function (e) {
       // set state
-      app.state.map.clickedOnMap = true
-			localStorage.setItem('clickedOnMap', true);
-      app.state.map.shouldPan = false;
+      app.state.map.clickedOnMap = 'true'
+			localStorage.setItem('clickedOnMap', 'true');
+      app.state.map.shouldPan = 'false';
 
       // if this was a cyclo circle click, don't do anything
       if (app.state.map.clickedCircle) {
         // console.log('clicked a circle');
-        app.state.map.clickedCircle = false;
+        app.state.map.clickedCircle = 'false';
 				return;
       }
 
@@ -812,7 +821,7 @@ app.map = (function ()
 					// this is a little kludgy b/c technically we don't have an address,
 					// but should work anyway.
           app.searchForAddress(parcelId);
-          app.state.map.clickedOnMap = true; //andy changed this 11/29
+          app.state.map.clickedOnMap = 'true'; //andy changed this 11/29
         }
       });
     },
@@ -908,7 +917,7 @@ app.map = (function ()
       _parcelLayerGroup.clearLayers();
 
       // pan map
-      // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
+      // 'true' if search button was clicked or if page is loaded w address parameter, 'false' if a parcel was clicked
       if (app.state.map.shouldPan) {
         // zoom to bounds of parcel poly plus some buffer
 				if (app.state.map.addressMarkers.parcelPolyDOR) {
@@ -967,7 +976,7 @@ app.map = (function ()
 			app.state.theCenter = _map.getCenter();
 			app.state.leafletCenterX = app.state.theCenter.lng;
 			app.state.leafletCenterY = app.state.theCenter.lat;
-      //if (app.state.map.clickedOnMap == true){
+      //if (app.state.map.clickedOnMap == 'true'){
 			if (app.state.ais.feature){
         app.state.leafletForCycloX = app.state.ais.feature.geometry.coordinates[0];
         app.state.leafletForCycloY = app.state.ais.feature.geometry.coordinates[1];
@@ -1073,7 +1082,7 @@ app.map = (function ()
 	      _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
 	        icon: camera,
 	        rotationAngle: app.state.stViewYaw,
-					draggable: true
+					draggable: 'true'
 	      }).on('click', function(){
 					console.log('clicked camera');
 				}).on('dragend', function(data){
@@ -1115,7 +1124,7 @@ app.map = (function ()
 			app.map.domLayerList();
 
 			// don't pan map if we shouldn't
-      // true if search button was clicked or if page is loaded w address parameter, false if a parcel was clicked
+      // 'true' if search button was clicked or if page is loaded w address parameter, 'false' if a parcel was clicked
       if (!app.state.map.shouldPan) {
 				// console.log('shouldnt pan so going to return now')
 				return;
@@ -1630,7 +1639,7 @@ app.map = (function ()
             color: '#3388ff',
             weight: 1,
           }).on('click', function(coord){
-            app.state.map.clickedCircle = true;
+            app.state.map.clickedCircle = 'true';
 
 						// SET LOCAL STORAGE
 						app.map.LSclickedCircle(coord.latlng.lat, coord.latlng.lng);
@@ -1645,7 +1654,7 @@ app.map = (function ()
         _cycloFeatureGroup.bringToFront();
       }
 			// set "circles on" in localStorage
-			localStorage.setItem('circlesOn', true);
+			localStorage.setItem('circlesOn', 'true');
     },
 
 		removeRegmap: function () {
@@ -1686,7 +1695,7 @@ app.map = (function ()
 					  url: url,
 						layers: [29],
 						layerDefs: "29:NAME='g" + next.toLowerCase() + ".tif'",
-						transparent: true,
+						transparent: 'true',
 						name: 'regmap',
 						zIndex: 4,
 					});
@@ -1701,7 +1710,7 @@ app.map = (function ()
 
 			// esri leaflet complains if we try to add the opacity slider before
 			// the tiles hvae loaded.
-			var firstLoadEvent = true;
+			var firstLoadEvent = 'true';
 			nextRegmap.on('load', function (map) {
 				// only do this when we first load the regmap. we couldn't find an
 				// event that fires only when the layer first loads.
@@ -1710,7 +1719,7 @@ app.map = (function ()
 					opacitySlider.addTo(_map);
 					nextRegmap.setOpacity(opacitySlider.options.opacity);
 
-					firstLoadEvent = false;
+					firstLoadEvent = 'false';
 				}
 			});
 
