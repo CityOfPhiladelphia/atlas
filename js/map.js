@@ -105,9 +105,9 @@ app.map = (function ()
 				app.state.map.pictometryOpen = 'false';
 			};
 
-      app.state.map.clickedOnMap = 'false';
+      app.state.map.clickedOnMap = false;
 			app.state.map.stViewInit = 'false';
-			localStorage.setItem('clickedOnMap', 'false');
+			localStorage.setItem('clickedOnMap', false);
       // the next 2 variables hold names for checking what is on the map
       app.state.map.nameBaseLayer;
       app.state.map.nameLabelsLayer;
@@ -116,7 +116,7 @@ app.map = (function ()
       // the next 2 objects hold the actual layers
       app.state.map.tileLayers = {};
       app.state.map.mapServices = {};
-			app.state.map.shouldPan = 'true';
+			app.state.map.shouldPan = true;
 
       //app.state.map.appealsLayerGroup = new L.LayerGroup();
 
@@ -124,7 +124,7 @@ app.map = (function ()
       var CITY_HALL = [39.952388, -75.163596];
 
       _map = L.map('map', {
-         zoomControl: 'false',
+         zoomControl: false,
          // measureControl: 'true',
       });
 			// add routing fix
@@ -781,14 +781,14 @@ app.map = (function ()
 
     didClickMap: function (e) {
       // set state
-      app.state.map.clickedOnMap = 'true'
-			localStorage.setItem('clickedOnMap', 'true');
-      app.state.map.shouldPan = 'false';
+      app.state.map.clickedOnMap = true
+			localStorage.setItem('clickedOnMap', true);
+      app.state.map.shouldPan = false;
 
       // if this was a cyclo circle click, don't do anything
       if (app.state.map.clickedCircle) {
         // console.log('clicked a circle');
-        app.state.map.clickedCircle = 'false';
+        app.state.map.clickedCircle = false;
 				return;
       }
 
@@ -821,7 +821,7 @@ app.map = (function ()
 					// this is a little kludgy b/c technically we don't have an address,
 					// but should work anyway.
           app.searchForAddress(parcelId);
-          app.state.map.clickedOnMap = 'true'; //andy changed this 11/29
+          app.state.map.clickedOnMap = true; //andy changed this 11/29
         }
       });
     },
@@ -1082,7 +1082,7 @@ app.map = (function ()
 	      _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
 	        icon: camera,
 	        rotationAngle: app.state.stViewYaw,
-					draggable: 'true'
+					draggable: true
 	      }).on('click', function(){
 					console.log('clicked camera');
 				}).on('dragend', function(data){
