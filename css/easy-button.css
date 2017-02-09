@@ -37,7 +37,7 @@
 .leaflet-bar button:hover {
   /*background-color: #fad26e;*/
   height: 30px;
-  width: 40px;
+  width: 35px;
 }
 
 
@@ -67,36 +67,67 @@
 }
 
 
-.leaflet-touch .leaflet-bar button {
+/*.leaflet-touch .leaflet-bar button {
   width: 30px;
   height: 30px;
   line-height: 30px;
-}
+}*/
 
 #baseToggleButton {
-    height: 40px;
-    width: 40px;
+  height: 30px;
+  width: 30px;
+}
+
+#stViewToggleButton {
+  /*background-color: #f99300;*/
+  height: 30px;
+  width: 30px;
+}
+
+#pictometryOpenButton {
+  /*background-color: #f99300;*/
+  height: 30px;
+  width: 30px;
 }
 
 #zoomFullExtentButton {
-    height: 40px;
-    width: 40px;
+  height: 40px;
+  width: 40px;
+}
+
+.easy-button-button.toggleOnWidget-active {
+  height: 30px;
+  width: 30px;
+  background-color: #96c9ff;
+  padding-top: 3px;
+}
+
+.easy-button-button.toggleOffWidget-active {
+  height: 30px;
+  width: 30px;
+  background-color: #f99300;
+  padding-top: 3px;
 }
 
 .easy-button-button.dateNotSelected-active {
-    height: 30px;
-    width: 40px;
-    background-color: #cfcfcf
+  height: 30px;
+  width: 35px;
+  background-color: #cfcfcf
 }
 
 .easy-button-button.dateSelected-active {
-    height: 30px;
-    width: 40px;
-    background-color: #ffffff
+  height: 30px;
+  width: 35px;
+  background-color: #ffffff
 }
 
 .aDate {
-    height: 30px;
-    line-height: 30px;
-    white-space: nowrap;
+  height: 30px;
+  line-height: 30px;
+  white-space: nowrap;
+}
+
+.leaflet-control-measure-toggle {
+  width: 36px;
+  height: 36px;
 }

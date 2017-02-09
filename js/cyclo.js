@@ -1,9 +1,9 @@
 var app = app || {};
 
 // when tab opens, set localStorage variable 'stViewClosed' to false
-$(window).on('load', function(){
+/*$(window).on('load', function(){
   localStorage.setItem('stViewOpen', true);
-});
+});*/
 
 // when tab closes, set localStorage variable 'stViewClosed' to true
 /*$(window).on('beforeunload', function(){
@@ -25,8 +25,11 @@ app.cyclo = ( function () {
     //resolveNewLocation = $.Deferred(),
 
     init: function (containerDiv) {
+      console.log('cyclo init is running');
       cycloDiv = $('<div>').addClass('panoramaViewerWindow').attr('id', 'cyclo-viewer')[0];
-      $(containerDiv).html(cycloDiv);
+      //$(containerDiv).html('<div><i class="fa fa-spinner fa-lg spin"></i> Loading...</div>');
+      $(containerDiv).html('<div id="cyclo-spinner"><i class="fa fa-spinner fa-2x spin"></i>Loading Street View...</div>')
+      $(containerDiv).append(cycloDiv);
       StreetSmartApi.init({
         username: app.config.cyclo.username,
         password: app.config.cyclo.password,
@@ -53,6 +56,7 @@ app.cyclo = ( function () {
     didInitCyclo: function () {
       // set up PanoramaViewer
       console.log('setting up addPanoramaViewer')
+      $('#cyclo-spinner').css('display', 'none');
       viewer = StreetSmartApi.addPanoramaViewer(cycloDiv, {recordingsVisible: true, timeTravelVisible: true});
       // set initial location
       console.log('running setInitLocation');
@@ -99,11 +103,18 @@ app.cyclo = ( function () {
       //console.log('stViewYaw now is ' + app.state.stViewYaw);
       app.state.stViewHfov = viewer.props.orientation.hFov * (180/3.14159265359);
       //console.log('stViewHfov now is ' + app.state.stViewHfov);
+
+      // SET LOCAL STORAGE
       app.cyclo.LSsetImageProps();
+
+      // CALL CHANGES WITHOUT LOCAL STORAGE
+      app.state.stViewConeCoords = app.map.calculateConeCoords();
+      app.map.stViewMarkersLayerGroup.clearLayers();
+      app.map.drawStViewMarkers();
     },
 
     didLoadView: function () {
-      //console.log('VIEW_LOAD_END event fired');
+      console.log('VIEW_LOAD_END event fired');
       var propsLoc = [viewer.props.orientation.xyz[0], viewer.props.orientation.xyz[1]];
       var savedLoc = [app.state.stViewX, app.state.stViewY];
       //console.log(propsLoc);
@@ -115,7 +126,13 @@ app.cyclo = ( function () {
         app.state.stViewX = viewer.props.orientation.xyz[0]
         app.state.stViewY = viewer.props.orientation.xyz[1]
         //console.log('saving new location to localStorage');
+
+        // SET LOCAL STORAGE
         app.cyclo.LSsetImageProps();
+
+        // CALL CHANGES WITHOUT LOCAL STORAGE
+        app.state.stViewConeCoords = app.map.calculateConeCoords();
+        app.map.drawStViewMarkers();
       }
     },
 

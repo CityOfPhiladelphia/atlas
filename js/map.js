@@ -10,7 +10,7 @@ app.cyclo.wfsClient = new WFSClient(
 
 L.Control.BaseToolTip = L.Control.extend({
 	options: {
-		position: 'bottomleft',
+		position: 'bottomalmostleft',
 	},
 	onAdd: function() {
 		this._div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-load basetooltip');
@@ -52,8 +52,10 @@ app.map = (function ()
       _stViewHfovMarker,
       _stViewCameraMarker
 
+
   return {
 
+		stViewMarkersLayerGroup : _stViewMarkersLayerGroup,
 		waterLegend : L.control({position: 'bottomleft'}),
 		baseToolTip : new L.Control.BaseToolTip,
 
@@ -61,6 +63,20 @@ app.map = (function ()
 		smallMarker: L.point(22,40),
 		largeMarker: L.point(32,50),
 		xLargeMarker: L.point(42,60),
+
+		// Adding map widget holders outside of corners
+		addControlPlaceholders: function(map) {
+			console.log('addControlPlaceholders is running');
+	    var corners = map._controlCorners,
+	        l = 'leaflet-',
+	        container = map._controlContainer;
+	    function createCorner(vSide, hSide) {
+	        var className = l + vSide + ' ' + l + hSide;
+	        corners[vSide + hSide] = L.DomUtil.create('div', className, container);
+	    }
+	    createCorner('bottom', 'almostleft');
+			createCorner('top', 'almostright');
+		},
 
     initMap : function () {
 
@@ -72,7 +88,20 @@ app.map = (function ()
 			// 	water: 1.0,
 			// 	regmap: 0.5
 			// };
+
+			if (localStorage.stViewOpen) {
+				app.state.map.stViewOpen = localStorage.stViewOpen
+			} else {
+				app.state.map.stViewOpen = false;
+			};
+			if (localStorage.pictometryOpen) {
+				app.state.map.pictometryOpen = localStorage.pictometryOpen
+			} else {
+				app.state.map.pictometryOpen = false;
+			};
+
       app.state.map.clickedOnMap = false;
+			app.state.map.stViewInit = false;
 			localStorage.setItem('clickedOnMap', false);
       // the next 2 variables hold names for checking what is on the map
       app.state.map.nameBaseLayer;
@@ -96,12 +125,27 @@ app.map = (function ()
 			// add routing fix
       _map.setView(CITY_HALL, 17);
 
-			/*app.map.baseToolTip.onAdd = function () {
-				var div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-load basetooltip');
-				div.innerHTML = 'i';
-				//div.title = "enter tooltip here"
-				return div;
-			};*/
+
+			app.map.addControlPlaceholders(_map);
+
+			// Change the position of the Zoom Control to a newly created placeholder.
+			//_map.zoomControl.setPosition('verticalcenterright');
+
+			// You can also put other controls in the same placeholder.
+			//L.control.scale({position: 'verticalcenterright'}).addTo(_map);
+
+
+			// make measure control
+			var measureControl = new L.Control.Measure({
+				position: 'bottomleft',
+				primaryLengthUnit: 'feet',
+				// secondaryLengthUnit: 'miles',
+				primaryAreaUnit: 'sqfeet',
+				// secondaryAreaUnit: 'sqmiles',
+			});
+			measureControl.addTo(_map);
+
+
 			app.map.baseToolTip.addTo(_map);
 			app.state.map.waterDisclaimer = 'The property boundaries displayed on the map are for reference only and may not be used in place of recorded deeds or land surveys. Boundaries are generalized for ease of visualization. Source: Philadelphia Water'
 			app.state.map.DORDisclaimer = 'The property boundaries displayed on the map are for reference only and may not be used in place of recorded deeds or land surveys. Dimension lengths are calculated using the GIS feature. Source: Department of Records.'
@@ -116,18 +160,7 @@ app.map = (function ()
 			$('.basetooltip').on('mouseout', function(){
 				app.map.baseToolTip.onMouseout();
 			})
-			/*app.map.baseToolTip.on('mouseover', function(){
-				console.log('mouseover happening');
-			});*/
 
-      // make measure control
-      var measureControl = new L.Control.Measure({
-        primaryLengthUnit: 'feet',
-        // secondaryLengthUnit: 'miles',
-        primaryAreaUnit: 'sqfeet',
-        // secondaryAreaUnit: 'sqmiles',
-      });
-      measureControl.addTo(_map);
 
       // Basemaps
 			_.forEach(app.config.esri.tiledLayers, function(layer, i, j) {
@@ -182,9 +215,9 @@ app.map = (function ()
       app.map.domLayerList();
 
       // Controls
-      new L.Control.Zoom({position: 'topright'}).addTo(_map);
+      new L.Control.Zoom({position: 'bottomright'}).addTo(_map);
 
-      var basemapToggleButton = L.easyButton({
+			var basemapToggleButton = L.easyButton({
         id: 'baseToggleButton',
         position: 'topright',
         states: [{
@@ -344,8 +377,60 @@ app.map = (function ()
 
       // build a toolbar with them
       theEasyBar = L.easyBar(app.state.map.historicalImageryButtons, {
-        position: 'topright'
+        position: 'topalmostright'
       })
+
+
+			app.map.stViewToggleButton = L.easyButton({
+        id: 'stViewToggleButton',
+        position: 'topright',
+        states: [{
+          stateName: 'toggleOnWidget',
+          icon:      'fa-road fa-2x',
+          title:     'Toggle On Street View',
+          onClick: function(control) {
+						toggleStView();
+						control.state('toggleOffWidget');
+					}
+        }, {
+          stateName: 'toggleOffWidget',
+          icon:      'fa-road fa-2x',
+          title:     'Toggle Off Street View',
+          onClick: function(control) {
+						toggleStView();
+						control.state('toggleOnWidget');
+          }
+        }]
+      });
+      app.map.stViewToggleButton.addTo(_map);
+			if (app.state.map.stViewOpen == true){
+				app.map.stViewToggleButton.state('toggleOffWidget');
+			};
+
+			app.map.pictometryOpenButton = L.easyButton({
+				id: 'pictometryOpenButton',
+				position: 'topright',
+				states: [{
+          stateName: 'toggleOnWidget',
+          icon:      'fa-plane fa-2x',
+          title:     'Open Pictometry',
+          onClick: function(control) {
+						window.open(app.config.pictometry.url, app.config.pictometry.url);
+						localStorage.setItem('pictometryOpen', true);
+						control.state('toggleOffWidget');
+					}
+				}, {
+          stateName: 'toggleOffWidget',
+          icon:      'fa-plane fa-2x',
+          title:     'Pictometry Already Open',
+          onClick: function(control) {
+          }
+				}]
+			});
+			app.map.pictometryOpenButton.addTo(_map);
+			if (app.state.map.pictometryOpen == 'true') {
+				app.map.pictometryOpenButton.state('toggleOffWidget');
+			};
 
       // adds and removes baseLayer and overlay
       function toggleBasemap() {
@@ -405,29 +490,83 @@ app.map = (function ()
       _map.on('zoomend', app.map.LSzoomend);
       _map.on('moveend', function(){
         app.map.LSmoveend();
-        if (localStorage.stViewOpen == 'true') {
+        if (app.state.map.stViewOpen && localStorage.stViewOpen == true) {
           app.map.prepareCycloBbox();
         };
       });
 
-      // when map refreshes, if there is already a cyclo tab open, place the marker
-      if (localStorage.stViewOpen == 'true') {
+      // if cyclo is in outside tab, when map refreshes, if there is already a cyclo tab open, place the marker
+      if (app.state.map.stViewOpen && localStorage.stViewOpen == true) {
         app.map.LSretrieve();
         console.log('map refreshing triggered drawStViewMarkers');
         app.map.drawStViewMarkers();
         app.map.prepareCycloBbox();
       }
 
+			// toggle stView
+			function toggleStView() {
+				console.log('toggleStView starting');
+				var cycloPanel = document.getElementById('cyclo-panel');
+				//var $cycloPanel = $('#cyclo-panel');
+				if (app.state.map.stViewOpen == 'false') {
+					app.state.map.stViewOpen = true;
+			    localStorage.setItem('stViewOpen', true);
+					//console.log(app.state.map.stViewOpen);
+					$('#map-panel').animate({
+						height: '50%'
+					}, 350, function(){
+						_map.invalidateSize()
+					});
+					$('#cyclo-panel').show('slide', {direction: 'down'}, 350);
+					if (app.state.map.stViewInit == false) {
+				  	app.cyclo.init(cycloPanel);
+						app.state.map.stViewInit = true;
+					} else {
+
+						app.state.stViewConeCoords = app.map.calculateConeCoords();
+						app.map.drawStViewMarkers();
+						app.cyclo.LSsetImageProps();
+					}
+					localStorage.setItem('circlesOn', true);
+
+				} else {
+					app.state.map.stViewOpen = false;
+					localStorage.setItem('stViewOpen', false);
+					//console.log(app.state.map.stViewOpen);
+					$('#map-panel').css('height', '100%');
+					$('#map-panel').animate({
+						height: '100%'
+					}, 350, function(){
+						_map.invalidateSize();
+					});
+					$('#cyclo-panel').hide('slide', {direction: 'down'}, 350);
+					_stViewMarkersLayerGroup.clearLayers();
+					_cycloFeatureGroup.clearLayers();
+					localStorage.setItem('circlesOn', false);
+				}
+			};
+
       // watch localStorage for changes to:
       //1. stViewOpen, 2. stViewCoords, 3. stViewYaw 4. stViewHfov
       // there is a problem, in that when it reopens all of these things trigger it to redraw
       $(window).bind('storage', function (e) {
 				console.warn(e);
+				// if pictometry window closes, change widget icon color
+				if (e.originalEvent.key == 'pictometryOpen') {
+					if (e.originalEvent.newValue == 'false') {
+						//console.log('!!!!!!! ', e.originalEvent.newValue);
+          	app.map.pictometryOpenButton.state('toggleOnWidget');
+					}
+					if (e.originalEvent.newValue == 'true') {
+						//console.log('!!!!!!! ', e.originalEvent.newValue);
+          	app.map.pictometryOpenButton.state('toggleOffWidget');
+					}
+        };
         // if cyclo window closes, remove marker
-        if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == 'false') {
-            _stViewMarkersLayerGroup.clearLayers();
-            _cycloFeatureGroup.clearLayers();
-						localStorage.setItem('circlesOn', false);
+        if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == false) {
+          _stViewMarkersLayerGroup.clearLayers();
+          _cycloFeatureGroup.clearLayers();
+					localStorage.setItem('circlesOn', false);
         };
         if (e.originalEvent.key == 'stViewOpen' && e.originalEvent.newValue == 'true') {
           app.map.LSretrieve();
@@ -447,13 +586,13 @@ app.map = (function ()
         };
         if (e.originalEvent.key == 'stViewYaw'){
           app.state.stViewYaw = localStorage.getItem('stViewYaw');
-            _stViewMarkersLayerGroup.clearLayers();
+          _stViewMarkersLayerGroup.clearLayers();
           console.log('change to stViewYaw triggered drawStViewMarkers');
           app.map.drawStViewMarkers();
         };
         if (e.originalEvent.key == 'stViewHfov'){
           app.state.stViewHfov = localStorage.getItem('stViewHfov');
-            _stViewMarkersLayerGroup.clearLayers();
+          _stViewMarkersLayerGroup.clearLayers();
           app.state.stViewConeCoords = app.map.calculateConeCoords();
           console.log('change to stViewHfov triggered drawStViewMarkers');
           app.map.drawStViewMarkers();
@@ -540,6 +679,9 @@ app.map = (function ()
 
 			//console.log('didGetAisResult is running LSinit');
 			app.map.LSinit();
+			if (app.state.map.stViewOpen == true){
+				app.cyclo.setNewLocation();
+			}
 
 			// if there's a regmap, remove it
 			var prevRegmap = app.state.map.mapServices.regmap;
@@ -915,31 +1057,34 @@ app.map = (function ()
 		},
 
     drawStViewMarkers: function(){
-      console.log('drawStViewMarkers is called - about to create _stViewHfovMarker');
-      _stViewHfovMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-        icon: new L.divIcon.svgIcon.triangleIcon({
-          iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
-          iconAnchor: [app.state.stViewConeCoords[0]/2, app.state.stViewConeCoords[1]],
-        }),
-        rotationAngle: app.state.stViewYaw,
-      }).on('click', 	function(){
-				console.log('clicked triangle marker');
-			});
-      //console.log('about to create _stViewCameraMarker');
-      _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
-        icon: camera,
-        rotationAngle: app.state.stViewYaw,
-				draggable: true
-      }).on('click', function(){
-				console.log('clicked camera');
-			}).on('dragend', function(data){
-				app.state.dragdata = data;
-				app.state.draggedX = data.target._latlng.lng;
-				app.state.draggedY = data.target._latlng.lat;
-				app.map.LSdraggedMarker(app.state.draggedY, app.state.draggedX);
-			});
-      _stViewCameraMarker.addTo(_stViewMarkersLayerGroup);
-      _stViewHfovMarker.addTo(_stViewMarkersLayerGroup);
+      //console.log('drawStViewMarkers is called - about to create _stViewHfovMarker');
+			// this can be called while street view is opening, causing errors
+			if (app.state.stViewY) {
+	      _stViewHfovMarker = L.marker([app.state.stViewY, app.state.stViewX], {
+	        icon: new L.divIcon.svgIcon.triangleIcon({
+	          iconSize: L.point(app.state.stViewConeCoords[0], app.state.stViewConeCoords[1]),
+	          iconAnchor: [app.state.stViewConeCoords[0]/2, app.state.stViewConeCoords[1]],
+	        }),
+	        rotationAngle: app.state.stViewYaw,
+	      }).on('click', 	function(){
+					console.log('clicked triangle marker');
+				});
+	      //console.log('about to create _stViewCameraMarker');
+	      _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
+	        icon: camera,
+	        rotationAngle: app.state.stViewYaw,
+					draggable: true
+	      }).on('click', function(){
+					console.log('clicked camera');
+				}).on('dragend', function(data){
+					app.state.dragdata = data;
+					app.state.draggedX = data.target._latlng.lng;
+					app.state.draggedY = data.target._latlng.lat;
+					app.map.LSdraggedMarker(app.state.draggedY, app.state.draggedX);
+				});
+	      _stViewCameraMarker.addTo(_stViewMarkersLayerGroup);
+	      _stViewHfovMarker.addTo(_stViewMarkersLayerGroup);
+			}
     },
 
 		showAddressMarker: function (markerType) {
@@ -1486,7 +1631,13 @@ app.map = (function ()
             weight: 1,
           }).on('click', function(coord){
             app.state.map.clickedCircle = true;
+
+						// SET LOCAL STORAGE
 						app.map.LSclickedCircle(coord.latlng.lat, coord.latlng.lng);
+
+						// DIRECTLY CHANGE CYCLO-WINDOW
+						app.cyclo.setNewLocation();
+
           });
           //blueCircle.on({click: console.log('clicked a circle')});
           blueCircle.addTo(_cycloFeatureGroup);
