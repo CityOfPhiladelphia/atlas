@@ -353,3 +353,29 @@ table {
   height:50%;
   font-size: 20px;
 }
+
+#inCycloDiv {
+  background-color: white;
+  border: 0px solid;
+  border-radius: 5px;
+  width: 24px;
+  height: 22px;
+  display:none;
+  cursor:pointer;
+  z-index: 10;
+  position:relative;
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
+  /*padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 30px;*/
+}
+
+.popout-icon {
+  margin-top: -2px;
+  color: #f99300;
+  /*margin-right: 10px;
+  padding-top:10px;
+  padding-right:10px;*/
+}

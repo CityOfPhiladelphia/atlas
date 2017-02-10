@@ -19,16 +19,16 @@ app.default.leafletForCycloX = -75.163596;
 
 app.cyclo = ( function () {
   var cycloDiv,
+    inCycloDiv,
     viewer;
 
   return {
     //resolveNewLocation = $.Deferred(),
 
     init: function (containerDiv) {
-      console.log('cyclo init is running');
       cycloDiv = $('<div>').addClass('panoramaViewerWindow').attr('id', 'cyclo-viewer')[0];
-      //$(containerDiv).html('<div><i class="fa fa-spinner fa-lg spin"></i> Loading...</div>');
       $(containerDiv).html('<div id="cyclo-spinner"><i class="fa fa-spinner fa-2x spin"></i>Loading Street View...</div>')
+      $(containerDiv).append('<div id="inCycloDiv"><i class="fa fa-external-link-square fa-2x popout-icon"></i></div>');
       $(containerDiv).append(cycloDiv);
       StreetSmartApi.init({
         username: app.config.cyclo.username,
@@ -55,8 +55,17 @@ app.cyclo = ( function () {
     },
     didInitCyclo: function () {
       // set up PanoramaViewer
+      //cycloDiv = $('<div>').addClass('panoramaViewerWindow').attr('id', 'cyclo-viewer')[0];
       console.log('setting up addPanoramaViewer')
       $('#cyclo-spinner').css('display', 'none');
+      $('#inCycloDiv').css('display', 'block').click(function(e){
+        console.log('clicked popout');
+        e.preventDefault();
+        window.open(app.config.cyclo.url, app.config.cyclo.url);
+        app.map.popoutStView();
+        app.map.stViewToggleButton.state('stViewOutside');
+        return false
+      });
       viewer = StreetSmartApi.addPanoramaViewer(cycloDiv, {recordingsVisible: true, timeTravelVisible: true});
       // set initial location
       console.log('running setInitLocation');

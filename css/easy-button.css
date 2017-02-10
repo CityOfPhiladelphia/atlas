@@ -109,6 +109,13 @@
   padding-top: 3px;
 }
 
+.easy-button-button.stViewOutside-active {
+  height: 30px;
+  width: 30px;
+  background-color: #f99300;
+  padding-top: 3px;
+}
+
 .easy-button-button.dateNotSelected-active {
   height: 30px;
   width: 35px;

@@ -394,7 +394,7 @@ app.map = (function ()
           icon:      'fa-road fa-2x',
           title:     'Toggle On Street View',
           onClick: function(control) {
-						toggleStView();
+						app.map.toggleStView();
 						control.state('toggleOffWidget');
 					}
         }, {
@@ -402,10 +402,18 @@ app.map = (function ()
           icon:      'fa-road fa-2x',
           title:     'Toggle Off Street View',
           onClick: function(control) {
-						toggleStView();
+						app.map.toggleStView();
 						control.state('toggleOnWidget');
           }
-        }]
+        }, {
+					stateName: 'stViewOutside',
+          icon:      'fa-road fa-2x',
+          title:     'Street View Already Open in Separate Tab',
+          onClick: function(control) {
+						//app.map.toggleStView();
+						//control.state('toggleOnWidget');
+          }
+				}]
       });
       app.map.stViewToggleButton.addTo(_map);
 			if (app.state.map.stViewOpen == 'true'){
@@ -427,7 +435,7 @@ app.map = (function ()
 				}, {
           stateName: 'toggleOffWidget',
           icon:      'fa-plane fa-2x',
-          title:     'Pictometry Already Open',
+          title:     'Pictometry Already Open in Separate Tab',
           onClick: function(control) {
           }
 				}]
@@ -508,6 +516,19 @@ app.map = (function ()
         app.map.prepareCycloBbox();
       }
 
+/*			// switch stView to outside
+			function popoutStView(){
+				console.log('popoutStView starting');
+				var cycloPanel = document.getElementById('cyclo-panel');
+				$('#map-panel').css('height', '100%');
+				$('#map-panel').animate({
+					height: '100%'
+				}, 350, function(){
+					_map.invalidateSize();
+				});
+				$('#cyclo-panel').hide('slide', {direction: 'down'}, 350);
+			};
+
 			// toggle stView
 			function toggleStView() {
 				console.log('toggleStView starting');
@@ -550,6 +571,7 @@ app.map = (function ()
 					localStorage.setItem('circlesOn', 'false');
 				}
 			};
+*/
 
       // watch localStorage for changes to:
       //1. stViewOpen, 2. stViewCoords, 3. stViewYaw 4. stViewHfov
@@ -574,8 +596,10 @@ app.map = (function ()
           	_stViewMarkersLayerGroup.clearLayers();
           	_cycloFeatureGroup.clearLayers();
 						localStorage.setItem('circlesOn', 'false');
+						app.state.map.stViewOpen = 'false';
+						app.map.stViewToggleButton.state('toggleOnWidget');
         	}
-					if (e.originalEvent.newValue == 'true') {
+					/*if (e.originalEvent.newValue == 'true') {
 						console.log('stView opened');
 	          app.map.LSretrieve();
 	          console.log('change to stViewOpen triggered drawStViewMarkers');
@@ -584,7 +608,7 @@ app.map = (function ()
 	          // need to set some kind of deferred...
 	          app.map.drawStViewMarkers();
 	          app.map.prepareCycloBbox();
-					}
+					}*/
         };
         if (e.originalEvent.key == 'stViewCoords'){
           app.state.stViewX = localStorage.getItem('stViewX');
@@ -608,6 +632,65 @@ app.map = (function ()
         };
       });
     }, // end of initMap
+
+		// switch stView to outside
+		popoutStView: function() {
+			console.log('popoutStView starting');
+			var cycloPanel = document.getElementById('cyclo-panel');
+			$('#map-panel').css('height', '100%');
+			$('#map-panel').animate({
+				height: '100%'
+			}, 350, function(){
+				_map.invalidateSize();
+			});
+			$('#cyclo-panel').hide('slide', {direction: 'down'}, 350);
+		},
+
+		// toggle stView
+		toggleStView: function() {
+			console.log('toggleStView starting');
+			var cycloPanel = document.getElementById('cyclo-panel');
+			//var $cycloPanel = $('#cyclo-panel');
+			if (app.state.map.stViewOpen == 'false') {
+				console.log('app.state.map.stViewOpen is false');
+				app.state.map.stViewOpen = 'true';
+				localStorage.setItem('stViewOpen', 'true');
+				//console.log(app.state.map.stViewOpen);
+				$('#map-panel').animate({
+					height: '50%'
+				}, 350, function(){
+					_map.invalidateSize()
+				});
+				$('#cyclo-panel').show('slide', {direction: 'down'}, 350);
+				if (app.state.map.stViewInit == 'false') {
+					app.cyclo.init(cycloPanel);
+					app.state.map.stViewInit = 'true';
+				} else {
+
+					app.state.stViewConeCoords = app.map.calculateConeCoords();
+					app.map.drawStViewMarkers();
+					app.cyclo.LSsetImageProps();
+				}
+				localStorage.setItem('circlesOn', 'true');
+
+			} else {
+				console.log('app.state.map.stViewOpen is true');
+				app.state.map.stViewOpen = 'false';
+				localStorage.setItem('stViewOpen', 'false');
+				//console.log(app.state.map.stViewOpen);
+				$('#map-panel').css('height', '100%');
+				$('#map-panel').animate({
+					height: '100%'
+				}, 350, function(){
+					_map.invalidateSize();
+				});
+				$('#cyclo-panel').hide('slide', {direction: 'down'}, 350);
+				_stViewMarkersLayerGroup.clearLayers();
+				_cycloFeatureGroup.clearLayers();
+				localStorage.setItem('circlesOn', 'false');
+			}
+		},
+
 
 		// add names of layers on the map to the DOM
     domLayerList: function() {
