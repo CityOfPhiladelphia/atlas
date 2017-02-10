@@ -391,7 +391,7 @@ app.map = (function ()
         position: 'topright',
         states: [{
           stateName: 'toggleOnWidget',
-          icon:      'fa-road fa-2x',
+          icon:      'fa-road fa-2x widget-icon',
           title:     'Toggle On Street View',
           onClick: function(control) {
 						app.map.toggleStView();
@@ -399,7 +399,7 @@ app.map = (function ()
 					}
         }, {
           stateName: 'toggleOffWidget',
-          icon:      'fa-road fa-2x',
+          icon:      'fa-road fa-2x widget-icon',
           title:     'Toggle Off Street View',
           onClick: function(control) {
 						app.map.toggleStView();
@@ -407,7 +407,7 @@ app.map = (function ()
           }
         }, {
 					stateName: 'stViewOutside',
-          icon:      'fa-road fa-2x',
+          icon:      'fa-road fa-2x widget-icon',
           title:     'Street View Already Open in Separate Tab',
           onClick: function(control) {
 						//app.map.toggleStView();
@@ -425,7 +425,7 @@ app.map = (function ()
 				position: 'topright',
 				states: [{
           stateName: 'toggleOnWidget',
-          icon:      'fa-plane fa-2x',
+          icon:      'fa-plane fa-2x widget-icon',
           title:     'Open Pictometry',
           onClick: function(control) {
 						window.open(app.config.pictometry.url, app.config.pictometry.url);
@@ -434,7 +434,7 @@ app.map = (function ()
 					}
 				}, {
           stateName: 'toggleOffWidget',
-          icon:      'fa-plane fa-2x',
+          icon:      'fa-plane fa-2x widget-icon',
           title:     'Pictometry Already Open in Separate Tab',
           onClick: function(control) {
           }
