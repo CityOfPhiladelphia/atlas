@@ -1,8 +1,4 @@
-/* global app, L */
-//localStorage.clear();
-/*app.cyclo = {};*/
-//window.localStorage.clear();
-
+// set variable to add blue cyclo circles to map
 app.cyclo.wfsClient = new WFSClient(
 	"https://atlas.cyclomedia.com/Recordings/wfs",
 	"atlas:Recording",
@@ -10,6 +6,7 @@ app.cyclo.wfsClient = new WFSClient(
 	""
 );
 
+//
 L.Control.BaseToolTip = L.Control.extend({
 	options: {
 		position: 'bottomalmostleft',
