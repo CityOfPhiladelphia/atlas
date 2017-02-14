@@ -6,7 +6,7 @@ app.cyclo.wfsClient = new WFSClient(
 	""
 );
 
-//
+// create custom information widget for telling user which parcel layer shows
 L.Control.BaseToolTip = L.Control.extend({
 	options: {
 		position: 'bottomalmostleft',
@@ -27,43 +27,35 @@ L.Control.BaseToolTip = L.Control.extend({
 	}
 });
 
+// create app.map object for containing map-related objects
 app.map = (function ()
 {
-  // the leaflet map object
   var _map,
-      camera = L.icon({
-        iconUrl: 'css/images/camera_04.png',
-        iconSize: [26, 16],
-        iconAnchor: [11,  8],
-      }),
       _baseLayerGroup = new L.LayerGroup(),
       _labelLayerGroup = new L.LayerGroup(),
       _overlayLayerGroup = new L.LayerGroup(),
-      _nearbyActivityLayerGroup = new L.FeatureGroup(),
-      // create an empty layer group for the parcel query layer
       _parcelLayerGroup = new L.LayerGroup(),
+			_stViewMarkersLayerGroup = new L.LayerGroup(),
+			_nearbyActivityLayerGroup = new L.FeatureGroup(),
 			_electionFeatureGroup = new L.FeatureGroup(),
-      _cycloFeatureGroup = new L.FeatureGroup().on('click', function(){
-        //console.log('clicked a member of the group');
-      }),
-      // create window level placeholder for _stViewHfovMarker
-      _stViewMarkersLayerGroup = new L.LayerGroup(),
+      _cycloFeatureGroup = new L.FeatureGroup(),
       _stViewHfovMarker,
-      _stViewCameraMarker
-
+      _stViewCameraMarker,
+			camera = L.icon({
+        iconUrl: 'css/images/camera.png',
+        iconSize: [26, 16],
+        iconAnchor: [11, 8],
+      })
 
   return {
-
 		stViewMarkersLayerGroup : _stViewMarkersLayerGroup,
 		waterLegend : L.control({position: 'bottomleft'}),
 		baseToolTip : new L.Control.BaseToolTip,
-
-    //theObject: queryParcel,
 		smallMarker: L.point(22,40),
 		largeMarker: L.point(32,50),
-		xLargeMarker: L.point(42,60),
+		//xLargeMarker: L.point(42,60),
 
-		// Adding map widget holders outside of corners
+		// Add map widget holders outside of corners - called in InitMap
 		addControlPlaceholders: function(map) {
 			console.log('addControlPlaceholders is running');
 	    var corners = map._controlCorners,
@@ -82,35 +74,31 @@ app.map = (function ()
       app.state.map = {
 				addressMarkers: {},
 			};
-			// app.state.map.opacity = {
-			// 	zoning: 1.0,
-			// 	water: 1.0,
-			// 	regmap: 0.5
-			// };
 
-			/*if (localStorage.stViewOpen) {
-				app.state.map.stViewOpen = localStorage.stViewOpen
-			} else {*/
+
+			app.state.map.stViewInit = 'false';
+			//TODO - figure out what to do about a popped out cyclomedia on re-load
+			//if (localStorage.stViewOpen) {
+			//	app.state.map.stViewOpen = localStorage.stViewOpen
+			//}// else {
 			localStorage.stViewOpen = 'false';
 			app.state.map.stViewOpen = 'false';
-
 			if (localStorage.pictometryOpen) {
-				console.log('%%%%%%% ', localStorage.pictometryOpen);
 				app.state.map.pictometryOpen = localStorage.pictometryOpen
 			} else {
 				localStorage.setItem('pictometryOpen', 'false');
 				app.state.map.pictometryOpen = 'false';
 			};
-
       app.state.map.clickedOnMap = false;
-			app.state.map.stViewInit = 'false';
 			localStorage.setItem('clickedOnMap', false);
-      // the next 2 variables hold names for checking what is on the map
+
+      // variables that hold names of layers on the map
       app.state.map.nameBaseLayer;
       app.state.map.nameLabelsLayer;
 			app.state.map.nameParcelLayer;
       app.state.map.namesOverLayers = [];
-      // the next 2 objects hold the actual layers
+
+      // objects that hold the actual layers
       app.state.map.tileLayers = {};
       app.state.map.mapServices = {};
 			app.state.map.shouldPan = true;
