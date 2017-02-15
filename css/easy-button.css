@@ -98,21 +98,21 @@
 .easy-button-button.toggleOnWidget-active {
   height: 30px;
   width: 30px;
-  background-color: #cfcfcf;
+  background-color: #ffffff;
   padding-top: 3px;
 }
 
 .easy-button-button.toggleOffWidget-active {
   height: 30px;
   width: 30px;
-  background-color: #ffffff;
+  background-color: #f99300;
   padding-top: 3px;
 }
 
 .easy-button-button.stViewOutside-active {
   height: 30px;
   width: 30px;
-  background-color: #ffffff;
+  background-color: #f99300;
   padding-top: 3px;
 }
 
