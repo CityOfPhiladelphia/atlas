@@ -1,0 +1,16 @@
+
+*[disabled] {
+    opacity: 0.5;
+}
+
+*[disabled] html, body {
+  height: 100%; /**/
+  overflow: none;
+}
+
+.panoramaViewerWindow {
+    display: block; /* changed from inline-block */
+    width: 100%;
+    height:100%;
+    /*height: 420px;*/
+}

@@ -61,6 +61,7 @@ WFSClient.prototype.getImageInfo = function (imageId, callback_)
 	http.send(postData);
 
 };
+
 WFSClient.prototype.loadBbox = function(left, bottom, right, top, callback_, username, password)
 {
 	var postData =  "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\" resultType=\"results\" outputFormat=\"text/xml; subtype=gml/3.1.1\" xmlns:wfs=\"http://www.opengis.net/wfs\">  "+
@@ -104,7 +105,7 @@ WFSClient.prototype.loadBbox = function(left, bottom, right, top, callback_, use
 
 		http.open("POST", url , true);
 		http.setRequestHeader("Content-length", postData.length);
-		http.setRequestHeader("Authorization", "Basic " + btoa(app.config.cyclo.username+ ":"+ app.config.cyclo.password));
+		http.setRequestHeader("Authorization", "Basic " + btoa(username+ ":"+ password));
 		http.onreadystatechange = function()
 		{
 			if(http.readyState == 4  /* && http.status == 200 */)
@@ -165,6 +166,7 @@ WFSClient.prototype.parseXML = function(xml)
             o.x = lon * 0.017453292519943 * 6378137;
 			return o;
     };
+
 
     var xml = parseXml(xml);
     var recordings = xml.getElementsByTagNameNS("*","Recording");

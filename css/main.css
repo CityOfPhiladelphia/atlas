@@ -1,3 +1,6 @@
+body {width:100%; height:100%; overflow:hidden; margin:0; }
+html {width:100%; height:100%; overflow:hidden; }
+
 header.site-header > .row:last-of-type {
     background: #2176d2;
 }
@@ -27,7 +30,7 @@ header.site-header > .row:last-of-type {
 
 #search-input {
     float: left;
-    width: 400px;
+    width: 500px;
 }
 
 #search-button {
@@ -192,6 +195,11 @@ header.site-header > .row:last-of-type {
     height: 100%;
 }
 
+#cyclo-panel{
+    display: none;
+    height: 50%;
+}
+
 #map {
     height: 100%;
 }
@@ -276,17 +284,22 @@ table {
     background: rgba(255,255,255,1);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
+    display: inline-block;
+    float: none;
 }
 
 .basetooltip2 {
-    width: 90%;
+    width: 80%;
     height: 20%;
     padding: 3px 10px;
+    padding-right: 40px;
     font: 14px/16px Arial, Helvetica, sans-serif;
     background: white;
     background: rgba(255,255,255,1);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
+    display: inline-block;
+    float: none;
 }
 
 #deeds-regmaps a {
@@ -295,4 +308,79 @@ table {
 
 #elections-location-name {
   font-weight: bold;
+}
+
+/*
+.leaflet-bottom .leaflet-left .basetooltip {
+  display: inline-block;
+  float: none;
+}*/
+
+.leaflet-almostleft {
+  position: absolute;
+  bottom: 0px; /* possible because the placeholder's parent is the map */
+  /*transform: translateY(-50%); /* using the CSS3 Transform technique */
+  /*padding-top: 10px;*/
+  left: 60px;
+  padding-bottom: 10px;
+  z-index: 500;
+}
+
+.leaflet-almostleft .leaflet-control {
+  margin-bottom: 10px;
+}
+
+
+.leaflet-almostright {
+  position: absolute;
+  top: 0px; /* possible because the placeholder's parent is the map */
+  /*transform: translateY(-50%); /* using the CSS3 Transform technique */
+  /*padding-top: 10px;*/
+  right: 60px;
+  padding-bottom: 10px;
+  z-index: 500;
+}
+
+.leaflet-almostright .leaflet-control {
+  margin-top: 10px;
+}
+
+#cyclo-spinner {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:100%;
+  height:50%;
+  font-size: 20px;
+}
+
+#inCycloDiv {
+  background-color: white;
+  border: 0px solid;
+  border-radius: 5px;
+  width: 24px;
+  height: 22px;
+  display:none;
+  cursor:pointer;
+  z-index: 10;
+  position:relative;
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
+  /*padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 30px;*/
+}
+
+.popout-icon {
+  margin-top: -2px;
+  color: #f99300;
+  /*margin-right: 10px;
+  padding-top:10px;
+  padding-right:10px;*/
+}
+
+.widget-icon {
+  margin-top: -1px;
+  color: #000000;
 }
