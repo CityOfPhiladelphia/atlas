@@ -126,41 +126,6 @@ var app = app || {};
         type: 'base',
         zIndex: 1,
       },
-      baseMapImagery2016: {
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer',
-        type: 'base',
-        zIndex: 2,
-      },
-      baseMapImagery2015: {
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer',
-        type: 'base',
-        zIndex: 2,
-      },
-      baseMapImagery2012: {
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2012_3in/MapServer',
-        type: 'base',
-        zIndex: 2,
-      },
-      baseMapImagery2010: {
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2010_3in/MapServer',
-        type: 'base',
-        zIndex: 2,
-      },
-      baseMapImagery2008: {
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2008_3in/MapServer',
-        type: 'base',
-        zIndex: 2,
-      },
-      baseMapImagery2004: {
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2004_6in/MapServer',
-        type: 'base',
-        zIndex: 2,
-      },
-      baseMapImagery1996: {
-        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_1996_6in/MapServer',
-        type: 'base',
-        zIndex: 2,
-      },
       parcels: {
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/ParcleTile/MapServer',
         type: 'overlay',
@@ -180,7 +145,51 @@ var app = app || {};
         url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_Labels/MapServer',
         type: 'overlayImageryLabels',
         zIndex: 10,
+      }
+    },
+    imageryLayers: {
+      baseMapImagery2016: {
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer',
+        type: 'base',
+        zIndex: 2,
+        year: 2016,
       },
+      baseMapImagery2015: {
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer',
+        type: 'base',
+        zIndex: 2,
+        year: 2015,
+      },
+      baseMapImagery2012: {
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2012_3in/MapServer',
+        type: 'base',
+        zIndex: 2,
+        year: 2012,
+      },
+      baseMapImagery2010: {
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2010_3in/MapServer',
+        type: 'base',
+        zIndex: 2,
+        year: 2010,
+      },
+      baseMapImagery2008: {
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2008_3in/MapServer',
+        type: 'base',
+        zIndex: 2,
+        year: 2008,
+      },
+      baseMapImagery2004: {
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2004_6in/MapServer',
+        type: 'base',
+        zIndex: 2,
+        year: 2004,
+      },
+      baseMapImagery1996: {
+        url: '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_1996_6in/MapServer',
+        type: 'base',
+        zIndex: 2,
+        year: 1996,
+      }
     },
     dynamicLayers: {
       zoning: {

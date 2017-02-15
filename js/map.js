@@ -55,27 +55,15 @@ app.map = (function ()
 		largeMarker: L.point(32,50),
 		//xLargeMarker: L.point(42,60),
 
-		// Add map widget holders outside of corners - called in InitMap
-		addControlPlaceholders: function(map) {
-			console.log('addControlPlaceholders is running');
-	    var corners = map._controlCorners,
-	        l = 'leaflet-',
-	        container = map._controlContainer;
-	    function createCorner(vSide, hSide) {
-	        var className = l + vSide + ' ' + l + hSide;
-	        corners[vSide + hSide] = L.DomUtil.create('div', className, container);
-	    }
-	    createCorner('bottom', 'almostleft');
-			createCorner('top', 'almostright');
-		},
-
     initMap : function () {
 
       app.state.map = {
 				addressMarkers: {},
 			};
 
-
+			app.state.map.clickedOnMap = false;
+			localStorage.setItem('clickedOnMap', false);
+			app.state.map.shouldPan = true;
 			app.state.map.stViewInit = 'false';
 			//TODO - figure out what to do about a popped out cyclomedia on re-load
 			//if (localStorage.stViewOpen) {
@@ -89,8 +77,6 @@ app.map = (function ()
 				localStorage.setItem('pictometryOpen', 'false');
 				app.state.map.pictometryOpen = 'false';
 			};
-      app.state.map.clickedOnMap = false;
-			localStorage.setItem('clickedOnMap', false);
 
       // variables that hold names of layers on the map
       app.state.map.nameBaseLayer;
@@ -99,42 +85,27 @@ app.map = (function ()
       app.state.map.namesOverLayers = [];
 
       // objects that hold the actual layers
-      app.state.map.tileLayers = {};
+      app.state.map.tiledLayers = {};
       app.state.map.mapServices = {};
-			app.state.map.shouldPan = true;
-
       //app.state.map.appealsLayerGroup = new L.LayerGroup();
 
-      //app.state.moveMode = 'true'
       var CITY_HALL = [39.952388, -75.163596];
 
       _map = L.map('map', {
          zoomControl: false,
-         // measureControl: 'true',
       });
 			// add routing fix
       _map.setView(CITY_HALL, 17);
 
-
 			app.map.addControlPlaceholders(_map);
-
-			// Change the position of the Zoom Control to a newly created placeholder.
-			//_map.zoomControl.setPosition('verticalcenterright');
-
-			// You can also put other controls in the same placeholder.
-			//L.control.scale({position: 'verticalcenterright'}).addTo(_map);
-
 
 			// make measure control
 			var measureControl = new L.Control.Measure({
 				position: 'bottomleft',
 				primaryLengthUnit: 'feet',
-				// secondaryLengthUnit: 'miles',
 				primaryAreaUnit: 'sqfeet',
-				// secondaryAreaUnit: 'sqmiles',
 			});
 			measureControl.addTo(_map);
-
 
 			app.map.baseToolTip.addTo(_map);
 			app.state.map.waterDisclaimer = 'The property boundaries displayed on the map are for reference only and may not be used in place of recorded deeds or land surveys. Boundaries are generalized for ease of visualization. Source: Philadelphia Water'
@@ -151,10 +122,9 @@ app.map = (function ()
 				app.map.baseToolTip.onMouseout();
 			})
 
-
-      // Basemaps
-			_.forEach(app.config.esri.tiledLayers, function(layer, i, j) {
-				app.state.map.tileLayers[i] = L.esri.tiledMapLayer({
+      // Non-Imagery Basemaps and all Labels
+			_.forEach(app.config.esri.tiledLayers, function(layer, i) {
+				app.state.map.tiledLayers[i] = L.esri.tiledMapLayer({
 	        url: layer.url,
 	        maxZoom: 22,
 	        name: i,
@@ -163,6 +133,18 @@ app.map = (function ()
 	      });
 			});
 
+			// Imagery Basemapes
+			_.forEach(app.config.esri.imageryLayers, function(layer, i) {
+				app.state.map.tiledLayers[i] = L.esri.tiledMapLayer({
+	        url: layer.url,
+	        maxZoom: 22,
+	        name: i,
+	        type: layer.type,
+	        zIndex: layer.zIndex,
+	      });
+			});
+
+			// Overlays
 			_.forEach(app.config.esri.dynamicLayers, function(layer, i) {
 				if (i != 'regmap'){
 					app.state.map.mapServices[i] = L.esri.dynamicMapLayer({
@@ -180,21 +162,18 @@ app.map = (function ()
 			var opacitySliders = _.forEach(app.config.map.opacitySliders, function (options, layerName) {
 				// add the layer name to options
 				options.layerName = layerName;
-
 				var slider = new L.Control.opacitySlider(options);
-
 				app.state.map.opacitySliders[layerName] = slider;
 			});
 
-      // Now add to map
-      _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapLight);
+      // add initial map layers to _map
+      _baseLayerGroup.addLayer(app.state.map.tiledLayers.baseMapLight);
       _baseLayerGroup.addTo(_map);
-      _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayBaseLabels);
+      _labelLayerGroup.addLayer(app.state.map.tiledLayers.overlayBaseLabels);
       _labelLayerGroup.addTo(_map);
 
-      // The next are not used initially
+      // add groups that contain no layers yet to _map
       _overlayLayerGroup.addTo(_map);
-			//_markerLayerGroup.addTo(_map);
       _parcelLayerGroup.addTo(_map);
       _nearbyActivityLayerGroup.addTo(_map);
 			_electionFeatureGroup.addTo(_map);
@@ -203,6 +182,20 @@ app.map = (function ()
 
       // add names of layers on the map to the DOM
       app.map.domLayerList();
+			// set map state and localStorage on mapInit
+			app.map.LSinit();
+
+			// listen for map events
+			_map.on('click', app.map.didClickMap);
+			_map.on('drag', app.map.LSdrag);
+			_map.on('dragend', app.map.LSdragend);
+			_map.on('zoomend', app.map.LSzoomend);
+			_map.on('moveend', function(){
+				app.map.LSmoveend();
+				if (app.state.map.stViewOpen && localStorage.stViewOpen == 'true') {
+					app.map.prepareCycloBbox();
+				};
+			});
 
       // Controls
       new L.Control.Zoom({position: 'bottomright'}).addTo(_map);
@@ -215,7 +208,7 @@ app.map = (function ()
           icon:      '<img src="css/images/imagery_small.png">',
           title:     'Toggle To Imagery',
           onClick: function(control) {
-            toggleBasemap();
+            app.map.toggleBasemap();
 						if (app.state.map.nameBaseLayer != 'baseMapLight' && app.state.map.nameBaseLayer != 'baseMapDORParcels') {
 							console.log('toggling button to basemap');
 	            control.state('toggletoBasemap');
@@ -226,7 +219,7 @@ app.map = (function ()
           icon:      '<img src="css/images/basemap_small.png">',
           title:     'Toggle To Basemap',
           onClick: function(control) {
-            toggleBasemap();
+            app.map.toggleBasemap();
 						if (app.state.map.nameBaseLayer == 'baseMapLight' || app.state.map.nameBaseLayer == 'baseMapDORParcels') {
 							console.log('toggling button to imagery');
 							control.state('toggleToImagery');
@@ -236,140 +229,33 @@ app.map = (function ()
       });
       basemapToggleButton.addTo(_map);
 
-      app.state.map.historicalImageryButtons = [
-        L.easyButton({
-          id: '2016ToggleButton',
-          states:[{
-            stateName: 'dateSelected',
-            icon: '<strong class="aDate">2016</strong>',
-            title: 'Show 2016 Imagery',
-            onClick: function(control) {
-            }
-          }, {
-            stateName: 'dateNotSelected',
-            icon: '<strong class="aDate">2016</strong>',
-            title: 'Show 2016 Imagery',
-            onClick: function(control) {
-              toggleYear(control, app.state.map.tileLayers.baseMapImagery2016);
-              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2016;
-            }
-          }]
-        }),
-        L.easyButton({
-          id: '2015ToggleButton',
-          states:[{
-            stateName: 'dateNotSelected',
-            icon: '<strong class="aDate">2015</strong>',
-            title: 'Show 2015 Imagery',
-            onClick: function(control) {
-              toggleYear(control, app.state.map.tileLayers.baseMapImagery2015);
-              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2015;
-            }
-          }, {
-            stateName: 'dateSelected',
-            icon: '<strong class="aDate">2015</strong>',
-            title: 'Show 2015 Imagery',
-            onClick: function(control) {
-            }
-          }]
-        }),
-        L.easyButton({
-          id: '2012ToggleButton',
-          states:[{
-            stateName: 'dateNotSelected',
-            icon: '<strong class="aDate">2012</strong>',
-            title: 'Show 2012 Imagery',
-            onClick: function(control) {
-              toggleYear(control, app.state.map.tileLayers.baseMapImagery2012);
-              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2012;
-            }
-          }, {
-            stateName: 'dateSelected',
-            icon: '<strong class="aDate">2012</strong>',
-            title: 'Show 2012 Imagery',
-            onClick: function(control) {
-            }
-          }]
-        }),
-        L.easyButton({
-          id: '2010ToggleButton',
-          states:[{
-            stateName: 'dateNotSelected',
-            icon: '<strong class="aDate">2010</strong>',
-            title: 'Show 2010 Imagery',
-            onClick: function(control) {
-              toggleYear(control, app.state.map.tileLayers.baseMapImagery2010);
-              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2010;
-            }
-          }, {
-            stateName: 'dateSelected',
-            icon: '<strong class="aDate">2010</strong>',
-            title: 'Show 2010 Imagery',
-            onClick: function(control) {
-            }
-          }]
-        }),
-        L.easyButton({
-          id: '2008ToggleButton',
-          states:[{
-            stateName: 'dateNotSelected',
-            icon: '<strong class="aDate">2008</strong>',
-            title: 'Show 2008 Imagery',
-            onClick: function(control) {
-              toggleYear(control, app.state.map.tileLayers.baseMapImagery2008);
-              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2008;
-            }
-          }, {
-            stateName: 'dateSelected',
-            icon: '<strong class="aDate">2008</strong>',
-            title: 'Show 2008 Imagery',
-            onClick: function(control) {
-            }
-          }]
-        }),
-        L.easyButton({
-          id: '2004ToggleButton',
-          states:[{
-            stateName: 'dateNotSelected',
-            icon: '<strong class="aDate">2004</strong>',
-            title: 'Show 2004 Imagery',
-            onClick: function(control) {
-              toggleYear(control, app.state.map.tileLayers.baseMapImagery2004);
-              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery2004;
-            }
-          }, {
-            stateName: 'dateSelected',
-            icon: '<strong class="aDate">2004</strong>',
-            title: 'Show 2004 Imagery',
-            onClick: function(control) {
-            }
-          }]
-        }),
-        L.easyButton({
-          id: '1996ToggleButton',
-          states:[{
-            stateName: 'dateNotSelected',
-            icon: '<strong class="aDate">1996</strong>',
-            title: 'Show 1996 Imagery',
-            onClick: function(control) {
-              toggleYear(control, app.state.map.tileLayers.baseMapImagery1996);
-              app.state.map.lastYearViewed = app.state.map.tileLayers.baseMapImagery1996;
-            }
-          }, {
-            stateName: 'dateSelected',
-            icon: '<strong class="aDate">1996</strong>',
-            title: 'Show 1996 Imagery',
-            onClick: function(control) {
-            }
-          }]
-        })
-      ];
+      app.state.map.historicalImageryButtons = []
+			_.forEach(app.config.esri.imageryLayers, function(layer, i) {
+				app.state.map.historicalImageryButtons.push(
+					L.easyButton({
+						id: layer.year+'ToggleButton',
+						states:[{
+							stateName: 'dateNotSelected',
+							icon: '<strong class="aDate">'+layer.year+'</strong>',
+							title: 'Show '+layer.year+' Imagery',
+							onClick: function(control) {
+								app.map.toggleYear(control, app.state.map.tiledLayers[i]);
+								app.state.map.lastYearViewed = app.state.map.tiledLayers[i];
+							}
+						}, {
+							stateName: 'dateSelected',
+							icon: '<strong class="aDate">'+layer.year+'</strong>',
+							title: 'Show '+layer.year+' Imagery',
+						}]
+					})
+				);
+			});
+			app.state.map.historicalImageryButtons[0].state('dateSelected');
 
       // build a toolbar with them
       theEasyBar = L.easyBar(app.state.map.historicalImageryButtons, {
         position: 'topalmostright'
       })
-
 
 			app.map.stViewToggleButton = L.easyButton({
         id: 'stViewToggleButton',
@@ -394,10 +280,7 @@ app.map = (function ()
 					stateName: 'stViewOutside',
           icon:      'fa-road fa-2x widget-icon',
           title:     'Street View Already Open in Separate Tab',
-          onClick: function(control) {
-						//app.map.toggleStView();
-						//control.state('toggleOnWidget');
-          }
+          //onClick: function(control) {}
 				}]
       });
       app.map.stViewToggleButton.addTo(_map);
@@ -430,69 +313,6 @@ app.map = (function ()
 				app.map.pictometryOpenButton.state('toggleOffWidget');
 			};
 
-      // adds and removes baseLayer and overlay
-      function toggleBasemap() {
-        if (app.state.map.nameBaseLayer == 'baseMapLight' || app.state.map.nameBaseLayer == 'baseMapDORParcels') {
-          _baseLayerGroup.clearLayers();
-          _labelLayerGroup.clearLayers();
-          if (app.state.map.lastYearViewed) {
-            _baseLayerGroup.addLayer(app.state.map.lastYearViewed);
-            _baseLayerGroup.addLayer(app.state.map.tileLayers.parcels);
-          } else {
-            _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapImagery2016);
-            _baseLayerGroup.addLayer(app.state.map.tileLayers.parcels);
-          }
-          _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayImageryLabels);
-          theEasyBar.addTo(_map);
-
-        } else {
-          _baseLayerGroup.clearLayers();
-          _labelLayerGroup.clearLayers();
-					if(app.state.activeTopic != 'deeds'){
-	          _baseLayerGroup.addLayer(app.state.map.tileLayers.baseMapLight);
-	          _labelLayerGroup.addLayer(app.state.map.tileLayers.overlayBaseLabels);
-					} else {
-						app.state.map.tileLayers.baseMapDORParcels.addTo(_baseLayerGroup);
-						app.state.map.tileLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
-					}
-          theEasyBar.remove();
-        }
-        app.map.domLayerList();
-      };
-
-
-      function toggleYear(control, requestedLayer) {
-        // gray all buttons
-        for (i = 0; i < app.state.map.historicalImageryButtons.length; i++) {
-          //console.log(app.state.map.historicalImageryButtons[i].options.id);
-          app.state.map.historicalImageryButtons[i].state('dateNotSelected');
-        };
-        _baseLayerGroup.clearLayers();
-        _baseLayerGroup.addLayer(requestedLayer);
-        _baseLayerGroup.addLayer(app.state.map.tileLayers.parcels);
-
-        // highlight current button
-        control.state('dateSelected');
-        app.map.domLayerList();
-
-      };
-
-      // set map state and localStorage on init, drag, dragend, and zoom
-			//console.log('initMap is calling LSinit');
-      app.map.LSinit();
-
-      // listen for map events
-      _map.on('click', app.map.didClickMap);
-      _map.on('drag', app.map.LSdrag);
-      _map.on('dragend', app.map.LSdragend);
-      _map.on('zoomend', app.map.LSzoomend);
-      _map.on('moveend', function(){
-        app.map.LSmoveend();
-        if (app.state.map.stViewOpen && localStorage.stViewOpen == 'true') {
-          app.map.prepareCycloBbox();
-        };
-      });
-
       // if cyclo is in outside tab, when map refreshes, if there is already a cyclo tab open, place the marker
       if (app.state.map.stViewOpen && localStorage.stViewOpen == 'true') {
         app.map.LSretrieve();
@@ -501,76 +321,16 @@ app.map = (function ()
         app.map.prepareCycloBbox();
       }
 
-/*			// switch stView to outside
-			function popoutStView(){
-				console.log('popoutStView starting');
-				var cycloPanel = document.getElementById('cyclo-panel');
-				$('#map-panel').css('height', '100%');
-				$('#map-panel').animate({
-					height: '100%'
-				}, 350, function(){
-					_map.invalidateSize();
-				});
-				$('#cyclo-panel').hide('slide', {direction: 'down'}, 350);
-			};
-
-			// toggle stView
-			function toggleStView() {
-				console.log('toggleStView starting');
-				var cycloPanel = document.getElementById('cyclo-panel');
-				//var $cycloPanel = $('#cyclo-panel');
-				if (app.state.map.stViewOpen == 'false') {
-					app.state.map.stViewOpen = 'true';
-			    localStorage.setItem('stViewOpen', 'true');
-					//console.log(app.state.map.stViewOpen);
-					$('#map-panel').animate({
-						height: '50%'
-					}, 350, function(){
-						_map.invalidateSize()
-					});
-					$('#cyclo-panel').show('slide', {direction: 'down'}, 350);
-					if (app.state.map.stViewInit == 'false') {
-				  	app.cyclo.init(cycloPanel);
-						app.state.map.stViewInit = 'true';
-					} else {
-
-						app.state.stViewConeCoords = app.map.calculateConeCoords();
-						app.map.drawStViewMarkers();
-						app.cyclo.LSsetImageProps();
-					}
-					localStorage.setItem('circlesOn', 'true');
-
-				} else {
-					app.state.map.stViewOpen = 'false';
-					localStorage.setItem('stViewOpen', 'false');
-					//console.log(app.state.map.stViewOpen);
-					$('#map-panel').css('height', '100%');
-					$('#map-panel').animate({
-						height: '100%'
-					}, 350, function(){
-						_map.invalidateSize();
-					});
-					$('#cyclo-panel').hide('slide', {direction: 'down'}, 350);
-					_stViewMarkersLayerGroup.clearLayers();
-					_cycloFeatureGroup.clearLayers();
-					localStorage.setItem('circlesOn', 'false');
-				}
-			};
-*/
-
       // watch localStorage for changes to:
-      //1. stViewOpen, 2. stViewCoords, 3. stViewYaw 4. stViewHfov
-      // there is a problem, in that when it reopens all of these things trigger it to redraw
+      //pictometryOpen, stViewOpen, stViewCoords, stViewYaw, stViewHfov
       $(window).bind('storage', function (e) {
 				console.warn(e);
 				// if pictometry window closes, change widget icon color
 				if (e.originalEvent.key == 'pictometryOpen') {
 					if (e.originalEvent.newValue == 'false') {
-						console.log('!!!!!!! ', e.originalEvent.newValue);
           	app.map.pictometryOpenButton.state('toggleOnWidget');
 					}
 					if (e.originalEvent.newValue == 'true') {
-						console.log('!!!!!!! ', e.originalEvent.newValue);
           	app.map.pictometryOpenButton.state('toggleOffWidget');
 					}
         };
@@ -584,16 +344,6 @@ app.map = (function ()
 						app.state.map.stViewOpen = 'false';
 						app.map.stViewToggleButton.state('toggleOnWidget');
         	}
-					/*if (e.originalEvent.newValue == 'true') {
-						console.log('stView opened');
-	          app.map.LSretrieve();
-	          console.log('change to stViewOpen triggered drawStViewMarkers');
-	          // this happens too quickly, or shouldn't happen if it already has been open, because you get
-	          // a marker right away that is wrong, and then it slowly moves to the right place.
-	          // need to set some kind of deferred...
-	          app.map.drawStViewMarkers();
-	          app.map.prepareCycloBbox();
-					}*/
         };
         if (e.originalEvent.key == 'stViewCoords'){
           app.state.stViewX = localStorage.getItem('stViewX');
@@ -617,6 +367,65 @@ app.map = (function ()
         };
       });
     }, // end of initMap
+
+		// Add map widget holders outside of corners - called in InitMap
+		addControlPlaceholders: function(map) {
+			console.log('addControlPlaceholders is running');
+	    var corners = map._controlCorners,
+	        l = 'leaflet-',
+	        container = map._controlContainer;
+	    function createCorner(vSide, hSide) {
+	        var className = l + vSide + ' ' + l + hSide;
+	        corners[vSide + hSide] = L.DomUtil.create('div', className, container);
+	    }
+	    createCorner('bottom', 'almostleft');
+			createCorner('top', 'almostright');
+		},
+
+		// adds and removes baseLayer and overlay
+		toggleBasemap: function() {
+			if (app.state.map.nameBaseLayer == 'baseMapLight' || app.state.map.nameBaseLayer == 'baseMapDORParcels') {
+				_baseLayerGroup.clearLayers();
+				_labelLayerGroup.clearLayers();
+				if (app.state.map.lastYearViewed) {
+					_baseLayerGroup.addLayer(app.state.map.lastYearViewed);
+					_baseLayerGroup.addLayer(app.state.map.tiledLayers.parcels);
+				} else {
+					_baseLayerGroup.addLayer(app.state.map.tiledLayers.baseMapImagery2016);
+					_baseLayerGroup.addLayer(app.state.map.tiledLayers.parcels);
+				}
+				_labelLayerGroup.addLayer(app.state.map.tiledLayers.overlayImageryLabels);
+				theEasyBar.addTo(_map);
+
+			} else {
+				_baseLayerGroup.clearLayers();
+				_labelLayerGroup.clearLayers();
+				if(app.state.activeTopic != 'deeds'){
+					_baseLayerGroup.addLayer(app.state.map.tiledLayers.baseMapLight);
+					_labelLayerGroup.addLayer(app.state.map.tiledLayers.overlayBaseLabels);
+				} else {
+					app.state.map.tiledLayers.baseMapDORParcels.addTo(_baseLayerGroup);
+					app.state.map.tiledLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
+				}
+				theEasyBar.remove();
+			}
+			app.map.domLayerList();
+		},
+
+		toggleYear: function(control, requestedLayer) {
+			// gray all buttons
+			for (i = 0; i < app.state.map.historicalImageryButtons.length; i++) {
+				//console.log(app.state.map.historicalImageryButtons[i].options.id);
+				app.state.map.historicalImageryButtons[i].state('dateNotSelected');
+			};
+			_baseLayerGroup.clearLayers();
+			_baseLayerGroup.addLayer(requestedLayer);
+			_baseLayerGroup.addLayer(app.state.map.tiledLayers.parcels);
+
+			// highlight current button
+			control.state('dateSelected');
+			app.map.domLayerList();
+		},
 
 		// switch stView to outside
 		popoutStView: function() {
@@ -676,7 +485,6 @@ app.map = (function ()
 			}
 		},
 
-
 		// add names of layers on the map to the DOM
     domLayerList: function() {
       _map.eachLayer(function(layer){
@@ -702,20 +510,8 @@ app.map = (function ()
       })
     },
 
-    // didSelectAddress: function () {
-		// 	console.log('did select address is calling createAddressMarkers');
-		// 	this.createAddressMarkers();
-		//
-    //   //if (app.state.dor) this.drawParcel();
-		// 	// if (app.state.activeTopic == 'elections') {
-		// 	// 	app.map.removeElectionInfo();
-		// 	// 	app.map.addElectionInfo();
-		// 	// }
-    // },
-
 		didCreateAddressMarker: function (markerType) {
 			// console.log('did create address marker', markerType);
-
 			var targetMarkerType = this.addressMarkerTypeForTopic(app.state.activeTopic);
 			if (markerType === targetMarkerType) {
 				// console.log('this is the marker we want to show')
@@ -894,151 +690,7 @@ app.map = (function ()
       });
     },
 
-		/*createAddressMarkers: function () {
-			console.log('create address markers');
 
-			// make sure we have both dor and pwd in state. otherwise, return.
-			// if (!(app.state.dor && app.state.pwd)) {
-			// 	console.log('create address markers, but we dont have parcels yet')
-			// 	return;
-			// }
-
-			var parcelPolyDOR, parcelPolyWater, aisMarker, parcelCentroid;
-
-			if (app.state.dor) {
-				// if there's no parcel in state, clear the map and don't render
-				// TODO zoom to AIS xy
-				var parcelDOR, geomDOR;
-
-				try {
-					parcelDOR = app.state.dor.features[0];
-					if (!parcelDOR) throw 'no parcel';
-					geomDOR = parcelDOR.geometry;
-					//center = geom.getBounds().getCenter();
-					//app.state.center = center;
-
-					var coordsDOR = app.util.flipCoords(geomDOR.coordinates);
-					parcelPolyDOR = L.polygon([coordsDOR], {
-						color: 'blue',
-						weight: 2,
-						name: 'parcelPolyDOR',
-						type: 'parcel',
-					});
-					parcelCentroid = parcelPolyDOR.getBounds().getCenter();
-				}
-				catch(err) {
-					console.log('draw parcel, but could not get parcel from state', err);
-					// clear parcel
-					// _parcelLayerGroup.clearLayers();
-					// return;
-				}
-			}
-
-			if (app.state.pwd) {
-				var parcelWater = app.state.pwd.features[0],
-						geomWater = parcelWater.geometry,
-						coordsWater = app.util.flipCoords(geomWater.coordinates);
-				parcelPolyWater = L.polygon([coordsWater], {
-					color: 'blue',
-					weight: 2,
-					name: 'parcelPolyWater',
-					type: 'parcel',
-				});
-			}
-
-			var aisGeom = app.state.ais.feature.geometry;
-			console.log('create marker is about to check ais geom', app.state);
-			if (aisGeom) {
-				console.log('we have ais geom gonna make the marker')
-				aisMarker = new L.Marker.SVGMarker([aisGeom.coordinates[1], aisGeom.coordinates[0]], {
-					"iconOptions": {
-						className: 'svg-icon-noClick',
-						circleRatio: 0,
-						color: 'rgb(255,30,30)',//'rgb(255,200,50)',
-						fillColor: 'rgb(255,60,30)',//'rgb(255,200,50)',
-						fillOpacity: 0.8,
-						iconSize: app.map.largeMarker,
-					},
-					title: 'current parcel',
-					name: 'parcelMarker',
-					type: 'parcel',
-				});
-			}
-
-			// app.state.theParcelCentroid = parcelCentroid;
-			app.state.map.addressMarkers = {};
-
-			app.state.map.addressMarkers.parcelPolyDOR = parcelPolyDOR;
-			app.state.map.addressMarkers.parcelPolyWater = parcelPolyWater;
-			app.state.map.addressMarkers.aisMarker = aisMarker;
-
-			console.log('created address markers', app.state.map.addressMarkers);
-
-			// calling LSinit will alert Pictometry and cyclo to change
-			app.map.LSinit();
-		},*/
-
-    /*drawParcel: function () {
-			console.log('running drawParcel');
-
-      // clear existing parcel
-      _parcelLayerGroup.clearLayers();
-
-      // pan map
-      // 'true' if search button was clicked or if page is loaded w address parameter, 'false' if a parcel was clicked
-      if (app.state.map.shouldPan) {
-        // zoom to bounds of parcel poly plus some buffer
-				if (app.state.map.addressMarkers.parcelPolyDOR) {
-	        var boundsPadded = app.state.map.addressMarkers.parcelPolyDOR.getBounds().pad(1.15);
-	        // _map.fitBounds(bounds, {padding: ['20%', '20%']});
-	        _map.fitBounds(boundsPadded);
-	        // or need to use parcel centroid instead of center of map
-	        // set new state and localStorage
-				};
-      };
-			// calling LSinit will alert Pictometry and cyclo to change
-			app.map.LSinit();
-
-      // add to map
-			if (app.state.activeTopic == 'deeds') {
-	      _parcelLayerGroup.addLayer(parcelPolyDOR);
-			} else if (app.state.activeTopic == 'water') {
-				_parcelLayerGroup.addLayer(parcelPolyWater);
-			} else {
-				// console.log('placing marker')
-				_parcelLayerGroup.addLayer(parcelMarker);
-			}
-			app.map.domLayerList();
-
-      // area method 2
-      var areaRequestGeom = '[' + JSON.stringify(geomDOR).replace('"type":"Polygon","coordinates"', '"rings"') + ']';
-      $.ajax({
-        url: '//gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/areasAndLengths',
-        data: {
-          polygons: areaRequestGeom,
-          sr: 4326,
-          calculationType: 'geodesic',
-          f: 'json',
-          areaUnit: '{"areaUnit" : "esriSquareFeet"}',
-          lengthUnit: 9002,
-        },
-        success: function (dataString) {
-          // console.log('got polygon with area', dataString, this.url);
-          var data = JSON.parse(dataString),
-              area = Math.round(data.areas[0]),
-              perimeter = Math.round(data.lengths[0]);
-          $('#deeds-area').text(area + ' sq ft');
-          $('#deeds-perimeter').text(perimeter + ' ft');
-        },
-        error: function (err) {
-          console.log('polygon area error', err);
-        },
-      });
-    }, // end of drawPolygon*/
-
-    // LocalStorage functions
-    // on init, put center and zoom in LocalStorage, in case
-    // Pictometry or cyclo are used
     LSinit: function() {
 			console.log('LSinit is running');
 			app.state.theCenter = _map.getCenter();
@@ -1080,8 +732,7 @@ app.map = (function ()
       localStorage.setItem('pictCoordsZoom', [app.state.leafletCenterX, app.state.leafletCenterY, app.state.theZoom]);
     },
 
-    // when map is finished being dragged, 1 more time reset
-    // the center in localStorage
+    // when map is finished being dragged, 1 more time reset the center in localStorage
     // this will move Pictometry AND cyclo
     LSdragend: function() {
       app.state.theCenter = _map.getCenter();
@@ -1230,12 +881,6 @@ app.map = (function ()
     didChangeTopic: function (prevTopic, nextTopic) {
 			console.log('did change topic', prevTopic, '=>', nextTopic);
 
-			// if we don't have both parcels, don't do anything
-			// if (!(app.state.dor && app.state.pwd)) {
-			// 	console.warn('did change topic, but we dont have parcels yet, returning')
-				// return;
-			// }
-
 			// handle address marker
 			var prevMarkerType = this.addressMarkerTypeForTopic(prevTopic),
 					nextMarkerType = this.addressMarkerTypeForTopic(nextTopic);
@@ -1259,7 +904,7 @@ app.map = (function ()
 				if (prevBasemapName !== nextBasemapName) {
 					// replace the basemap
 					_baseLayerGroup.clearLayers();
-					app.state.map.tileLayers[nextBasemapName].addTo(_baseLayerGroup);
+					app.state.map.tiledLayers[nextBasemapName].addTo(_baseLayerGroup);
 					// update state
 					app.state.nameBaseLayer = nextBasemapName;
 				}
@@ -1295,7 +940,7 @@ app.map = (function ()
 			if (prevLabelLayer !== nextLabelLayer) {
 				// replace labels
 				_labelLayerGroup.clearLayers();
-				app.state.map.tileLayers[nextLabelLayer].addTo(_labelLayerGroup);
+				app.state.map.tiledLayers[nextLabelLayer].addTo(_labelLayerGroup);
 			}
 
       // console.log('did change topic', prevTopic, '=>', nextTopic);
