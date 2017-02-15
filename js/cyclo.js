@@ -28,7 +28,7 @@ app.cyclo = ( function () {
     init: function (containerDiv) {
       cycloDiv = $('<div>').addClass('panoramaViewerWindow').attr('id', 'cyclo-viewer')[0];
       $(containerDiv).html('<div id="cyclo-spinner"><i class="fa fa-spinner fa-2x spin"></i>Loading Street View...</div>')
-      $(containerDiv).append('<div id="inCycloDiv"><i class="fa fa-external-link-square fa-2x popout-icon"></i></div>');
+      $(containerDiv).append('<div id="inCycloDiv"><i class="fa fa-external-link fa popout-icon"></i></div>');
       $(containerDiv).append(cycloDiv);
       StreetSmartApi.init({
         username: app.config.cyclo.username,

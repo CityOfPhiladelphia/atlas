@@ -119,10 +119,31 @@ var app = _.extend(app || {},
     // clear active topic in localStorage
     localStorage.removeItem('activeTopic');
 
+
+    /*
+    VACANCIES
+    */
+    // populate dropdown
+    _.forEach(app.config.nearby.activityTypes, function (activityType) {
+      var $option = $('<option>'),
+          label = activityType.label,
+          slug = app.util.slugify(label);
+      $option.attr({value: slug});
+      $option.text(label);
+      $('#vacancies-nearby-activity-type').append($option);
+    });
+
+    // listen for changes to nearby activity dropdown selection
+    $('#vacancies-nearby-activity-type').change(app.getNearbyActivity);
+    // $('#nearby-activity-timeframe').change(app.filterNearbyActivityByTimeframe);
+    $('#vacancies-nearby-activity-timeframe').change(app.didGetNearbyActivity);
+    // $('#nearby-activity-sort').change(app.sortNearbyActivity);
+    $('#vacancies-nearby-activity-sort').change(app.didGetNearbyActivity);
+
+
     /*
     NEARBY
     */
-
     // populate dropdown
     _.forEach(app.config.nearby.activityTypes, function (activityType) {
       var $option = $('<option>'),
@@ -1787,8 +1808,8 @@ var app = _.extend(app || {},
     app.util.formatTableFields($table);
   },
 
-  getNearbyActivity: function () {
-    var $nearbyActivityType = $('#nearby-activity-type'),
+  getNearbyActivity: function (topic) {
+    var $nearbyActivityType = $('#'+topic+'-activity-type'),
         $selected = $nearbyActivityType.find(':selected'),
         label = $('#nearby-activity-type :selected').text();
 

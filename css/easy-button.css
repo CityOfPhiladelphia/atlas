@@ -99,21 +99,29 @@
   height: 30px;
   width: 30px;
   background-color: #ffffff;
-  padding-top: 3px;
+  padding-top: 4px;
 }
 
 .easy-button-button.toggleOffWidget-active {
   height: 30px;
   width: 30px;
-  background-color: #f99300;
-  padding-top: 3px;
+  /*background-color: #f99300;*/
+  /*background-color: rgba(249, 147, 0, 0.5);*/
+  /*background-color: #F9A72D;*/
+  background-color: rgb(243, 198, 19);
+  /*background: rgba(243, 198, 19, 0.4);*/
+  padding-top: 4px;
 }
 
 .easy-button-button.stViewOutside-active {
   height: 30px;
   width: 30px;
-  background-color: #f99300;
-  padding-top: 3px;
+  /*background-color: #f99300;*/
+  /*background-color: #F9A72D;*/
+  background-color: rgb(243, 198, 19);
+  /*background: rgba(243, 198, 19, 0.4);*/
+  /*background-color: rgba(249, 147, 0, 0.5);*/
+  padding-top: 4px;
 }
 
 .easy-button-button.dateNotSelected-active {
@@ -126,6 +134,10 @@
   height: 30px;
   width: 35px;
   background-color: #ffffff
+}
+
+.widget-icon {
+  font-size: 15px;
 }
 
 .aDate {
