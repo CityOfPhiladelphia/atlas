@@ -26,7 +26,9 @@ var app = _.extend(app || {},
     },
     didFinishDorRequest: false,
     didFinishPwdRequest: false,
-    vacancy: {},
+    vacancy: {
+      selected: 'vacantLand',
+    },
   },
 
   // start app
@@ -129,27 +131,42 @@ var app = _.extend(app || {},
     Vacancy
     */
 
-    $('.vacancy-radio').click(function(){
-      app.placeVacancyMarker();
-      app.map.didClickVacancyRadioButton(this.id);
+    $('.vacancy-button').click(function (e) {
+      e.preventDefault();
+      var buttonClass = this.getAttribute('class');
+      if (buttonClass.includes('hollow')) {
+        //var container = $('#vacancy-button-container');
+        //var buttons =
+        _.forEach($('.vacancy-button'), function (tag) {
+          tag.setAttribute('class', 'button hollow vacancy-button');
+        })
+        this.setAttribute('class', 'button vacancy-button');
+        app.state.vacancy.selected = this.id
+        app.placeVacancyMarker();
+        app.map.didClickVacancyRadioButton(this.id);
+      } else {
+        console.log('button already selected');
+      }
     });
+
 
     // populate dropdown
-    _.forEach(app.config.nearby.activityTypes, function (activityType) {
-      var $option = $('<option>'),
-          label = activityType.label,
-          slug = app.util.slugify(label);
-      $option.attr({value: slug});
-      $option.text(label);
-      $('#vacancy-nearby-activity-type').append($option);
-    });
+    // only do first 3
+    // for (i=0; i<2; i++) {
+    //   var $option = $('<option>'),
+    //   label = app.config.nearby.activityTypes[i].label,
+    //   slug = app.util.slugify(label);
+    //   $option.attr({value: slug});
+    //   $option.text(label);
+    //   $('#vacancy-nearby-activity-type').append($option);
+    // };
 
     // listen for changes to nearby activity dropdown selection
-    $('#vacancy-nearby-activity-type').change(app.getNearbyActivity);
-    // $('#nearby-activity-timeframe').change(app.filterNearbyActivityByTimeframe);
-    $('#vacancy-nearby-activity-timeframe').change(app.didGetNearbyActivity);
-    // $('#nearby-activity-sort').change(app.sortNearbyActivity);
-    $('#vacancy-nearby-activity-sort').change(app.didGetNearbyActivity);
+    // $('#vacancy-nearby-activity-type').change(app.getNearbyActivity);
+    // // $('#nearby-activity-timeframe').change(app.filterNearbyActivityByTimeframe);
+    // $('#vacancy-nearby-activity-timeframe').change(app.didGetNearbyActivity);
+    // // $('#nearby-activity-sort').change(app.sortNearbyActivity);
+    // $('#vacancy-nearby-activity-sort').change(app.didGetNearbyActivity);
 
     /*
     NEARBY
@@ -159,17 +176,26 @@ var app = _.extend(app || {},
       var $option = $('<option>'),
           label = activityType.label,
           slug = app.util.slugify(label);
+
       $option.attr({value: slug});
       $option.text(label);
       $('#nearby-activity-type').append($option);
+
+      console.warn('%%%%%%%% ', label)
+      console.warn($('#nearby-activity-type').children().length)
+
+      // don't add appeals to vacancy nearby selector
+      if (['311 Requests', 'Crime Incidents'].indexOf(label) > -1) {
+        $('#vacancy-nearby-activity-type').append($option.clone());
+      }
     });
 
     // listen for changes to nearby activity dropdown selection
-    $('#nearby-activity-type').change(app.getNearbyActivity);
+    $('[id$=nearby-activity-type]').change(app.getNearbyActivity);
     // $('#nearby-activity-timeframe').change(app.filterNearbyActivityByTimeframe);
-    $('#nearby-activity-timeframe').change(app.didGetNearbyActivity);
+    $('[id$=nearby-activity-timeframe]').change(app.didGetNearbyActivity);
     // $('#nearby-activity-sort').change(app.sortNearbyActivity);
-    $('#nearby-activity-sort').change(app.didGetNearbyActivity);
+    $('[id$=nearby-activity-sort]').change(app.didGetNearbyActivity);
 
     /*
     ROUTING
@@ -1415,8 +1441,7 @@ var app = _.extend(app || {},
   },
 
   placeVacancyMarker: function() {
-    var selectedVacancyButton = $('#vacancy-buttons .vacancy-radio:checked').attr('id');
-    console.log('!!!!!!!!!!!! ', app.state.vacancy[selectedVacancyButton]);
+    var selectedVacancyButton = app.state.vacancy.selected;
     var currentWidth = $('#vacancy-marker-line').width();
     var currentMarkerPosition = app.state.vacancy[selectedVacancyButton] * currentWidth
     $('#vacancy-marker-line').css('padding-left', currentMarkerPosition);
@@ -1888,9 +1913,11 @@ var app = _.extend(app || {},
   },
 
   getNearbyActivity: function () {
-    var $nearbyActivityType = $('#nearby-activity-type'),
+    var activeTopic = app.state.activeTopic,
+        prefix = activeTopic === 'nearby' ? 'nearby' : 'vacancy-nearby',
+        $nearbyActivityType = $('#'+prefix+'-activity-type'),
         $selected = $nearbyActivityType.find(':selected'),
-        label = $('#nearby-activity-type :selected').text();
+        label = $('#'+prefix+'-activity-type :selected').text();
 
     console.log('get activity for: ', label);
 
@@ -1908,13 +1935,12 @@ var app = _.extend(app || {},
         url = app.config.socrata.baseUrl + socrataId + '.json',
 
         // form query
-        query = 'DISTANCE_IN_METERS(location, POINT(' + aisX + ',' + aisY + ')) <= ' + radiusMeters;
         where = 'within_circle(' + ['shape', aisY, aisX, radiusMeters].join(', ') + ')',
         fieldMap = activityType.fieldMap,
         distanceFn = "DISTANCE_IN_METERS(shape, 'POINT(" + aisX + ' ' + aisY + ")') * 3.28084",
         selectComps = _.values(fieldMap).concat([
                         'shape',
-                         distanceFn + "AS distance",
+                        distanceFn + "AS distance",
                       ]);
         select = selectComps.join(', ');
 
@@ -1948,43 +1974,48 @@ var app = _.extend(app || {},
   },
 
   didGetNearbyActivity: function () {
-    // console.info('did get nearby activity', app.state.nearby.data);
+    //console.info('did get nearby activity', app.state.nearby.data);
+
+    var activeTopic = app.state.activeTopic,
+        prefix = activeTopic === 'nearby' ? 'nearby' : 'vacancy-nearby';
 
     // munge, filter, sort, make html
     var rows = app.state.nearby.data,
-        daysBack = $('#nearby-activity-timeframe').val(),
-        label = $('#nearby-activity-type :selected').text(),
+        tableId = prefix + '-activity',
+        daysBack = $('#' + tableId + '-timeframe').val(),
+        label = $('#' + tableId + '-type :selected').text(),
         activityTypes = app.config.nearby.activityTypes,
         activityTypeDef = _.filter(activityTypes, {label: label})[0],
         fieldMap = activityTypeDef.fieldMap,
         dateField = fieldMap.date,
         rowsFiltered = app.util.filterJsonByTimeframe(rows, dateField, daysBack),
-        sortMethod = $('#nearby-activity-sort').val(),
+        sortMethod = $('#' + tableId + '-sort').val(),
         sortField = sortMethod === 'date' ? dateField : 'distance',
         sortDirection = sortMethod === 'date'? 'desc' : 'asc',
         rowsSorted = _.orderBy(rowsFiltered, sortField, [sortDirection]),
         fields = _.values(fieldMap).concat(['distance']),
         tbodyHtml = app.util.makeTableRowsFromJson(rowsSorted, fields),
-        $tbody = $('#nearby-activity > tbody');
-    app.state.nearby.rowsSorted = rowsSorted
+        $tbody = $('#' + tableId + ' > tbody');
+
+    app.state.nearby.rowsSorted = rowsSorted;
 
     // populate table
     $tbody.html(tbodyHtml);
 
     // update table header
-    $('#nearby-activity-table-title').text(label);
+    $('#' + tableId + '-table-title').text(label);
 
     // update counter
-    $('#nearby-activity-count').text(' (' + rowsFiltered.length + ')');
+    $('#' + tableId + '-count').text(' (' + rowsFiltered.length + ')');
 
     // apply transforms
-    app.util.formatTableFields($('#nearby-activity'));
+    app.util.formatTableFields($('#' + tableId));
 
     // TEMP attribute rows with appeal id and distance
     _.forEach($tbody.find('tr'), function (row, i) {
       var dataRow = rowsSorted[i],
-          id = dataRow.id,
-          $tableRow = $(row);
+      id = dataRow.id,
+      $tableRow = $(row);
       $tableRow.attr('data-id', dataRow.id);
     });
 
@@ -1992,12 +2023,13 @@ var app = _.extend(app || {},
     // app.map.renderNearbyActivity(rowsFiltered);
 
     // refresh them on map if topic accordion is open
-    var $targetTopic = $('#topic-nearby');
+    var $targetTopic = prefix === 'nearby' ? $('#topic-nearby') : $('#topic-vacancy');
     if ($targetTopic.is(':visible')){
-    //if ($('#topic-nearby').attr('style') == 'display: block;') {
+      //if ($('#topic-nearby').attr('style') == 'display: block;') {
       //console.log($('#topic-nearby').attr('style'));
       //console.log('refreshing appeals layer');
       // app.map.removeNearbyActivity();
+      //console.log('rowsSorted is ', rowsSorted);
       app.map.addNearbyActivity(rowsSorted);
     };
 

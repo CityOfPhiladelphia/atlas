@@ -423,3 +423,10 @@ table {
   width: 3px;
   background: #000000;
 }
+
+#vacancy-button-container {
+  /*justify-content:center;
+  align-items:center;*/
+  text-align: center;
+  padding-bottom: 20px;
+}

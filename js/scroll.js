@@ -27,13 +27,13 @@ function check(row) {
         i, j, cur;
     //for (i = 0, j = tr.length; i < j; i++) {
         //cur = tr[i];
-        console.log(container);
-        console.log(theRow);
+        //console.log(container);
+        //console.log(theRow);
         if (isElementInViewport(container, theRow)) {
             //visible.push(theRow);
-            console.log('row ' + row + ' is visible');
+            //console.log('row ' + row + ' is visible');
         } else {
-          console.log('row ' + row + ' is not visible');
+          //console.log('row ' + row + ' is not visible');
           var container2 = $('#topic-panel');
           var theRow2 = $('[data-id ='+row+']');
           theRow2.get(0).scrollIntoView();

@@ -503,7 +503,7 @@ app.map = (function ()
 		},
 
 		didClickVacancyRadioButton: function(buttonId) {
-			console.log('didClickVacancyRadioButton ran');
+			console.log('didClickVacancyRadioButton ran with ', buttonId);
 			_overlayLayerGroup.clearLayers();
 			var newOverlay = app.state.map.featureServices[buttonId];
 			newOverlay.addTo(_overlayLayerGroup);
@@ -999,14 +999,6 @@ app.map = (function ()
 				}
 			});
 
-			// handle vacancy
-			if (nextTopic === 'vacancy') {
-				var selectedVacancyButton = $('#vacancy-buttons .vacancy-radio:checked').attr('id');
-				app.map.didClickVacancyRadioButton(selectedVacancyButton);
-				//app.map.didClickVacancyRadioButton('vacantLand');
-				//app.map.didClickVacancyRadioButton('vacantBuildings');
-			}
-
 			// handle water
 			if (nextTopic === 'water') {
 				console.warn('adding water overlay');
@@ -1036,6 +1028,19 @@ app.map = (function ()
 				this.removeElectionInfo();
 			}
 
+			// handle vacancy
+			if (nextTopic === 'vacancy') {
+				var selectedVacancyButton = app.state.vacancy.selected;
+				console.log('!!!!!!!!!!!! ', app.state.vacancy[selectedVacancyButton]);
+				app.map.didClickVacancyRadioButton(selectedVacancyButton);
+				//app.map.didClickVacancyRadioButton('vacantLand');
+				//app.map.didClickVacancyRadioButton('vacantBuildings');
+				this.addNearbyActivity();
+			}
+			else if (prevTopic === 'vacancy') {
+				app.map.removeNearbyActivity();
+			}
+
 			// handle nearby activity
 			if (nextTopic === 'nearby') {
 				this.addNearbyActivity();
@@ -1044,6 +1049,7 @@ app.map = (function ()
 				this.removeNearbyActivity();
 			}
 
+			// local storage stuff
 			localStorage.setItem('previousTopic', prevTopic);
 			localStorage.setItem('activeTopic', nextTopic);
 			console.log('got to end of didChangeTopic');
@@ -1232,11 +1238,12 @@ app.map = (function ()
 		},
 
 		addNearbyActivity: function (rows) {
-			// console.info('add nearby activity', rows);
+			console.debug('add nearby activity', rows);
+
+			app.state.map.nearbyActivity = app.state.map.nearbyActivity || {};
 
 			// if no rows were passed in, get them from state
 			if (!rows) {
-					app.state.map.nearbyActivity = app.state.map.nearbyActivity || {};
 					app.state.map.nearbyActivity.data = app.state.nearby.rowsSorted || {};
 					rows = app.state.map.nearbyActivity.data;
 			} else {
