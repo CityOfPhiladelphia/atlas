@@ -48,7 +48,6 @@ WFSClient.prototype.getImageInfo = function (imageId, callback_)
 	http.open("POST", url , true);
 	//http.setRequestHeader("Content-length", postData.length);
 	http.setRequestHeader("Content-type", "text/xml");
-	//http.setRequestHeader("apiKey", "mbYh-jcxeTod-DcNu38dej0F-TQR-H85WropuDoNmbUJa_sxiT8J2b8pOP0VuTQd");
 	this.callback = callback_;
 	http.onreadystatechange = function()
 	{
