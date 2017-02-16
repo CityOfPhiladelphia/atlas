@@ -213,6 +213,23 @@ var app = app || {};
         zIndex: 4,
       },
     },
+    featureServices: {
+      vacantLand: {
+        url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Land/FeatureServer/0',
+        type: 'overlay',
+        zIndex: 4,
+      },
+      vacantBuildings: {
+        url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Bldg/FeatureServer/0',
+        type: 'overlay',
+        zIndex: 4,
+      },
+      vacancyPercent: {
+        url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/VacancyBlockPercentage/FeatureServer/2',
+        type: 'overlay',
+        zIndex: 4,
+      }
+    },
     otherLayers: {
       parcelLayerDOR: {
         url: '//gis.phila.gov/arcgis/rest/services/DOR_ParcelExplorer/rtt_basemap/MapServer/24',

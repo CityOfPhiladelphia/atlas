@@ -382,3 +382,44 @@ table {
   margin-top: -1px;
   color: #000000;
 }
+
+#vacancy-scale {
+  margin: 0 auto;
+  height: 25px;
+  width: 100%;
+  margin-top: 10px;
+  /*margin-bottom: 40px;*/
+  background: #76ff32; /* Old browsers */
+  background: -moz-linear-gradient(left, #76ff32 0%, #fff67a 36%, #ffc97a 67%, #ff7a7a 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, #76ff32 0%,#fff67a 36%,#ffc97a 67%,#ff7a7a 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #76ff32 0%,#fff67a 36%,#ffc97a 67%,#ff7a7a 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#76ff32', endColorstr='#ff7a7a',GradientType=1 ); /* IE6-9 */
+}
+
+#vacancy-scale-caption-low {
+  float: left;
+  margin-left: 5px;
+}
+
+#vacancy-scale-caption-high {
+  float: right;
+  margin-right: 5px;
+}
+
+.vacancy-scale-caption {
+  color: #222;
+  /*margin-top: 10px;*/
+}
+
+#vacancy-marker-line {
+  margin: 0 auto;
+  height: 10px;
+  width: 100%;
+  /*background: #76ff32;*/
+}
+
+#vacancy-marker {
+  height: 25px;
+  width: 3px;
+  background: #000000;
+}

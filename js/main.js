@@ -10,6 +10,10 @@ NOTE: this is just a demo - lots of jQuery soup ahead :)
      console.log(e.originalEvent.key, e.originalEvent.newValue);
 });*/
 
+$(window).resize(function(){
+  app.placeVacancyMarker();
+})
+
 var app = _.extend(app || {},
 {
   // initial app state
@@ -22,6 +26,7 @@ var app = _.extend(app || {},
     },
     didFinishDorRequest: false,
     didFinishPwdRequest: false,
+    vacancy: {},
   },
 
   // start app
@@ -121,8 +126,14 @@ var app = _.extend(app || {},
 
 
     /*
-    VACANCIES
+    Vacancy
     */
+
+    $('.vacancy-radio').click(function(){
+      app.placeVacancyMarker();
+      app.map.didClickVacancyRadioButton(this.id);
+    });
+
     // populate dropdown
     _.forEach(app.config.nearby.activityTypes, function (activityType) {
       var $option = $('<option>'),
@@ -130,16 +141,15 @@ var app = _.extend(app || {},
           slug = app.util.slugify(label);
       $option.attr({value: slug});
       $option.text(label);
-      $('#vacancies-nearby-activity-type').append($option);
+      $('#vacancy-nearby-activity-type').append($option);
     });
 
     // listen for changes to nearby activity dropdown selection
-    $('#vacancies-nearby-activity-type').change(app.getNearbyActivity);
+    $('#vacancy-nearby-activity-type').change(app.getNearbyActivity);
     // $('#nearby-activity-timeframe').change(app.filterNearbyActivityByTimeframe);
-    $('#vacancies-nearby-activity-timeframe').change(app.didGetNearbyActivity);
+    $('#vacancy-nearby-activity-timeframe').change(app.didGetNearbyActivity);
     // $('#nearby-activity-sort').change(app.sortNearbyActivity);
-    $('#vacancies-nearby-activity-sort').change(app.didGetNearbyActivity);
-
+    $('#vacancy-nearby-activity-sort').change(app.didGetNearbyActivity);
 
     /*
     NEARBY
@@ -1025,6 +1035,11 @@ var app = _.extend(app || {},
     });
 
     /*
+    VACANCY
+    */
+    app.runVacancyQueries(aisGeom);
+
+    /*
     NEARBY
     */
 
@@ -1342,6 +1357,70 @@ var app = _.extend(app || {},
 
     var count = features.length;
     $('#zoning-overlays-count').html(' (' + count + ')');
+  },
+
+  runVacancyQueries: function (aisGeom) {
+    var vacantLandQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Land/FeatureServer/0'});
+    vacantLandQuery.contains(aisGeom);
+    vacantLandQuery.run(app.didGetVacantLandResult);
+
+    var vacantBuildingsQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Bldg/FeatureServer/0'});
+    vacantBuildingsQuery.contains(aisGeom);
+    vacantBuildingsQuery.run(app.didGetVacantBuildingResult);
+
+    var vacantBlockPercentQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/VacancyBlockPercentage/FeatureServer/2'});
+    vacantBlockPercentQuery.contains(aisGeom);
+    vacantBlockPercentQuery.run(app.didGetVacantBlockPercentResult);
+  },
+
+
+  didGetVacantLandResult: function (error, featureCollection, response) {
+    var features = featureCollection.features;
+    if (features.length) {
+      app.state.vacancy.vacantLand = features[0].properties['LAND_RANK'];
+    } else {
+      app.state.vacancy.vacantLand = 0;
+    }
+    if(app.state.activeTopic == 'vacancy') {
+      app.placeVacancyMarker();
+    };
+  },
+
+  didGetVacantBuildingResult: function (error, featureCollection, response) {
+    var features = featureCollection.features;
+    if (features.length) {
+      app.state.vacancy.vacantBuildings = features[0].properties['BUILD_RANK'];
+    } else {
+      app.state.vacancy.vacantBuildings = 0;
+    }
+    if(app.state.activeTopic == 'vacancy') {
+      app.placeVacancyMarker();
+    };
+  },
+
+  didGetVacantBlockPercentResult: function (error, featureCollection, response) {
+    //console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+    var features = featureCollection.features;
+    //console.log(features);
+    if (features.length) {
+      app.state.vacancy.vacancyPercent = features[0].properties['PercentVacant'];
+      //app.state.vacancy.percentVacantBuilding = features[0].properties['PercentVacantBuilding'];
+      //app.state.vacancy.percentVacantLand = features[0].properties['PercentVacantLand'];
+    } else {
+      app.state.vacancy.vacancyPercent = 0;
+    }
+    if(app.state.activeTopic == 'vacancy') {
+      app.placeVacancyMarker();
+    };
+  },
+
+  placeVacancyMarker: function() {
+    var selectedVacancyButton = $('#vacancy-buttons .vacancy-radio:checked').attr('id');
+    console.log('!!!!!!!!!!!! ', app.state.vacancy[selectedVacancyButton]);
+    var currentWidth = $('#vacancy-marker-line').width();
+    var currentMarkerPosition = app.state.vacancy[selectedVacancyButton] * currentWidth
+    $('#vacancy-marker-line').css('padding-left', currentMarkerPosition);
+    $('#vacancy-scale').css('padding-left', currentMarkerPosition+5);
   },
 
   // long code => description
@@ -1808,12 +1887,12 @@ var app = _.extend(app || {},
     app.util.formatTableFields($table);
   },
 
-  getNearbyActivity: function (topic) {
-    var $nearbyActivityType = $('#'+topic+'-activity-type'),
+  getNearbyActivity: function () {
+    var $nearbyActivityType = $('#nearby-activity-type'),
         $selected = $nearbyActivityType.find(':selected'),
         label = $('#nearby-activity-type :selected').text();
 
-    // console.log('get activity for: ', label);
+    console.log('get activity for: ', label);
 
     // make sure we have an XY first
     // TODO clear out 'nearby' content if no XY.

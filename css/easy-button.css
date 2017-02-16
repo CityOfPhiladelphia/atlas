@@ -99,7 +99,7 @@
   height: 30px;
   width: 30px;
   background-color: #ffffff;
-  padding-top: 4px;
+  padding-bottom: 10px;
 }
 
 .easy-button-button.toggleOffWidget-active {
@@ -110,7 +110,7 @@
   /*background-color: #F9A72D;*/
   background-color: rgb(243, 198, 19);
   /*background: rgba(243, 198, 19, 0.4);*/
-  padding-top: 4px;
+  padding-bottom: 2px;
 }
 
 .easy-button-button.stViewOutside-active {
@@ -121,7 +121,7 @@
   background-color: rgb(243, 198, 19);
   /*background: rgba(243, 198, 19, 0.4);*/
   /*background-color: rgba(249, 147, 0, 0.5);*/
-  padding-top: 4px;
+  padding-bottom: 2px;
 }
 
 .easy-button-button.dateNotSelected-active {
@@ -149,4 +149,18 @@
 .leaflet-control-measure-toggle {
   width: 36px;
   height: 36px;
+}
+
+#stViewToggleButton img {
+  position: absolute;
+  top: 3px;
+  right: 6px;
+  height: 21px;
+  width: 17px;
+}
+
+#pictometryOpenButton img {
+  position: absolute;
+  top: 1px;
+  right: 5px;
 }

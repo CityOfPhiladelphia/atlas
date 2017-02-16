@@ -85,6 +85,7 @@ app.map = (function ()
       app.state.map.namesOverLayers = [];
 
       // objects that hold the actual layers
+			app.state.map.featureServices = {};
       app.state.map.tiledLayers = {};
       app.state.map.mapServices = {};
       //app.state.map.appealsLayerGroup = new L.LayerGroup();
@@ -142,6 +143,17 @@ app.map = (function ()
 	        type: layer.type,
 	        zIndex: layer.zIndex,
 	      });
+			});
+
+			// Feature services
+			_.forEach(app.config.esri.featureServices, function(layer, i) {
+				app.state.map.featureServices[i] = L.esri.featureLayer({
+					url: layer.url,
+					maxZoom: 22,
+					name: i,
+					type: layer.type,
+					zIndex: layer.zIndex,
+				});
 			});
 
 			// Overlays
@@ -262,7 +274,8 @@ app.map = (function ()
         position: 'topright',
         states: [{
           stateName: 'toggleOnWidget',
-          icon:      'fa-road fa widget-icon',
+          //icon:      'fa-road fa widget-icon',
+					icon: '<img src="css/images/cyclo.png">',
           title:     'Toggle On Street View',
           onClick: function(control) {
 						app.map.toggleStView();
@@ -270,7 +283,8 @@ app.map = (function ()
 					}
         }, {
           stateName: 'toggleOffWidget',
-          icon:      'fa-road fa widget-icon',
+          //icon:      'fa-road fa widget-icon',
+					icon: '<img src="css/images/cyclo.png">',
           title:     'Toggle Off Street View',
           onClick: function(control) {
 						app.map.toggleStView();
@@ -278,11 +292,11 @@ app.map = (function ()
           }
         }, {
 					stateName: 'stViewOutside',
-          icon:      'fa-road fa widget-icon',
+          //icon:      'fa-road fa widget-icon',
+					icon: '<img src="css/images/cyclo.png">',
           title:     'Street View Already Open in Separate Tab',
           //onClick: function(control) {}
 				}]
-//>>>>>>> cycloIn
       });
       app.map.stViewToggleButton.addTo(_map);
 			if (app.state.map.stViewOpen == 'true'){
@@ -294,7 +308,8 @@ app.map = (function ()
 				position: 'topright',
 				states: [{
           stateName: 'toggleOnWidget',
-          icon:      'fa-plane fa-1x widget-icon',
+          //icon:      'fa-plane fa-1x widget-icon',
+					icon: '<img src="css/images/pictometry.png">',
           title:     'Open Pictometry',
           onClick: function(control) {
 						window.open(app.config.pictometry.url, app.config.pictometry.url);
@@ -303,7 +318,8 @@ app.map = (function ()
 					}
 				}, {
           stateName: 'toggleOffWidget',
-          icon:      'fa-plane fa-1x widget-icon',
+          //icon:      'fa-plane fa-1x widget-icon',
+					icon: '<img src="css/images/pictometry.png">',
           title:     'Pictometry Already Open in Separate Tab',
           onClick: function(control) {
           }
@@ -484,6 +500,14 @@ app.map = (function ()
 				_cycloFeatureGroup.clearLayers();
 				localStorage.setItem('circlesOn', 'false');
 			}
+		},
+
+		didClickVacancyRadioButton: function(buttonId) {
+			console.log('didClickVacancyRadioButton ran');
+			_overlayLayerGroup.clearLayers();
+			var newOverlay = app.state.map.featureServices[buttonId];
+			newOverlay.addTo(_overlayLayerGroup);
+			app.map.domLayerList();
 		},
 
 		// add names of layers on the map to the DOM
@@ -974,6 +998,14 @@ app.map = (function ()
 					}
 				}
 			});
+
+			// handle vacancy
+			if (nextTopic === 'vacancy') {
+				var selectedVacancyButton = $('#vacancy-buttons .vacancy-radio:checked').attr('id');
+				app.map.didClickVacancyRadioButton(selectedVacancyButton);
+				//app.map.didClickVacancyRadioButton('vacantLand');
+				//app.map.didClickVacancyRadioButton('vacantBuildings');
+			}
 
 			// handle water
 			if (nextTopic === 'water') {
