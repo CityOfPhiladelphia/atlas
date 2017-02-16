@@ -671,7 +671,7 @@
                         <!--vacancy-->
                         <a id="topic-link-vacancy" class="topic-link" href="#"><span class="topic-link-icon flaticon-placeholder-1"></span>Vacancy</a>
                         <div id="topic-vacancy" class="topic">
-                          <h3 style="text-align: center">How likely is this property to be vacant?</h3>
+                          <h3 style="text-align: center; padding-top: 10px">Vacancy Likelihood</h3>
 
                           <div id="vacancy-scale-container">
                             <div id="vacancy-marker-line">
@@ -688,20 +688,27 @@
 
                           <div class="clearfix" style="margin-bottom: 24px;"></div>
 
+
+                          <h3 style="text-align: center">Show me:</h3>
+                          <div id="vacancy-button-container">
+                            <a id="vacantLand" class="button vacancy-button" href="#">Vacant Land</a>
+                            <a id="vacantBuildings" class="button hollow vacancy-button" href="#">Vacant Buildings</a>
+                            <a id="vacancyPercent" class="button hollow vacancy-button" href="#">Block Vacancy %</a>
+                          </div>
+
                           <!-- <h3 style="text-align: center">What would you like to see on the map?</h3> -->
-                            <form id='vacancy-form' action="#/">
+                          <!--  <form id='vacancy-form' action="#/">
                             <fieldset class="options">
-                              <!-- <legend>Map Layers</legend> -->
                               <ul id="vacancy-buttons" class="no-bullet">
                                 <li><label for="radio1"><input id="vacantLand" name="radio" type="radio" class="vacancy-radio" checked="checked"> Vacant Land</label></li>
                                 <li><label for="radio2"><input id="vacantBuildings" name="radio" type="radio" class="vacancy-radio"> Vacant Buildings</label></li>
                                 <li><label for="radio3"><input id="vacancyPercent" name="radio" type="radio" class="vacancy-radio"> Block Vacancy Percent</label></li>
                               </ul>
                             </fieldset>
-                            </form>
+                          </form>-->
 
                             <div id="vacancy-nearby-activity-selector-wrapper" class="center">
-                              <h3>What activity would you like to see?</h3>
+                              <h3>What nearby activity would you like to see?</h3>
                               <select id="vacancy-nearby-activity-type" style="margin: 10px; width: 250px"></select>
                               from the last
                               <select id="vacancy-nearby-activity-timeframe" style="margin: 10px; width: 125px">

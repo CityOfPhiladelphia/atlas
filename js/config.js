@@ -84,6 +84,15 @@ var app = app || {};
           description: 'text_general_code',
         },
       },
+      // {
+      //   label: 'Streets Code Violations',
+      //   socrataId: '5g3z-ynfm',
+      //   fieldMap: {
+      //     date: 'date_added',
+      //     location: 'st_name',
+      //     description: 'violation_description',
+      //   },
+      // },
       {
         label: 'Zoning Appeals',
         socrataId: '3tq7-6fj4',
