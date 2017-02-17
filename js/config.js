@@ -117,6 +117,9 @@ var app = app || {};
       water: {
         defaultOpacity: 1.0,
       },
+      /*vacancy: {
+        defaultOpacity: 0.6,
+      },*/
     }
   },
 
