@@ -36,10 +36,7 @@ var app = _.extend(app || {},
   {
     // debug stuff
     // var DEBUG = false,
-    var DEBUG_HOSTS = [
-          '10.8.101.67',
-          'localhost',
-        ],
+    var DEBUG_HOSTS = app.config.debugHosts,
         HOST = window.location.hostname,
         DEBUG = _.some(_.map(DEBUG_HOSTS, function (debugHost) {
           return HOST.indexOf(debugHost) >= 0;
