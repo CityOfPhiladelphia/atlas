@@ -351,7 +351,7 @@ app.map = (function ()
           	app.map.pictometryOpenButton.state('toggleOffWidget');
 					}
         };
-        // if cyclo window closes, remove marker
+        // if cyclo window closes, remove marker and change icon color
         if (e.originalEvent.key == 'stViewOpen') {
 					if (e.originalEvent.newValue == 'false') {
 						console.log('stView closed');
@@ -360,7 +360,9 @@ app.map = (function ()
 						localStorage.setItem('circlesOn', 'false');
 						app.state.map.stViewOpen = 'false';
 						app.map.stViewToggleButton.state('toggleOnWidget');
-        	}
+        	} else if (e.originalEvent.newValue == 'true') {
+						app.map.stViewToggleButton.state('stViewOutside');
+					}
         };
         if (e.originalEvent.key == 'stViewCoords'){
           app.state.stViewX = localStorage.getItem('stViewX');

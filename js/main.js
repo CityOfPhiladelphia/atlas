@@ -35,7 +35,7 @@ var app = _.extend(app || {},
         DEBUG = _.some(_.map(DEBUG_HOSTS, function (debugHost) {
           return HOST.indexOf(debugHost) >= 0;
         })),
-        DEBUG_ADDRESS = '1234 market st',
+        DEBUG_ADDRESS = '943 sigel st',
         // DEBUG_ADDRESS = '1849 blair st',
         // DEBUG_ADDRESS = 'n 3rd st & market st',
       // dynamically form a url based on the current hostname
