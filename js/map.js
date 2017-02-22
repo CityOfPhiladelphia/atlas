@@ -66,11 +66,12 @@ app.map = (function ()
 			app.state.map.shouldPan = true;
 			app.state.map.stViewInit = 'false';
 			//TODO - figure out what to do about a popped out cyclomedia on re-load
-			//if (localStorage.stViewOpen) {
-			//	app.state.map.stViewOpen = localStorage.stViewOpen
-			//}// else {
-			localStorage.stViewOpen = 'false';
-			app.state.map.stViewOpen = 'false';
+			if (localStorage.stViewOpen) {
+				app.state.map.stViewOpen = localStorage.stViewOpen
+			} else {
+				localStorage.setItem('stViewOpen', 'false');
+				app.state.map.stViewOpen = 'false';
+			}
 			if (localStorage.pictometryOpen) {
 				app.state.map.pictometryOpen = localStorage.pictometryOpen
 			} else {
@@ -362,6 +363,7 @@ app.map = (function ()
 						app.map.stViewToggleButton.state('toggleOnWidget');
         	} else if (e.originalEvent.newValue == 'true') {
 						app.map.stViewToggleButton.state('stViewOutside');
+						app.map.prepareCycloBbox();
 					}
         };
         if (e.originalEvent.key == 'stViewCoords'){
@@ -1391,6 +1393,7 @@ app.map = (function ()
     },
 
     addCycloCircles: function() {
+			console.log('addCycloCircles is running');
       _cycloFeatureGroup.clearLayers();
       app.cyclo.recordings = app.cyclo.wfsClient.recordingList;
       if (app.cyclo.recordings.length > 0) {
