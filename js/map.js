@@ -66,11 +66,12 @@ app.map = (function ()
 			app.state.map.shouldPan = true;
 			app.state.map.stViewInit = 'false';
 			//TODO - figure out what to do about a popped out cyclomedia on re-load
-			//if (localStorage.stViewOpen) {
-			//	app.state.map.stViewOpen = localStorage.stViewOpen
-			//}// else {
-			localStorage.stViewOpen = 'false';
-			app.state.map.stViewOpen = 'false';
+			if (localStorage.stViewOpen) {
+				app.state.map.stViewOpen = localStorage.stViewOpen
+			} else {
+				localStorage.setItem('stViewOpen', 'false');
+				app.state.map.stViewOpen = 'false';
+			}
 			if (localStorage.pictometryOpen) {
 				app.state.map.pictometryOpen = localStorage.pictometryOpen
 			} else {
@@ -351,7 +352,7 @@ app.map = (function ()
           	app.map.pictometryOpenButton.state('toggleOffWidget');
 					}
         };
-        // if cyclo window closes, remove marker
+        // if cyclo window closes, remove marker and change icon color
         if (e.originalEvent.key == 'stViewOpen') {
 					if (e.originalEvent.newValue == 'false') {
 						console.log('stView closed');
@@ -360,7 +361,10 @@ app.map = (function ()
 						localStorage.setItem('circlesOn', 'false');
 						app.state.map.stViewOpen = 'false';
 						app.map.stViewToggleButton.state('toggleOnWidget');
-        	}
+        	} else if (e.originalEvent.newValue == 'true') {
+						app.map.stViewToggleButton.state('stViewOutside');
+						app.map.prepareCycloBbox();
+					}
         };
         if (e.originalEvent.key == 'stViewCoords'){
           app.state.stViewX = localStorage.getItem('stViewX');
@@ -938,7 +942,7 @@ app.map = (function ()
 			// handle overlays
 			console.warn('didChangeTopic is clearing _overlayLayerGroup');
 			_overlayLayerGroup.clearLayers();
-			console.warn('calling overlaysForTopic to get nextOverlays');
+			console.warn('calling overlaysForTopic to get nextOverlays with nextTopic ', nextTopic);
 			var nextOverlays = this.overlaysForTopic(nextTopic);
 			console.log('nextOverlays', nextOverlays);
 			_.forEach(nextOverlays, function (nextOverlay) {
@@ -989,9 +993,12 @@ app.map = (function ()
 				});
 			}
 			// add next slider
+			console.log('^^^^^^^^^^^^^^ nextOverlays is ', nextOverlays);
 			_.forEach(nextOverlays, function (nextOverlay) {
+				console.log('@@@@@@@@@@@ forEach with nextOverlay', nextOverlay)
 				if(nextOverlay){
 					var name = nextOverlay.options.name;
+					console.log('name is ', name);
 					if (_.keys(opacitySliders).indexOf(name) > -1) {
 						var opacitySlider = opacitySliders[name];
 						opacitySlider.addTo(_map);
@@ -1074,6 +1081,7 @@ app.map = (function ()
 		},
 
 		overlaysForTopic: function (topic) {
+			console.log('running overlaysForTopic with topic ', topic);
 			var overlays;
 
 			switch (topic) {
@@ -1094,6 +1102,14 @@ app.map = (function ()
 					];
 					console.log('inside overlays for topic function ', overlays);
 					break;
+				/*case 'vacancy':
+					console.log('overlays for topic VACANCY');
+					overlays = [
+						//app.state.map.featureServices.vacancyPercent,
+						//app.state.map.featureServices.vacantBuildings,
+						app.state.map.featureServices.vacantLand,
+					]
+					console.log('overlays is ', overlays);*/
 				default:
 					overlays = [];
 					return;
@@ -1389,6 +1405,7 @@ app.map = (function ()
     },
 
     addCycloCircles: function() {
+			console.log('addCycloCircles is running');
       _cycloFeatureGroup.clearLayers();
       app.cyclo.recordings = app.cyclo.wfsClient.recordingList;
       if (app.cyclo.recordings.length > 0) {

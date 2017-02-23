@@ -1,11 +1,5 @@
 /* global L, _, $, history */
 
-// https://www.youtube.com/watch?v=JFAcOnhcpGA
-
-/*
-NOTE: this is just a demo - lots of jQuery soup ahead :)
-*/
-
 /*$(window).bind('storage', function (e) {
      console.log(e.originalEvent.key, e.originalEvent.newValue);
 });*/
@@ -36,15 +30,12 @@ var app = _.extend(app || {},
   {
     // debug stuff
     // var DEBUG = false,
-    var DEBUG_HOSTS = [
-          '10.8.101.67',
-          'localhost',
-        ],
+    var DEBUG_HOSTS = app.config.debugHosts,
         HOST = window.location.hostname,
         DEBUG = _.some(_.map(DEBUG_HOSTS, function (debugHost) {
           return HOST.indexOf(debugHost) >= 0;
         })),
-        DEBUG_ADDRESS = '1234 market st',
+        DEBUG_ADDRESS = '943 sigel st',
         // DEBUG_ADDRESS = '1849 blair st',
         // DEBUG_ADDRESS = 'n 3rd st & market st',
       // dynamically form a url based on the current hostname
@@ -1018,7 +1009,7 @@ var app = _.extend(app || {},
 
     // get dor documents
     $.ajax({
-      url: '//ase.phila.gov/arcgis/rest/services/RTT/MapServer/0/query',
+      url: app.config.dor.documents.documentIdQueryUrl,
       data: {
         where: "ADDRESS = '" + aisAddress + "'",
         outFields: '*',
@@ -1847,8 +1838,7 @@ var app = _.extend(app || {},
       var $idField = $(idField),
           docId = $idField.text(),
           idFieldHtml = $('<a />', {
-            // href: 'http://170.115.71.250/picris/detail.jsp?did=' + docId,
-            href: 'http://pdx-app01/recorder/eagleweb/viewDoc.jsp?node=DOCC' + docId,
+            href: app.config.dor.documents.url + docId,
             text: docId,
             class: 'external',
           });
@@ -1868,7 +1858,7 @@ var app = _.extend(app || {},
           plural = remainingCount > 1,
           resourceNoun = plural ? 'documents' : 'document',
           seeMoreText = ['See ', remainingCount, 'older', resourceNoun, 'at PhilaDox'].join(' '),
-          seeMoreUrl = 'http://170.115.71.250/picris/documentSearch.jsp',
+          seeMoreUrl = app.config.dor.documents.seeMoreUrl,
           $seeMoreLink = $('<a />', {
             class: 'external li-see-more-link',
             id: 'deeds-documents-see-more-link',
@@ -2123,5 +2113,3 @@ var app = _.extend(app || {},
 $(function () {
   app.init();
 });
-
-// https://api.tiles.mapbox.com/v4/mapbox.streets/11/1024/681.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw

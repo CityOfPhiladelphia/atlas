@@ -2,16 +2,14 @@ language: c
 script: ':'
 deploy:
   - provider: s3
-    access_key_id: AKIAIA2JFC22Y6EOKPCQ
-    secret_access_key:
-      secure: 'ZGqN9l2ArS5tPrvNxMv1k22r6MH43eKiM1OC2dYXr+z9pB28HQkFmqFbbP2ujN8C1dA7Yoxdes4fd5tSXM1m6zQr89G+RBvmOpHZnNDkzhcmvwsw/UuaT06VD9jmckl+qSc/Unlz+rAopXLuvQD5vMU2RX8NptoBy8ZZGGmJuVLI1q+7S47U6OnJ8+1LD5fISFCWySce7oHVPjAkK4JTtF36kE1TEMbfknW7vvlEXJbscnPpjH7/l5H2BrG2/rJGbS1+BJdLD2zGc1vPUqBY6P9A+u70sr+tC6Y8rPxwUAc8NkiMrDustFt4i8woKWsjyjwafYW91kqYtLaTPL0R3V3uogwIe3M+ln9MVQgVvuZH6e0QngWzWoIuRyJdCxth8Z+3uthf5//6N8vWH0adgH9q90mOyVbRKP42dXL1Ndz/iKugmZunbY8XfFFySnmWKEXkgod/TYQVK9g//+qFbx6soatbmM8AdxWYm23UWAzlUkwNO4oiSAE6LcwZiXXDwVHK8rasb9qSwanrPQv5EQovb/9GIwS7Nhg4qFWFdQK8CtkVkT7F5YgDyVzi+yOEnXcrb2XUG5H1slA2BV2yIco21sW6ccVbyh3ZeRWkmmdtQc37XXZYcf8YKvvhXhh3ks0NCnG2aqTACcZyq0z3qpqlyykcmMdsfOdb8963Ov0='
-    bucket: phila-atlas-prod
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: 'phila-atlas-prod'
     on:
-      branch: gh-pages
+      branch: master
   - provider: s3
-    access_key_id: AKIAIA2JFC22Y6EOKPCQ
-    secret_access_key:
-      secure: 'ZGqN9l2ArS5tPrvNxMv1k22r6MH43eKiM1OC2dYXr+z9pB28HQkFmqFbbP2ujN8C1dA7Yoxdes4fd5tSXM1m6zQr89G+RBvmOpHZnNDkzhcmvwsw/UuaT06VD9jmckl+qSc/Unlz+rAopXLuvQD5vMU2RX8NptoBy8ZZGGmJuVLI1q+7S47U6OnJ8+1LD5fISFCWySce7oHVPjAkK4JTtF36kE1TEMbfknW7vvlEXJbscnPpjH7/l5H2BrG2/rJGbS1+BJdLD2zGc1vPUqBY6P9A+u70sr+tC6Y8rPxwUAc8NkiMrDustFt4i8woKWsjyjwafYW91kqYtLaTPL0R3V3uogwIe3M+ln9MVQgVvuZH6e0QngWzWoIuRyJdCxth8Z+3uthf5//6N8vWH0adgH9q90mOyVbRKP42dXL1Ndz/iKugmZunbY8XfFFySnmWKEXkgod/TYQVK9g//+qFbx6soatbmM8AdxWYm23UWAzlUkwNO4oiSAE6LcwZiXXDwVHK8rasb9qSwanrPQv5EQovb/9GIwS7Nhg4qFWFdQK8CtkVkT7F5YgDyVzi+yOEnXcrb2XUG5H1slA2BV2yIco21sW6ccVbyh3ZeRWkmmdtQc37XXZYcf8YKvvhXhh3ks0NCnG2aqTACcZyq0z3qpqlyykcmMdsfOdb8963Ov0='
-    bucket: phila-atlas-dev
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: 'phila-atlas-dev'
     on:
       branch: develop
