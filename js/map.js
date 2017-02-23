@@ -942,7 +942,7 @@ app.map = (function ()
 			// handle overlays
 			console.warn('didChangeTopic is clearing _overlayLayerGroup');
 			_overlayLayerGroup.clearLayers();
-			console.warn('calling overlaysForTopic to get nextOverlays');
+			console.warn('calling overlaysForTopic to get nextOverlays with nextTopic ', nextTopic);
 			var nextOverlays = this.overlaysForTopic(nextTopic);
 			console.log('nextOverlays', nextOverlays);
 			_.forEach(nextOverlays, function (nextOverlay) {
@@ -993,9 +993,12 @@ app.map = (function ()
 				});
 			}
 			// add next slider
+			console.log('^^^^^^^^^^^^^^ nextOverlays is ', nextOverlays);
 			_.forEach(nextOverlays, function (nextOverlay) {
+				console.log('@@@@@@@@@@@ forEach with nextOverlay', nextOverlay)
 				if(nextOverlay){
 					var name = nextOverlay.options.name;
+					console.log('name is ', name);
 					if (_.keys(opacitySliders).indexOf(name) > -1) {
 						var opacitySlider = opacitySliders[name];
 						opacitySlider.addTo(_map);
@@ -1078,6 +1081,7 @@ app.map = (function ()
 		},
 
 		overlaysForTopic: function (topic) {
+			console.log('running overlaysForTopic with topic ', topic);
 			var overlays;
 
 			switch (topic) {
@@ -1098,6 +1102,14 @@ app.map = (function ()
 					];
 					console.log('inside overlays for topic function ', overlays);
 					break;
+				/*case 'vacancy':
+					console.log('overlays for topic VACANCY');
+					overlays = [
+						//app.state.map.featureServices.vacancyPercent,
+						//app.state.map.featureServices.vacantBuildings,
+						app.state.map.featureServices.vacantLand,
+					]
+					console.log('overlays is ', overlays);*/
 				default:
 					overlays = [];
 					return;
