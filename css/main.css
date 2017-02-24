@@ -383,6 +383,11 @@ table {
   color: #000000;
 }
 
+#topic-vacancy .topic-badge {
+  width: 400px;
+  margin-bottom: 40px;
+}
+
 #vacancy-scale {
   margin: 0 auto;
   height: 25px;

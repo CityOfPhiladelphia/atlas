@@ -122,23 +122,23 @@ var app = _.extend(app || {},
     Vacancy
     */
 
-    $('.vacancy-button').click(function (e) {
-      e.preventDefault();
-      var buttonClass = this.getAttribute('class');
-      if (buttonClass.includes('hollow')) {
-        //var container = $('#vacancy-button-container');
-        //var buttons =
-        _.forEach($('.vacancy-button'), function (tag) {
-          tag.setAttribute('class', 'button hollow vacancy-button');
-        })
-        this.setAttribute('class', 'button vacancy-button');
-        app.state.vacancy.selected = this.id
-        app.placeVacancyMarker();
-        app.map.didClickVacancyRadioButton(this.id);
-      } else {
-        console.log('button already selected');
-      }
-    });
+    // $('.vacancy-button').click(function (e) {
+    //   e.preventDefault();
+    //   var buttonClass = this.getAttribute('class');
+    //   if (buttonClass.includes('hollow')) {
+    //     //var container = $('#vacancy-button-container');
+    //     //var buttons =
+    //     _.forEach($('.vacancy-button'), function (tag) {
+    //       tag.setAttribute('class', 'button hollow vacancy-button');
+    //     })
+    //     this.setAttribute('class', 'button vacancy-button');
+    //     app.state.vacancy.selected = this.id
+    //     app.placeVacancyMarker();
+    //     app.map.didClickVacancyRadioButton(this.id);
+    //   } else {
+    //     console.log('button already selected');
+    //   }
+    // });
 
 
     // populate dropdown
@@ -1054,6 +1054,7 @@ var app = _.extend(app || {},
     /*
     VACANCY
     */
+    app.state.vacancy = {};
     app.runVacancyQueries(aisGeom);
 
     /*
@@ -1385,50 +1386,78 @@ var app = _.extend(app || {},
     vacantBuildingsQuery.contains(aisGeom);
     vacantBuildingsQuery.run(app.didGetVacantBuildingResult);
 
-    var vacantBlockPercentQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/VacancyBlockPercentage/FeatureServer/2'});
-    vacantBlockPercentQuery.contains(aisGeom);
-    vacantBlockPercentQuery.run(app.didGetVacantBlockPercentResult);
+    // var vacantBlockPercentQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/VacancyBlockPercentage/FeatureServer/2'});
+    // vacantBlockPercentQuery.contains(aisGeom);
+    // vacantBlockPercentQuery.run(app.didGetVacantBlockPercentResult);
   },
 
-
   didGetVacantLandResult: function (error, featureCollection, response) {
-    var features = featureCollection.features;
-    if (features.length) {
-      app.state.vacancy.vacantLand = features[0].properties['LAND_RANK'];
-    } else {
-      app.state.vacancy.vacantLand = 0;
+    var features = featureCollection.features,
+        isVacant = false;
+
+    if (features.length > 0) {
+      var rank = features[0].properties['LAND_RANK'];
+      isVacant = rank > 0;
     }
-    if(app.state.activeTopic == 'vacancy') {
-      app.placeVacancyMarker();
-    };
+
+    app.state.vacancy.land = isVacant;
+    app.state.vacancy.didGetVacantLand = true;
+
+    if (app.state.vacancy.didGetVacantBuilding) {
+      app.didGetAllVacancyResults();
+    }
   },
 
   didGetVacantBuildingResult: function (error, featureCollection, response) {
-    var features = featureCollection.features;
-    if (features.length) {
-      app.state.vacancy.vacantBuildings = features[0].properties['BUILD_RANK'];
-    } else {
-      app.state.vacancy.vacantBuildings = 0;
+    var features = featureCollection.features,
+        isVacant = false;
+
+    if (features.length > 0) {
+      var rank = features[0].properties['BUILD_RANK'];
+      isVacant = rank > 0;
     }
-    if(app.state.activeTopic == 'vacancy') {
-      app.placeVacancyMarker();
-    };
+
+    app.state.vacancy.building = isVacant;
+    app.state.vacancy.didGetVacantBuilding = true;
+
+    if (app.state.vacancy.didGetVacantLand) {
+      app.didGetAllVacancyResults();
+    }
   },
 
-  didGetVacantBlockPercentResult: function (error, featureCollection, response) {
-    //console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-    var features = featureCollection.features;
-    //console.log(features);
-    if (features.length) {
-      app.state.vacancy.vacancyPercent = features[0].properties['PercentVacant'];
-      //app.state.vacancy.percentVacantBuilding = features[0].properties['PercentVacantBuilding'];
-      //app.state.vacancy.percentVacantLand = features[0].properties['PercentVacantLand'];
-    } else {
-      app.state.vacancy.vacancyPercent = 0;
+  // didGetVacantBlockPercentResult: function (error, featureCollection, response) {
+  //   //console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+  //   var features = featureCollection.features;
+  //   //console.log(features);
+  //   if (features.length) {
+  //     app.state.vacancy.vacancyPercent = features[0].properties['PercentVacant'];
+  //     //app.state.vacancy.percentVacantBuilding = features[0].properties['PercentVacantBuilding'];
+  //     //app.state.vacancy.percentVacantLand = features[0].properties['PercentVacantLand'];
+  //   } else {
+  //     app.state.vacancy.vacancyPercent = 0;
+  //   }
+  //   if(app.state.activeTopic == 'vacancy') {
+  //     app.placeVacancyMarker();
+  //   };
+  // },
+
+  didGetAllVacancyResults: function () {
+    var $likelihood = $('#vacancy-likelihood'),
+        vacantLand = app.state.vacancy.land,
+        vacantBuilding = app.state.vacancy.building,
+        isVacant = vacantLand || vacantBuilding,
+        prefix = !isVacant ? 'Not' : '',
+        propertyType = '';
+
+    if (vacantLand) {
+      propertyType = 'Land';
+    } else if (vacantBuilding) {
+      propertyType = 'Building';
     }
-    if(app.state.activeTopic == 'vacancy') {
-      app.placeVacancyMarker();
-    };
+
+    var text = prefix + ' Likely Vacant ' + propertyType;
+
+    $likelihood.text(text);
   },
 
   placeVacancyMarker: function() {
