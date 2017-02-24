@@ -1442,17 +1442,22 @@ var app = _.extend(app || {},
   // },
 
   didGetAllVacancyResults: function () {
-    var $likelihood = $('#vacancy-likelihood'),
+    var $header = $('#topic-vacancy .topic-badge h4'),
+        $likelihood = $('#vacancy-likelihood'),
         vacantLand = app.state.vacancy.land,
         vacantBuilding = app.state.vacancy.building,
         isVacant = vacantLand || vacantBuilding,
         prefix = !isVacant ? 'Not' : '',
         propertyType = '';
 
+    $header.removeClass('vacant-land vacant-building');
+
     if (vacantLand) {
       propertyType = 'Land';
+      $header.addClass('vacant-land');
     } else if (vacantBuilding) {
       propertyType = 'Building';
+      $header.addClass('vacant-building');
     }
 
     var text = prefix + ' Likely Vacant ' + propertyType;
