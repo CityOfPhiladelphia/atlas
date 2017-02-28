@@ -9,21 +9,20 @@
         <link rel='icon' type='image/x-icon' href="//cityofphiladelphia.github.io/patterns/images/favicon.ico">
         <meta name="description" content="">
 
+        <!-- CSS -->
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="//cityofphiladelphia.github.io/patterns/dist/1.3.0/css/patterns.css">
         <link rel="canonical" href="">
-        <link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.min.css" />
-        <link rel="stylesheet" href="css/leaflet.css">
-        <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css">-->
-        <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/leaflet/1.0.0-beta.2/leaflet.css"-->
+        <link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.min.css">
+        <link rel="stylesheet" href="//unpkg.com/leaflet@1.0.3/dist/leaflet.css">
         <link rel="stylesheet" href="//ljagis.github.io/leaflet-measure/leaflet-measure.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/cyclo.css">
         <link rel="stylesheet" href="css/flaticon.css">
         <link rel="stylesheet" href="css/opacity.css">
         <link rel="stylesheet" href="css/easy-button.css">
-
     </head>
+
     <body>
         <!-- Google Tag Manager [phila.gov] -->
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKCTSVS"
@@ -34,6 +33,7 @@
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-NKCTSVS');</script>
         <!-- End Google Tag Manager -->
+
         <div class="full" id="application">
             <!-- demo alert -->
             <div id="alpha-alert">
@@ -867,34 +867,30 @@
 
         <!-- JS: VENDOR -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-        <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.1.2/foundation.min.js"></script>
         <script src="//cityofphiladelphia.github.io/patterns/dist/1.3.0/js/patterns.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.6/lodash.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
-        <!--<script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>-->
-        <!--<script src="//cdn.jsdelivr.net/leaflet/1.0.0-beta.2/leaflet.js"></script>-->
-        <script src='js/leaflet.js'></script>
-        <script src='js/leaflet.rotatedMarker.js'></script>
-        <script src='js/easy-button.js'></script>
-        <script src='js/svg-icon.js'></script>
-        <script src='js/triangleIcon.js'></script>
-        <script src='//unpkg.com/esri-leaflet@2.0.6'></script>
-        <!--<script src="//cdn.jsdelivr.net/leaflet.esri/2.0.0-beta.8/esri-leaflet.js"></script>-->
+        <script src="//unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+        <script src="//unpkg.com/esri-leaflet@2.0.6"></script>
         <script src="//ljagis.github.io/leaflet-measure/leaflet-measure.min.js"></script>
+        <script src="//unpkg.com/leaflet-rotatedmarker@0.1.2"></script>
         <script src="//momentjs.com/downloads/moment.min.js"></script>
-        <script src="js/opacity.js"></script>
-
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react-dom.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.17.1/ol.js"></script>
-        <script type="text/javascript" src="https://streetsmart.cyclomedia.com/api/v16.1/Aperture.js"></script>
-        <script type="text/javascript" src="https://streetsmart.cyclomedia.com/api/v16.1/StreetSmartApi.js"></script>
-
-        <script src="https://unpkg.com/esri-leaflet-renderers@2.0.2"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+        <!-- Cyclomedia -->
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react-dom.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.17.1/ol.js"></script>
+        <script type="text/javascript" src="//streetsmart.cyclomedia.com/api/v16.1/Aperture.js"></script>
+        <script type="text/javascript" src="//streetsmart.cyclomedia.com/api/v16.1/StreetSmartApi.js"></script>
+        <!-- TODO load jquery-ui from cdn -->
+        <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
 
         <!-- JS: LOCAL -->
         <script src="js/config.js"></script>
+        <script src="js/opacity.js"></script>
+        <script src="js/easy-button.js"></script>
+        <script src="js/svg-icon.js"></script>
+        <script src="js/triangleIcon.js"></script>
         <script src="js/wfsclient.js"></script>
         <script src="js/cyclo.js"></script>
         <script src="js/main.js"></script>
