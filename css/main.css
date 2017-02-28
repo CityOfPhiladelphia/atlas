@@ -383,6 +383,19 @@ table {
   color: #000000;
 }
 
+#topic-vacancy .topic-badge h4.vacant-land {
+  background: orange;
+}
+
+#topic-vacancy .topic-badge h4.vacant-building {
+  background: purple;
+}
+
+#topic-vacancy .topic-badge {
+  width: 400px;
+  margin-bottom: 40px;
+}
+
 #vacancy-scale {
   margin: 0 auto;
   height: 25px;

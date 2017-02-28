@@ -147,14 +147,8 @@ app.map = (function ()
 			});
 
 			// Feature services
-			_.forEach(app.config.esri.featureServices, function(layer, i) {
-				app.state.map.featureServices[i] = L.esri.featureLayer({
-					url: layer.url,
-					maxZoom: 22,
-					name: i,
-					type: layer.type,
-					zIndex: layer.zIndex,
-				});
+			_.forEach(app.config.esri.featureServices, function(options, layerName) {
+				app.state.map.featureServices[layerName] = L.esri.featureLayer(options);
 			});
 
 			// Overlays
@@ -506,13 +500,13 @@ app.map = (function ()
 			}
 		},
 
-		didClickVacancyRadioButton: function(buttonId) {
-			console.log('didClickVacancyRadioButton ran with ', buttonId);
-			_overlayLayerGroup.clearLayers();
-			var newOverlay = app.state.map.featureServices[buttonId];
-			newOverlay.addTo(_overlayLayerGroup);
-			app.map.domLayerList();
-		},
+		// didClickVacancyRadioButton: function(buttonId) {
+		// 	console.log('didClickVacancyRadioButton ran with ', buttonId);
+		// 	_overlayLayerGroup.clearLayers();
+		// 	var newOverlay = app.state.map.featureServices[buttonId];
+		// 	newOverlay.addTo(_overlayLayerGroup);
+		// 	app.map.domLayerList();
+		// },
 
 		// add names of layers on the map to the DOM
     domLayerList: function() {
@@ -1037,11 +1031,12 @@ app.map = (function ()
 
 			// handle vacancy
 			if (nextTopic === 'vacancy') {
-				var selectedVacancyButton = app.state.vacancy.selected;
-				console.log('!!!!!!!!!!!! ', app.state.vacancy[selectedVacancyButton]);
-				app.map.didClickVacancyRadioButton(selectedVacancyButton);
-				//app.map.didClickVacancyRadioButton('vacantLand');
-				//app.map.didClickVacancyRadioButton('vacantBuildings');
+				_overlayLayerGroup.clearLayers();
+				var landOverlay = app.state.map.featureServices.vacantLand;
+				var buildingOverlay = app.state.map.featureServices.vacantBuildings;
+				landOverlay.addTo(_overlayLayerGroup);
+				buildingOverlay.addTo(_overlayLayerGroup);
+				app.map.domLayerList();
 				this.addNearbyActivity();
 			}
 			else if (prevTopic === 'vacancy') {
