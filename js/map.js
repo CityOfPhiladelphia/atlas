@@ -587,8 +587,8 @@ app.map = (function ()
 			}
 		},
 
-		didGetDorParcel: function () {
-			console.log('MAP: did get dor parcel');
+		didGetDorParcels: function () {
+			console.log('MAP: did get dor parcels');
 
 			// if there's no parcel in state, clear the map and don't render
 			// TODO zoom to AIS xy
@@ -667,6 +667,8 @@ app.map = (function ()
 		// },
 
     didClickMap: function (e) {
+			app.state.dor = app.state.pwd = null;
+
       // set state
       app.state.map.clickedOnMap = true
 			localStorage.setItem('clickedOnMap', true);
@@ -680,7 +682,7 @@ app.map = (function ()
       }
 
 			// otherwise, it was a parcel click. get the parcel ID and query AIS.
-      app.getParcelByLatLng(e.latlng, function () {
+      app.getParcelsByLatLng(e.latlng, function () {
 				// which parcels are being displayed?
 				var activeTopic = app.state.activeTopic,
 						DOR_TOPICS = ['deeds', 'zoning'],
@@ -703,12 +705,10 @@ app.map = (function ()
 						break;
 				}
 
-        // if this is the result of a map click, query ais for the address
+        // if this is the result of a map click, query ais
         if (app.state.map.clickedOnMap) {
-					// this is a little kludgy b/c technically we don't have an address,
-					// but should work anyway.
-          app.searchForAddress(parcelId);
-          app.state.map.clickedOnMap = true; //andy changed this 11/29
+          app.searchAis(parcelId);
+          app.state.map.clickedOnMap = true;
         }
       });
     },

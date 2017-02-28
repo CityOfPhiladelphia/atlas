@@ -217,7 +217,7 @@ var app = _.extend(app || {},
     // if there are query params
     var searchParam = params.search;
     if (searchParam) {
-      app.searchForAddress(searchParam);
+      app.searchAis(searchParam);
       // TODO fix url
       return;
     }
@@ -242,7 +242,7 @@ var app = _.extend(app || {},
 
     // if there's no ais in state, go get it
     if (!aisState) {
-      app.searchForAddress(address);
+      app.searchAis(address);
       return;
     }
 
@@ -291,12 +291,14 @@ var app = _.extend(app || {},
       app.state[stateProp] = undefined;
     });
 
+    app.state.dor = app.state.pwd = null;
+
     // fire off ais
-    app.searchForAddress(val);
+    app.searchAis(val);
   },
 
   // fires ais search
-  searchForAddress: function (address) {
+  searchAis: function (address) {
     console.log('search for address', address);
     var url = app.config.ais.url + encodeURIComponent(address),
         params = {};
@@ -566,49 +568,17 @@ var app = _.extend(app || {},
         nextHash = app.util.constructHash(streetAddress, nextTopic);
     history.pushState(nextState, null, nextHash);
 
-    // if no topic is active, activate property
-    // if (!app.state.nextTopic) {}
-    // console.log('didGetAisResult is calling activateTopic');
-    // app.activateTopic(nextTopic);
-
-    /*
-    PARCELS
-    */
-
-    // the problem is: if the last search yielded a good parcel and the
-    // current one did not, the parcel isn't getting cleared out if clickedOnMap === false.
-
-    // var stateParcelDor = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null,
-    //     dorParcelId = props.dor_parcel_id;
-    //
-    // // if the user searched via the search bar and we have
-    // if (stateParcelDor && stateParcelDor.properties.MAPREG !== dorParcelId) {
-    //   // console.log('**************** state parcel doesnt match current AIS parcel id, clearing out')
-    //   app.state.dor = null;
-    // }
-    //
-    // // check pwd
-    // var stateParcelPwd = app.state.pwd && app.state.pwd.features ? app.state.pwd.features[0] : null,
-    //     pwdParcelId = props.pwd_parcel_id;
-    //
-    // // if the user searched via the search bar and we have
-    // if (stateParcelPwd && stateParcelPwd.properties.PARCELID !== pwdParcelId) {
-    //   // console.log('**************** PWD state parcel doesnt match current AIS parcel id, clearing out')
-    //   app.state.pwd = null;
-    // }
-    //
-    // if (!app.state.map.clickedOnMap) {
-    //   // get rid of old dadress markers
-    //   // app.state.map.addressMarkers = {};
-    // }
-
-    // go get both parcels
-    // console.log('didGetAisResult is calling getParcels');
-    // app.getParcels();
-    app.state.dor = app.state.pwd = null;
+    // app.state.dor = app.state.pwd = null;
     app.state.regmaps
     app.state.didFinishPwdRequest = app.state.didFinishDorRequest = null;
-    app.getDorParcel();
+
+    if (!app.state.dor) {
+      console.debug('no dor, so get it')
+      app.getDorParcel();
+    }
+    else {
+      app.renderParcelTopic();
+    }
     app.getPwdParcel();
 
     // tell map we got an ais result
@@ -670,17 +640,18 @@ var app = _.extend(app || {},
 
     var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerDOR.url});
     //parcelQuery.contains(latLng);
-    parcelQuery.where("MAPREG = '" + parcelId + "' AND STATUS IN (1, 3)")
-    parcelQuery.run(app.didGetDorParcel);
+    // parcelQuery.where("MAPREG = '" + parcelId + "' AND STATUS IN (1, 3)")
+    parcelQuery.where("MAPREG = '" + parcelId + "'")
+    parcelQuery.run(app.didGetDorParcels);
   },
 
-  didGetDorParcel: function (error, featureCollection, response) {
-    console.log('did get dor parcel');
+  didGetDorParcels: function (error, featureCollection, response) {
+    console.debug('did get dor parcel', featureCollection);
 
     app.state.didFinishDorRequest = true;
 
     if (error || !featureCollection) {
-      console.log('get dor parcel, but error', error);
+      console.warn('did get dor parcel, but error', error);
       return;
     }
 
@@ -701,16 +672,25 @@ var app = _.extend(app || {},
 
     // sort by status
     var features = featureCollection.features,
-    featuresSorted = _.sortBy(features, function (feature) {
-      return feature.properties.STATUS;
-    });
+        PARCEL_STATUS_SORT_ORDER = [1, 3, 2],
+        featuresSorted = _.sortBy(features, function (feature) {
+                            var parcelStatus = feature.properties.STATUS,
+                                priority = PARCEL_STATUS_SORT_ORDER.indexOf(parcelStatus),
+                                mapreg = feature.properties.MAPREG,
+                                parcelNum = feature.properties.PARCEL;
+
+                            // hacky
+                            return priority + '_' + parcelNum;
+                          });
     featureCollection.features = featuresSorted;
+
+    console.debug('dor parcels sorted', featuresSorted);
 
     // update state
     app.state.dor = featureCollection;
 
     // tell map we got a dor parcel
-    app.map.didGetDorParcel();
+    app.map.didGetDorParcels();
 
     // calculate perimeter and area
     var geomDOR = featuresSorted[0].geometry,
@@ -847,54 +827,6 @@ var app = _.extend(app || {},
     app.map.didGetPwdParcel();
   },
 
-  // this gets pwd and dor parcels and then runs a callback. kind of overlaps
-  // with getParcelById function. they should probably be merged eventually.
-  // getParcels: function () {
-  //   console.log('get parcels');
-  //
-  //   // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
-  //   var aisFeature = app.state.ais.feature,
-  //       dorParcelId = aisFeature.properties.dor_parcel_id,
-  //       pwdParcelId = aisFeature.properties.pwd_parcel_id;
-  //
-  //   // clear els
-  //   _.forEach(['id', 'address', 'status', 'air-rights', 'condo'], function (tag) {
-  //     var $el = $('#deeds-' + tag);
-  //     $el.empty();
-  //   });
-  //
-  //   // if we already have the parcel
-  //   var stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
-  //   // if the user searched via the search bar and we have
-  //   if (stateParcel && stateParcel.properties.MAPREG === dorParcelId) {
-  //     console.log('i have a state parcel and its the right one')
-  //     app.renderParcelTopic();
-  //     app.map.didGetParcels();
-  //   // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
-  //   } else if (dorParcelId) {
-  //     // the function we're about to call is kind of the same thing as the
-  //     // current function and should probably be merged at some point
-  //     app.getParcelsWithIds(dorParcelId, pwdParcelId, function () {
-  //       console.log('got parcels by id')
-  //       //console.log('got parcel by id', app.state.dor);
-  //       app.renderParcelTopic();
-  //       // console.log('getparcelById callback is calling createAddressMarkers');
-  //
-  //       // tell map we finished getting parcels and it's ok to do stuff
-  //       // that depends on them
-  //       // app.map.createAddressMarkers();
-  //       // app.map.didActivateTopic(app.state.activeTopic);
-  //       console.log('calling getParcels callback')
-  //       app.map.didGetParcels();
-  //     });
-  //   } else {
-  //     console.log('get parcels but no dor parcel id, calling map.didGetParcels')
-  //     app.map.didGetParcels();
-  //     app.hideContentForTopic('deeds');
-  //   }
-  //   // app.map.didGetParcels();
-  // },
-
   showContentForTopic: function (topic) {
     console.log('show content for topic', topic);
 
@@ -924,11 +856,7 @@ var app = _.extend(app || {},
 
   // initiates requests to topic APIs (OPA, L&I, etc.)
   getTopics: function () {
-    // console.log('get topics');
-
-    // show accordion
-    // doing this in route now
-    // $('#topic-list').show();
+    console.log('get topics');
 
     var aisFeature = app.state.ais.feature,
         aisProps = aisFeature.properties,
@@ -975,37 +903,6 @@ var app = _.extend(app || {},
             },
           });
         });
-    // fire deferreds
-    // this is nice and elegant but the callback is firing before the
-    // individual callbacks have completed. commenting out for now.
-    // $.when(liDeferreds).then(app.didGetAllLiResults);
-
-    // DOR
-    // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
-    // var aisFeature = app.state.ais.feature,
-    //     aisParcelId = aisFeature.properties.dor_parcel_id,
-    //     waterParcelId = aisFeature.properties.pwd_parcel_id,
-    //     stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
-    //
-    // // clear els
-    // _.forEach(['id', 'address', 'status', 'air-rights', 'condo'], function (tag) {
-    //   var $el = $('#deeds-' + tag);
-    //   $el.empty();
-    // });
-
-    // if we already have the parcel
-    // if (stateParcel && stateParcel.properties.MAPREG === aisParcelId) {
-    //   app.renderParcelTopic();
-    // }
-    // // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
-    // else if (aisParcelId) {
-    //   app.getParcelsWithIds(aisParcelId, waterParcelId, function () {
-    //     //console.log('got parcel by id', app.state.dor);
-    //     app.renderParcelTopic();
-    //     console.log('getTopics is calling createAddressMarkers');
-    //     app.map.createAddressMarkers();
-    //   });
-    // }
 
     // get dor documents
     $.ajax({
@@ -1188,23 +1085,41 @@ var app = _.extend(app || {},
 
   // render deeds (assumes there's a parcel in the state)
   renderParcelTopic: function () {
-    console.log('render parcel topic');
+    var parcels = app.state.dor.features;
 
-    if (!app.state.dor.features[0]) {
+    console.log('render parcel topic. total parcels:', parcels.length);
+
+    if (!parcels[0]) {
       console.log('render parcel topic, but no parcel feature', app.state.dor);
       return;
     }
 
-    var parcel = app.state.dor.features[0],
-        props = parcel.properties,
-        parcelId = props.MAPREG,
-        address = app.util.concatDorAddress(parcel);
+    var $parcelTabs = $('#parcel-tabs');
+    $parcelTabs.empty();
 
-    $('#deeds-address').html(address);
-    $('#deeds-id').html(parcelId);
-    $('#deeds-status').html(app.PARCEL_STATUS[props.STATUS]);
-    $('#deeds-air-rights').html(props.SUFFIX === 'A' ? 'Yes' : 'No');
-    $('#deeds-condo').html(props.CONDOFLAG === 1 ? 'Yes' : 'No');
+    _.forEach(parcels, function (parcel, i) {
+      console.debug('render parcel', parcel);
+
+      var $tab = $('<li>')
+                    .addClass('tabs-title')
+                    .html('<a href="#">' + parcel.properties.MAPREG + '</a>');
+
+      if (i === 0) {
+        $tab.addClass('is-active');
+      }
+
+      $parcelTabs.append($tab);
+
+      // var props = parcel.properties,
+      //     parcelId = props.MAPREG,
+      //     address = app.util.concatDorAddress(parcel);
+      //
+      // $('#deeds-address').html(address);
+      // $('#deeds-id').html(parcelId);
+      // $('#deeds-status').html(app.PARCEL_STATUS[props.STATUS]);
+      // $('#deeds-air-rights').html(props.SUFFIX === 'A' ? 'Yes' : 'No');
+      // $('#deeds-condo').html(props.CONDOFLAG === 1 ? 'Yes' : 'No');
+    });
 
     app.showContentForTopic('deeds');
   },
@@ -1529,180 +1444,10 @@ var app = _.extend(app || {},
     if (desc) $('#zoning-description').html(desc);
   },
 
-  getParcelsWithIds: function (dorParcelId, pwdParcelId, callback) {
-    console.log('getParcelsWithIds');
-
-    // use this to fire the callback after both requests have finished
-    // (not sure if esri leaflet returns promises)
-    var didFinishDorRequest = false,
-        didFinishPwdRequest = false;
-
-    /*
-    DOR
-    */
-
-    // only query for dor parcel if we have an id
-    if(dorParcelId){
-      var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerDOR.url});
-      //parcelQuery.contains(latLng);
-      parcelQuery.where("MAPREG = '" + dorParcelId + "' AND STATUS IN (1, 3)")
-      parcelQuery.run(function (error, featureCollection, response) {
-        if (error || !featureCollection) {
-          console.log('get parcel by latlng error', error);
-          return;
-        }
-
-        // if empty response
-        if (featureCollection.features.length === 0) {
-          // show alert
-          $('#no-results-modal').foundation('open');
-          return;
-        }
-
-        // sort by status
-        console.log('before', featureCollection);
-        var features = featureCollection.features,
-            featuresSorted = _.sortBy(features, function (feature) {
-              return feature.properties.STATUS;
-            });
-        featureCollection.features = featuresSorted;
-        console.log('after', featureCollection);
-
-        // update state
-        app.state.dor = featureCollection;
-
-        // if there's a callback, call it
-        callback && callback();
-      })
-    }
-    /*if (dorParcelId) {
-      $.ajax({
-        url: app.config.esri.parcelLayerDORUrl + '/query',
-        data: {
-          where: "MAPREG = '" + dorParcelId + "' AND STATUS IN (1, 3)" ,
-          outSR: 4326,
-          outFields: '*',
-          f: 'geojson',
-        },
-        success: function (data) {
-          // AGO returns json with plaintext headers, so parse
-          data = JSON.parse(data);
-          console.log('got DOR data ', data);
-
-          // check data
-          if (data.features.length === 0) {
-            console.log('got parcel but 0 features', this.url);
-          }
-
-          app.state.dor = data;
-
-          // call callback if we already finished the pwd request
-          if (didFinishPwdRequest) {
-            console.log('get parcels: pwd finished then dor, calling callback')
-            callback();
-          }
-          else {
-            didFinishDorRequest = true;
-          }
-
-          app.showContentForTopic('deeds');
-        },
-        error: function (err) {
-          console.log('get parcel by id error', err);
-          app.hideContentForTopic('deeds');
-          didFinishDorRequest = true;
-        },
-      });
-
-    // no DOR parcel id, so don't query
-  }*/ else {
-      console.log('no dor parcel id specified');
-    }
-
-    /*
-    PWD
-    */
-
-    // only query if we have a pwd parcel id
-    if (pwdParcelId) {
-      var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerWater.url});
-      parcelQuery.where('PARCELID = ' + pwdParcelId)
-      parcelQuery.run(function (error, featureCollection, response) {
-        if (error || !featureCollection) {
-          console.log('get pwd parcel by id error:', error);
-          didFinishPwdRequest = true;
-          return;
-        }
-
-        // if empty response
-        if (featureCollection.features.length === 0) {
-          console.log('get pwd parcel no features');
-
-          // show alert
-          $('#no-results-modal').foundation('open');
-
-          didFinishPwdRequest = true;
-          return;
-        }
-
-        // update state
-        // TODO put this in a specific parcel object
-        console.log('****************setting state pwd', featureCollection)
-        app.state.pwd = featureCollection;
-
-        // call callback if we're all done
-        if (didFinishDorRequest) {
-          console.log('get parcels: dor finished then pwd, calling callback')
-          callback();
-        } else {
-          didFinishPwdRequest = true;
-        }
-      });
-
-    // no pwd parcel id, don't do anything
-    } else {
-      console.log('no pwd parcel id specified');
-      console.log('ais', app.state.ais.feature)
-    }
-
-    /*$.ajax({
-      url: app.config.esri.parcelLayerWaterUrl + '/query',
-      data: {
-        where: "PARCELID = '" + waterId + "'",
-        outSR: 4326,
-        outFields: '*',
-        f: 'json',
-      },
-      success: function (data) {
-        // AGO returns json with plaintext headers, so parse
-        data = JSON.parse(data);
-        console.log('got water data ' + data);
-
-        // check data
-        if (data.features.length === 0) {
-          console.log('got water parcel but 0 features', this.url);
-        }
-
-        app.state.pwd = data;
-        //callback && callback();
-
-        //app.showContentForTopic('deeds');
-      },
-      error: function (err) {
-        console.log('get water parcel by id error', err);
-        //app.hideContentForTopic('deeds');
-      },
-    });*/
-  },
-
   // get a parcel by a leaflet latlng
-  getParcelByLatLng: function (latLng, callback) {
-    console.log('get parcel by latlng');
+  getParcelsByLatLng: function (latLng, callback) {
+    console.log('get parcels by latlng');
 
-    // clear state
-    // disabling this because if the new query doesn't return anything,
-    // we don't want to flush out the current dor parcel
-    // app.state.dor = undefined;
     if (app.state.activeTopic == 'deeds' || app.state.activeTopic == 'zoning') {
       var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerDOR.url});
       parcelQuery.contains(latLng);
@@ -1721,17 +1466,22 @@ var app = _.extend(app || {},
         }
 
         // sort by status
-        console.log('**before', featureCollection);
         var features = featureCollection.features,
+            PARCEL_STATUS_SORT_ORDER = [1, 3, 2],
             featuresSorted = _.sortBy(features, function (feature) {
-              return feature.properties.STATUS;
-            });
+                                var parcelStatus = feature.properties.STATUS,
+                                    priority = PARCEL_STATUS_SORT_ORDER.indexOf(parcelStatus),
+                                    parcelNum = 10000 - feature.properties.PARCEL;
+
+                                // hacky
+                                return priority + '_' + parcelNum;
+                              });
         featureCollection.features = featuresSorted;
-        console.log('**after', featureCollection);
+
+        console.debug('dor parcels sorted', featuresSorted);
 
         // update state
         app.state.dor = featureCollection;
-        console.log('saved it to state', app.state.dor)
 
         // if there's a callback, call it
         callback && callback();
@@ -1760,100 +1510,6 @@ var app = _.extend(app || {},
       })
     }
   },
-
-  // replaced by didGetNearbyActivity
-  // didGetNearbyAppeals: function () {
-  //   //console.log('function didGetNearbyAppeals is starting to run')
-  //   var features = app.state.nearby.appeals,
-  //       featuresSorted = _.orderBy(features, app.config.li.fieldMap.appeals.date, ['desc']),
-  //       // sourceFields = _.map(app.config.li.displayFields, function (displayField) {
-  //       //                   return app.config.li.fieldMap.appeals[displayField];
-  //       //                 }),
-  //       // adding address:
-  //       sourceFields = ['processeddate', 'appealkey', 'address', 'appealgrounds', 'decision',],
-  //       rowsHtml = app.util.makeTableRowsFromJson(featuresSorted, sourceFields),
-  //       $table = $('#nearby-appeals'),
-  //       $tbody = $table.find('tbody');
-  //   $tbody.html(rowsHtml);
-  //   $('#nearby-appeals-count').text(' (' + features.length + ')');
-  //
-  //   // reset radio button
-  //   var $dateButton = $('input[name="nearby-appeals-sort-by"][value="date"]');
-  //   $dateButton.prop({checked: true});
-  //
-  //   // TEMP attribute rows with appeal id and distance
-  //   var sourceIdField = app.config.li.fieldMap.appeals.id;
-  //   _.forEach($tbody.find('tr'), function (row, i) {
-  //     var feature = featuresSorted[i];
-  //     $(row).attr('data-appeal-id', feature[sourceIdField]);
-  //     $(row).attr('data-appeal-distance', feature.distance);
-  //     $(row).attr('data-appeal-date', feature.processeddate);
-  //   });
-  //
-  //   // format fields
-  //   app.util.formatTableFields($table);
-  //
-    // // refresh them on map if topic accordion is open
-    // var $targetTopic = $('#topic-nearby');
-    // if ($targetTopic.is(':visible')){
-    // //if ($('#topic-nearby').attr('style') == 'display: block;') {
-    //   //console.log($('#topic-nearby').attr('style'));
-    //   //console.log('refreshing appeals layer');
-    //   app.map.removeNearbyAppeals();
-    //   app.map.addNearbyAppealsToMap();
-    // };
-    //
-    // // listen for hover
-    // $tbody.find('tr').hover(
-    //   function () {
-    //     var $this = $(this);
-    //     $this.css('background', '#ffffff');
-    //     // tell map to highlight pin
-    //     var appealId = $this.attr('data-appeal-id');
-    //     app.map.didHoverOverNearbyAppeal(appealId);
-    //   },
-    //   function () {
-    //     var $this = $(this);
-    //     $this.css('background', '');
-    //     var appealId = $this.attr('data-appeal-id');
-    //     app.map.didMoveOffNearbyAppeal(appealId);
-    //   }
-    // );
-  //
-  //   // TODO should sort?
-  // },
-  //
-  // sortNearbyAppealsBy: function (sortBy) {
-  //   // get rows
-  //   var rows = $('#nearby-appeals > tbody > tr'),
-  //       rowsSorted = _.sortBy(rows, function (row) {
-  //         return $(row).attr('data-appeal-' + sortBy);
-  //       });
-  //
-  //   // date should be desc
-  //   if (sortBy === 'date') rowsSorted = _.reverse(rowsSorted);
-  //
-  //   // clobber
-  //   $('#nearby-appeals > tbody').empty();
-  //   $('#nearby-appeals > tbody').append(rowsSorted);
-  //
-  //   // listen for hover
-  //   $('#nearby-appeals').find('tr').hover(
-  //     function () {
-  //       var $this = $(this);
-  //       $this.css('background', '#ffffff');
-  //       // tell map to highlight pin
-  //       var appealId = $this.attr('data-appeal-id');
-  //       app.map.didHoverOverNearbyAppeal(appealId);
-  //     },
-  //     function () {
-  //       var $this = $(this);
-  //       $this.css('background', '');
-  //       var appealId = $this.attr('data-appeal-id');
-  //       app.map.didMoveOffNearbyAppeal(appealId);
-  //     }
-  //   );
-  // },
 
   didGetDorDocuments: function () {
     // have to unpack these differently from geojson/socrata
