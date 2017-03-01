@@ -28,6 +28,10 @@ var app = _.extend(app || {},
   // start app
   init: function ()
   {
+    // configure underscore templating to use mustache style strings
+    _.templateSettings = {
+      interpolate: /\{\{(.+?)\}\}/g
+    };
     // debug stuff
     // var DEBUG = false,
     var DEBUG_HOSTS = app.config.debugHosts,
@@ -1095,21 +1099,65 @@ var app = _.extend(app || {},
     }
 
     var $parcelTabs = $('#parcel-tabs');
+    var $parcelTabsPanels = $('#parcel-tabs-panels');
     $parcelTabs.empty();
+    $parcelTabsPanels.empty();
+
+    // create tab and tab content templates
+    // var tabTemplateString = $('#parcel-tab-template').html(),
+    //     tabTemplate = _.template(tabTemplateString);
+    //
+    // console.warn('template fn', _.template)
+    // console.warn('template 1', tabTemplate);
+    // var tabContentTemplateString = $('#parcel-tab-content-template').html();
+    // console.warn(tabContentTemplateString);
+    //
+    // var tabContentTemplate = _.template(tabContentTemplateString);
+
 
     _.forEach(parcels, function (parcel, i) {
       console.debug('render parcel', parcel);
+      var props = parcel.properties,
+          mapreg = props.MAPREG;
 
       var $tab = $('<li>')
                     .addClass('tabs-title')
-                    .html('<a href="#">' + parcel.properties.MAPREG + '</a>');
+                    .html('<a href="#parcel-tab-' + mapreg + '">' + mapreg + '</a>');
 
-      if (i === 0) {
-        $tab.addClass('is-active');
-      }
+
+      // create parcel tab content
+      // var templateData = {
+      //   id: props.MAPREG,
+      //   // address: props.,
+      //   id: props.MAPREG,
+      //   id: props.MAPREG,
+      //   id: props.MAPREG,
+      // }
+      // var html = template();
 
       $parcelTabs.append($tab);
 
+      // make tab panel/content
+      var $panel = $('<div>').addClass('tabs-panel').attr('id', 'parcel-tab-' + mapreg),
+          $content = $('<div>').addClass('tabs-panel-content');
+
+      // $panel.html('hello panel');
+      $table = $('<table>');
+      $content.append($table);
+
+      // documents
+      var $docsHeader = $('<h4>').append($('<span>').addClass('deeds-documents-count').html('Documents (0)'))
+      $content.append($docsHeader)
+
+      $panel.html($content);
+      $parcelTabsPanels.append($panel);
+
+
+      // make first tab active
+      if (i === 0) {
+        $tab.addClass('is-active');
+        $panel.addClass('is-active');
+      }
       // var props = parcel.properties,
       //     parcelId = props.MAPREG,
       //     address = app.util.concatDorAddress(parcel);

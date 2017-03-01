@@ -228,13 +228,13 @@
                                 </div>
 
                                 <ul class="tabs" data-tabs id="parcel-tabs">
-                                  <li class="tabs-title is-active"><a href="#panel1">Tab 1</a></li>
+                                  <!-- <li class="tabs-title is-active"><a href="#panel1">Tab 1</a></li>
                                   <li class="tabs-title"><a href="#panel2">Tab 2</a></li>
                                   <li class="tabs-title"><a href="#panel3">Tab 3</a></li>
-                                  <li class="tabs-title"><a href="#panel4">Tab 4</a></li>
+                                  <li class="tabs-title"><a href="#panel4">Tab 4</a></li> -->
                                 </ul>
-                                <div class="tabs-content" data-tabs-content="example-vert-tabs">
-                                  <div class="tabs-panel is-active" id="panel1">
+                                <div id="parcel-tabs-panels" class="tabs-content" data-tabs-content="parcel-tabs-content">
+                                  <!-- <div class="tabs-panel is-active" id="panel1">
                                     <p>This is the first panel of the basic tab example. You can place all sorts of content here including a grid.</p>
                                   </div>
                                   <div class="tabs-panel" id="panel2">
@@ -245,56 +245,79 @@
                                   </div>
                                   <div class="tabs-panel" id="panel4">
                                     <p>This is the fourth panel of the basic tab example. This is the fourth panel of the basic tab example.</p>
-                                  </div>
+                                  </div> -->
                                 </div>
 
-                                <!-- <table>
-                                    <tr>
-                                        <th>Map Registry #</th>
-                                        <td id="deeds-id"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Parcel Address</th>
-                                        <td id="deeds-address"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Status</th>
-                                        <td id="deeds-status"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Has Air Rights</th>
-                                        <td id="deeds-air-rights"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Is Condo</th>
-                                        <td id="deeds-condo"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Perimeter</th>
-                                        <td id="deeds-perimeter"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Area</th>
-                                        <td id="deeds-area"></td>
-                                    </tr>
-                                </table>
+                                <script id="parcel-tab-template" type="text/template">
+                                  <li class="tabs-title"><a href="#">{{ id }}</a></li>
+                                </script>
 
-                                <h4>Documents<span id="deeds-documents-count"></span></h4>
-                                <table id="deeds-documents" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                                  <thead>
-                                    <tr>
-                                      <th scope="col" data-field-type="date">Date</th>
-                                      <th scope="col">ID</th>
-                                      <th scope="col">Type</th>
-                                      <th scope="col">Grantor</th>
-                                      <th scope="col">Grantee</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody></tbody>
-                                </table>
+                                <script id="parcel-tab-content-template" type="text/template">
+                                  <!-- <div class="tabs-panel" id="parcel-tab-{{ id }}"> -->
+                                  <div class="tabs-panel">
+                                    <table>
+                                        <tr>
+                                            <th>Map Registry #</th>
+                                            <td id="deeds-id">{{ id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Parcel Address</th>
+                                            <td id="deeds-address">{{ address }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Status</th>
+                                            <td id="deeds-status">{{ status }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Has Air Rights</th>
+                                            <td id="deeds-air-rights">{{ airRights }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Is Condo</th>
+                                            <td id="deeds-condo">{{ condo }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Perimeter</th>
+                                            <td id="deeds-perimeter">{{ perimeter }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Area</th>
+                                            <td id="deeds-area">{{ area }}</td>
+                                        </tr>
+                                    </table>
 
-                                <h4>Registry Maps<span id="deeds-regmaps-count"></span></h4>
-                                <div id="deeds-regmaps"></div> -->
+                                    <h4>Documents<span id="deeds-documents-count"></span></h4>
+                                    <table id="deeds-documents" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                                      <thead>
+                                        <tr>
+                                          <th scope="col" data-field-type="date">Date</th>
+                                          <th scope="col">ID</th>
+                                          <th scope="col">Type</th>
+                                          <th scope="col">Grantor</th>
+                                          <th scope="col">Grantee</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {{ _.forEach(docs, function (doc) { }}
+                                          <tr>
+                                            <td>{{ doc.date }}</td>
+                                            <td>{{ doc.id }}</td>
+                                            <td>{{ doc.type }}</td>
+                                            <td>{{ doc.grantor }}</td>
+                                            <td>{{ doc.grantee }}</td>
+                                          </tr>
+                                        {{ }); }}
+                                      </tbody>
+                                    </table>
+
+                                    <h4>Registry Maps<span id="deeds-regmaps-count"></span></h4>
+                                    <div id="deeds-regmaps"></div>
+
+                                  </div><!-- end of tabs-panel-->
+                                </script>
+
+
+
                             </div>
 
                             <div class="topic-content-not-found">
