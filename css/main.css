@@ -456,3 +456,7 @@ table {
 #parcel-tabs-panels .tabs-panel {
   padding: 20px;
 }
+
+#parcel-tab-container .tabs a.parcel-status-inactive {
+  font-style: italic;
+}
