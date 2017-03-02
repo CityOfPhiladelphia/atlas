@@ -705,8 +705,6 @@ var app = _.extend(app || {},
                           });
     featureCollection.features = featuresSorted;
 
-    console.debug('dor parcels sorted', featuresSorted);
-
     // update state
     app.state.dor = featureCollection;
 
@@ -1041,57 +1039,50 @@ var app = _.extend(app || {},
     /*
     ELECTIONS
     */
-    if (aisProps.political_ward && aisProps.political_division) {
-      var electionsUrl = '//api.phila.gov/elections',
-      electionsWard = aisProps.political_ward,
-      // TODO divisions in AIS are prefixed with the ward num; slice it out
-      // apparently this is called the `division_id` in the elections API
-      electionsDivision = aisProps.political_division.substring(2);
-
-      $.ajax({
-        url: electionsUrl,
-        data: {
-          option: 'com_pollingplaces',
-          view: 'json',
-          ward: electionsWard,
-          division: electionsDivision,
-        },
-        success: function (jsonString) {
-          // no json headers set on this
-          var data = JSON.parse(jsonString);
-
-          if (!data.features || data.features.length < 1) {
-            // does this work?
-            console.log('elections no features, trying to call error callback');
-            this.error();
-          }
-
-          //console.log('elections', data);
-          app.state.elections = data;
-          app.didGetElections();
-
-          $('#topic-election .topic-content').show();
-          $('#topic-election .topic-content-not-found').hide();
-        },
-        error: function (err) {
-          console.log('elections error', err);
-          app.state.elections = null;
-
-          $('#topic-election .topic-content').hide();
-          $('#topic-election .topic-content-not-found').show();
-        },
-      });
-    }
-    else {
-      // TODO clean up elections content
-    }
-
-    /*
-    PUBLIC SAFETY
-    */
-
-    // Get nearest evacuation route
-    // var evacQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/EvacuationRoute/FeatureServer/0'});
+    // if (aisProps.political_ward && aisProps.political_division) {
+    //   var electionsUrl = '//api.phila.gov/elections',
+    //   electionsWard = aisProps.political_ward,
+    //   // TODO divisions in AIS are prefixed with the ward num; slice it out
+    //   // apparently this is called the `division_id` in the elections API
+    //   electionsDivision = aisProps.political_division.substring(2);
+    //
+    //   $.ajax({
+    //     url: electionsUrl,
+    //     data: {
+    //       option: 'com_pollingplaces',
+    //       view: 'json',
+    //       ward: electionsWard,
+    //       division: electionsDivision,
+    //     },
+    //     success: function (jsonString) {
+    //       // no json headers set on this
+    //       var data = JSON.parse(jsonString);
+    //
+    //       if (!data.features || data.features.length < 1) {
+    //         // does this work?
+    //         console.log('elections no features, trying to call error callback');
+    //         this.error();
+    //       }
+    //
+    //       //console.log('elections', data);
+    //       app.state.elections = data;
+    //       app.didGetElections();
+    //
+    //       $('#topic-election .topic-content').show();
+    //       $('#topic-election .topic-content-not-found').hide();
+    //     },
+    //     error: function (err) {
+    //       console.log('elections error', err);
+    //       app.state.elections = null;
+    //
+    //       $('#topic-election .topic-content').hide();
+    //       $('#topic-election .topic-content-not-found').show();
+    //     },
+    //   });
+    // }
+    // else {
+    //   // TODO clean up elections content
+    // }
 
     // show topics
     $('#topic-list').show();
@@ -1100,7 +1091,6 @@ var app = _.extend(app || {},
     // $('.topic:visible').length === 0 && app.activateTopic('property');
   },
 
-  // TODO confirm these
   PARCEL_STATUS: {
     1:  'Active',
     2:  'Inactive',
@@ -1110,8 +1100,6 @@ var app = _.extend(app || {},
   // render deeds (assumes there's a parcel in the state)
   renderParcelTopic: function () {
     var parcels = app.state.dor.features;
-
-    console.log('render parcel topic. total parcels:', parcels.length);
 
     if (!parcels[0]) {
       console.log('render parcel topic, but no parcel feature', app.state.dor);
@@ -1123,83 +1111,6 @@ var app = _.extend(app || {},
 
     // activate first parcel by default
     app.views.parcelTabs.activeParcel = parcels[0].properties.MAPREG;
-
-    // var $parcelTabs = $('#parcel-tabs');
-    // var $parcelTabsPanels = $('#parcel-tabs-panels');
-    // $parcelTabs.empty();
-    // $parcelTabsPanels.empty();
-
-    // create tab and tab content templates
-    // var tabTemplateString = $('#parcel-tab-template').html(),
-    //     tabTemplate = _.template(tabTemplateString);
-    //
-    // console.warn('template fn', _.template)
-    // console.warn('template 1', tabTemplate);
-    // var tabContentTemplateString = $('#parcel-tab-content-template').html();
-    // console.warn(tabContentTemplateString);
-    //
-    // var tabContentTemplate = _.template(tabContentTemplateString);
-
-    // var tabTableTemplateString = $('#parcel-tab-table-template').html(),
-    //     tabTableTemplate = _.template(tabTableTemplateString);
-    //
-    // _.forEach(parcels, function (parcel, i) {
-    //   console.debug('render parcel', parcel);
-    //   var props = parcel.properties,
-    //       mapreg = props.MAPREG;
-    //
-    //   var $tab = $('<li>')
-    //                 .addClass('tabs-title')
-    //                 .html('<a href="#panel' + i + '">' + mapreg + '</a>');
-    //
-    //   $parcelTabs.append($tab);
-
-      // make tab panel/content
-      // var $panel = $('<div>')
-      //                 .addClass('tabs-panel')
-      //                 .attr('id', 'panel'),
-      //                 // .attr('data-tabs', ''),
-      //     // $content = $('<div>').addClass('tabs-panel-content');
-      //     address = app.util.concatDorAddress(parcel),
-      //     tableTemplateData = {
-      //       id: mapreg,
-      //       address: address,
-      //       airRights: props.SUFFIX === 'A' ? 'Yes' : 'No',
-      //       condo: props.CONDOFLAG ? 'Yes' : 'No',
-      //       perimeter: 000,
-      //       area: 000,
-      //       status: app.PARCEL_STATUS[props.STATUS],
-      //     },
-      //     tableHtml = tabTableTemplate(tableTemplateData);
-
-      // console.warn('table html', tableHtml);
-      // $content.html(tableHtml);
-
-      // documents
-      // var $docsHeader = $('<h4>').append($('<span>').addClass('deeds-documents-count').html('Documents (0)'))
-      // $content.append($docsHeader)
-
-      // $panel.html($content);
-      // console.warn('panel time', $panel)
-      // $panel.html(mapreg)
-      // $parcelTabsPanels.append($panel);
-
-
-      // make first tab active
-      // if (i === 0) {
-      //   $tab.addClass('is-active');
-      //   $panel.addClass('is-active');
-      // }
-      // var props = parcel.properties,
-      //     parcelId = props.MAPREG,
-      //     address = app.util.concatDorAddress(parcel);
-      //
-      // $('#deeds-address').html(address);
-      // $('#deeds-id').html(parcelId);
-      // $('#deeds-status').html(app.PARCEL_STATUS[props.STATUS]);
-      // $('#deeds-air-rights').html(props.SUFFIX === 'A' ? 'Yes' : 'No');
-      // $('#deeds-condo').html(props.CONDOFLAG === 1 ? 'Yes' : 'No');
-    // });
 
     app.showContentForTopic('deeds');
   },
