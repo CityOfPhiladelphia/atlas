@@ -1499,6 +1499,46 @@ app.map = (function ()
 			});
 
 		},
+
+		didActivateParcel: function () {
+			// if there's no parcel in state, clear the map and don't render
+			// TODO zoom to AIS xy
+			var parcelDOR, geomDOR;
+
+			var activeParcelId = app.views.parcelTabs.activeParcel,
+					activeParcel = _.filter(app.state.dor.features, function (feature) {
+						return feature.properties.MAPREG == activeParcelId;
+					})[0];
+
+			try {
+				if (!activeParcel) {
+					throw 'no parcel'
+				};
+
+				geomDOR = activeParcel.geometry;
+
+				var coordsDOR = app.util.flipCoords(geomDOR.coordinates);
+				parcelPolyDOR = L.polygon([coordsDOR], {
+					color: 'blue',
+					weight: 2,
+					name: 'parcelPolyDOR',
+					type: 'parcel',
+				});
+				parcelCentroid = parcelPolyDOR.getBounds().getCenter();
+			}
+			catch(err) {
+				console.log('draw parcel, but could not get parcel from state', err);
+				// clear parcel
+				// _parcelLayerGroup.clearLayers();
+				// return;
+			}
+
+			app.state.map.addressMarkers.parcelPolyDOR = parcelPolyDOR;
+
+			app.map.didCreateAddressMarker('parcelPolyDOR');
+
+			app.map.didGetParcel('dor');
+		},
   }; // end of return
 })();
 

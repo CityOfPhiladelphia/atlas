@@ -214,109 +214,86 @@
                             <div class="topic-content">
                                 <div class="callout">
                                   <p>
-                                    <!--This information is provided by the Department of
-                                    Records (<span class="keyword">DOR</span>), the agency
-                                    which records real estate documents in the City of Philadelphia.
-                                    The parcel boundaries shown on the map are a
-                                    graphic representation of the deed and should not be used in place of
-                                    legal documents such as deeds or land
-                                    surveys.-->
                                     The property boundaries displayed on the map are for reference only and may not be used in place of
                                      recorded deeds or land surveys.  Dimension lengths are calculated using the GIS feature.
                                      Source: Department of Records.
                                   </p>
                                 </div>
 
-                                <ul class="tabs" data-tabs id="parcel-tabs">
-                                  <!-- <li class="tabs-title is-active"><a href="#panel1">Tab 1</a></li>
-                                  <li class="tabs-title"><a href="#panel2">Tab 2</a></li>
-                                  <li class="tabs-title"><a href="#panel3">Tab 3</a></li>
-                                  <li class="tabs-title"><a href="#panel4">Tab 4</a></li> -->
-                                </ul>
-                                <div id="parcel-tabs-panels" class="tabs-content" data-tabs-content="parcel-tabs-content">
-                                  <!-- <div class="tabs-panel is-active" id="panel1">
-                                    <p>This is the first panel of the basic tab example. You can place all sorts of content here including a grid.</p>
-                                  </div>
-                                  <div class="tabs-panel" id="panel2">
-                                    <p>This is the second panel of the basic tab example. This is the second panel of the basic tab example.</p>
-                                  </div>
-                                  <div class="tabs-panel" id="panel3">
-                                    <p>This is the third panel of the basic tab example. This is the third panel of the basic tab example.</p>
-                                  </div>
-                                  <div class="tabs-panel" id="panel4">
-                                    <p>This is the fourth panel of the basic tab example. This is the fourth panel of the basic tab example.</p>
-                                  </div> -->
-                                </div>
+                                <div id="parcel-tab-container"><!-- start of vue -->
 
-                                <script id="parcel-tab-template" type="text/template">
-                                  <li class="tabs-title"><a href="#">{{ id }}</a></li>
-                                </script>
+                                  <ul class="tabs" data-tabs id="parcel-tabs">
+                                    <li class="tabs-title" v-for="parcel, index in parcels" v-bind:class="{'is-active': (activeParcel == parcel.properties.MAPREG)}"><a v-bind:href="'#parcel-' + parcel.properties.MAPREG" v-on:click="activeParcel = parcel.properties.MAPREG">{{ parcel.properties.MAPREG }}</a></li>
+                                  </ul>
 
-                                <script id="parcel-tab-content-template" type="text/template">
-                                  <!-- <div class="tabs-panel" id="parcel-tab-{{ id }}"> -->
-                                  <div class="tabs-panel">
-                                    <table>
+                                  <div id="parcel-tabs-panels" class="tabs-content" data-tabs-content="parcel-tabs-content">
+                                    <div class="tabs-panel" v-for="parcel, index in parcels" v-bind:class="{'is-active': (activeParcel == parcel.properties.MAPREG)}" v-bind:id="'parcel-' + parcel.properties.MAPREG">
+                                      <h4>Parcel</h4>
+                                      <table>
                                         <tr>
                                             <th>Map Registry #</th>
-                                            <td id="deeds-id">{{ id }}</td>
+                                            <td>{{ parcel.properties.MAPREG }}</td>
                                         </tr>
                                         <tr>
                                             <th>Parcel Address</th>
-                                            <td id="deeds-address">{{ address }}</td>
+                                            <td>{{ app.util.concatDorAddress(parcel) }}</td>
                                         </tr>
                                         <tr>
                                             <th>Status</th>
-                                            <td id="deeds-status">{{ status }}</td>
+                                            <td>{{ app.PARCEL_STATUS[parcel.properties.STATUS] }}</td>
                                         </tr>
                                         <tr>
                                             <th>Has Air Rights</th>
-                                            <td id="deeds-air-rights">{{ airRights }}</td>
+                                            <td>{{ parcel.properties.SUFFIX === 'A' ? 'Yes' : 'No' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Is Condo</th>
-                                            <td id="deeds-condo">{{ condo }}</td>
+                                            <td>{{ parcel.properties.CONDOFLAG ? 'Yes' : 'No' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Perimeter</th>
-                                            <td id="deeds-perimeter">{{ perimeter }}</td>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <th>Area</th>
-                                            <td id="deeds-area">{{ area }}</td>
+                                            <td></td>
                                         </tr>
-                                    </table>
+                                      </table>
 
-                                    <h4>Documents<span id="deeds-documents-count"></span></h4>
-                                    <table id="deeds-documents" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                                      <thead>
-                                        <tr>
-                                          <th scope="col" data-field-type="date">Date</th>
-                                          <th scope="col">ID</th>
-                                          <th scope="col">Type</th>
-                                          <th scope="col">Grantor</th>
-                                          <th scope="col">Grantee</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        {{ _.forEach(docs, function (doc) { }}
+                                      <h4>Documents<span id="deeds-documents-count"></span></h4>
+                                      <table id="deeds-documents" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                                        <thead>
                                           <tr>
-                                            <td>{{ doc.date }}</td>
-                                            <td>{{ doc.id }}</td>
-                                            <td>{{ doc.type }}</td>
-                                            <td>{{ doc.grantor }}</td>
-                                            <td>{{ doc.grantee }}</td>
+                                            <th scope="col" data-field-type="date">Date</th>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Type</th>
+                                            <th scope="col">Grantor</th>
+                                            <th scope="col">Grantee</th>
                                           </tr>
-                                        {{ }); }}
-                                      </tbody>
-                                    </table>
+                                        </thead>
+                                        <tbody></tbody>
+                                      </table>
 
-                                    <h4>Registry Maps<span id="deeds-regmaps-count"></span></h4>
-                                    <div id="deeds-regmaps"></div>
+                                      <h4>Registry Maps<span id="deeds-regmaps-count"></span></h4>
+                                      <!-- <ul id="deeds-regmaps-list">
+                                      </ul> -->
+                                      <div id="deeds-regmaps"></div>
 
-                                  </div><!-- end of tabs-panel-->
-                                </script>
 
+                                    </div><!-- end of panel -->
 
+                                    <div class="tabs-panel" id="panel2">
+                                      <p>This is the second panel of the basic tab example. This is the second panel of the basic tab example.</p>
+                                    </div>
+                                    <div class="tabs-panel" id="panel3">
+                                      <p>This is the third panel of the basic tab example. This is the third panel of the basic tab example.</p>
+                                    </div>
+                                    <div class="tabs-panel" id="panel4">
+                                      <p>This is the fourth panel of the basic tab example. This is the fourth panel of the basic tab example.</p>
+                                    </div>
+                                  </div>
+
+                                </div><!-- end of parcel-tab-container -->
 
                             </div>
 
@@ -502,34 +479,6 @@
 
                                     </p>
                                 </div>
-
-                                <!-- <div class="topic-badge panel center">
-                                    <h4 class="alternate">Impervious Area</h4>
-                                    <div class="topic-badge-body">
-                                        <h1><span id="water-impervious-area"></span> sq ft</h1>
-                                        <span
-                                              aria-haspopup="true"
-                                              class="has-tip"
-                                              title="This is the total surface area of the property covered by materials such as asphalt or concrete,
-                                                     which do not allow water to drain into the ground. This number is used to calculate your stormwater bill."
-                                        >
-                                          What does this mean?
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="topic-badge panel center">
-                                    <h4 class="alternate">Gross Area</h4>
-                                    <div class="topic-badge-body">
-                                        <h1><span id="water-gross-area"></span> sq ft</h1>
-                                        <span
-                                              aria-haspopup="true"
-                                              class="has-tip"
-                                              title="This is the total surface area of the property."
-                                        >
-                                          What does this mean?
-                                        </span>
-                                    </div>
-                                </div> -->
 
                                 <h4>Parcel</h4>
                                 <table>
@@ -909,9 +858,11 @@
 
         <!-- JS: VENDOR -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.1.2/foundation.min.js"></script>
+        <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.1.2/foundation.min.js"></script> -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.1.2/foundation.js"></script>
         <script src="//cityofphiladelphia.github.io/patterns/dist/1.3.0/js/patterns.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.6/lodash.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue.js"></script>
         <script src="//unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
         <script src="//unpkg.com/esri-leaflet@2.0.6"></script>
         <script src="//ljagis.github.io/leaflet-measure/leaflet-measure.min.js"></script>

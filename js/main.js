@@ -204,6 +204,23 @@ var app = _.extend(app || {},
 
     // route one time on load
     app.route();
+
+    // PARCEL TABS
+    app.views = {};
+    app.views.parcelTabs = new Vue({
+      el: '#parcel-tab-container',
+      mounted: function () {
+        $(document).foundation();
+      },
+      data: {
+        app: app,
+        parcels: [],
+        activeParcel: '',
+      },
+      watch: {
+        activeParcel: app.map.didActivateParcel,
+      },
+    });
   },
 
   showCyclo: function () {
@@ -854,6 +871,9 @@ var app = _.extend(app || {},
   resetTopicViews: function () {
     // console.log('reset topic views');
 
+    // DEBUG
+    return;
+
     var topicCells = $('.topic td');
     topicCells.empty();
   },
@@ -1084,7 +1104,7 @@ var app = _.extend(app || {},
   PARCEL_STATUS: {
     1:  'Active',
     2:  'Inactive',
-    3:  'Trans',
+    3:  'Remainder',
   },
 
   // render deeds (assumes there's a parcel in the state)
@@ -1098,10 +1118,16 @@ var app = _.extend(app || {},
       return;
     }
 
-    var $parcelTabs = $('#parcel-tabs');
-    var $parcelTabsPanels = $('#parcel-tabs-panels');
-    $parcelTabs.empty();
-    $parcelTabsPanels.empty();
+    // put parcels in state
+    app.views.parcelTabs.parcels = parcels;
+
+    // activate first parcel by default
+    app.views.parcelTabs.activeParcel = parcels[0].properties.MAPREG;
+
+    // var $parcelTabs = $('#parcel-tabs');
+    // var $parcelTabsPanels = $('#parcel-tabs-panels');
+    // $parcelTabs.empty();
+    // $parcelTabsPanels.empty();
 
     // create tab and tab content templates
     // var tabTemplateString = $('#parcel-tab-template').html(),
@@ -1114,50 +1140,56 @@ var app = _.extend(app || {},
     //
     // var tabContentTemplate = _.template(tabContentTemplateString);
 
-
-    _.forEach(parcels, function (parcel, i) {
-      console.debug('render parcel', parcel);
-      var props = parcel.properties,
-          mapreg = props.MAPREG;
-
-      var $tab = $('<li>')
-                    .addClass('tabs-title')
-                    .html('<a href="#parcel-tab-' + mapreg + '">' + mapreg + '</a>');
-
-
-      // create parcel tab content
-      // var templateData = {
-      //   id: props.MAPREG,
-      //   // address: props.,
-      //   id: props.MAPREG,
-      //   id: props.MAPREG,
-      //   id: props.MAPREG,
-      // }
-      // var html = template();
-
-      $parcelTabs.append($tab);
+    // var tabTableTemplateString = $('#parcel-tab-table-template').html(),
+    //     tabTableTemplate = _.template(tabTableTemplateString);
+    //
+    // _.forEach(parcels, function (parcel, i) {
+    //   console.debug('render parcel', parcel);
+    //   var props = parcel.properties,
+    //       mapreg = props.MAPREG;
+    //
+    //   var $tab = $('<li>')
+    //                 .addClass('tabs-title')
+    //                 .html('<a href="#panel' + i + '">' + mapreg + '</a>');
+    //
+    //   $parcelTabs.append($tab);
 
       // make tab panel/content
-      var $panel = $('<div>').addClass('tabs-panel').attr('id', 'parcel-tab-' + mapreg),
-          $content = $('<div>').addClass('tabs-panel-content');
+      // var $panel = $('<div>')
+      //                 .addClass('tabs-panel')
+      //                 .attr('id', 'panel'),
+      //                 // .attr('data-tabs', ''),
+      //     // $content = $('<div>').addClass('tabs-panel-content');
+      //     address = app.util.concatDorAddress(parcel),
+      //     tableTemplateData = {
+      //       id: mapreg,
+      //       address: address,
+      //       airRights: props.SUFFIX === 'A' ? 'Yes' : 'No',
+      //       condo: props.CONDOFLAG ? 'Yes' : 'No',
+      //       perimeter: 000,
+      //       area: 000,
+      //       status: app.PARCEL_STATUS[props.STATUS],
+      //     },
+      //     tableHtml = tabTableTemplate(tableTemplateData);
 
-      // $panel.html('hello panel');
-      $table = $('<table>');
-      $content.append($table);
+      // console.warn('table html', tableHtml);
+      // $content.html(tableHtml);
 
       // documents
-      var $docsHeader = $('<h4>').append($('<span>').addClass('deeds-documents-count').html('Documents (0)'))
-      $content.append($docsHeader)
+      // var $docsHeader = $('<h4>').append($('<span>').addClass('deeds-documents-count').html('Documents (0)'))
+      // $content.append($docsHeader)
 
-      $panel.html($content);
-      $parcelTabsPanels.append($panel);
+      // $panel.html($content);
+      // console.warn('panel time', $panel)
+      // $panel.html(mapreg)
+      // $parcelTabsPanels.append($panel);
 
 
       // make first tab active
-      if (i === 0) {
-        $tab.addClass('is-active');
-        $panel.addClass('is-active');
-      }
+      // if (i === 0) {
+      //   $tab.addClass('is-active');
+      //   $panel.addClass('is-active');
+      // }
       // var props = parcel.properties,
       //     parcelId = props.MAPREG,
       //     address = app.util.concatDorAddress(parcel);
@@ -1167,7 +1199,7 @@ var app = _.extend(app || {},
       // $('#deeds-status').html(app.PARCEL_STATUS[props.STATUS]);
       // $('#deeds-air-rights').html(props.SUFFIX === 'A' ? 'Yes' : 'No');
       // $('#deeds-condo').html(props.CONDOFLAG === 1 ? 'Yes' : 'No');
-    });
+    // });
 
     app.showContentForTopic('deeds');
   },
