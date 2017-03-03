@@ -216,6 +216,7 @@ var app = _.extend(app || {},
         app: app,
         parcels: [],
         activeParcel: '',
+        documents: [],
       },
       watch: {
         activeParcel: app.map.didActivateParcel,
@@ -711,39 +712,68 @@ var app = _.extend(app || {},
     // tell map we got a dor parcel
     app.map.didGetDorParcels();
 
-    // calculate perimeter and area
-    var geomDOR = featuresSorted[0].geometry,
-        areaRequestGeom = '[' + JSON.stringify(geomDOR).replace('"type":"Polygon","coordinates"', '"rings"') + ']';
+    // loop over parcels
+    _.forEach(featuresSorted, function (parcel) {
+      console.warn('par', parcel);
 
-    $.ajax({
-      url: '//gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/areasAndLengths',
-      data: {
-        polygons: areaRequestGeom,
-        sr: 4326,
-        calculationType: 'geodesic',
-        f: 'json',
-        areaUnit: '{"areaUnit" : "esriSquareFeet"}',
-        lengthUnit: 9002,
-      },
-      success: function (dataString) {
-        // console.log('got polygon with area', dataString, this.url);
-        var data = JSON.parse(dataString),
-            area = Math.round(data.areas[0]),
-            perimeter = Math.round(data.lengths[0]);
-        $('#deeds-area').text(area + ' sq ft');
-        $('#deeds-perimeter').text(perimeter + ' ft');
-      },
-      error: function (err) {
-        console.log('polygon area error', err);
-      },
-    });
+      // calculate perimeter and area
+      var geomDOR = parcel.geometry,
+          areaRequestGeom = '[' + JSON.stringify(geomDOR).replace('"type":"Polygon","coordinates"', '"rings"') + ']';
 
-    app.renderParcelTopic();
+      $.ajax({
+        url: '//gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/areasAndLengths',
+        data: {
+          polygons: areaRequestGeom,
+          sr: 4326,
+          calculationType: 'geodesic',
+          f: 'json',
+          areaUnit: '{"areaUnit" : "esriSquareFeet"}',
+          lengthUnit: 9002,
+        },
+        success: function (dataString) {
+          // console.log('got polygon with area', dataString, this.url);
+          var data = JSON.parse(dataString),
+              area = Math.round(data.areas[0]),
+              perimeter = Math.round(data.lengths[0]);
+          $('#deeds-area').text(area + ' sq ft');
+          $('#deeds-perimeter').text(perimeter + ' ft');
+        },
+        error: function (err) {
+          console.log('polygon area error', err);
+        },
+      });
 
-    // get intersecting regmaps
-    var regmapQuery = new L.esri.Query({url: app.config.esri.dynamicLayers.regmap.url})
-                        .intersects(geomDOR);
-    regmapQuery.run(app.didGetRegmaps);
+      // get dor documents
+      var parcelAddress = app.util.concatDorAddress(parcel);
+      console.warn('getting docs for parcel', parcelAddress);
+
+      $.ajax({
+        url: app.config.dor.documents.documentIdQueryUrl,
+        data: {
+          where: "ADDRESS = '" + parcelAddress + "'",
+          outFields: '*',
+          f: 'json',
+        },
+        success: function (data) {
+          console.warn('docs for', parcelAddress, data);
+          // app.state.dorDocuments = data;
+          // app.didGetDorDocuments();
+
+          // update vue state
+          app.view.parcelTabs.documents = data;
+        },
+        error: function (err) {
+          console.log('dor document error', err);
+        },
+      });
+
+      app.renderParcelTopic();
+
+      // get intersecting regmaps
+      var regmapQuery = new L.esri.Query({url: app.config.esri.dynamicLayers.regmap.url})
+                                          .intersects(geomDOR);
+      regmapQuery.run(app.didGetRegmaps);
+    }); // end of parcel loop
   },
 
   didGetRegmaps: function (error, featureCollection, response) {
@@ -925,23 +955,6 @@ var app = _.extend(app || {},
             },
           });
         });
-
-    // get dor documents
-    $.ajax({
-      url: app.config.dor.documents.documentIdQueryUrl,
-      data: {
-        where: "ADDRESS = '" + aisAddress + "'",
-        outFields: '*',
-        f: 'json',
-      },
-      success: function (data) {
-        app.state.dorDocuments = data;
-        app.didGetDorDocuments();
-      },
-      error: function (err) {
-        console.log('dor document error', err);
-      },
-    });
 
     /*
     ZONING

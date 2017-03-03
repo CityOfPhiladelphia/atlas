@@ -251,6 +251,14 @@
                                             <td>{{ app.PARCEL_STATUS[parcel.properties.STATUS] }}</td>
                                         </tr>
                                         <tr>
+                                            <th>Origination Date</th>
+                                            <td>{{ parcel.properties.ORIG_DATE }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Inactive Date</th>
+                                            <td>{{ parcel.properties.INACTDATE }}</td>
+                                        </tr>
+                                        <tr>
                                             <th>Has Air Rights</th>
                                             <td>{{ parcel.properties.SUFFIX === 'A' ? 'Yes' : 'No' }}</td>
                                         </tr>
@@ -279,7 +287,9 @@
                                             <th scope="col">Grantee</th>
                                           </tr>
                                         </thead>
-                                        <tbody></tbody>
+                                        <tbody>
+                                          
+                                        </tbody>
                                       </table>
 
                                       <h4>Registry Maps<span id="deeds-regmaps-count"></span></h4>
