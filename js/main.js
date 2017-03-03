@@ -606,8 +606,7 @@ var app = _.extend(app || {},
     app.state.didFinishPwdRequest = app.state.didFinishDorRequest = null;
 
     //if (!app.state.dor) {
-    if (!app.state.clickedOnMap) {
-      //console.debug('no dor, so get it')
+    if (!app.state.map.clickedOnMap) {
       app.getDorParcel();
     }
     else {
