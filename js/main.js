@@ -1,7 +1,7 @@
 /* global L, _, $, history */
 
 /*$(window).bind('storage', function (e) {
-     console.log(e.originalEvent.key, e.originalEvent.newValue);
+     // console.log(e.originalEvent.key, e.originalEvent.newValue);
 });*/
 
 $(window).resize(function(){
@@ -47,14 +47,14 @@ var app = _.extend(app || {},
           return '//' + host + path;
         };
 
-    // disable console if not debugging
+    // disable // console if not debugging
     if (!DEBUG) {
       _.forEach(['log', 'debug', 'info', 'warn', 'error'], function (method) {
-        console[method] = function () {};
+        // console[method] = function () {};
       });
     }
 
-    DEBUG && console.log('debug mode on');
+    DEBUG && // console.log('debug mode on');
     DEBUG && $('#search-input').val(DEBUG_ADDRESS);
 
     // set pictometry and cyclomedia urls based on host
@@ -140,7 +140,7 @@ var app = _.extend(app || {},
     //     app.placeVacancyMarker();
     //     app.map.didClickVacancyRadioButton(this.id);
     //   } else {
-    //     console.log('button already selected');
+    //     // console.log('button already selected');
     //   }
     // });
 
@@ -176,8 +176,8 @@ var app = _.extend(app || {},
       $option.text(label);
       $('#nearby-activity-type').append($option);
 
-      console.warn('%%%%%%%% ', label)
-      console.warn($('#nearby-activity-type').children().length)
+      // console.warn('%%%%%%%% ', label)
+      // console.warn($('#nearby-activity-type').children().length)
 
       // don't add appeals to vacancy nearby selector
       if (['311 Requests', 'Crime Incidents'].indexOf(label) > -1) {
@@ -198,7 +198,7 @@ var app = _.extend(app || {},
 
     // listen for back button
     window.onpopstate = function () {
-      // console.log('popped state', location.href);
+      // // console.log('popped state', location.href);
       app.route();
     };
 
@@ -217,9 +217,19 @@ var app = _.extend(app || {},
         parcels: [],
         activeParcel: '',
         documents: [],
+        regmaps: [],
+        activeRegmap: '',
       },
       watch: {
         activeParcel: app.map.didActivateParcel,
+        activeRegmap: app.map.didSelectRegmap,
+      },
+      methods: {
+        dateFormat: function (date) {
+          if (!isNaN(date)){
+            return moment(parseInt(date)).format('YYYY-MM-DD');
+          }
+        },
       },
     });
   },
@@ -231,7 +241,7 @@ var app = _.extend(app || {},
   },
 
   route: function () {
-    // console.log('route');
+    // // console.log('route');
     var hash = location.hash,
         params = app.util.getQueryParams(),
         comps = hash.split('/');
@@ -246,7 +256,7 @@ var app = _.extend(app || {},
 
     // check for enough comps (just 2, since topic is optional)
     if (comps.length < 2) {
-      // console.log('route, but not enough comps', comps);
+      // // console.log('route, but not enough comps', comps);
       return;
     }
 
@@ -269,7 +279,7 @@ var app = _.extend(app || {},
     }
 
     // otherwise rehydrate state
-    console.log('rehydrate state', aisState);
+    // console.log('rehydrate state', aisState);
     app.state.ais = aisState;
 
     app.didGetAisResult();
@@ -280,11 +290,11 @@ var app = _.extend(app || {},
 
   didClickLink: function (e) {
     $this = $(this);
-    // console.log('did click link', $this);
+    // // console.log('did click link', $this);
 
     // if the link has the class `external`, open in a new window/tab
     if ($this.hasClass('external')) {
-      // console.log('external link, opening in new window');
+      // // console.log('external link, opening in new window');
 
       var href = $this.attr('href');
       window.open(href);
@@ -339,13 +349,13 @@ var app = _.extend(app || {},
       url: url,
       data: params,
       success: function (data) {
-        console.log('got ais');
+        // console.log('got ais');
 
         var features = data.features;
 
         // this shouldn't happen, but just in case
         if (features.length === 0) {
-          console.error('got ais, but no features');
+          // console.error('got ais, but no features');
           $('#no-results-modal').foundation('open');
           return;
         }
@@ -359,7 +369,7 @@ var app = _.extend(app || {},
               function (relatedFeature) {
                 // if the main feature is a range, reject anything that isn't also a range
                 if (!!feature.properties.address_high) {
-                  // console.warn('base addr is a range')
+                  // // console.warn('base addr is a range')
                   return !relatedFeature.properties.address_high;
                 }
                 return false;
@@ -367,7 +377,7 @@ var app = _.extend(app || {},
 
         // make sure it has geometry
         if (!feature.geometry.geocode_type) {
-          console.log('got ais, but address did not have an xy');
+          // console.log('got ais, but address did not have an xy');
           $('#no-results-modal').foundation('open');
           return;
         }
@@ -387,14 +397,14 @@ var app = _.extend(app || {},
         app.didGetAisResult();
       },
       error: function (err) {
-        console.log('ais error', err);
+        // console.log('ais error', err);
         $('#no-results-modal').foundation('open');
       },
     });
   },
 
   showMultipleAisResultModal: function (data) {
-    // console.log('show multiple ais modal');
+    // // console.log('show multiple ais modal');
     // var data = app.state.ais;
 
     $('#addressList').empty();
@@ -434,7 +444,7 @@ var app = _.extend(app || {},
   // takes a topic (formerly "data row") name and activates the corresponding
   // section in the data panel
   activateTopic: function (targetTopicName) {
-    console.log('activate topic:', targetTopicName);
+    // console.log('activate topic:', targetTopicName);
 
     // prevent topics from opening until we have at least AIS (arbitrary , but should work)
     // var ais = app.state.ais;
@@ -458,7 +468,7 @@ var app = _.extend(app || {},
 
     // only activate if it's not already active
     if ($targetTopic.is($activeTopic)) {
-      console.info('activate topic, but its already active');
+      // console.info('activate topic, but its already active');
       return;
     }
 
@@ -474,7 +484,7 @@ var app = _.extend(app || {},
     }
     app.map.didChangeTopic(prevTopic, targetTopicName);
 
-    console.log('activate topic finished');
+    // console.log('activate topic finished');
   },
 
   toggleTopic: function (targetTopicName) {
@@ -484,7 +494,7 @@ var app = _.extend(app || {},
     if ($targetTopic.is(':visible')){
       app.state.activeTopic = null
       $targetTopic.slideUp(350);
-      console.log('toggleTopic is calling didChangeTopic');
+      // console.log('toggleTopic is calling didChangeTopic');
       app.map.didChangeTopic(targetTopicName, null);
       // app.map.didDeactivateTopic(targetTopicName);
 
@@ -497,7 +507,7 @@ var app = _.extend(app || {},
 
     // otherwise, activate
     else {
-      console.log('toggleTopic is calling activateTopic with ' + targetTopicName);
+      // console.log('toggleTopic is calling activateTopic with ' + targetTopicName);
       app.activateTopic(targetTopicName);
     }
   },
@@ -505,6 +515,7 @@ var app = _.extend(app || {},
   // this gets called after ais state has been set (either by making an AJAX
   // call or rehydrating state)
   didGetAisResult: function () {
+    console.log('didGetAisResult is running');
     // open topic
     app.state.shouldOpenTopics = true;
     app.activateTopic(app.state.activeTopic || 'property');
@@ -582,7 +593,7 @@ var app = _.extend(app || {},
     app.getTopics();
 
     // push to history
-    console.log('pushing to history', aisState);
+    // console.log('pushing to history', aisState);
     var nextState = {
           ais: aisState,
         },
@@ -594,8 +605,9 @@ var app = _.extend(app || {},
     app.state.regmaps
     app.state.didFinishPwdRequest = app.state.didFinishDorRequest = null;
 
-    if (!app.state.dor) {
-      console.debug('no dor, so get it')
+    //if (!app.state.dor) {
+    if (!app.state.clickedOnMap) {
+      //console.debug('no dor, so get it')
       app.getDorParcel();
     }
     else {
@@ -617,7 +629,7 @@ var app = _.extend(app || {},
     var features = app.state.ais.related,
         $relatedList = $('#related-list');
 
-        // console.log('render related addresses', features);
+        // // console.log('render related addresses', features);
 
     // clear out old addresses
     $relatedList.empty();
@@ -644,13 +656,13 @@ var app = _.extend(app || {},
   },
 
   getDorParcel: function () {
-    console.log('get dor parcel');
+    console.log('get dor parcel is running');
 
     var aisFeature = app.state.ais.feature,
         parcelId = aisFeature.properties.dor_parcel_id;
 
     if (!parcelId) {
-      console.warn('get dor parcel, but no parcel id');
+      // console.warn('get dor parcel, but no parcel id');
 
       app.state.didFinishDorRequest = true;
 
@@ -668,18 +680,18 @@ var app = _.extend(app || {},
   },
 
   didGetDorParcels: function (error, featureCollection, response) {
-    console.debug('did get dor parcel', featureCollection);
+    console.log('didGetDorParcels is running', featureCollection);
 
     app.state.didFinishDorRequest = true;
 
     if (error || !featureCollection) {
-      console.warn('did get dor parcel, but error', error);
+      // console.warn('did get dor parcel, but error', error);
       return;
     }
 
     // if empty response
     if (featureCollection.features.length === 0) {
-      console.log('get dor parcel, but no results');
+      // console.log('get dor parcel, but no results');
       // show alert
       // $('#no-results-modal').foundation('open');
       app.state.dor = null;
@@ -714,7 +726,7 @@ var app = _.extend(app || {},
 
     // loop over parcels
     _.forEach(featuresSorted, function (parcel) {
-      console.warn('par', parcel);
+      // console.warn('par', parcel);
 
       // calculate perimeter and area
       var geomDOR = parcel.geometry,
@@ -731,7 +743,7 @@ var app = _.extend(app || {},
           lengthUnit: 9002,
         },
         success: function (dataString) {
-          // console.log('got polygon with area', dataString, this.url);
+          // // console.log('got polygon with area', dataString, this.url);
           var data = JSON.parse(dataString),
               area = Math.round(data.areas[0]),
               perimeter = Math.round(data.lengths[0]);
@@ -739,13 +751,13 @@ var app = _.extend(app || {},
           $('#deeds-perimeter').text(perimeter + ' ft');
         },
         error: function (err) {
-          console.log('polygon area error', err);
+          // console.log('polygon area error', err);
         },
       });
 
       // get dor documents
       var parcelAddress = app.util.concatDorAddress(parcel);
-      console.warn('getting docs for parcel', parcelAddress);
+      // console.warn('&&&&&&&&&&&&&&&&&& getting docs for parcel', parcelAddress);
 
       $.ajax({
         url: app.config.dor.documents.documentIdQueryUrl,
@@ -755,15 +767,18 @@ var app = _.extend(app || {},
           f: 'json',
         },
         success: function (data) {
-          console.warn('docs for', parcelAddress, data);
-          // app.state.dorDocuments = data;
+          //// console.warn('docs for', parcelAddress, data);
+          app.state.dorDocuments = data;
+          var features = _.map(JSON.parse(app.state.dorDocuments).features, function (feature) { return feature.attributes; });
+              //recordLimit = app.config.topicRecordLimit,
+              //featuresLimited = features.slice(0, recordLimit)
           // app.didGetDorDocuments();
 
           // update vue state
-          app.view.parcelTabs.documents = data;
+          app.views.parcelTabs.documents = features;
         },
         error: function (err) {
-          console.log('dor document error', err);
+          // console.log('dor document error', err);
         },
       });
 
@@ -772,12 +787,18 @@ var app = _.extend(app || {},
       // get intersecting regmaps
       var regmapQuery = new L.esri.Query({url: app.config.esri.dynamicLayers.regmap.url})
                                           .intersects(geomDOR);
-      regmapQuery.run(app.didGetRegmaps);
+      //regmapQuery.run(app.didGetRegmaps);
+      console.log('!!!!!!!!!!!&&&&&&&&&&&& about to do regmapQuery.run');
+      regmapQuery.run( function (error, fC, response) {
+        console.log('###########@@@@@@@@@@@@@ just did remapQuery.run', fC);
+        console.log('^^^^^^^^^^', response);
+        app.views.parcelTabs.regmaps = fC.features;
+      });
     }); // end of parcel loop
   },
 
   didGetRegmaps: function (error, featureCollection, response) {
-    console.log('did get regmaps', featureCollection);
+    // console.log('did get regmaps', featureCollection);
 
     // set state
     app.state.regmaps = featureCollection;
@@ -804,32 +825,36 @@ var app = _.extend(app || {},
     $('#deeds-regmaps-count').html(' (' + features.length + ')')
   },
 
-  didSelectRegmap: function (e) {
-    var $this = $(this),
-        selected = $this.html(),
-        prev = app.state.selectedRegmap,
-        // if we selected the same one again, it's really an unselect
-        next = (prev !== selected ? selected : null);
-
-    console.log('did select regmap', prev, '=>', next);
-
-    // set state
-    app.state.selectedRegmap = next;
-
-    // unhighlight last selected
-    $('#deeds-regmaps a:not(.hollow)').addClass('hollow');
-
-    // tell map
-    app.map.didChangeRegmap(prev, next);
-
-    // highlight selected
-    if (next) {
-      $this.removeClass('hollow');
-    }
-
-    e.preventDefault();
-    e.stopPropagation();
-  },
+  // didSelectRegmap: function () {
+  //   // var $this = $(this),
+  //   //     selected = $this.html(),
+  //   //     prev = app.state.selectedRegmap,
+  //   //     // if we selected the same one again, it's really an unselect
+  //   //     next = (prev !== selected ? selected : null);
+  //
+  //   // console.log('did select regmap', prev, '=>', next);
+  //
+  //   // set state
+  //   // app.state.selectedRegmap = next;
+  //
+  //   // get selected regmap
+  //   var active = app.views.parcelTabs.activeRegmap;
+  //   console.log('SELECTED REGMAP', active);
+  //
+  //   // unhighlight last selected
+  //   // $('#deeds-regmaps a:not(.hollow)').addClass('hollow');
+  //
+  //   // tell map
+  //   app.map.didChangeRegmap(prev, next);
+  //
+  //   // highlight selected
+  //   if (next) {
+  //     $this.removeClass('hollow');
+  //   }
+  //
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  // },
 
   getPwdParcel: function () {
     var aisFeature = app.state.ais.feature,
@@ -837,7 +862,7 @@ var app = _.extend(app || {},
         parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerWater.url});
 
     if (!parcelId) {
-      console.warn('get pwd parcel, but no id');
+      // console.warn('get pwd parcel, but no id');
       app.state.didFinishPwdRequest = true;
       return;
     }
@@ -847,18 +872,18 @@ var app = _.extend(app || {},
   },
 
   didGetPwdParcel: function (error, featureCollection, response) {
-    console.log('did get pwd parcel');
+    // console.log('did get pwd parcel');
 
     app.state.didFinishPwdRequest = true;
 
     if (error || !featureCollection) {
-      console.log('get pwd parcel by id error:', error);
+      // console.log('get pwd parcel by id error:', error);
       return;
     }
 
     // if empty response
     if (featureCollection.features.length === 0) {
-      console.log('get pwd parcel, but no results');
+      // console.log('get pwd parcel, but no results');
 
       // show alert
       // $('#no-results-modal').foundation('open');
@@ -877,7 +902,7 @@ var app = _.extend(app || {},
   },
 
   showContentForTopic: function (topic) {
-    console.log('show content for topic', topic);
+    // console.log('show content for topic', topic);
 
     var topicDivId = '#topic-' + topic,
         $topicContent = $(topicDivId + ' > .topic-content'),
@@ -897,7 +922,7 @@ var app = _.extend(app || {},
 
   // clears out data rendered in topics
   resetTopicViews: function () {
-    // console.log('reset topic views');
+    // // console.log('reset topic views');
 
     // DEBUG
     return;
@@ -908,7 +933,7 @@ var app = _.extend(app || {},
 
   // initiates requests to topic APIs (OPA, L&I, etc.)
   getTopics: function () {
-    console.log('get topics');
+    // console.log('get topics');
 
     var aisFeature = app.state.ais.feature,
         aisProps = aisFeature.properties,
@@ -922,7 +947,7 @@ var app = _.extend(app || {},
         url: '//data.phila.gov/resource/w7rb-qrn8.json?parcel_number=' + opaAccountNum,
         success: app.didGetOpaResult,
         error: function (err) {
-          console.log('opa error', err);
+          // console.log('opa error', err);
         },
       });
     } else {
@@ -951,7 +976,7 @@ var app = _.extend(app || {},
               if (shouldContinue) app.didGetAllLiResults();
             },
             error: function (err) {
-              console.log('li error', err);
+              // console.log('li error', err);
             },
           });
         });
@@ -974,12 +999,12 @@ var app = _.extend(app || {},
         address: aisAddress,
       },
       success: function (data) {
-        // console.log('got zoning docs', data);
+        // // console.log('got zoning docs', data);
         app.state.zoningDocuments = data;
         app.didGetZoningDocuments();
       },
       error: function (err) {
-        console.log('zoning docs error:', err);
+        // console.log('zoning docs error:', err);
       },
     });
 
@@ -1025,7 +1050,7 @@ var app = _.extend(app || {},
     //     app.didGetNearbyAppeals();
     //   },
     //   error: function (err) {
-    //     console.log('nearby appeals error', err);
+    //     // console.log('nearby appeals error', err);
     //   },
     // });
 
@@ -1045,7 +1070,7 @@ var app = _.extend(app || {},
         app.didGetWater();
       },
       error: function (err) {
-        console.log('water error', err);
+        // console.log('water error', err);
       },
     });
 
@@ -1073,11 +1098,11 @@ var app = _.extend(app || {},
     //
     //       if (!data.features || data.features.length < 1) {
     //         // does this work?
-    //         console.log('elections no features, trying to call error callback');
+    //         // console.log('elections no features, trying to call error callback');
     //         this.error();
     //       }
     //
-    //       //console.log('elections', data);
+    //       //// console.log('elections', data);
     //       app.state.elections = data;
     //       app.didGetElections();
     //
@@ -1085,7 +1110,7 @@ var app = _.extend(app || {},
     //       $('#topic-election .topic-content-not-found').hide();
     //     },
     //     error: function (err) {
-    //       console.log('elections error', err);
+    //       // console.log('elections error', err);
     //       app.state.elections = null;
     //
     //       $('#topic-election .topic-content').hide();
@@ -1115,7 +1140,7 @@ var app = _.extend(app || {},
     var parcels = app.state.dor.features;
 
     if (!parcels[0]) {
-      console.log('render parcel topic, but no parcel feature', app.state.dor);
+      // console.log('render parcel topic, but no parcel feature', app.state.dor);
       return;
     }
 
@@ -1137,7 +1162,7 @@ var app = _.extend(app || {},
 
   didGetOpaResult: function (data)
   {
-    // console.log('did get opa result', data);
+    // // console.log('did get opa result', data);
 
     // if no data, hide
     if (data.length < 1) {
@@ -1345,9 +1370,9 @@ var app = _.extend(app || {},
   },
 
   // didGetVacantBlockPercentResult: function (error, featureCollection, response) {
-  //   //console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+  //   //// console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
   //   var features = featureCollection.features;
-  //   //console.log(features);
+  //   //// console.log(features);
   //   if (features.length) {
   //     app.state.vacancy.vacancyPercent = features[0].properties['PercentVacant'];
   //     //app.state.vacancy.percentVacantBuilding = features[0].properties['PercentVacantBuilding'];
@@ -1436,7 +1461,7 @@ var app = _.extend(app || {},
     var feature = featureCollection.features[0];
 
     if (!feature) {
-      console.log('could not get zoning base', error, featureCollection);
+      // console.log('could not get zoning base', error, featureCollection);
       return;
     }
 
@@ -1450,7 +1475,7 @@ var app = _.extend(app || {},
 
   // get a parcel by a leaflet latlng
   getParcelsByLatLng: function (latLng, callback) {
-    console.log('get parcels by latlng');
+    // console.log('get parcels by latlng');
 
     if (app.state.activeTopic == 'deeds' || app.state.activeTopic == 'zoning') {
       var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerDOR.url});
@@ -1458,7 +1483,7 @@ var app = _.extend(app || {},
       // parcelQuery.where('STATUS IN (1, 3)')
       parcelQuery.run(function (error, featureCollection, response) {
         if (error || !featureCollection) {
-          console.log('get parcel by latlng error', error);
+          // console.log('get parcel by latlng error', error);
           return;
         }
 
@@ -1482,7 +1507,7 @@ var app = _.extend(app || {},
                               });
         featureCollection.features = featuresSorted;
 
-        console.debug('dor parcels sorted', featuresSorted);
+        // console.debug('dor parcels sorted', featuresSorted);
 
         // update state
         app.state.dor = featureCollection;
@@ -1496,7 +1521,7 @@ var app = _.extend(app || {},
         //parcelQuery.where('STATUS IN (1, 3)')
         parcelQuery.run(function (error, featureCollection, response) {
           if (error || !featureCollection) {
-            console.log('get parcel by latlng error', error);
+            // console.log('get parcel by latlng error', error);
             return;
           }
 
@@ -1603,7 +1628,7 @@ var app = _.extend(app || {},
         $selected = $nearbyActivityType.find(':selected'),
         label = $('#'+prefix+'-activity-type :selected').text();
 
-    console.log('get activity for: ', label);
+    // console.log('get activity for: ', label);
 
     // make sure we have an XY first
     // TODO clear out 'nearby' content if no XY.
@@ -1652,13 +1677,13 @@ var app = _.extend(app || {},
         app.didGetNearbyActivity();
       },
       error: function (err) {
-        console.log('nearby error', err);
+        // console.log('nearby error', err);
       },
     });
   },
 
   didGetNearbyActivity: function () {
-    //console.info('did get nearby activity', app.state.nearby.data);
+    //// console.info('did get nearby activity', app.state.nearby.data);
 
     var activeTopic = app.state.activeTopic,
         prefix = activeTopic === 'nearby' ? 'nearby' : 'vacancy-nearby';
@@ -1710,10 +1735,10 @@ var app = _.extend(app || {},
     var $targetTopic = prefix === 'nearby' ? $('#topic-nearby') : $('#topic-vacancy');
     if ($targetTopic.is(':visible')){
       //if ($('#topic-nearby').attr('style') == 'display: block;') {
-      //console.log($('#topic-nearby').attr('style'));
-      //console.log('refreshing appeals layer');
+      //// console.log($('#topic-nearby').attr('style'));
+      //// console.log('refreshing appeals layer');
       // app.map.removeNearbyActivity();
-      //console.log('rowsSorted is ', rowsSorted);
+      //// console.log('rowsSorted is ', rowsSorted);
       app.map.addNearbyActivity(rowsSorted);
     };
 
@@ -1775,7 +1800,7 @@ var app = _.extend(app || {},
   },
 
   didGetElections: function () {
-    // console.log('did get elections');
+    // // console.log('did get elections');
 
     var data = app.state.elections,
         attrs = data.features[0].attributes,

@@ -252,11 +252,11 @@
                                         </tr>
                                         <tr>
                                             <th>Origination Date</th>
-                                            <td>{{ parcel.properties.ORIG_DATE }}</td>
+                                            <td>{{ dateFormat(parcel.properties.ORIG_DATE) }}</td>
                                         </tr>
                                         <tr>
                                             <th>Inactive Date</th>
-                                            <td>{{ parcel.properties.INACTDATE }}</td>
+                                            <td>{{ dateFormat(parcel.properties.INACTDATE) }}</td>
                                         </tr>
                                         <tr>
                                             <th>Has Air Rights</th>
@@ -276,7 +276,7 @@
                                         </tr>
                                       </table>
 
-                                      <h4>Documents<span id="deeds-documents-count"></span></h4>
+                                      <h4>Documents ({{ documents.length }})</h4>
                                       <table id="deeds-documents" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                         <thead>
                                           <tr>
@@ -288,14 +288,30 @@
                                           </tr>
                                         </thead>
                                         <tbody>
-                                          
+                                          <tr v-for="document in documents.slice(0, app.config.topicRecordLimit)">
+                                            <td>{{ dateFormat(document.RECORDING_DATE) }}</td>
+                                            <td>
+                                              <a class='external'v-bind:href="app.config.dor.documents.documentUrl + document.R_NUM">
+                                                {{ document.R_NUM }}
+                                              </a>
+                                            </td>
+                                            <td>{{ document.DOC_TYPE }}</td>
+                                            <td>{{ document.GRANTOR }}</td>
+                                            <td>{{ document.GRANTEE }}</td>
+                                          </tr>
                                         </tbody>
                                       </table>
 
                                       <h4>Registry Maps<span id="deeds-regmaps-count"></span></h4>
                                       <!-- <ul id="deeds-regmaps-list">
                                       </ul> -->
-                                      <div id="deeds-regmaps"></div>
+                                      <div id="deeds-regmaps">
+                                        <a class="button" href="#" v-for="regmap in regmaps"
+                                           v-on:click="activeRegmap = (activeRegmap == regmap.properties.RECMAP) ? null : regmap.properties.RECMAP"
+                                           v-bind:class="{'hollow': (activeRegmap != regmap.properties.RECMAP)}">
+                                            {{ regmap.properties.RECMAP }}
+                                        </a>
+                                      </div>
 
 
                                     </div><!-- end of panel -->
