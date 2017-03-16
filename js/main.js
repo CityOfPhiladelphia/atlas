@@ -1,7 +1,7 @@
 /* global L, _, $, history */
 
 /*$(window).bind('storage', function (e) {
-     console.log(e.originalEvent.key, e.originalEvent.newValue);
+     // console.log(e.originalEvent.key, e.originalEvent.newValue);
 });*/
 
 $(window).resize(function(){
@@ -28,6 +28,10 @@ var app = _.extend(app || {},
   // start app
   init: function ()
   {
+    // configure underscore templating to use mustache style strings
+    _.templateSettings = {
+      interpolate: /\{\{(.+?)\}\}/g
+    };
     // debug stuff
     // var DEBUG = false,
     var DEBUG_HOSTS = app.config.debugHosts,
@@ -43,14 +47,14 @@ var app = _.extend(app || {},
           return '//' + host + path;
         };
 
-    // disable console if not debugging
+    // disable // console if not debugging
     if (!DEBUG) {
       _.forEach(['log', 'debug', 'info', 'warn', 'error'], function (method) {
-        console[method] = function () {};
+        // console[method] = function () {};
       });
     }
 
-    DEBUG && console.log('debug mode on');
+    DEBUG && // console.log('debug mode on');
     DEBUG && $('#search-input').val(DEBUG_ADDRESS);
 
     // set pictometry and cyclomedia urls based on host
@@ -136,7 +140,7 @@ var app = _.extend(app || {},
     //     app.placeVacancyMarker();
     //     app.map.didClickVacancyRadioButton(this.id);
     //   } else {
-    //     console.log('button already selected');
+    //     // console.log('button already selected');
     //   }
     // });
 
@@ -172,8 +176,8 @@ var app = _.extend(app || {},
       $option.text(label);
       $('#nearby-activity-type').append($option);
 
-      console.warn('%%%%%%%% ', label)
-      console.warn($('#nearby-activity-type').children().length)
+      // console.warn('%%%%%%%% ', label)
+      // console.warn($('#nearby-activity-type').children().length)
 
       // don't add appeals to vacancy nearby selector
       if (['311 Requests', 'Crime Incidents'].indexOf(label) > -1) {
@@ -194,12 +198,40 @@ var app = _.extend(app || {},
 
     // listen for back button
     window.onpopstate = function () {
-      // console.log('popped state', location.href);
+      // // console.log('popped state', location.href);
       app.route();
     };
 
     // route one time on load
     app.route();
+
+    // PARCEL TABS
+    app.views = {};
+    app.views.parcelTabs = new Vue({
+      el: '#parcel-tab-container',
+      mounted: function () {
+        $(document).foundation();
+      },
+      data: {
+        app: app,
+        parcels: [],
+        activeParcel: '',
+        documents: [],
+        regmaps: [],
+        activeRegmap: '',
+      },
+      watch: {
+        activeParcel: app.map.didActivateParcel,
+        activeRegmap: app.map.didSelectRegmap,
+      },
+      methods: {
+        dateFormat: function (date) {
+          if (!isNaN(date)){
+            return moment(parseInt(date)).format('YYYY-MM-DD');
+          }
+        },
+      },
+    });
   },
 
   showCyclo: function () {
@@ -209,7 +241,7 @@ var app = _.extend(app || {},
   },
 
   route: function () {
-    // console.log('route');
+    // // console.log('route');
     var hash = location.hash,
         params = app.util.getQueryParams(),
         comps = hash.split('/');
@@ -217,14 +249,14 @@ var app = _.extend(app || {},
     // if there are query params
     var searchParam = params.search;
     if (searchParam) {
-      app.searchForAddress(searchParam);
+      app.searchAis(searchParam);
       // TODO fix url
       return;
     }
 
     // check for enough comps (just 2, since topic is optional)
     if (comps.length < 2) {
-      // console.log('route, but not enough comps', comps);
+      // // console.log('route, but not enough comps', comps);
       return;
     }
 
@@ -242,12 +274,12 @@ var app = _.extend(app || {},
 
     // if there's no ais in state, go get it
     if (!aisState) {
-      app.searchForAddress(address);
+      app.searchAis(address);
       return;
     }
 
     // otherwise rehydrate state
-    console.log('rehydrate state', aisState);
+    // console.log('rehydrate state', aisState);
     app.state.ais = aisState;
 
     app.didGetAisResult();
@@ -258,11 +290,11 @@ var app = _.extend(app || {},
 
   didClickLink: function (e) {
     $this = $(this);
-    // console.log('did click link', $this);
+    // // console.log('did click link', $this);
 
     // if the link has the class `external`, open in a new window/tab
     if ($this.hasClass('external')) {
-      // console.log('external link, opening in new window');
+      // // console.log('external link, opening in new window');
 
       var href = $this.attr('href');
       window.open(href);
@@ -291,12 +323,14 @@ var app = _.extend(app || {},
       app.state[stateProp] = undefined;
     });
 
+    app.state.dor = app.state.pwd = null;
+
     // fire off ais
-    app.searchForAddress(val);
+    app.searchAis(val);
   },
 
   // fires ais search
-  searchForAddress: function (address) {
+  searchAis: function (address) {
     console.log('search for address', address);
     var url = app.config.ais.url + encodeURIComponent(address),
         params = {};
@@ -315,13 +349,13 @@ var app = _.extend(app || {},
       url: url,
       data: params,
       success: function (data) {
-        console.log('got ais');
+        // console.log('got ais');
 
         var features = data.features;
 
         // this shouldn't happen, but just in case
         if (features.length === 0) {
-          console.error('got ais, but no features');
+          // console.error('got ais, but no features');
           $('#no-results-modal').foundation('open');
           return;
         }
@@ -335,7 +369,7 @@ var app = _.extend(app || {},
               function (relatedFeature) {
                 // if the main feature is a range, reject anything that isn't also a range
                 if (!!feature.properties.address_high) {
-                  // console.warn('base addr is a range')
+                  // // console.warn('base addr is a range')
                   return !relatedFeature.properties.address_high;
                 }
                 return false;
@@ -343,7 +377,7 @@ var app = _.extend(app || {},
 
         // make sure it has geometry
         if (!feature.geometry.geocode_type) {
-          console.log('got ais, but address did not have an xy');
+          // console.log('got ais, but address did not have an xy');
           $('#no-results-modal').foundation('open');
           return;
         }
@@ -363,14 +397,14 @@ var app = _.extend(app || {},
         app.didGetAisResult();
       },
       error: function (err) {
-        console.log('ais error', err);
+        // console.log('ais error', err);
         $('#no-results-modal').foundation('open');
       },
     });
   },
 
   showMultipleAisResultModal: function (data) {
-    // console.log('show multiple ais modal');
+    // // console.log('show multiple ais modal');
     // var data = app.state.ais;
 
     $('#addressList').empty();
@@ -410,7 +444,7 @@ var app = _.extend(app || {},
   // takes a topic (formerly "data row") name and activates the corresponding
   // section in the data panel
   activateTopic: function (targetTopicName) {
-    console.log('activate topic:', targetTopicName);
+    // console.log('activate topic:', targetTopicName);
 
     // prevent topics from opening until we have at least AIS (arbitrary , but should work)
     // var ais = app.state.ais;
@@ -434,7 +468,7 @@ var app = _.extend(app || {},
 
     // only activate if it's not already active
     if ($targetTopic.is($activeTopic)) {
-      console.info('activate topic, but its already active');
+      // console.info('activate topic, but its already active');
       return;
     }
 
@@ -450,7 +484,7 @@ var app = _.extend(app || {},
     }
     app.map.didChangeTopic(prevTopic, targetTopicName);
 
-    console.log('activate topic finished');
+    // console.log('activate topic finished');
   },
 
   toggleTopic: function (targetTopicName) {
@@ -460,7 +494,7 @@ var app = _.extend(app || {},
     if ($targetTopic.is(':visible')){
       app.state.activeTopic = null
       $targetTopic.slideUp(350);
-      console.log('toggleTopic is calling didChangeTopic');
+      // console.log('toggleTopic is calling didChangeTopic');
       app.map.didChangeTopic(targetTopicName, null);
       // app.map.didDeactivateTopic(targetTopicName);
 
@@ -473,7 +507,7 @@ var app = _.extend(app || {},
 
     // otherwise, activate
     else {
-      console.log('toggleTopic is calling activateTopic with ' + targetTopicName);
+      // console.log('toggleTopic is calling activateTopic with ' + targetTopicName);
       app.activateTopic(targetTopicName);
     }
   },
@@ -481,6 +515,7 @@ var app = _.extend(app || {},
   // this gets called after ais state has been set (either by making an AJAX
   // call or rehydrating state)
   didGetAisResult: function () {
+    console.log('didGetAisResult is running');
     // open topic
     app.state.shouldOpenTopics = true;
     app.activateTopic(app.state.activeTopic || 'property');
@@ -558,7 +593,7 @@ var app = _.extend(app || {},
     app.getTopics();
 
     // push to history
-    console.log('pushing to history', aisState);
+    // console.log('pushing to history', aisState);
     var nextState = {
           ais: aisState,
         },
@@ -566,49 +601,17 @@ var app = _.extend(app || {},
         nextHash = app.util.constructHash(streetAddress, nextTopic);
     history.pushState(nextState, null, nextHash);
 
-    // if no topic is active, activate property
-    // if (!app.state.nextTopic) {}
-    // console.log('didGetAisResult is calling activateTopic');
-    // app.activateTopic(nextTopic);
-
-    /*
-    PARCELS
-    */
-
-    // the problem is: if the last search yielded a good parcel and the
-    // current one did not, the parcel isn't getting cleared out if clickedOnMap === false.
-
-    // var stateParcelDor = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null,
-    //     dorParcelId = props.dor_parcel_id;
-    //
-    // // if the user searched via the search bar and we have
-    // if (stateParcelDor && stateParcelDor.properties.MAPREG !== dorParcelId) {
-    //   // console.log('**************** state parcel doesnt match current AIS parcel id, clearing out')
-    //   app.state.dor = null;
-    // }
-    //
-    // // check pwd
-    // var stateParcelPwd = app.state.pwd && app.state.pwd.features ? app.state.pwd.features[0] : null,
-    //     pwdParcelId = props.pwd_parcel_id;
-    //
-    // // if the user searched via the search bar and we have
-    // if (stateParcelPwd && stateParcelPwd.properties.PARCELID !== pwdParcelId) {
-    //   // console.log('**************** PWD state parcel doesnt match current AIS parcel id, clearing out')
-    //   app.state.pwd = null;
-    // }
-    //
-    // if (!app.state.map.clickedOnMap) {
-    //   // get rid of old dadress markers
-    //   // app.state.map.addressMarkers = {};
-    // }
-
-    // go get both parcels
-    // console.log('didGetAisResult is calling getParcels');
-    // app.getParcels();
-    app.state.dor = app.state.pwd = null;
+    // app.state.dor = app.state.pwd = null;
     app.state.regmaps
     app.state.didFinishPwdRequest = app.state.didFinishDorRequest = null;
-    app.getDorParcel();
+
+    //if (!app.state.dor) {
+    if (!app.state.map.clickedOnMap) {
+      app.getDorParcel();
+    }
+    else {
+      app.renderParcelTopic();
+    }
     app.getPwdParcel();
 
     // tell map we got an ais result
@@ -625,7 +628,7 @@ var app = _.extend(app || {},
     var features = app.state.ais.related,
         $relatedList = $('#related-list');
 
-        // console.log('render related addresses', features);
+        // // console.log('render related addresses', features);
 
     // clear out old addresses
     $relatedList.empty();
@@ -652,13 +655,13 @@ var app = _.extend(app || {},
   },
 
   getDorParcel: function () {
-    console.log('get dor parcel');
+    console.log('get dor parcel is running');
 
     var aisFeature = app.state.ais.feature,
         parcelId = aisFeature.properties.dor_parcel_id;
 
     if (!parcelId) {
-      console.warn('get dor parcel, but no parcel id');
+      // console.warn('get dor parcel, but no parcel id');
 
       app.state.didFinishDorRequest = true;
 
@@ -670,23 +673,24 @@ var app = _.extend(app || {},
 
     var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerDOR.url});
     //parcelQuery.contains(latLng);
-    parcelQuery.where("MAPREG = '" + parcelId + "' AND STATUS IN (1, 3)")
-    parcelQuery.run(app.didGetDorParcel);
+    // parcelQuery.where("MAPREG = '" + parcelId + "' AND STATUS IN (1, 3)")
+    parcelQuery.where("MAPREG = '" + parcelId + "'")
+    parcelQuery.run(app.didGetDorParcels);
   },
 
-  didGetDorParcel: function (error, featureCollection, response) {
-    console.log('did get dor parcel');
+  didGetDorParcels: function (error, featureCollection, response) {
+    console.log('didGetDorParcels is running', featureCollection);
 
     app.state.didFinishDorRequest = true;
 
     if (error || !featureCollection) {
-      console.log('get dor parcel, but error', error);
+      // console.warn('did get dor parcel, but error', error);
       return;
     }
 
     // if empty response
     if (featureCollection.features.length === 0) {
-      console.log('get dor parcel, but no results');
+      // console.log('get dor parcel, but no results');
       // show alert
       // $('#no-results-modal').foundation('open');
       app.state.dor = null;
@@ -701,54 +705,99 @@ var app = _.extend(app || {},
 
     // sort by status
     var features = featureCollection.features,
-    featuresSorted = _.sortBy(features, function (feature) {
-      return feature.properties.STATUS;
-    });
+        PARCEL_STATUS_SORT_ORDER = [1, 3, 2],
+        featuresSorted = _.sortBy(features, function (feature) {
+                            var parcelStatus = feature.properties.STATUS,
+                                priority = PARCEL_STATUS_SORT_ORDER.indexOf(parcelStatus),
+                                mapreg = feature.properties.MAPREG,
+                                parcelNum = feature.properties.PARCEL;
+
+                            // hacky
+                            return priority + '_' + parcelNum;
+                          });
     featureCollection.features = featuresSorted;
 
     // update state
     app.state.dor = featureCollection;
 
     // tell map we got a dor parcel
-    app.map.didGetDorParcel();
+    app.map.didGetDorParcels();
 
-    // calculate perimeter and area
-    var geomDOR = featuresSorted[0].geometry,
-        areaRequestGeom = '[' + JSON.stringify(geomDOR).replace('"type":"Polygon","coordinates"', '"rings"') + ']';
+    // loop over parcels
+    _.forEach(featuresSorted, function (parcel) {
+      // console.warn('par', parcel);
 
-    $.ajax({
-      url: '//gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/areasAndLengths',
-      data: {
-        polygons: areaRequestGeom,
-        sr: 4326,
-        calculationType: 'geodesic',
-        f: 'json',
-        areaUnit: '{"areaUnit" : "esriSquareFeet"}',
-        lengthUnit: 9002,
-      },
-      success: function (dataString) {
-        // console.log('got polygon with area', dataString, this.url);
-        var data = JSON.parse(dataString),
-            area = Math.round(data.areas[0]),
-            perimeter = Math.round(data.lengths[0]);
-        $('#deeds-area').text(area + ' sq ft');
-        $('#deeds-perimeter').text(perimeter + ' ft');
-      },
-      error: function (err) {
-        console.log('polygon area error', err);
-      },
-    });
+      // calculate perimeter and area
+      var geomDOR = parcel.geometry,
+          areaRequestGeom = '[' + JSON.stringify(geomDOR).replace('"type":"Polygon","coordinates"', '"rings"') + ']';
 
-    app.renderParcelTopic();
+      $.ajax({
+        url: '//gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/areasAndLengths',
+        data: {
+          polygons: areaRequestGeom,
+          sr: 4326,
+          calculationType: 'geodesic',
+          f: 'json',
+          areaUnit: '{"areaUnit" : "esriSquareFeet"}',
+          lengthUnit: 9002,
+        },
+        success: function (dataString) {
+          // // console.log('got polygon with area', dataString, this.url);
+          var data = JSON.parse(dataString),
+              area = Math.round(data.areas[0]),
+              perimeter = Math.round(data.lengths[0]);
+          $('#deeds-area').text(area + ' sq ft');
+          $('#deeds-perimeter').text(perimeter + ' ft');
+        },
+        error: function (err) {
+          // console.log('polygon area error', err);
+        },
+      });
 
-    // get intersecting regmaps
-    var regmapQuery = new L.esri.Query({url: app.config.esri.dynamicLayers.regmap.url})
-                        .intersects(geomDOR);
-    regmapQuery.run(app.didGetRegmaps);
+      // get dor documents
+      var parcelAddress = app.util.concatDorAddress(parcel);
+      // console.warn('&&&&&&&&&&&&&&&&&& getting docs for parcel', parcelAddress);
+
+      $.ajax({
+        url: app.config.dor.documents.documentIdQueryUrl,
+        data: {
+          where: "ADDRESS = '" + parcelAddress + "'",
+          outFields: '*',
+          f: 'json',
+        },
+        success: function (data) {
+          //// console.warn('docs for', parcelAddress, data);
+          app.state.dorDocuments = data;
+          var features = _.map(JSON.parse(app.state.dorDocuments).features, function (feature) { return feature.attributes; });
+              //recordLimit = app.config.topicRecordLimit,
+              //featuresLimited = features.slice(0, recordLimit)
+          // app.didGetDorDocuments();
+
+          // update vue state
+          app.views.parcelTabs.documents = features;
+        },
+        error: function (err) {
+          // console.log('dor document error', err);
+        },
+      });
+
+      app.renderParcelTopic();
+
+      // get intersecting regmaps
+      var regmapQuery = new L.esri.Query({url: app.config.esri.dynamicLayers.regmap.url})
+                                          .intersects(geomDOR);
+      //regmapQuery.run(app.didGetRegmaps);
+      console.log('!!!!!!!!!!!&&&&&&&&&&&& about to do regmapQuery.run');
+      regmapQuery.run( function (error, fC, response) {
+        console.log('###########@@@@@@@@@@@@@ just did remapQuery.run', fC);
+        console.log('^^^^^^^^^^', response);
+        app.views.parcelTabs.regmaps = fC.features;
+      });
+    }); // end of parcel loop
   },
 
   didGetRegmaps: function (error, featureCollection, response) {
-    console.log('did get regmaps', featureCollection);
+    // console.log('did get regmaps', featureCollection);
 
     // set state
     app.state.regmaps = featureCollection;
@@ -775,32 +824,36 @@ var app = _.extend(app || {},
     $('#deeds-regmaps-count').html(' (' + features.length + ')')
   },
 
-  didSelectRegmap: function (e) {
-    var $this = $(this),
-        selected = $this.html(),
-        prev = app.state.selectedRegmap,
-        // if we selected the same one again, it's really an unselect
-        next = (prev !== selected ? selected : null);
-
-    console.log('did select regmap', prev, '=>', next);
-
-    // set state
-    app.state.selectedRegmap = next;
-
-    // unhighlight last selected
-    $('#deeds-regmaps a:not(.hollow)').addClass('hollow');
-
-    // tell map
-    app.map.didChangeRegmap(prev, next);
-
-    // highlight selected
-    if (next) {
-      $this.removeClass('hollow');
-    }
-
-    e.preventDefault();
-    e.stopPropagation();
-  },
+  // didSelectRegmap: function () {
+  //   // var $this = $(this),
+  //   //     selected = $this.html(),
+  //   //     prev = app.state.selectedRegmap,
+  //   //     // if we selected the same one again, it's really an unselect
+  //   //     next = (prev !== selected ? selected : null);
+  //
+  //   // console.log('did select regmap', prev, '=>', next);
+  //
+  //   // set state
+  //   // app.state.selectedRegmap = next;
+  //
+  //   // get selected regmap
+  //   var active = app.views.parcelTabs.activeRegmap;
+  //   console.log('SELECTED REGMAP', active);
+  //
+  //   // unhighlight last selected
+  //   // $('#deeds-regmaps a:not(.hollow)').addClass('hollow');
+  //
+  //   // tell map
+  //   app.map.didChangeRegmap(prev, next);
+  //
+  //   // highlight selected
+  //   if (next) {
+  //     $this.removeClass('hollow');
+  //   }
+  //
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  // },
 
   getPwdParcel: function () {
     var aisFeature = app.state.ais.feature,
@@ -808,7 +861,7 @@ var app = _.extend(app || {},
         parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerWater.url});
 
     if (!parcelId) {
-      console.warn('get pwd parcel, but no id');
+      // console.warn('get pwd parcel, but no id');
       app.state.didFinishPwdRequest = true;
       return;
     }
@@ -818,18 +871,18 @@ var app = _.extend(app || {},
   },
 
   didGetPwdParcel: function (error, featureCollection, response) {
-    console.log('did get pwd parcel');
+    // console.log('did get pwd parcel');
 
     app.state.didFinishPwdRequest = true;
 
     if (error || !featureCollection) {
-      console.log('get pwd parcel by id error:', error);
+      // console.log('get pwd parcel by id error:', error);
       return;
     }
 
     // if empty response
     if (featureCollection.features.length === 0) {
-      console.log('get pwd parcel, but no results');
+      // console.log('get pwd parcel, but no results');
 
       // show alert
       // $('#no-results-modal').foundation('open');
@@ -847,56 +900,8 @@ var app = _.extend(app || {},
     app.map.didGetPwdParcel();
   },
 
-  // this gets pwd and dor parcels and then runs a callback. kind of overlaps
-  // with getParcelById function. they should probably be merged eventually.
-  // getParcels: function () {
-  //   console.log('get parcels');
-  //
-  //   // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
-  //   var aisFeature = app.state.ais.feature,
-  //       dorParcelId = aisFeature.properties.dor_parcel_id,
-  //       pwdParcelId = aisFeature.properties.pwd_parcel_id;
-  //
-  //   // clear els
-  //   _.forEach(['id', 'address', 'status', 'air-rights', 'condo'], function (tag) {
-  //     var $el = $('#deeds-' + tag);
-  //     $el.empty();
-  //   });
-  //
-  //   // if we already have the parcel
-  //   var stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
-  //   // if the user searched via the search bar and we have
-  //   if (stateParcel && stateParcel.properties.MAPREG === dorParcelId) {
-  //     console.log('i have a state parcel and its the right one')
-  //     app.renderParcelTopic();
-  //     app.map.didGetParcels();
-  //   // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
-  //   } else if (dorParcelId) {
-  //     // the function we're about to call is kind of the same thing as the
-  //     // current function and should probably be merged at some point
-  //     app.getParcelsWithIds(dorParcelId, pwdParcelId, function () {
-  //       console.log('got parcels by id')
-  //       //console.log('got parcel by id', app.state.dor);
-  //       app.renderParcelTopic();
-  //       // console.log('getparcelById callback is calling createAddressMarkers');
-  //
-  //       // tell map we finished getting parcels and it's ok to do stuff
-  //       // that depends on them
-  //       // app.map.createAddressMarkers();
-  //       // app.map.didActivateTopic(app.state.activeTopic);
-  //       console.log('calling getParcels callback')
-  //       app.map.didGetParcels();
-  //     });
-  //   } else {
-  //     console.log('get parcels but no dor parcel id, calling map.didGetParcels')
-  //     app.map.didGetParcels();
-  //     app.hideContentForTopic('deeds');
-  //   }
-  //   // app.map.didGetParcels();
-  // },
-
   showContentForTopic: function (topic) {
-    console.log('show content for topic', topic);
+    // console.log('show content for topic', topic);
 
     var topicDivId = '#topic-' + topic,
         $topicContent = $(topicDivId + ' > .topic-content'),
@@ -916,7 +921,10 @@ var app = _.extend(app || {},
 
   // clears out data rendered in topics
   resetTopicViews: function () {
-    // console.log('reset topic views');
+    // // console.log('reset topic views');
+
+    // DEBUG
+    return;
 
     var topicCells = $('.topic td');
     topicCells.empty();
@@ -925,10 +933,6 @@ var app = _.extend(app || {},
   // initiates requests to topic APIs (OPA, L&I, etc.)
   getTopics: function () {
     // console.log('get topics');
-
-    // show accordion
-    // doing this in route now
-    // $('#topic-list').show();
 
     var aisFeature = app.state.ais.feature,
         aisProps = aisFeature.properties,
@@ -942,7 +946,7 @@ var app = _.extend(app || {},
         url: '//data.phila.gov/resource/w7rb-qrn8.json?parcel_number=' + opaAccountNum,
         success: app.didGetOpaResult,
         error: function (err) {
-          console.log('opa error', err);
+          // console.log('opa error', err);
         },
       });
     } else {
@@ -971,58 +975,10 @@ var app = _.extend(app || {},
               if (shouldContinue) app.didGetAllLiResults();
             },
             error: function (err) {
-              console.log('li error', err);
+              // console.log('li error', err);
             },
           });
         });
-    // fire deferreds
-    // this is nice and elegant but the callback is firing before the
-    // individual callbacks have completed. commenting out for now.
-    // $.when(liDeferreds).then(app.didGetAllLiResults);
-
-    // DOR
-    // get parcel id and try to reuse a parcel from state (i.e. user clicked map)
-    // var aisFeature = app.state.ais.feature,
-    //     aisParcelId = aisFeature.properties.dor_parcel_id,
-    //     waterParcelId = aisFeature.properties.pwd_parcel_id,
-    //     stateParcel = app.state.dor && app.state.dor.features ? app.state.dor.features[0] : null;
-    //
-    // // clear els
-    // _.forEach(['id', 'address', 'status', 'air-rights', 'condo'], function (tag) {
-    //   var $el = $('#deeds-' + tag);
-    //   $el.empty();
-    // });
-
-    // if we already have the parcel
-    // if (stateParcel && stateParcel.properties.MAPREG === aisParcelId) {
-    //   app.renderParcelTopic();
-    // }
-    // // otherwise we don't have a parcel, so go get one (but only if we have a parcel id)
-    // else if (aisParcelId) {
-    //   app.getParcelsWithIds(aisParcelId, waterParcelId, function () {
-    //     //console.log('got parcel by id', app.state.dor);
-    //     app.renderParcelTopic();
-    //     console.log('getTopics is calling createAddressMarkers');
-    //     app.map.createAddressMarkers();
-    //   });
-    // }
-
-    // get dor documents
-    $.ajax({
-      url: app.config.dor.documents.documentIdQueryUrl,
-      data: {
-        where: "ADDRESS = '" + aisAddress + "'",
-        outFields: '*',
-        f: 'json',
-      },
-      success: function (data) {
-        app.state.dorDocuments = data;
-        app.didGetDorDocuments();
-      },
-      error: function (err) {
-        console.log('dor document error', err);
-      },
-    });
 
     /*
     ZONING
@@ -1042,12 +998,12 @@ var app = _.extend(app || {},
         address: aisAddress,
       },
       success: function (data) {
-        // console.log('got zoning docs', data);
+        // // console.log('got zoning docs', data);
         app.state.zoningDocuments = data;
         app.didGetZoningDocuments();
       },
       error: function (err) {
-        console.log('zoning docs error:', err);
+        // console.log('zoning docs error:', err);
       },
     });
 
@@ -1093,7 +1049,7 @@ var app = _.extend(app || {},
     //     app.didGetNearbyAppeals();
     //   },
     //   error: function (err) {
-    //     console.log('nearby appeals error', err);
+    //     // console.log('nearby appeals error', err);
     //   },
     // });
 
@@ -1113,64 +1069,57 @@ var app = _.extend(app || {},
         app.didGetWater();
       },
       error: function (err) {
-        console.log('water error', err);
+        // console.log('water error', err);
       },
     });
 
     /*
     ELECTIONS
     */
-    if (aisProps.political_ward && aisProps.political_division) {
-      var electionsUrl = '//api.phila.gov/elections',
-      electionsWard = aisProps.political_ward,
-      // TODO divisions in AIS are prefixed with the ward num; slice it out
-      // apparently this is called the `division_id` in the elections API
-      electionsDivision = aisProps.political_division.substring(2);
-
-      $.ajax({
-        url: electionsUrl,
-        data: {
-          option: 'com_pollingplaces',
-          view: 'json',
-          ward: electionsWard,
-          division: electionsDivision,
-        },
-        success: function (jsonString) {
-          // no json headers set on this
-          var data = JSON.parse(jsonString);
-
-          if (!data.features || data.features.length < 1) {
-            // does this work?
-            console.log('elections no features, trying to call error callback');
-            this.error();
-          }
-
-          //console.log('elections', data);
-          app.state.elections = data;
-          app.didGetElections();
-
-          $('#topic-election .topic-content').show();
-          $('#topic-election .topic-content-not-found').hide();
-        },
-        error: function (err) {
-          console.log('elections error', err);
-          app.state.elections = null;
-
-          $('#topic-election .topic-content').hide();
-          $('#topic-election .topic-content-not-found').show();
-        },
-      });
-    }
-    else {
-      // TODO clean up elections content
-    }
-
-    /*
-    PUBLIC SAFETY
-    */
-
-    // Get nearest evacuation route
-    // var evacQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/EvacuationRoute/FeatureServer/0'});
+    // if (aisProps.political_ward && aisProps.political_division) {
+    //   var electionsUrl = '//api.phila.gov/elections',
+    //   electionsWard = aisProps.political_ward,
+    //   // TODO divisions in AIS are prefixed with the ward num; slice it out
+    //   // apparently this is called the `division_id` in the elections API
+    //   electionsDivision = aisProps.political_division.substring(2);
+    //
+    //   $.ajax({
+    //     url: electionsUrl,
+    //     data: {
+    //       option: 'com_pollingplaces',
+    //       view: 'json',
+    //       ward: electionsWard,
+    //       division: electionsDivision,
+    //     },
+    //     success: function (jsonString) {
+    //       // no json headers set on this
+    //       var data = JSON.parse(jsonString);
+    //
+    //       if (!data.features || data.features.length < 1) {
+    //         // does this work?
+    //         // console.log('elections no features, trying to call error callback');
+    //         this.error();
+    //       }
+    //
+    //       //// console.log('elections', data);
+    //       app.state.elections = data;
+    //       app.didGetElections();
+    //
+    //       $('#topic-election .topic-content').show();
+    //       $('#topic-election .topic-content-not-found').hide();
+    //     },
+    //     error: function (err) {
+    //       // console.log('elections error', err);
+    //       app.state.elections = null;
+    //
+    //       $('#topic-election .topic-content').hide();
+    //       $('#topic-election .topic-content-not-found').show();
+    //     },
+    //   });
+    // }
+    // else {
+    //   // TODO clean up elections content
+    // }
 
     // show topics
     $('#topic-list').show();
@@ -1179,32 +1128,26 @@ var app = _.extend(app || {},
     // $('.topic:visible').length === 0 && app.activateTopic('property');
   },
 
-  // TODO confirm these
   PARCEL_STATUS: {
     1:  'Active',
     2:  'Inactive',
-    3:  'Trans',
+    3:  'Remainder',
   },
 
   // render deeds (assumes there's a parcel in the state)
   renderParcelTopic: function () {
-    console.log('render parcel topic');
+    var parcels = app.state.dor.features;
 
-    if (!app.state.dor.features[0]) {
-      console.log('render parcel topic, but no parcel feature', app.state.dor);
+    if (!parcels[0]) {
+      // console.log('render parcel topic, but no parcel feature', app.state.dor);
       return;
     }
 
-    var parcel = app.state.dor.features[0],
-        props = parcel.properties,
-        parcelId = props.MAPREG,
-        address = app.util.concatDorAddress(parcel);
+    // put parcels in state
+    app.views.parcelTabs.parcels = parcels;
 
-    $('#deeds-address').html(address);
-    $('#deeds-id').html(parcelId);
-    $('#deeds-status').html(app.PARCEL_STATUS[props.STATUS]);
-    $('#deeds-air-rights').html(props.SUFFIX === 'A' ? 'Yes' : 'No');
-    $('#deeds-condo').html(props.CONDOFLAG === 1 ? 'Yes' : 'No');
+    // activate first parcel by default
+    app.views.parcelTabs.activeParcel = parcels[0].properties.MAPREG;
 
     app.showContentForTopic('deeds');
   },
@@ -1218,7 +1161,7 @@ var app = _.extend(app || {},
 
   didGetOpaResult: function (data)
   {
-    // console.log('did get opa result', data);
+    // // console.log('did get opa result', data);
 
     // if no data, hide
     if (data.length < 1) {
@@ -1426,9 +1369,9 @@ var app = _.extend(app || {},
   },
 
   // didGetVacantBlockPercentResult: function (error, featureCollection, response) {
-  //   //console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+  //   //// console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
   //   var features = featureCollection.features;
-  //   //console.log(features);
+  //   //// console.log(features);
   //   if (features.length) {
   //     app.state.vacancy.vacancyPercent = features[0].properties['PercentVacant'];
   //     //app.state.vacancy.percentVacantBuilding = features[0].properties['PercentVacantBuilding'];
@@ -1517,7 +1460,7 @@ var app = _.extend(app || {},
     var feature = featureCollection.features[0];
 
     if (!feature) {
-      console.log('could not get zoning base', error, featureCollection);
+      // console.log('could not get zoning base', error, featureCollection);
       return;
     }
 
@@ -1529,187 +1472,17 @@ var app = _.extend(app || {},
     if (desc) $('#zoning-description').html(desc);
   },
 
-  getParcelsWithIds: function (dorParcelId, pwdParcelId, callback) {
-    console.log('getParcelsWithIds');
-
-    // use this to fire the callback after both requests have finished
-    // (not sure if esri leaflet returns promises)
-    var didFinishDorRequest = false,
-        didFinishPwdRequest = false;
-
-    /*
-    DOR
-    */
-
-    // only query for dor parcel if we have an id
-    if(dorParcelId){
-      var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerDOR.url});
-      //parcelQuery.contains(latLng);
-      parcelQuery.where("MAPREG = '" + dorParcelId + "' AND STATUS IN (1, 3)")
-      parcelQuery.run(function (error, featureCollection, response) {
-        if (error || !featureCollection) {
-          console.log('get parcel by latlng error', error);
-          return;
-        }
-
-        // if empty response
-        if (featureCollection.features.length === 0) {
-          // show alert
-          $('#no-results-modal').foundation('open');
-          return;
-        }
-
-        // sort by status
-        console.log('before', featureCollection);
-        var features = featureCollection.features,
-            featuresSorted = _.sortBy(features, function (feature) {
-              return feature.properties.STATUS;
-            });
-        featureCollection.features = featuresSorted;
-        console.log('after', featureCollection);
-
-        // update state
-        app.state.dor = featureCollection;
-
-        // if there's a callback, call it
-        callback && callback();
-      })
-    }
-    /*if (dorParcelId) {
-      $.ajax({
-        url: app.config.esri.parcelLayerDORUrl + '/query',
-        data: {
-          where: "MAPREG = '" + dorParcelId + "' AND STATUS IN (1, 3)" ,
-          outSR: 4326,
-          outFields: '*',
-          f: 'geojson',
-        },
-        success: function (data) {
-          // AGO returns json with plaintext headers, so parse
-          data = JSON.parse(data);
-          console.log('got DOR data ', data);
-
-          // check data
-          if (data.features.length === 0) {
-            console.log('got parcel but 0 features', this.url);
-          }
-
-          app.state.dor = data;
-
-          // call callback if we already finished the pwd request
-          if (didFinishPwdRequest) {
-            console.log('get parcels: pwd finished then dor, calling callback')
-            callback();
-          }
-          else {
-            didFinishDorRequest = true;
-          }
-
-          app.showContentForTopic('deeds');
-        },
-        error: function (err) {
-          console.log('get parcel by id error', err);
-          app.hideContentForTopic('deeds');
-          didFinishDorRequest = true;
-        },
-      });
-
-    // no DOR parcel id, so don't query
-  }*/ else {
-      console.log('no dor parcel id specified');
-    }
-
-    /*
-    PWD
-    */
-
-    // only query if we have a pwd parcel id
-    if (pwdParcelId) {
-      var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerWater.url});
-      parcelQuery.where('PARCELID = ' + pwdParcelId)
-      parcelQuery.run(function (error, featureCollection, response) {
-        if (error || !featureCollection) {
-          console.log('get pwd parcel by id error:', error);
-          didFinishPwdRequest = true;
-          return;
-        }
-
-        // if empty response
-        if (featureCollection.features.length === 0) {
-          console.log('get pwd parcel no features');
-
-          // show alert
-          $('#no-results-modal').foundation('open');
-
-          didFinishPwdRequest = true;
-          return;
-        }
-
-        // update state
-        // TODO put this in a specific parcel object
-        console.log('****************setting state pwd', featureCollection)
-        app.state.pwd = featureCollection;
-
-        // call callback if we're all done
-        if (didFinishDorRequest) {
-          console.log('get parcels: dor finished then pwd, calling callback')
-          callback();
-        } else {
-          didFinishPwdRequest = true;
-        }
-      });
-
-    // no pwd parcel id, don't do anything
-    } else {
-      console.log('no pwd parcel id specified');
-      console.log('ais', app.state.ais.feature)
-    }
-
-    /*$.ajax({
-      url: app.config.esri.parcelLayerWaterUrl + '/query',
-      data: {
-        where: "PARCELID = '" + waterId + "'",
-        outSR: 4326,
-        outFields: '*',
-        f: 'json',
-      },
-      success: function (data) {
-        // AGO returns json with plaintext headers, so parse
-        data = JSON.parse(data);
-        console.log('got water data ' + data);
-
-        // check data
-        if (data.features.length === 0) {
-          console.log('got water parcel but 0 features', this.url);
-        }
-
-        app.state.pwd = data;
-        //callback && callback();
-
-        //app.showContentForTopic('deeds');
-      },
-      error: function (err) {
-        console.log('get water parcel by id error', err);
-        //app.hideContentForTopic('deeds');
-      },
-    });*/
-  },
-
   // get a parcel by a leaflet latlng
-  getParcelByLatLng: function (latLng, callback) {
-    console.log('get parcel by latlng');
+  getParcelsByLatLng: function (latLng, callback) {
+    // console.log('get parcels by latlng');
 
-    // clear state
-    // disabling this because if the new query doesn't return anything,
-    // we don't want to flush out the current dor parcel
-    // app.state.dor = undefined;
     if (app.state.activeTopic == 'deeds' || app.state.activeTopic == 'zoning') {
       var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerDOR.url});
       parcelQuery.contains(latLng);
       // parcelQuery.where('STATUS IN (1, 3)')
       parcelQuery.run(function (error, featureCollection, response) {
         if (error || !featureCollection) {
-          console.log('get parcel by latlng error', error);
+          // console.log('get parcel by latlng error', error);
           return;
         }
 
@@ -1721,17 +1494,22 @@ var app = _.extend(app || {},
         }
 
         // sort by status
-        console.log('**before', featureCollection);
         var features = featureCollection.features,
+            PARCEL_STATUS_SORT_ORDER = [1, 3, 2],
             featuresSorted = _.sortBy(features, function (feature) {
-              return feature.properties.STATUS;
-            });
+                                var parcelStatus = feature.properties.STATUS,
+                                    priority = PARCEL_STATUS_SORT_ORDER.indexOf(parcelStatus),
+                                    parcelNum = 10000 - feature.properties.PARCEL;
+
+                                // hacky
+                                return priority + '_' + parcelNum;
+                              });
         featureCollection.features = featuresSorted;
-        console.log('**after', featureCollection);
+
+        // console.debug('dor parcels sorted', featuresSorted);
 
         // update state
         app.state.dor = featureCollection;
-        console.log('saved it to state', app.state.dor)
 
         // if there's a callback, call it
         callback && callback();
@@ -1742,7 +1520,7 @@ var app = _.extend(app || {},
         //parcelQuery.where('STATUS IN (1, 3)')
         parcelQuery.run(function (error, featureCollection, response) {
           if (error || !featureCollection) {
-            console.log('get parcel by latlng error', error);
+            // console.log('get parcel by latlng error', error);
             return;
           }
 
@@ -1760,100 +1538,6 @@ var app = _.extend(app || {},
       })
     }
   },
-
-  // replaced by didGetNearbyActivity
-  // didGetNearbyAppeals: function () {
-  //   //console.log('function didGetNearbyAppeals is starting to run')
-  //   var features = app.state.nearby.appeals,
-  //       featuresSorted = _.orderBy(features, app.config.li.fieldMap.appeals.date, ['desc']),
-  //       // sourceFields = _.map(app.config.li.displayFields, function (displayField) {
-  //       //                   return app.config.li.fieldMap.appeals[displayField];
-  //       //                 }),
-  //       // adding address:
-  //       sourceFields = ['processeddate', 'appealkey', 'address', 'appealgrounds', 'decision',],
-  //       rowsHtml = app.util.makeTableRowsFromJson(featuresSorted, sourceFields),
-  //       $table = $('#nearby-appeals'),
-  //       $tbody = $table.find('tbody');
-  //   $tbody.html(rowsHtml);
-  //   $('#nearby-appeals-count').text(' (' + features.length + ')');
-  //
-  //   // reset radio button
-  //   var $dateButton = $('input[name="nearby-appeals-sort-by"][value="date"]');
-  //   $dateButton.prop({checked: true});
-  //
-  //   // TEMP attribute rows with appeal id and distance
-  //   var sourceIdField = app.config.li.fieldMap.appeals.id;
-  //   _.forEach($tbody.find('tr'), function (row, i) {
-  //     var feature = featuresSorted[i];
-  //     $(row).attr('data-appeal-id', feature[sourceIdField]);
-  //     $(row).attr('data-appeal-distance', feature.distance);
-  //     $(row).attr('data-appeal-date', feature.processeddate);
-  //   });
-  //
-  //   // format fields
-  //   app.util.formatTableFields($table);
-  //
-    // // refresh them on map if topic accordion is open
-    // var $targetTopic = $('#topic-nearby');
-    // if ($targetTopic.is(':visible')){
-    // //if ($('#topic-nearby').attr('style') == 'display: block;') {
-    //   //console.log($('#topic-nearby').attr('style'));
-    //   //console.log('refreshing appeals layer');
-    //   app.map.removeNearbyAppeals();
-    //   app.map.addNearbyAppealsToMap();
-    // };
-    //
-    // // listen for hover
-    // $tbody.find('tr').hover(
-    //   function () {
-    //     var $this = $(this);
-    //     $this.css('background', '#ffffff');
-    //     // tell map to highlight pin
-    //     var appealId = $this.attr('data-appeal-id');
-    //     app.map.didHoverOverNearbyAppeal(appealId);
-    //   },
-    //   function () {
-    //     var $this = $(this);
-    //     $this.css('background', '');
-    //     var appealId = $this.attr('data-appeal-id');
-    //     app.map.didMoveOffNearbyAppeal(appealId);
-    //   }
-    // );
-  //
-  //   // TODO should sort?
-  // },
-  //
-  // sortNearbyAppealsBy: function (sortBy) {
-  //   // get rows
-  //   var rows = $('#nearby-appeals > tbody > tr'),
-  //       rowsSorted = _.sortBy(rows, function (row) {
-  //         return $(row).attr('data-appeal-' + sortBy);
-  //       });
-  //
-  //   // date should be desc
-  //   if (sortBy === 'date') rowsSorted = _.reverse(rowsSorted);
-  //
-  //   // clobber
-  //   $('#nearby-appeals > tbody').empty();
-  //   $('#nearby-appeals > tbody').append(rowsSorted);
-  //
-  //   // listen for hover
-  //   $('#nearby-appeals').find('tr').hover(
-  //     function () {
-  //       var $this = $(this);
-  //       $this.css('background', '#ffffff');
-  //       // tell map to highlight pin
-  //       var appealId = $this.attr('data-appeal-id');
-  //       app.map.didHoverOverNearbyAppeal(appealId);
-  //     },
-  //     function () {
-  //       var $this = $(this);
-  //       $this.css('background', '');
-  //       var appealId = $this.attr('data-appeal-id');
-  //       app.map.didMoveOffNearbyAppeal(appealId);
-  //     }
-  //   );
-  // },
 
   didGetDorDocuments: function () {
     // have to unpack these differently from geojson/socrata
@@ -1943,7 +1627,7 @@ var app = _.extend(app || {},
         $selected = $nearbyActivityType.find(':selected'),
         label = $('#'+prefix+'-activity-type :selected').text();
 
-    console.log('get activity for: ', label);
+    // console.log('get activity for: ', label);
 
     // make sure we have an XY first
     // TODO clear out 'nearby' content if no XY.
@@ -1992,13 +1676,13 @@ var app = _.extend(app || {},
         app.didGetNearbyActivity();
       },
       error: function (err) {
-        console.log('nearby error', err);
+        // console.log('nearby error', err);
       },
     });
   },
 
   didGetNearbyActivity: function () {
-    //console.info('did get nearby activity', app.state.nearby.data);
+    //// console.info('did get nearby activity', app.state.nearby.data);
 
     var activeTopic = app.state.activeTopic,
         prefix = activeTopic === 'nearby' ? 'nearby' : 'vacancy-nearby';
@@ -2050,10 +1734,10 @@ var app = _.extend(app || {},
     var $targetTopic = prefix === 'nearby' ? $('#topic-nearby') : $('#topic-vacancy');
     if ($targetTopic.is(':visible')){
       //if ($('#topic-nearby').attr('style') == 'display: block;') {
-      //console.log($('#topic-nearby').attr('style'));
-      //console.log('refreshing appeals layer');
+      //// console.log($('#topic-nearby').attr('style'));
+      //// console.log('refreshing appeals layer');
       // app.map.removeNearbyActivity();
-      //console.log('rowsSorted is ', rowsSorted);
+      //// console.log('rowsSorted is ', rowsSorted);
       app.map.addNearbyActivity(rowsSorted);
     };
 
@@ -2115,7 +1799,7 @@ var app = _.extend(app || {},
   },
 
   didGetElections: function () {
-    // console.log('did get elections');
+    // // console.log('did get elections');
 
     var data = app.state.elections,
         attrs = data.features[0].attributes,

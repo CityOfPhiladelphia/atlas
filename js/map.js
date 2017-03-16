@@ -217,7 +217,7 @@ app.map = (function ()
           onClick: function(control) {
             app.map.toggleBasemap();
 						if (app.state.map.nameBaseLayer != 'baseMapLight' && app.state.map.nameBaseLayer != 'baseMapDORParcels') {
-							console.log('toggling button to basemap');
+							// console.log('toggling button to basemap');
 	            control.state('toggletoBasemap');
 	          }
 					}
@@ -228,7 +228,7 @@ app.map = (function ()
           onClick: function(control) {
             app.map.toggleBasemap();
 						if (app.state.map.nameBaseLayer == 'baseMapLight' || app.state.map.nameBaseLayer == 'baseMapDORParcels') {
-							console.log('toggling button to imagery');
+							// console.log('toggling button to imagery');
 							control.state('toggleToImagery');
 						}
           }
@@ -328,7 +328,7 @@ app.map = (function ()
       // if cyclo is in outside tab, when map refreshes, if there is already a cyclo tab open, place the marker
       if (app.state.map.stViewOpen && localStorage.stViewOpen == 'true') {
         app.map.LSretrieve();
-        console.log('map refreshing triggered drawStViewMarkers');
+        // console.log('map refreshing triggered drawStViewMarkers');
         app.map.drawStViewMarkers();
         app.map.prepareCycloBbox();
       }
@@ -336,7 +336,7 @@ app.map = (function ()
       // watch localStorage for changes to:
       //pictometryOpen, stViewOpen, stViewCoords, stViewYaw, stViewHfov
       $(window).bind('storage', function (e) {
-				console.warn(e);
+				// console.warn(e);
 				// if pictometry window closes, change widget icon color
 				if (e.originalEvent.key == 'pictometryOpen') {
 					if (e.originalEvent.newValue == 'false') {
@@ -349,7 +349,7 @@ app.map = (function ()
         // if cyclo window closes, remove marker and change icon color
         if (e.originalEvent.key == 'stViewOpen') {
 					if (e.originalEvent.newValue == 'false') {
-						console.log('stView closed');
+						// console.log('stView closed');
           	_stViewMarkersLayerGroup.clearLayers();
           	_cycloFeatureGroup.clearLayers();
 						localStorage.setItem('circlesOn', 'false');
@@ -364,20 +364,20 @@ app.map = (function ()
           app.state.stViewX = localStorage.getItem('stViewX');
           app.state.stViewY = localStorage.getItem('stViewY');
           _stViewMarkersLayerGroup.clearLayers();
-          console.log('change to stViewCoords triggered drawStViewMarkers');
+          // console.log('change to stViewCoords triggered drawStViewMarkers');
           app.map.drawStViewMarkers();
         };
         if (e.originalEvent.key == 'stViewYaw'){
           app.state.stViewYaw = localStorage.getItem('stViewYaw');
           _stViewMarkersLayerGroup.clearLayers();
-          console.log('change to stViewYaw triggered drawStViewMarkers');
+          // console.log('change to stViewYaw triggered drawStViewMarkers');
           app.map.drawStViewMarkers();
         };
         if (e.originalEvent.key == 'stViewHfov'){
           app.state.stViewHfov = localStorage.getItem('stViewHfov');
           _stViewMarkersLayerGroup.clearLayers();
           app.state.stViewConeCoords = app.map.calculateConeCoords();
-          console.log('change to stViewHfov triggered drawStViewMarkers');
+          // console.log('change to stViewHfov triggered drawStViewMarkers');
           app.map.drawStViewMarkers();
         };
       });
@@ -385,7 +385,7 @@ app.map = (function ()
 
 		// Add map widget holders outside of corners - called in InitMap
 		addControlPlaceholders: function(map) {
-			console.log('addControlPlaceholders is running');
+			// console.log('addControlPlaceholders is running');
 	    var corners = map._controlCorners,
 	        l = 'leaflet-',
 	        container = map._controlContainer;
@@ -430,7 +430,7 @@ app.map = (function ()
 		toggleYear: function(control, requestedLayer) {
 			// gray all buttons
 			for (i = 0; i < app.state.map.historicalImageryButtons.length; i++) {
-				//console.log(app.state.map.historicalImageryButtons[i].options.id);
+				//// console.log(app.state.map.historicalImageryButtons[i].options.id);
 				app.state.map.historicalImageryButtons[i].state('dateNotSelected');
 			};
 			_baseLayerGroup.clearLayers();
@@ -444,7 +444,7 @@ app.map = (function ()
 
 		// switch stView to outside
 		popoutStView: function() {
-			console.log('popoutStView starting');
+			// console.log('popoutStView starting');
 			var cycloPanel = document.getElementById('cyclo-panel');
 			$('#map-panel').css('height', '100%');
 			$('#map-panel').animate({
@@ -457,14 +457,14 @@ app.map = (function ()
 
 		// toggle stView
 		toggleStView: function() {
-			console.log('toggleStView starting');
+			// console.log('toggleStView starting');
 			var cycloPanel = document.getElementById('cyclo-panel');
 			//var $cycloPanel = $('#cyclo-panel');
 			if (app.state.map.stViewOpen == 'false') {
-				console.log('app.state.map.stViewOpen is false');
+				// console.log('app.state.map.stViewOpen is false');
 				app.state.map.stViewOpen = 'true';
 				localStorage.setItem('stViewOpen', 'true');
-				//console.log(app.state.map.stViewOpen);
+				//// console.log(app.state.map.stViewOpen);
 				$('#map-panel').animate({
 					height: '50%'
 				}, 350, function(){
@@ -483,10 +483,10 @@ app.map = (function ()
 				localStorage.setItem('circlesOn', 'true');
 
 			} else {
-				console.log('app.state.map.stViewOpen is true');
+				// console.log('app.state.map.stViewOpen is true');
 				app.state.map.stViewOpen = 'false';
 				localStorage.setItem('stViewOpen', 'false');
-				//console.log(app.state.map.stViewOpen);
+				//// console.log(app.state.map.stViewOpen);
 				$('#map-panel').css('height', '100%');
 				$('#map-panel').animate({
 					height: '100%'
@@ -501,7 +501,7 @@ app.map = (function ()
 		},
 
 		// didClickVacancyRadioButton: function(buttonId) {
-		// 	console.log('didClickVacancyRadioButton ran with ', buttonId);
+		// 	// console.log('didClickVacancyRadioButton ran with ', buttonId);
 		// 	_overlayLayerGroup.clearLayers();
 		// 	var newOverlay = app.state.map.featureServices[buttonId];
 		// 	newOverlay.addTo(_overlayLayerGroup);
@@ -534,10 +534,10 @@ app.map = (function ()
     },
 
 		didCreateAddressMarker: function (markerType) {
-			// console.log('did create address marker', markerType);
+			// // console.log('did create address marker', markerType);
 			var targetMarkerType = this.addressMarkerTypeForTopic(app.state.activeTopic);
 			if (markerType === targetMarkerType) {
-				// console.log('this is the marker we want to show')
+				// // console.log('this is the marker we want to show')
 				this.showAddressMarker(markerType);
 			}
 			// else if (app.state.map.addressMarkers.aisMarker) {
@@ -546,14 +546,14 @@ app.map = (function ()
 		},
 
 		didGetAisResult: function () {
-			console.log('MAP: did get ais result');
+			// console.log('MAP: did get ais result');
 
 			// clear out old address markers
 			app.state.map.addressMarkers = {};
 
 			var aisGeom = app.state.ais.feature.geometry;
 			if (aisGeom) {
-				console.log('we have ais geom gonna make the marker')
+				// console.log('we have ais geom gonna make the marker')
 				aisMarker = new L.Marker.SVGMarker([aisGeom.coordinates[1], aisGeom.coordinates[0]], {
 					"iconOptions": {
 						className: 'svg-icon-noClick',
@@ -573,7 +573,7 @@ app.map = (function ()
 
 			this.didCreateAddressMarker('aisMarker');
 
-			//console.log('didGetAisResult is running LSinit');
+			//// console.log('didGetAisResult is running LSinit');
 			app.map.LSinit();
 			if (app.state.map.stViewOpen == 'true'){
 				app.cyclo.setNewLocation();
@@ -582,13 +582,13 @@ app.map = (function ()
 			// if there's a regmap, remove it
 			var prevRegmap = app.state.map.mapServices.regmap;
 			if (prevRegmap) {
-				console.warn('didGetAisResult is calling removeRegmap');
+				// console.warn('didGetAisResult is calling removeRegmap');
 				this.removeRegmap();
 			}
 		},
 
-		didGetDorParcel: function () {
-			console.log('MAP: did get dor parcel');
+		didGetDorParcels: function () {
+			// console.log('MAP: did get dor parcels');
 
 			// if there's no parcel in state, clear the map and don't render
 			// TODO zoom to AIS xy
@@ -611,7 +611,7 @@ app.map = (function ()
 				parcelCentroid = parcelPolyDOR.getBounds().getCenter();
 			}
 			catch(err) {
-				console.log('draw parcel, but could not get parcel from state', err);
+				// console.log('draw parcel, but could not get parcel from state', err);
 				// clear parcel
 				// _parcelLayerGroup.clearLayers();
 				// return;
@@ -625,7 +625,7 @@ app.map = (function ()
 		},
 
 		didGetPwdParcel: function () {
-			console.log('MAP: did get pwd parcel');
+			// console.log('MAP: did get pwd parcel');
 
 			var parcelWater = app.state.pwd.features[0],
 					geomWater = parcelWater.geometry,
@@ -645,7 +645,7 @@ app.map = (function ()
 		},
 
 		didGetParcel: function (parcelLayer) {
-			// console.log('MAP: did get parcel', parcelLayer);
+			// // console.log('MAP: did get parcel', parcelLayer);
 
 			var didGetResult = !!app.state[parcelLayer],
 					otherRequest = parcelLayer === 'pwd' ? 'didFinishDorRequest' : 'didFinishPwdRequest',
@@ -667,6 +667,8 @@ app.map = (function ()
 		// },
 
     didClickMap: function (e) {
+			//app.state.dor = app.state.pwd = null;
+
       // set state
       app.state.map.clickedOnMap = true
 			localStorage.setItem('clickedOnMap', true);
@@ -674,13 +676,13 @@ app.map = (function ()
 
       // if this was a cyclo circle click, don't do anything
       if (app.state.map.clickedCircle) {
-        // console.log('clicked a circle');
+        // // console.log('clicked a circle');
         app.state.map.clickedCircle = false;
 				return;
       }
 
 			// otherwise, it was a parcel click. get the parcel ID and query AIS.
-      app.getParcelByLatLng(e.latlng, function () {
+      app.getParcelsByLatLng(e.latlng, function () {
 				// which parcels are being displayed?
 				var activeTopic = app.state.activeTopic,
 						DOR_TOPICS = ['deeds', 'zoning'],
@@ -691,31 +693,29 @@ app.map = (function ()
 					case 'dor':
 						var parcel = app.state.dor.features[0];
 						parcelId = parcel.properties.MAPREG;
-						console.log('dor parcel, id:', parcelId);
+						// console.log('dor parcel, id:', parcelId);
 						break;
 					case 'pwd':
 						var parcel = app.state.pwd.features[0];
 						parcelId = parcel.properties.PARCELID;
-						console.log('pwd parcel, id:', parcelId);
+						// console.log('pwd parcel, id:', parcelId);
 						break;
 					default:
-						console.log('unknown parcel layer:', parcelLayer)
+						// console.log('unknown parcel layer:', parcelLayer)
 						break;
 				}
 
-        // if this is the result of a map click, query ais for the address
+        // if this is the result of a map click, query ais
         if (app.state.map.clickedOnMap) {
-					// this is a little kludgy b/c technically we don't have an address,
-					// but should work anyway.
-          app.searchForAddress(parcelId);
-          app.state.map.clickedOnMap = true; //andy changed this 11/29
+          app.searchAis(parcelId);
+          app.state.map.clickedOnMap = true;
         }
       });
     },
 
 
     LSinit: function() {
-			console.log('LSinit is running');
+			// console.log('LSinit is running');
 			app.state.theCenter = _map.getCenter();
 			app.state.leafletCenterX = app.state.theCenter.lng;
 			app.state.leafletCenterY = app.state.theCenter.lat;
@@ -808,7 +808,7 @@ app.map = (function ()
 		},
 
     drawStViewMarkers: function(){
-      //console.log('drawStViewMarkers is called - about to create _stViewHfovMarker');
+      //// console.log('drawStViewMarkers is called - about to create _stViewHfovMarker');
 			// this can be called while street view is opening, causing errors
 			if (app.state.stViewY) {
 	      _stViewHfovMarker = L.marker([app.state.stViewY, app.state.stViewX], {
@@ -818,15 +818,15 @@ app.map = (function ()
 	        }),
 	        rotationAngle: app.state.stViewYaw,
 	      }).on('click', 	function(){
-					console.log('clicked triangle marker');
+					// console.log('clicked triangle marker');
 				});
-	      //console.log('about to create _stViewCameraMarker');
+	      //// console.log('about to create _stViewCameraMarker');
 	      _stViewCameraMarker = L.marker([app.state.stViewY, app.state.stViewX], {
 	        icon: camera,
 	        rotationAngle: app.state.stViewYaw,
 					draggable: true
 	      }).on('click', function(){
-					console.log('clicked camera');
+					// console.log('clicked camera');
 				}).on('dragend', function(data){
 					app.state.dragdata = data;
 					app.state.draggedX = data.target._latlng.lng;
@@ -839,10 +839,10 @@ app.map = (function ()
     },
 
 		showAddressMarker: function (markerType) {
-			// console.log('show address marker', markerType);
+			// // console.log('show address marker', markerType);
 
 			// if (!app.state.map.addressMarkers) {
-			// 	console.log('show address marker, but we havent created them yet');
+			// 	// console.log('show address marker, but we havent created them yet');
 			// 	return;
 			// }
 
@@ -858,7 +858,7 @@ app.map = (function ()
 
 			// if there's no corresponding marker, don't do anything
 			if (!marker) {
-				// console.log('show address marker, but we dont have a marker of type', markerType);
+				// // console.log('show address marker, but we dont have a marker of type', markerType);
 				return;
 			}
 
@@ -868,7 +868,7 @@ app.map = (function ()
 			// don't pan map if we shouldn't
       // 'true' if search button was clicked or if page is loaded w address parameter, 'false' if a parcel was clicked
       if (!app.state.map.shouldPan) {
-				// console.log('shouldnt pan so going to return now')
+				// // console.log('shouldnt pan so going to return now')
 				return;
 			}
 
@@ -895,14 +895,14 @@ app.map = (function ()
 					break;
 
 				default:
-					console.log('show address marker: unhandled type')
+					// console.log('show address marker: unhandled type')
 					break;
 			}
 		},
 
 		// this is called when we change topics
     didChangeTopic: function (prevTopic, nextTopic) {
-			console.log('did change topic', prevTopic, '=>', nextTopic);
+			// console.log('did change topic', prevTopic, '=>', nextTopic);
 
 			// handle address marker
 			var prevMarkerType = this.addressMarkerTypeForTopic(prevTopic),
@@ -916,7 +916,7 @@ app.map = (function ()
 					nextMarker.addTo(_parcelLayerGroup);
 				}
 				else {
-					console.warn('did change topic, but no next marker')
+					// console.warn('did change topic, but no next marker')
 				}
 			}
 
@@ -934,13 +934,13 @@ app.map = (function ()
 			}
 
 			// handle overlays
-			console.warn('didChangeTopic is clearing _overlayLayerGroup');
+			// console.warn('didChangeTopic is clearing _overlayLayerGroup');
 			_overlayLayerGroup.clearLayers();
-			console.warn('calling overlaysForTopic to get nextOverlays with nextTopic ', nextTopic);
+			// console.warn('calling overlaysForTopic to get nextOverlays with nextTopic ', nextTopic);
 			var nextOverlays = this.overlaysForTopic(nextTopic);
-			console.log('nextOverlays', nextOverlays);
+			// console.log('nextOverlays', nextOverlays);
 			_.forEach(nextOverlays, function (nextOverlay) {
-				//console.log('nextOverlay is ', nextOverlay);
+				//// console.log('nextOverlay is ', nextOverlay);
 				if (nextOverlay) {
 					nextOverlay.addTo(_overlayLayerGroup);
 					// nextOverlay.setOpacity
@@ -948,36 +948,36 @@ app.map = (function ()
 			});
 
 			// handle regmaps - unhighlight last selected
-			/*console.log('unhighlighting last selected');
+			/*// console.log('unhighlighting last selected');
       $('#deeds-regmaps a:not(.hollow)').addClass('hollow');*/
 
 			// handle labels
 			var prevLabelLayer = this.labelsForTopicAndBasemap(prevTopic, prevBasemapName),
 					nextLabelLayer = this.labelsForTopicAndBasemap(nextTopic, nextBasemapName);
-			// console.log('prevTopic is ' +  prevTopic);
-			// console.log('prevBasemapName is ' + prevBasemapName);
-			// console.log('prevLabelLayer is ' + prevLabelLayer);
-			// console.log('nextTopic is ' +  nextTopic);
-			// console.log('nextBasemapName is ' + nextBasemapName);
-			// console.log('nextLabelLayer is ' + nextLabelLayer);
+			// // console.log('prevTopic is ' +  prevTopic);
+			// // console.log('prevBasemapName is ' + prevBasemapName);
+			// // console.log('prevLabelLayer is ' + prevLabelLayer);
+			// // console.log('nextTopic is ' +  nextTopic);
+			// // console.log('nextBasemapName is ' + nextBasemapName);
+			// // console.log('nextLabelLayer is ' + nextLabelLayer);
 			if (prevLabelLayer !== nextLabelLayer) {
 				// replace labels
 				_labelLayerGroup.clearLayers();
 				app.state.map.tiledLayers[nextLabelLayer].addTo(_labelLayerGroup);
 			}
 
-      // console.log('did change topic', prevTopic, '=>', nextTopic);
+      // // console.log('did change topic', prevTopic, '=>', nextTopic);
 
 			// handle opacity sliders
-			console.log('######## calling overlaysForTopic to get prevTopic');
+			// console.log('######## calling overlaysForTopic to get prevTopic');
 			var opacitySliders = app.state.map.opacitySliders,
 					prevOverlays = this.overlaysForTopic(prevTopic);
 
 			// remove existing sliders
 			if (prevOverlays !== undefined && prevOverlays[0] !== undefined && prevOverlays[0] !== null) {
-				console.log('prevOverlays', prevOverlays)
+				// console.log('prevOverlays', prevOverlays)
 				_.forEach(prevOverlays, function (prevOverlay) {
-					console.log('$$$$$$$$$$$$$$$ prevOverlay ', prevOverlay)
+					// console.log('$$$$$$$$$$$$$$$ prevOverlay ', prevOverlay)
 					var name = prevOverlay.options.name;
 					if (_.keys(opacitySliders).indexOf(name) > -1) {
 						var opacitySlider = opacitySliders[name];
@@ -987,12 +987,12 @@ app.map = (function ()
 				});
 			}
 			// add next slider
-			console.log('^^^^^^^^^^^^^^ nextOverlays is ', nextOverlays);
+			// console.log('^^^^^^^^^^^^^^ nextOverlays is ', nextOverlays);
 			_.forEach(nextOverlays, function (nextOverlay) {
-				console.log('@@@@@@@@@@@ forEach with nextOverlay', nextOverlay)
+				// console.log('@@@@@@@@@@@ forEach with nextOverlay', nextOverlay)
 				if(nextOverlay){
 					var name = nextOverlay.options.name;
-					console.log('name is ', name);
+					// console.log('name is ', name);
 					if (_.keys(opacitySliders).indexOf(name) > -1) {
 						var opacitySlider = opacitySliders[name];
 						opacitySlider.addTo(_map);
@@ -1002,7 +1002,7 @@ app.map = (function ()
 
 			// handle water
 			if (nextTopic === 'water') {
-				console.warn('adding water overlay');
+				// console.warn('adding water overlay');
 				_overlayLayerGroup.addLayer(app.state.map.mapServices.water);
 				app.map.domLayerList();
 				// app.map.addOpacitySlider(app.state.map.mapServices.water, app.state.map.opacity.water);
@@ -1054,11 +1054,11 @@ app.map = (function ()
 			// local storage stuff
 			localStorage.setItem('previousTopic', prevTopic);
 			localStorage.setItem('activeTopic', nextTopic);
-			console.log('got to end of didChangeTopic');
+			// console.log('got to end of didChangeTopic');
     },
 
 		basemapForTopic: function (topic) {
-			// console.log('running basemapForTopic with topic ' + topic);
+			// // console.log('running basemapForTopic with topic ' + topic);
 			var basemapName;
 			switch (topic) {
 				case 'deeds':
@@ -1071,12 +1071,12 @@ app.map = (function ()
 					basemapName = 'baseMapLight';
 					break;
 			};
-			// console.log('basemapName is ' + basemapName);
+			// // console.log('basemapName is ' + basemapName);
 			return basemapName;
 		},
 
 		overlaysForTopic: function (topic) {
-			console.log('running overlaysForTopic with topic ', topic);
+			// console.log('running overlaysForTopic with topic ', topic);
 			var overlays;
 
 			switch (topic) {
@@ -1091,20 +1091,20 @@ app.map = (function ()
 					];
 					break;
 				case 'deeds':
-					console.log('overlays for topic DEEDS');
+					// console.log('overlays for topic DEEDS');
 					overlays = [
 						app.state.map.mapServices.regmap,
 					];
-					console.log('inside overlays for topic function ', overlays);
+					// console.log('inside overlays for topic function ', overlays);
 					break;
 				/*case 'vacancy':
-					console.log('overlays for topic VACANCY');
+					// console.log('overlays for topic VACANCY');
 					overlays = [
 						//app.state.map.featureServices.vacancyPercent,
 						//app.state.map.featureServices.vacantBuildings,
 						app.state.map.featureServices.vacantLand,
 					]
-					console.log('overlays is ', overlays);*/
+					// console.log('overlays is ', overlays);*/
 				default:
 					overlays = [];
 					return;
@@ -1116,7 +1116,7 @@ app.map = (function ()
 		// labels depend on both the topic and the basemap being shown
 		labelsForTopicAndBasemap: function (topic, basemap) {
 			// always show imagery labels for imagery basemap
-			// console.log('basemap is ' + basemap);
+			// // console.log('basemap is ' + basemap);
 			if (basemap.indexOf('Imagery') > -1) {
 				return 'overlayImageryLabels';
 			}
@@ -1129,7 +1129,7 @@ app.map = (function ()
 		},
 
 		addressMarkerTypeForTopic: function (topic) {
-			// console.log('running addressMarkerTypeForTopic with topic ' + topic);
+			// // console.log('running addressMarkerTypeForTopic with topic ' + topic);
 
 			var markerType;
 			if (topic === 'deeds') {
@@ -1143,12 +1143,12 @@ app.map = (function ()
 		},
 
 		addressMarkerForTopic: function (topic) {
-			console.log('running addressMarkerForTopic with topic ' + topic);
+			// console.log('running addressMarkerForTopic with topic ' + topic);
 			var addressMarkers = app.state.map.addressMarkers;
 
 			// check for markers
 			if (!addressMarkers || addressMarkers.length === 0) {
-				console.warn('called addressMarkerForTopic but there are no address markers')
+				// console.warn('called addressMarkerForTopic but there are no address markers')
 				return;
 			}
 
@@ -1177,12 +1177,12 @@ app.map = (function ()
 		addElectionInfo: function () {
 			_electionFeatureGroup.clearLayers();
 
-			console.log('addElectionInfo was called');
+			// console.log('addElectionInfo was called');
 
 			var elections = app.state.elections;
 
 			if (!elections) {
-				console.warn('add election info, but no elections yet');
+				// console.warn('add election info, but no elections yet');
 				return;
 			}
 
@@ -1249,7 +1249,7 @@ app.map = (function ()
 		},
 
 		addNearbyActivity: function (rows) {
-			console.debug('add nearby activity', rows);
+			// console.debug('add nearby activity', rows);
 
 			app.state.map.nearbyActivity = app.state.map.nearbyActivity || {};
 
@@ -1286,7 +1286,7 @@ app.map = (function ()
 							// custom attr to link with data rows
 							rowId: row.id,
 						}).on('click', 	function () {
-							// console.log('clicked a marker');
+							// // console.log('clicked a marker');
 						}).on('mouseover', function () {
 							// this part is for scrolling to the row
 							check(row.id);
@@ -1326,9 +1326,9 @@ app.map = (function ()
 					layerBounds = _nearbyActivityLayerGroup.getBounds();
 
 			if (mapBounds.contains(layerBounds)) {
-				// console.log('map bounds contain nearby activity bounds');
+				// // console.log('map bounds contain nearby activity bounds');
 			} else {
-				// console.log('map bounds do not contain activity bounds');
+				// // console.log('map bounds do not contain activity bounds');
 				_map.fitBounds(layerBounds);
 				//_map.panInsideBounds(_nearbyActivityLayerGroup.getBounds());
 			}
@@ -1340,7 +1340,7 @@ app.map = (function ()
 			_nearbyActivityLayerGroup.eachLayer(function (layer) {
 				// make sure it's a nearby marker
 				var layerRowId = layer.options.rowId;
-				if (!layerRowId) console.log('layerRowId not found');
+				if (!layerRowId) // console.log('layerRowId not found');
 
 				if (id == layerRowId) {
 					markerlatlng = layer._latlng
@@ -1361,7 +1361,7 @@ app.map = (function ()
 			_nearbyActivityLayerGroup.eachLayer(function (layer) {
 				// make sure it's a nearby marker
 				var layerRowId = layer.options.rowId;
-				if (!layerRowId) console.log('layerRowId not found');
+				if (!layerRowId) // console.log('layerRowId not found');
 
 				if (id == layerRowId) {
 					markerlatlng = layer._latlng
@@ -1400,7 +1400,7 @@ app.map = (function ()
     },
 
     addCycloCircles: function() {
-			console.log('addCycloCircles is running');
+			// console.log('addCycloCircles is running');
       _cycloFeatureGroup.clearLayers();
       app.cyclo.recordings = app.cyclo.wfsClient.recordingList;
       if (app.cyclo.recordings.length > 0) {
@@ -1423,7 +1423,7 @@ app.map = (function ()
 						app.cyclo.setNewLocation();
 
           });
-          //blueCircle.on({click: console.log('clicked a circle')});
+          //blueCircle.on({click: // console.log('clicked a circle')});
           blueCircle.addTo(_cycloFeatureGroup);
         }
         _cycloFeatureGroup.bringToFront();
@@ -1433,7 +1433,7 @@ app.map = (function ()
     },
 
 		removeRegmap: function () {
-			console.log('remove regmap');
+			// console.log('remove regmap');
 			var regmapLayer = app.state.map.mapServices.regmap,
 					opacitySlider = app.state.map.opacitySliders.regmap;
 
@@ -1442,7 +1442,7 @@ app.map = (function ()
 			}
 
 			if (app.state.activeTopic == 'deeds') {
-				console.warn('removeRegmap is clearing _overlayLayerGroup');
+				// console.warn('removeRegmap is clearing _overlayLayerGroup');
 				_overlayLayerGroup.clearLayers();
 			}
 
@@ -1451,17 +1451,17 @@ app.map = (function ()
 			app.state.map.mapServices.regmap = null;
 		},
 
-		didChangeRegmap: function (prev, next) {
-			console.log('MAP: did change regmap', prev, '=>', next);
+		didSelectRegmap: function (nextRegmap) {
+			console.log('MAP: did change regmap =>', nextRegmap);
 
 			var prevRegmap = app.state.map.mapServices.regmap;
 
 			if (prevRegmap) {
-				this.removeRegmap();
+				app.map.removeRegmap();
 			}
 
-			// if there no `next`, this is really a deselect.
-			if (!next) {
+			// if there isn't a regmap to show, don't do anything
+			if (!nextRegmap) {
 				return;
 			}
 
@@ -1469,7 +1469,7 @@ app.map = (function ()
 					nextRegmap = new L.esri.dynamicMapLayer({
 					  url: url,
 						layers: [29],
-						layerDefs: "29:NAME='g" + next.toLowerCase() + ".tif'",
+						layerDefs: "29:NAME='g" + nextRegmap.toLowerCase() + ".tif'",
 						transparent: 'true',
 						name: 'regmap',
 						zIndex: 4,
@@ -1498,6 +1498,46 @@ app.map = (function ()
 				}
 			});
 
+		},
+
+		didActivateParcel: function () {
+			// if there's no parcel in state, clear the map and don't render
+			// TODO zoom to AIS xy
+			var parcelDOR, geomDOR;
+
+			var activeParcelId = app.views.parcelTabs.activeParcel,
+					activeParcel = _.filter(app.state.dor.features, function (feature) {
+						return feature.properties.MAPREG == activeParcelId;
+					})[0];
+
+			try {
+				if (!activeParcel) {
+					throw 'no parcel'
+				};
+
+				geomDOR = activeParcel.geometry;
+
+				var coordsDOR = app.util.flipCoords(geomDOR.coordinates);
+				parcelPolyDOR = L.polygon([coordsDOR], {
+					color: 'blue',
+					weight: 2,
+					name: 'parcelPolyDOR',
+					type: 'parcel',
+				});
+				parcelCentroid = parcelPolyDOR.getBounds().getCenter();
+			}
+			catch(err) {
+				// console.log('draw parcel, but could not get parcel from state', err);
+				// clear parcel
+				// _parcelLayerGroup.clearLayers();
+				// return;
+			}
+
+			app.state.map.addressMarkers.parcelPolyDOR = parcelPolyDOR;
+
+			app.map.didCreateAddressMarker('parcelPolyDOR');
+
+			app.map.didGetParcel('dor');
 		},
   }; // end of return
 })();

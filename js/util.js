@@ -98,10 +98,23 @@ app.util = (function () {
     // takes a dor parcel object (geojson response) and creates the full,
     // concatenated street address
     concatDorAddress: function (obj) {
-      var ADDRESS_FIELDS = ['HOUSE', 'SUFFIX', 'STDIR', 'STNAM', 'STDES', 'STDESSUF'],
-          props = obj.properties,
-          // clean up attributes
-          comps = _.map(_.pick(props, ADDRESS_FIELDS), app.util.cleanDorAttribute),
+      var STREET_FIELDS = ['STDIR', 'STNAM', 'STDES', 'STDESSUF'],
+          props = obj.properties;
+
+      // handle house num
+      var addressLow = app.util.cleanDorAttribute(props.HOUSE),
+          addressHigh = app.util.cleanDorAttribute(props.STEX),
+          addressSuffix = app.util.cleanDorAttribute(props.SUFFIX),
+          address = addressLow,
+          address = address + (addressHigh ? '-' + addressHigh : ''),
+          address = address + (addressSuffix || '');
+
+      // handle unit
+      var unit = app.util.cleanDorAttribute(props.UNIT);
+      unit && (unit = '# ' + unit);
+
+      // clean up attributes
+      var comps = _.map(_.pick(props, STREET_FIELDS), app.util.cleanDorAttribute),
           // TODO handle individual address comps (like mapping stex=2 => 1/2)
           // addressLow = comps.HOUSE,
           // addressHigh = comps.STEX,
@@ -109,6 +122,12 @@ app.util = (function () {
           // streetName = comps.STNAM,
           // streetSuffix = comps.STDES,
           // streetPostdir = comps.STDESSUF,
+
+          // add address to front
+          comps = [address].concat(comps),
+
+          // add unit to end
+          comps = comps.concat([unit]),
 
           // remove nulls and concat
           address = _.compact(comps).join(' ');
