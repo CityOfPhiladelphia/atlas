@@ -1682,7 +1682,7 @@ var app = _.extend(app || {},
   },
 
   didGetNearbyActivity: function () {
-    //// console.info('did get nearby activity', app.state.nearby.data);
+    // console.info('did get nearby activity', app.state.nearby.data);
 
     var activeTopic = app.state.activeTopic,
         prefix = activeTopic === 'nearby' ? 'nearby' : 'vacancy-nearby';
@@ -1721,10 +1721,14 @@ var app = _.extend(app || {},
 
     // TEMP attribute rows with appeal id and distance
     _.forEach($tbody.find('tr'), function (row, i) {
+      // console.log(row);
       var dataRow = rowsSorted[i],
       id = dataRow.id,
       $tableRow = $(row);
       $tableRow.attr('data-id', dataRow.id);
+      // console.log(dataRow);
+      // console.log(id);
+      // console.log($tableRow);
     });
 
     // render on map
@@ -1732,12 +1736,13 @@ var app = _.extend(app || {},
 
     // refresh them on map if topic accordion is open
     var $targetTopic = prefix === 'nearby' ? $('#topic-nearby') : $('#topic-vacancy');
+    // console.log('$$$$$$$$$$$', $targetTopic);
     if ($targetTopic.is(':visible')){
       //if ($('#topic-nearby').attr('style') == 'display: block;') {
       //// console.log($('#topic-nearby').attr('style'));
       //// console.log('refreshing appeals layer');
       // app.map.removeNearbyActivity();
-      //// console.log('rowsSorted is ', rowsSorted);
+      // console.log('rowsSorted is ', rowsSorted);
       app.map.addNearbyActivity(rowsSorted);
     };
 

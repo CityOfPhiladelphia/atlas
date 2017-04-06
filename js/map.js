@@ -1340,7 +1340,7 @@ app.map = (function ()
 			_nearbyActivityLayerGroup.eachLayer(function (layer) {
 				// make sure it's a nearby marker
 				var layerRowId = layer.options.rowId;
-				if (!layerRowId) // console.log('layerRowId not found');
+				if (!layerRowId) console.log('layerRowId not found');
 
 				if (id == layerRowId) {
 					markerlatlng = layer._latlng
@@ -1361,7 +1361,7 @@ app.map = (function ()
 			_nearbyActivityLayerGroup.eachLayer(function (layer) {
 				// make sure it's a nearby marker
 				var layerRowId = layer.options.rowId;
-				if (!layerRowId) // console.log('layerRowId not found');
+				if (!layerRowId) console.log('layerRowId not found');
 
 				if (id == layerRowId) {
 					markerlatlng = layer._latlng
