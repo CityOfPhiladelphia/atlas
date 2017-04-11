@@ -943,7 +943,7 @@ var app = _.extend(app || {},
     var opaAccountNum = aisProps.opa_account_num;
     if (opaAccountNum) {
       $.get({
-        url: '//data.phila.gov/resource/w7rb-qrn8.json?parcel_number=' + opaAccountNum,
+        url: 'https://data.phila.gov/resource/w7rb-qrn8.json?parcel_number=' + opaAccountNum,
         success: app.didGetOpaResult,
         error: function (err) {
           // console.log('opa error', err);
@@ -959,7 +959,7 @@ var app = _.extend(app || {},
         liDeferreds;
     // create an array of Deferred objects for each l&i request
     liDeferreds =_.map(app.config.li.socrataIds, function (liSocrataId, liStateKey) {
-          var url = '//data.phila.gov/resource/' + liSocrataId + '.json',
+          var url = 'https://data.phila.gov/resource/' + liSocrataId + '.json',
               params = {addresskey: liAddressKey};
           return $.ajax({
             url: url,
@@ -993,7 +993,7 @@ var app = _.extend(app || {},
 
     // get scanned documents ("zoning archive")
     $.ajax({
-      url: '//data.phila.gov/resource/spcr-thsm.json',
+      url: 'https://data.phila.gov/resource/spcr-thsm.json',
       data: {
         address: aisAddress,
       },
