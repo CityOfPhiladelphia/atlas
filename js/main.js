@@ -993,13 +993,12 @@ var app = _.extend(app || {},
 
     // get scanned documents ("zoning archive")
     $.ajax({
-      url: 'https://data.phila.gov/resource/spcr-thsm.json',
+      url: app.config.carto.baseUrl,
       data: {
-        address: aisAddress,
+        q: "select * from zoning_documents_20170420 where address_std = '" + aisProps.street_address + "' or addrkey = " + aisProps.li_address_key,
       },
       success: function (data) {
-        // // console.log('got zoning docs', data);
-        app.state.zoningDocuments = data;
+        app.state.zoningDocuments = data.rows;
         app.didGetZoningDocuments();
       },
       error: function (err) {
@@ -1594,19 +1593,19 @@ var app = _.extend(app || {},
     var features = app.state.zoningDocuments,
         // TODO sort by date
         idConstructor = function (row) {
-          var id = row.app_id + '-' + row.document_id;
+          var id = row.appid + '-' + row.docid;
           return id;
         },
         linkConstructor = function (row) {
           var address = row.address,
-              appId = row.app_id.length === 2 ? '0' + String(row.app_id) : row.app_id,
-              docType = row.document_type,
-              docId = row.document_id,
-              numPages = row.num_pages,
+              appId = row.appid.length === 2 ? '0' + String(row.appid) : row.appid,
+              docType = row.doctype,
+              docId = row.docid,
+              numPages = row.page_numbers,
               url = '//www.phila.gov/zoningarchive/Preview.aspx?address=' + address + '&&docType=' + docType + '&numofPages=' + numPages + '&docID=' + docId + '&app=' + appId;
           return url;
         },
-        FIELDS = ['scan_date', idConstructor, 'document_type', 'num_pages', linkConstructor],
+        FIELDS = ['scandate', idConstructor, 'doctype', 'page_numbers', linkConstructor],
         rowsHtml = app.util.makeTableRowsFromJson(features, FIELDS),
         $table = $('#zoning-documents'),
         $tbody = $table.find('tbody');
