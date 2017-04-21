@@ -1725,9 +1725,6 @@ var app = _.extend(app || {},
       id = dataRow.id,
       $tableRow = $(row);
       $tableRow.attr('data-id', dataRow.id);
-      // console.log(dataRow);
-      // console.log(id);
-      // console.log($tableRow);
     });
 
     // render on map
@@ -1735,13 +1732,9 @@ var app = _.extend(app || {},
 
     // refresh them on map if topic accordion is open
     var $targetTopic = prefix === 'nearby' ? $('#topic-nearby') : $('#topic-vacancy');
-    // console.log('$$$$$$$$$$$', $targetTopic);
     if ($targetTopic.is(':visible')){
       //if ($('#topic-nearby').attr('style') == 'display: block;') {
-      //// console.log($('#topic-nearby').attr('style'));
-      //// console.log('refreshing appeals layer');
       // app.map.removeNearbyActivity();
-      // console.log('rowsSorted is ', rowsSorted);
       app.map.addNearbyActivity(rowsSorted);
     };
 
