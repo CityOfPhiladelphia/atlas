@@ -7,16 +7,11 @@ rem     Usage: push_config [dev|prod]
 set dest=
 
 IF %1==prod (
-  echo Pushing To Prod...
+  echo Pushing to prod...
   set dest=s3://atlas.phila.gov/js/config.js
 )
 IF %1==dev (
-  echo Pushing To Dev...
+  echo Pushing to dev...
   set dest=s3://atlas-%env%.phila.gov/js/config.js
 )
-IF EXIST %dest% (
-  aws s3 cp ..\js\config.js %dest%
-) ELSE (
-  echo Must Provide Environment
-  exit 1
-)
+aws s3 cp ..\js\config.js %dest%
