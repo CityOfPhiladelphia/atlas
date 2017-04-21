@@ -610,6 +610,7 @@ var app = _.extend(app || {},
       app.getDorParcel();
     }
     else {
+      console.log('did get ais result && did click map');
       app.renderParcelTopic();
     }
     app.getPwdParcel();
@@ -781,16 +782,14 @@ var app = _.extend(app || {},
         },
       });
 
+      console.log('did get dor parcels, now render');
       app.renderParcelTopic();
 
       // get intersecting regmaps
       var regmapQuery = new L.esri.Query({url: app.config.esri.dynamicLayers.regmap.url})
                                           .intersects(geomDOR);
       //regmapQuery.run(app.didGetRegmaps);
-      console.log('!!!!!!!!!!!&&&&&&&&&&&& about to do regmapQuery.run');
       regmapQuery.run( function (error, fC, response) {
-        console.log('###########@@@@@@@@@@@@@ just did remapQuery.run', fC);
-        console.log('^^^^^^^^^^', response);
         app.views.parcelTabs.regmaps = fC.features;
       });
     }); // end of parcel loop
@@ -1135,6 +1134,7 @@ var app = _.extend(app || {},
 
   // render deeds (assumes there's a parcel in the state)
   renderParcelTopic: function () {
+    console.log('render parcel topic')
     var parcels = app.state.dor.features;
 
     if (!parcels[0]) {
@@ -1296,6 +1296,7 @@ var app = _.extend(app || {},
   },
 
   didGetZoningOverlayResult: function (error, featureCollection, response) {
+    console.log('did get zoning overlay result', featureCollection);
     var features = featureCollection.features,
         $tbody = $('#zoning-overlays').find('tbody'),
         fields = ['OVERLAY_NAME', 'CODE_SECTION'],
@@ -1638,39 +1639,58 @@ var app = _.extend(app || {},
         radiusMeters = app.config.nearby.radius * 0.3048,
         activityTypes = app.config.nearby.activityTypes,
         activityType = _.filter(activityTypes, {label: label})[0],
-        socrataId = activityType.socrataId,
-        url = app.config.socrata.baseUrl + socrataId + '.json',
+        // socrataId = activityType.socrataId,
+        table = activityType.table,
+        url = app.config.carto.baseUrl,
 
         // form query
-        where = 'within_circle(' + ['shape', aisY, aisX, radiusMeters].join(', ') + ')',
+        // GEOM_FIELD = 'the_geom_webmercator',
+        // distanceFn = "DISTANCE_IN_METERS(" + GEOM_FIELD + ", 'POINT(" + aisX + ' ' + aisY + ")') * 3.28084",
+        distanceFn = "ST_Distance(the_geom_webmercator, ST_Transform(CDB_LatLng(" + aisY + ", " + aisX + "), 3857)) * 3.28084",
+        // where = 'within_circle(' + [GEOM_FIELD, aisY, aisX, radiusMeters].join(', ') + ')',
+        where = distanceFn + ' < 500',
         fieldMap = activityType.fieldMap,
-        distanceFn = "DISTANCE_IN_METERS(shape, 'POINT(" + aisX + ' ' + aisY + ")') * 3.28084",
         selectComps = _.values(fieldMap).concat([
-                        'shape',
+                        'ST_X(the_geom) as x',
+                        'ST_Y(the_geom) as y',
                         distanceFn + "AS distance",
                       ]);
-        select = selectComps.join(', ');
+        select = selectComps.join(', '),
+        queryComps = [
+          'SELECT',
+          select,
+          'FROM',
+          table,
+          'WHERE',
+          where
+        ],
+        query = queryComps.join(' ');
+
+    // console.warn('nearby query', query);
 
     // TODO exclude recordss at the exact address
     // if (liAddressKey) nearbyAppealsWhere += " AND addresskey != '" + liAddressKey + "'";
 
     // TODO date range
-
     $.ajax({
       url: url,
       data: {
-        $where: where,
-        $select: select,
-        $order: distanceFn,
+        // $where: where,
+        // $select: select,
+        // $order: distanceFn,
+        q: query,
       },
       success: function (data) {
         // TODO set app.state.nearby.activeType to whatever's selected
 
+        var rows = data.rows;
+        // console.log('got nearby rows', rows);
+
         // rows need to have unique ids for coordination with map
-        var dataWithIds = app.util.addIdsToRows(data);
+        var rowsWithIds = app.util.addIdsToRows(rows);
 
         // if (!app.state.nearby.data) app.state.nearby.data = {};
-        app.state.nearby.data = dataWithIds;
+        app.state.nearby.data = rowsWithIds;
 
         app.didGetNearbyActivity();
       },
