@@ -288,7 +288,7 @@
                                           </tr>
                                         </thead>
                                         <tbody>
-                                          <tr v-for="document in documents.slice(0, app.config.topicRecordLimit)">
+                                          <tr v-for="document in documents">
                                             <td>{{ dateFormat(document.RECORDING_DATE) }}</td>
                                             <td>
                                               <a class='external'v-bind:href="app.config.dor.documents.documentUrl + document.R_NUM">
