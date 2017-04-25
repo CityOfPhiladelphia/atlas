@@ -1650,21 +1650,12 @@ var app = _.extend(app || {},
         // where = 'within_circle(' + [GEOM_FIELD, aisY, aisX, radiusMeters].join(', ') + ')',
         where = distanceFn + ' < 500',
         fieldMap = activityType.fieldMap,
-        selectComps = _.values(fieldMap).concat([
-                        'ST_X(the_geom) as x',
-                        'ST_Y(the_geom) as y',
-                        distanceFn + "AS distance",
-                      ]);
-        select = selectComps.join(', '),
-        queryComps = [
-          'SELECT',
-          select,
-          'FROM',
-          table,
-          'WHERE',
-          where
-        ],
-        query = queryComps.join(' ');
+        select = _.values(fieldMap).concat([
+                  'ST_X(the_geom) as x',
+                  'ST_Y(the_geom) as y',
+                  distanceFn + "AS distance",
+                ]).join(', '),
+        query = ['SELECT', select, 'FROM', table, 'WHERE', where].join(' ');
 
     // console.warn('nearby query', query);
 
