@@ -1082,6 +1082,7 @@ var app = _.extend(app || {},
 
     if (!parcels[0]) {
       // console.log('render parcel topic, but no parcel feature', app.state.dor);
+      app.views.parcelTabs.parcels = [];
       return;
     }
 
