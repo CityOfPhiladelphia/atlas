@@ -12,6 +12,6 @@ IF %1==prod (
 )
 IF %1==dev (
   echo Pushing to dev...
-  set dest=s3://atlas-%env%.phila.gov/js/config.js
+  set dest=s3://atlas-dev.phila.gov/js/config.js
 )
 aws s3 cp ..\js\config.js %dest%

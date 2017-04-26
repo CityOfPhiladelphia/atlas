@@ -1271,8 +1271,8 @@ app.map = (function ()
 			this.removeNearbyActivity();
 
 			_.forEach(rows, function (row) {
-				var lon = row.shape.coordinates[0],
-						lat = row.shape.coordinates[1],
+				var lon = row.x,
+						lat = row.y,
 						newMarker = new L.Marker.SVGMarker([lat, lon], {
 							"iconOptions": {
 								className: 'svg-icon-noClick',

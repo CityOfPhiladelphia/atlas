@@ -605,13 +605,14 @@ var app = _.extend(app || {},
     app.state.regmaps
     app.state.didFinishPwdRequest = app.state.didFinishDorRequest = null;
 
-    //if (!app.state.dor) {
+    // if (!app.state.dor) {
     if (!app.state.map.clickedOnMap) {
       app.getDorParcel();
     }
     else {
       console.log('did get ais result && did click map');
-      app.renderParcelTopic();
+      // app.renderParcelTopic();
+      app.didGetDorParcels(null, app.state.dor, null);
     }
     app.getPwdParcel();
 
@@ -757,7 +758,7 @@ var app = _.extend(app || {},
 
       // get dor documents
       var parcelAddress = app.util.concatDorAddress(parcel);
-      // console.warn('&&&&&&&&&&&&&&&&&& getting docs for parcel', parcelAddress);
+      console.warn('getting docs for parcel', parcelAddress);
 
       $.ajax({
         url: app.config.dor.documents.documentIdQueryUrl,
@@ -778,7 +779,7 @@ var app = _.extend(app || {},
           app.views.parcelTabs.documents = features;
         },
         error: function (err) {
-          // console.log('dor document error', err);
+          console.error('dor document error', err);
         },
       });
 
@@ -788,71 +789,13 @@ var app = _.extend(app || {},
       // get intersecting regmaps
       var regmapQuery = new L.esri.Query({url: app.config.esri.dynamicLayers.regmap.url})
                                           .intersects(geomDOR);
-      //regmapQuery.run(app.didGetRegmaps);
-      regmapQuery.run( function (error, fC, response) {
-        app.views.parcelTabs.regmaps = fC.features;
+      // regmapQuery.run(app.didGetRegmaps);
+      regmapQuery.run(function (error, fC, response) {
+        var features = fC.features;
+        app.views.parcelTabs.regmaps = features;
       });
     }); // end of parcel loop
   },
-
-  didGetRegmaps: function (error, featureCollection, response) {
-    // console.log('did get regmaps', featureCollection);
-
-    // set state
-    app.state.regmaps = featureCollection;
-
-    var features = featureCollection.features,
-        $list = $('#deeds-regmaps');
-
-    // clear everything out
-    $list.empty();
-
-    _.forEach(features, function (feature) {
-      var props = feature.properties,
-          id = props.RECMAP,
-          $link = $('<a>')
-                    .attr({href: '#'})
-                    .addClass('button hollow')
-                    .html(id)
-                    .on('click', app.didSelectRegmap);
-          // $el = $('<li>')
-          //         .html($link);
-      $list.append($link);
-    });
-
-    $('#deeds-regmaps-count').html(' (' + features.length + ')')
-  },
-
-  // didSelectRegmap: function () {
-  //   // var $this = $(this),
-  //   //     selected = $this.html(),
-  //   //     prev = app.state.selectedRegmap,
-  //   //     // if we selected the same one again, it's really an unselect
-  //   //     next = (prev !== selected ? selected : null);
-  //
-  //   // console.log('did select regmap', prev, '=>', next);
-  //
-  //   // set state
-  //   // app.state.selectedRegmap = next;
-  //
-  //   // get selected regmap
-  //   var active = app.views.parcelTabs.activeRegmap;
-  //   console.log('SELECTED REGMAP', active);
-  //
-  //   // unhighlight last selected
-  //   // $('#deeds-regmaps a:not(.hollow)').addClass('hollow');
-  //
-  //   // tell map
-  //   app.map.didChangeRegmap(prev, next);
-  //
-  //   // highlight selected
-  //   if (next) {
-  //     $this.removeClass('hollow');
-  //   }
-  //
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  // },
 
   getPwdParcel: function () {
     var aisFeature = app.state.ais.feature,
@@ -1139,6 +1082,7 @@ var app = _.extend(app || {},
 
     if (!parcels[0]) {
       // console.log('render parcel topic, but no parcel feature', app.state.dor);
+      app.views.parcelTabs.parcels = [];
       return;
     }
 
