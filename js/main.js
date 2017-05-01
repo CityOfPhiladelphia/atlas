@@ -1227,8 +1227,7 @@ var app = _.extend(app || {},
             plural = remainingCount > 1,
             resourceNoun = plural ? stateKey : stateKey.slice(0, -1),
             seeMoreText = 'See ' + remainingCount + ' older ' + resourceNoun,
-            // TODO form real url
-            seeMoreUrl = 'http://li.phila.gov/#summary?address=1234+market+st',
+            seeMoreUrl = 'http://li.phila.gov/#summary?address=' + app.state.ais.feature.properties.street_address.replace(/ /g, '+'),
             seeMoreHtml = '<a class="external li-see-more-link" href="' + seeMoreUrl + '">' + seeMoreText + '</a>',
             $seeMoreLink = $(seeMoreHtml);
         $liSectionTable.after($seeMoreLink);
