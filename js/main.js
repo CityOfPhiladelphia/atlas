@@ -744,7 +744,7 @@ var app = _.extend(app || {},
           lengthUnit: 9002,
         },
         success: function (dataString) {
-          // // console.log('got polygon with area', dataString, this.url);
+          console.log('got polygon with area', JSON.parse(dataString), this.url);
           var data = JSON.parse(dataString),
               area = Math.round(data.areas[0]),
               perimeter = Math.round(data.lengths[0]);
@@ -1418,7 +1418,7 @@ var app = _.extend(app || {},
 
   // get a parcel by a leaflet latlng
   getParcelsByLatLng: function (latLng, callback) {
-    // console.log('get parcels by latlng');
+    console.log('get parcels by latlng');
 
     if (app.state.activeTopic == 'deeds' || app.state.activeTopic == 'zoning') {
       var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerDOR.url});
@@ -1429,7 +1429,7 @@ var app = _.extend(app || {},
           // console.log('get parcel by latlng error', error);
           return;
         }
-
+        console.log('GETPARCELSBYLATLNG featureCollection', featureCollection);
         // if empty response
         if (featureCollection.features.length === 0) {
           // show alert
@@ -1464,10 +1464,8 @@ var app = _.extend(app || {},
         //parcelQuery.where('STATUS IN (1, 3)')
         parcelQuery.run(function (error, featureCollection, response) {
           if (error || !featureCollection) {
-            // console.log('get parcel by latlng error', error);
             return;
           }
-
           // if empty response
           if (featureCollection.features.length === 0) {
             // show alert

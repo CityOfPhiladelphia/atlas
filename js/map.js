@@ -667,6 +667,7 @@ app.map = (function ()
 		// },
 
     didClickMap: function (e) {
+			console.log('RUNNING DIDCLICKMAP');
 			//app.state.dor = app.state.pwd = null;
 
       // set state
@@ -683,6 +684,7 @@ app.map = (function ()
 
 			// otherwise, it was a parcel click. get the parcel ID and query AIS.
       app.getParcelsByLatLng(e.latlng, function () {
+				console.log('RUNNING CALLBACK TO GETPARCELSBYLATLNG');
 				// which parcels are being displayed?
 				var activeTopic = app.state.activeTopic,
 						DOR_TOPICS = ['deeds', 'zoning'],
@@ -705,8 +707,11 @@ app.map = (function ()
 						break;
 				}
 
+				console.log('parcelId is', parcelId);
+
         // if this is the result of a map click, query ais
         if (app.state.map.clickedOnMap) {
+					console.log('about to search ais')
           app.searchAis(parcelId);
           app.state.map.clickedOnMap = true;
         }
