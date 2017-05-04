@@ -1056,6 +1056,16 @@ app.map = (function ()
 				this.removeNearbyActivity();
 			}
 
+
+			// handle nearby activity
+			if (nextTopic === '311') {
+				this.addNearbyActivity(app.state.nearby311.rowsSortedGeom);
+			}
+			else if (prevTopic === '311') {
+				this.removeNearbyActivity();
+			}
+
+
 			// local storage stuff
 			localStorage.setItem('previousTopic', prevTopic);
 			localStorage.setItem('activeTopic', nextTopic);
@@ -1255,7 +1265,7 @@ app.map = (function ()
 		},
 
 		addNearbyActivity: function (rows) {
-			// console.debug('add nearby activity', rows);
+			console.debug('add nearby activity', rows);
 
 			app.state.map.nearbyActivity = app.state.map.nearbyActivity || {};
 
@@ -1545,6 +1555,12 @@ app.map = (function ()
 
 			app.map.didGetParcel('dor');
 		},
+
+		drawBuffer(data){
+	    //console.log('running drawBuffer', data['geometries'][0]['rings'][0]);
+	    var buffer = L.polygon(data['geometries'][0]['rings'][0], {color: 'green'});
+	    buffer.addTo(_overlayLayerGroup);
+	  },
   }; // end of return
 })();
 

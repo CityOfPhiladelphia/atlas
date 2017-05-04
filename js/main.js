@@ -15,6 +15,7 @@ var app = _.extend(app || {},
     ais: {},
     // prevent topics from opening until we've completed a search
     shouldOpenTopics: false,
+    nearby311: {},
     nearby: {
       activeType: undefined,
     },
@@ -997,6 +998,11 @@ var app = _.extend(app || {},
     app.getNearbyActivity();
 
     /*
+    311
+    */
+    app.getBufferFor311();
+
+    /*
     WATER
     */
     var waterUrl = '//api.phila.gov/stormwater';
@@ -1562,6 +1568,7 @@ var app = _.extend(app || {},
   },
 
   getNearbyActivity: function () {
+    console.log('running getNearbyActivity');
     var activeTopic = app.state.activeTopic,
         prefix = activeTopic === 'nearby' ? 'nearby' : 'vacancy-nearby',
         $nearbyActivityType = $('#'+prefix+'-activity-type'),
@@ -1656,6 +1663,9 @@ var app = _.extend(app || {},
         tbodyHtml = app.util.makeTableRowsFromJson(rowsSorted, fields),
         $tbody = $('#' + tableId + ' > tbody');
 
+    console.log('nearby rowsSorted', rowsSorted);
+    console.log('nearby fields', fields);
+
     app.state.nearby.rowsSorted = rowsSorted;
 
     // populate table
@@ -1708,6 +1718,189 @@ var app = _.extend(app || {},
       }
     );
   },
+
+
+// New 311 Stuff:
+  getBufferFor311: function () {
+    var aisGeom = app.state.ais.feature.geometry;
+    if (!aisGeom.geocode_type) return;
+    var aisX = aisGeom.coordinates[0],
+        aisY = aisGeom.coordinates[1],
+        bufferUrl = app.config.esri.tools.buffer.url;
+
+    $.ajax({
+      url: bufferUrl,
+      data: {
+        geometries: '['+aisY+', '+aisX+']',
+        inSR: 4326,
+        outSR: 4326,
+        bufferSR: 4326,
+        distances: .0015,
+        unionResults: true,
+        geodesic: false,
+        f: 'json',
+      },
+      success: function (dataString) {
+        var data = JSON.parse(dataString);
+        app.getNearby311(data);
+        //app.map.drawBuffer(data);
+      },
+      error: function (err) {
+        console.log(err);
+      },
+    });
+  },
+
+  getNearby311: function (data) {
+    console.log('running getNearby311', data);
+    var buffer = L.polygon(data['geometries'][0]['rings'][0], {color: 'green'});
+    threeOneOneUrl = app.config.esri.otherLayers.threeOneOneLayer.url
+
+    var threeOneOneQuery = L.esri.query({url: threeOneOneUrl});
+    threeOneOneQuery.within(buffer)
+    threeOneOneQuery.run(app.didGet311)
+  },
+
+  didGet311: function (error, featureCollection, response) {
+    console.log('didGet311 is running', featureCollection);
+    app.state.nearby311.data = featureCollection.features;
+
+    var activeTopic = app.state.activeTopic,
+        prefix = 'nearby-311';
+
+    // munge, filter, sort, make html
+    var array = app.state.nearby311.data,
+        tableId = prefix,
+        daysBack = $('#' + tableId + '-timeframe').val(),
+        label = $('#' + tableId + '-type :selected').text(),
+        fieldMap = app.config.nearby311.fieldMap,
+        dateField = fieldMap.date,
+        rowsFiltered = app.util.filterFeatClassByTimeframe(array, dateField, daysBack),
+        sortMethod = $('#' + tableId + '-sort').val(),
+        sortField = sortMethod === 'date' ? dateField : 'distance',
+        sortDirection = sortMethod === 'date'? 'desc' : 'asc',
+        rowsSorted = _.orderBy(rowsFiltered, sortField, [sortDirection]),
+        fields = _.values(fieldMap).concat(['distance']),
+        $tbody = $('#' + tableId + ' > tbody');
+        // tbodyHtml = app.util.makeTableRowsFromFeatClass(rowsSorted, fields),
+
+    console.log('rowsSorted', rowsSorted);
+    console.log('fields', fields);
+    app.state.nearby311.rowsSorted = rowsSorted;
+
+    var rowsSortedGeom = [];
+    var rowsLength = rowsSorted.length;
+    counter = 0
+    var aisGeom = app.state.ais.feature.geometry;
+    if (!aisGeom.geocode_type) return;
+    var aisX = aisGeom.coordinates[0],
+        aisY = aisGeom.coordinates[1],
+        distanceUrl = app.config.esri.tools.distance.url;
+    var tbodyHtml;
+
+    _.forEach(rowsSorted, function(row) {
+      var curRow = {}
+      curRow.id = row.id
+      curRow.x = row.geometry.coordinates[0];
+      curRow.y = row.geometry.coordinates[1];
+      curRow.address = row.properties.ADDRESS;
+      curRow.description = row.properties.DESCRIPTION;
+      curRow.requested_datetime = row.properties.REQUESTED_DATETIME;
+      curRow.subject = row.properties.SUBJECT;
+      if (row.properties.MEDIA_URL) {
+        curRow.subject = '<a target="_blank" href='+row.properties.MEDIA_URL+'>'+row.properties.SUBJECT+'</a>';
+      } else {
+        curRow.subject = row.properties.SUBJECT;
+      }
+      if (row.properties.PRIVATE_CASE){
+        curRow.private = 'Y';
+      } else {
+        curRow.private = 'N';
+      };
+      rowsSortedGeom.push(curRow);
+    }) // end of forEach
+
+    console.log('$$$$$ROWSSORTEDGEOM', rowsSortedGeom);
+    app.state.nearby311.rowsSortedGeom = rowsSortedGeom
+    //var tbodyHtml = app.util.makeTableRowsFromJson(rowsSortedGeom, fields);
+    tbodyHtml = app.util.makeTableRowsFromJson(rowsSortedGeom, fields);
+    $tbody.html(tbodyHtml);
+
+    // populate table
+
+
+    // update table header
+    $('#' + tableId + '-table-title').text(label);
+
+    // update counter
+    $('#' + tableId + '-count').text(' (' + rowsFiltered.length + ')');
+
+    // apply transforms
+    app.util.formatTableFields($('#' + tableId));
+
+    // TEMP attribute rows with appeal id and distance
+    _.forEach($tbody.find('tr'), function (row, i) {
+      // console.log(row);
+      var dataRow = rowsSorted[i],
+      id = dataRow.id,
+      $tableRow = $(row);
+      $tableRow.attr('data-id', dataRow.id);
+    });
+
+    // refresh them on map if topic accordion is open
+    //var $targetTopic = prefix === 'nearby' ? $('#topic-nearby') : $('#topic-vacancy');
+    var $targetTopic = $('#topic-311');
+    if ($targetTopic.is(':visible')){
+      //if ($('#topic-nearby').attr('style') == 'display: block;') {
+      // app.map.removeNearbyActivity();
+      //app.map.addNearbyActivity(rowsSorted);
+      app.map.addNearbyActivity(rowsSortedGeom);
+    }
+
+    _.forEach(rowsSortedGeom, function(curRow, index) {
+      $.ajax({
+        url: distanceUrl,
+        data: {
+          sr: '4326',
+          geometry1: '{"geometryType":"esriGeometryPoint", "geometry":{"x":'+aisX+', "y" :'+aisY+',  "spatialReference" : {"wkid" : 4326}}}',
+          geometry2: '{"geometryType":"esriGeometryPoint", "geometry":{"x":'+curRow.x+', "y" :'+curRow.y+',  "spatialReference" : {"wkid" : 4326}}}',
+          geodesic: true,
+          distanceUnit: '9002',
+          f: 'json',
+        },
+        success: function (dataString) {
+          var data = JSON.parse(dataString);
+          var $row = $($tbody.children()[index]);
+          var distanceField = $row.children().last();
+          distanceField.text(Math.round(data.distance) + ' feet');
+        },
+        error: function (err) {
+          console.log(err);
+        },
+      });
+    })
+
+    // listen for hover
+    $tbody.find('tr').hover(
+      function () {
+        var $this = $(this);
+        // $this.css('background', '#ffffff');
+        $this.css('background', '#F3D661');
+        // tell map to highlight pin
+        var id = $this.attr('data-id');
+        app.map.didMouseOverNearbyActivityRow(id);
+      },
+      function () {
+        var $this = $(this);
+        $this.css('background', '');
+        var id = $this.attr('data-id');
+        app.map.didMouseOffNearbyActivityRow(id);
+      }
+    );
+
+
+  },
+
 
   didGetWater: function () {
     // the stormwater api seems to return a list of opa matches
