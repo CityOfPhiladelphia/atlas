@@ -211,6 +211,7 @@ var app = _.extend(app || {},
     app.views.parcelTabs = new Vue({
       el: '#parcel-tab-container',
       mounted: function () {
+        console.log('mounted ParcelTabs view');
         $(document).foundation();
       },
       data: {
@@ -726,6 +727,8 @@ var app = _.extend(app || {},
     // tell map we got a dor parcel
     app.map.didGetDorParcels();
 
+    console.log('$$$$ FEATURES SORTED', featuresSorted);
+
     // loop over parcels
     _.forEach(featuresSorted, function (parcel) {
       // console.warn('par', parcel);
@@ -749,8 +752,11 @@ var app = _.extend(app || {},
           var data = JSON.parse(dataString),
               area = Math.round(data.areas[0]),
               perimeter = Math.round(data.lengths[0]);
-          $('#deeds-area').text(area + ' sq ft');
-          $('#deeds-perimeter').text(perimeter + ' ft');
+          // $('#deeds-area').text(area + ' sq ft');
+          // $('#deeds-perimeter').text(perimeter + ' ft');
+          parcel.properties.AREA = area + ' sq ft';
+          parcel.properties.PERIMETER = perimeter + ' ft';
+          console.log('%%%% PARCEL', parcel);
         },
         error: function (err) {
           // console.log('polygon area error', err);
@@ -769,9 +775,10 @@ var app = _.extend(app || {},
           f: 'json',
         },
         success: function (data) {
-          //// console.warn('docs for', parcelAddress, data);
+          // console.warn('docs for', parcelAddress, data);
           app.state.dorDocuments = data;
           var features = _.map(JSON.parse(app.state.dorDocuments).features, function (feature) { return feature.attributes; });
+          // console.log('$$$$ DOR FEATURES', features);
               //recordLimit = app.config.topicRecordLimit,
               //featuresLimited = features.slice(0, recordLimit)
           // app.didGetDorDocuments();
@@ -1085,6 +1092,7 @@ var app = _.extend(app || {},
   renderParcelTopic: function () {
     console.log('render parcel topic')
     var parcels = app.state.dor.features;
+    console.log('@@@@ PARCELS', parcels);
 
     if (!parcels[0]) {
       // console.log('render parcel topic, but no parcel feature', app.state.dor);
