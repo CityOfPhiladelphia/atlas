@@ -1568,7 +1568,7 @@ var app = _.extend(app || {},
   },
 
   getNearbyActivity: function () {
-    console.log('running getNearbyActivity');
+    // console.log('running getNearbyActivity');
     var activeTopic = app.state.activeTopic,
         prefix = activeTopic === 'nearby' ? 'nearby' : 'vacancy-nearby',
         $nearbyActivityType = $('#'+prefix+'-activity-type'),
@@ -1663,8 +1663,8 @@ var app = _.extend(app || {},
         tbodyHtml = app.util.makeTableRowsFromJson(rowsSorted, fields),
         $tbody = $('#' + tableId + ' > tbody');
 
-    console.log('nearby rowsSorted', rowsSorted);
-    console.log('nearby fields', fields);
+    // console.log('nearby rowsSorted', rowsSorted);
+    // console.log('nearby fields', fields);
 
     app.state.nearby.rowsSorted = rowsSorted;
 
@@ -1752,7 +1752,7 @@ var app = _.extend(app || {},
   },
 
   getNearby311: function (data) {
-    console.log('running getNearby311', data);
+    // console.log('running getNearby311', data);
     var buffer = L.polygon(data['geometries'][0]['rings'][0], {color: 'green'});
     threeOneOneUrl = app.config.esri.otherLayers.threeOneOneLayer.url
 
@@ -1762,7 +1762,7 @@ var app = _.extend(app || {},
   },
 
   didGet311: function (error, featureCollection, response) {
-    console.log('didGet311 is running', featureCollection);
+    // console.log('didGet311 is running', featureCollection);
     app.state.nearby311.data = featureCollection.features;
 
     var activeTopic = app.state.activeTopic,
@@ -1784,8 +1784,8 @@ var app = _.extend(app || {},
         $tbody = $('#' + tableId + ' > tbody');
         // tbodyHtml = app.util.makeTableRowsFromFeatClass(rowsSorted, fields),
 
-    console.log('rowsSorted', rowsSorted);
-    console.log('fields', fields);
+    // console.log('rowsSorted', rowsSorted);
+    // console.log('fields', fields);
     app.state.nearby311.rowsSorted = rowsSorted;
 
     var rowsSortedGeom = [];
@@ -1820,7 +1820,7 @@ var app = _.extend(app || {},
       rowsSortedGeom.push(curRow);
     }) // end of forEach
 
-    console.log('$$$$$ROWSSORTEDGEOM', rowsSortedGeom);
+    // console.log('$$$$$ROWSSORTEDGEOM', rowsSortedGeom);
     app.state.nearby311.rowsSortedGeom = rowsSortedGeom
     //var tbodyHtml = app.util.makeTableRowsFromJson(rowsSortedGeom, fields);
     tbodyHtml = app.util.makeTableRowsFromJson(rowsSortedGeom, fields);
