@@ -230,7 +230,7 @@
 
                                   <div id="parcel-tabs-panels" class="tabs-content" data-tabs-content="parcel-tabs-content">
                                     <div class="tabs-panel" v-for="parcel in parcels" v-bind:class="{'is-active': (activeParcel === parcel.properties.MAPREG)}" v-bind:id="'parcel-' + parcel.properties.MAPREG">
-                                      <h4>Parcel</h4>
+                                      <h4>Parcel Details</h4>
                                       <table>
                                         <tr>
                                             <th>Map Registry #</th>
@@ -324,7 +324,7 @@
                                   <div class="callout">
                                     <p>
                                       The property boundaries displayed on the map are for reference only and may not be used in place of
-                                       recorded deeds or land surveys.  Dimension lengths are calculated using the GIS feature.
+                                       recorded deeds or land surveys.
                                        Source: Department of Records.
                                     </p>
                                   </div>
@@ -861,6 +861,44 @@
                                 <tbody></tbody>
                             </table>-->
                         </div><!-- /nearby -->
+                        <!--311-->
+                        <a id="topic-link-311" class="topic-link" href="#"><span class="topic-link-icon flaticon-placeholder-1"></span>311</a>
+                        <div id="topic-311" class="topic">
+
+                            <div id="nearby-311-selector-wrapper" class="center">
+                              <!-- <h3>What activity would you like to see?</h3> -->
+                              <!-- <select id="nearby-311-type" style="margin: 10px; width: 250px"></select> -->
+                              from the last
+                              <select id="nearby-311-timeframe" style="margin: 10px; width: 125px">
+                                <option value="30">30 days</option>
+                                <option value="90">90 days</option>
+                                <option value="365">year</option>
+                              </select>
+                              sorted by
+                              <select id="nearby-311-sort" style="margin: 10px; width: 125px">
+                                <option value="date">date</option>
+                                <option value="distance">distance</option>
+                              </select>
+                            </div>
+
+                            <h4 style="margin-top: 20px">
+                                <span id="nearby-311-table-title"></span><span id="nearby-311-count"></span>
+                            </h4>
+                            <table id="nearby-311" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="date-col" data-field-type="date">Date</th>
+                                        <th scope="col">Address</th>
+                                        <th scope="col">Subject</th>
+                                        <th scope="col">Description (not provided to public)</th>
+                                        <th scope="col">Private?</th>
+                                        <!-- <th scope="col">MediaURL</th> -->
+                                        <th scope="col" data-field-type="distance">Distance</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div><!-- /311 -->
                     </div>
                 </div>
 

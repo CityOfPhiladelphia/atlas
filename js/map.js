@@ -534,7 +534,7 @@ app.map = (function ()
     },
 
 		didCreateAddressMarker: function (markerType) {
-			// // console.log('did create address marker', markerType);
+			console.log('did create address marker', markerType);
 			var targetMarkerType = this.addressMarkerTypeForTopic(app.state.activeTopic);
 			if (markerType === targetMarkerType) {
 				// // console.log('this is the marker we want to show')
@@ -839,7 +839,7 @@ app.map = (function ()
     },
 
 		showAddressMarker: function (markerType) {
-			// // console.log('show address marker', markerType);
+			console.log('show address marker', markerType);
 
 			// if (!app.state.map.addressMarkers) {
 			// 	// console.log('show address marker, but we havent created them yet');
@@ -853,7 +853,7 @@ app.map = (function ()
 			// if we tried to get something other than the ais marker and couldn't,
 			// try falling back to ais marker
 			if (!marker && markerType !== 'aisMarker') {
-				marker = app.state.map.addressMarkers['aisMarker'];
+				marker = app.state.map.addressMarkers.aisMarker;
 			}
 
 			// if there's no corresponding marker, don't do anything
@@ -1050,6 +1050,16 @@ app.map = (function ()
 			else if (prevTopic === 'nearby') {
 				this.removeNearbyActivity();
 			}
+
+
+			// handle nearby activity
+			if (nextTopic === '311') {
+				this.addNearbyActivity(app.state.nearby311.rowsSortedGeom);
+			}
+			else if (prevTopic === '311') {
+				this.removeNearbyActivity();
+			}
+
 
 			// local storage stuff
 			localStorage.setItem('previousTopic', prevTopic);
@@ -1249,7 +1259,7 @@ app.map = (function ()
 		},
 
 		addNearbyActivity: function (rows) {
-			// console.debug('add nearby activity', rows);
+			console.debug('add nearby activity', rows);
 
 			app.state.map.nearbyActivity = app.state.map.nearbyActivity || {};
 
@@ -1539,6 +1549,12 @@ app.map = (function ()
 
 			app.map.didGetParcel('dor');
 		},
+
+		drawBuffer(data){
+	    //console.log('running drawBuffer', data['geometries'][0]['rings'][0]);
+	    var buffer = L.polygon(data['geometries'][0]['rings'][0], {color: 'green'});
+	    buffer.addTo(_overlayLayerGroup);
+	  },
   }; // end of return
 })();
 

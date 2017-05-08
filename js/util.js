@@ -38,6 +38,31 @@ app.util = (function () {
       return cleanAttr;
     },
 
+    // takes an array, returns a string of concatenated <tr> elements
+    // THIS MIGHT NOT BE NEEDED
+    makeTableRowsFromFeatClass: function (rows, fields) {
+      // loop over rows
+      //console.log('makeTableRowsFromFeatClass');
+      var rowsHtml =  _.map(rows, function (row) {
+        var props = row.properties;
+        //console.log('props', props);
+        // loop over fields
+        var valsHtml = _.map(fields, function (field) {
+          var val = props[field] || '';
+
+          // truncate long strings
+          if ((typeof val === 'string' || val instanceof String) && val.length > 150) {
+            val = val.substr(val, 150) + '...';
+          }
+
+          return '<td>' + val + '</td>';
+        }).join('');
+        return '<tr>' + valsHtml + '</tr>';
+      }).join('');
+
+      return rowsHtml;
+    },
+
     // takes an array of geojson features, returns a string of concatenated <tr> elements
     makeTableRowsFromGeoJson: function (rows, fields) {
       // loop over rows
@@ -78,6 +103,7 @@ app.util = (function () {
           if ((typeof val === 'string' || val instanceof String) && val.length > 150) {
             val = val.substr(val, 150) + '...';
           }
+          //console.log(row, field, typeof field, row['distance'], val);
 
           // TEMP format iso dates
           // if (field.indexOf('date') > -1) {
@@ -261,6 +287,23 @@ app.util = (function () {
       var minDate = moment().subtract(daysBack, 'days');
       return _.filter(rows, function (row) {
         var rowDateRaw = row[dateField];
+        //console.log(rowDateRaw);
+        if (!rowDateRaw) return;
+        var rowDate = moment(rowDateRaw);
+        //console.log(rowDate);
+        return minDate < moment(rowDate);
+      });
+    },
+
+    filterFeatClassByTimeframe: function (array, dateField, daysBack) {
+      console.log('filterFeatClassByTimeframe');
+      console.log('array length', array.length);
+      console.log('dateField', dateField);
+      var minDate = moment().subtract(daysBack, 'days');
+      return _.filter(array, function (row) {
+        var rowDateRaw = row.properties.REQUESTED_DATETIME;
+        var rowDateRaw2 = new Date(rowDateRaw * 1000);
+        //console.log(rowDateRaw2);
         if (!rowDateRaw) return;
         var rowDate = moment(rowDateRaw);
         return minDate < moment(rowDate);
