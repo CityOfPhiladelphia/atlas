@@ -224,6 +224,66 @@ var app = _.extend(app || {},
         activeParcel: app.map.didActivateParcel,
         activeRegmap: app.map.didSelectRegmap,
       },
+      computed: {
+        activeParcels: function () {
+          return _.filter(this.parcels, function (parcel) {
+            return parcel.properties.STATUS == 1;
+          });
+        },
+        inactiveParcels: function () {
+          return _.filter(this.parcels, function (parcel) {
+            return parcel.properties.STATUS == 2;
+          });
+        },
+        remainderParcels: function () {
+          return _.filter(this.parcels, function (parcel) {
+            return parcel.properties.STATUS == 3;
+          });
+        },
+        summary: function () {
+          var actives = this.activeParcels,
+              inactives = this.inactiveParcels,
+              remainders = this.remainderParcels,
+              parcelNoun = function (parcels) {
+                return 'parcel' + (parcels.length === 1 ? '' : 's');
+              },
+              PARCEL_CLASSES = [
+                'active',
+                'remainder',
+                'inactive',
+              ],
+              self = this,
+              quantities = _.compact(_.map(PARCEL_CLASSES, function (parcelClass) {
+                var parcels = self[parcelClass + 'Parcels'];
+                    length = parcels.length;
+                if (length > 0) {
+                  return [length, parcelClass, parcelNoun(parcels)].join(' ');
+                }
+              })),
+              quantitiesJoined;
+
+          // if (quantities.length === 0) {
+          //   return 'No parcels found at this address.';
+          // }
+
+          switch (quantities.length) {
+            case 1:
+              quantitiesJoined = quantities[0];
+              break;
+            case 2:
+              quantitiesJoined = quantities[0] + ' and ' + quantities[1];
+              break;
+            case 3:
+              quantitiesJoined = quantities.slice(2).join(', ') + ' and ' + quantities[2];
+              break;
+            default:
+              console.warn('no parcel quantities');
+              break;
+          }
+
+          return 'We found ' + quantitiesJoined + ' at this address.';
+        }
+      },
       methods: {
         dateFormat: function (date) {
           if (!isNaN(date)){

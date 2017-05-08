@@ -453,6 +453,11 @@ table {
   margin-bottom: 7px;
 }
 
+#parcel-tab-summary {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 #parcel-tabs-panels .tabs-panel {
   padding: 20px;
 }

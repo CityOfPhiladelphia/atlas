@@ -212,16 +212,10 @@
                         <a id="topic-link-deeds" class="topic-link" href="#"><span class="topic-link-icon flaticon-copy"></span>Deeds</a>
                         <div id="topic-deeds" class="topic">
                             <div class="topic-content">
-                                <div class="callout">
-                                  <p>
-                                    The property boundaries displayed on the map are for reference only and may not be used in place of
-                                     recorded deeds or land surveys.  Dimension lengths are calculated using the GIS feature.
-                                     Source: Department of Records.
-                                  </p>
-                                </div>
-
                                 <div id="parcel-tab-container"><!-- start of vue -->
-
+                                  <h3 id="parcel-tab-summary">
+                                    {{ summary }}
+                                  </h3>
                                   <ul class="tabs" data-tabs id="parcel-tabs">
                                     <li class="tabs-title"
                                         v-for="parcel in parcels"
@@ -325,6 +319,14 @@
                                     <div class="tabs-panel" id="panel4">
                                       <p>This is the fourth panel of the basic tab example. This is the fourth panel of the basic tab example.</p>
                                     </div>
+                                  </div>
+
+                                  <div class="callout">
+                                    <p>
+                                      The property boundaries displayed on the map are for reference only and may not be used in place of
+                                       recorded deeds or land surveys.  Dimension lengths are calculated using the GIS feature.
+                                       Source: Department of Records.
+                                    </p>
                                   </div>
 
                                 </div><!-- end of parcel-tab-container -->
