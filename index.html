@@ -213,17 +213,27 @@
                         <div id="topic-deeds" class="topic">
                             <div class="topic-content">
                                 <div id="parcel-tab-container"><!-- start of vue -->
+                                  <!-- <div>
+                                    <parcel-tab-summary :quantities="quantities" />
+                                  </div> -->
                                   <h3 id="parcel-tab-summary">
+                                  <!-- <h3 id="parcel-tab-summary" v-show="parcels.length > 1"> -->
+                                    <!-- <span v-for="(quantity, index) in quantities">
+                                      {{ quantity.quantity }} <strong>{{ quantity.status }}</strong> {{ quantity.noun}}
+                                    </span>
+                                    found at this address. -->
                                     {{ summary }}
                                   </h3>
+
                                   <ul class="tabs" data-tabs id="parcel-tabs">
+                                  <!-- <ul class="tabs" data-tabs id="parcel-tabs" v-show="parcels.length > 1"> -->
                                     <li class="tabs-title"
                                         v-for="parcel in parcels"
                                         v-bind:class="{'is-active': (activeParcel === parcel.properties.MAPREG)}">
                                       <a v-bind:href="'#parcel-' + parcel.properties.MAPREG"
-                                         v-bind:class="{'parcel-status-inactive': (parcel.properties.STATUS == 2)}"
-                                         v-on:click="activeParcel = parcel.properties.MAPREG">
-                                         {{ parcel.properties.MAPREG }}
+                                         v-on:click="activeParcel = parcel.properties.MAPREG"
+                                      >
+                                        {{ parcel.properties.MAPREG }}
                                       </a>
                                     </li>
                                   </ul>

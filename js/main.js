@@ -208,10 +208,61 @@ var app = _.extend(app || {},
 
     // PARCEL TABS
     app.views = {};
+
+    var ParcelTabSummary = {
+      props: ['quantities'],
+      render: function (createElement) {
+        var quantities = this.quantities,
+            children = [],
+            self = this;
+
+        _.forEach(quantities, function (quantity, index) {
+          var child;
+
+          // check for ands and commas
+          if (quantities.length === 2 && index == 1) {
+            children.push(createElement('span', ' and '));
+          } else if (quantities.length === 3) {
+            if (index === 1) {
+              children.push(createElement('span', ','));
+            } else if (index === 2) {
+              children.push(createElement('span', ' and '));
+            }
+          }
+
+          // children.push(createElement('span', quantity.quantity + ' '));
+          children.push(createElement(
+            'span',
+            {style: 'color: ' + self.$parent.colorForParcelStatus(quantity.status)},
+            [
+              createElement('strong', [
+                createElement('span', quantity.quantity + ' '),
+                createElement('span', quantity.status + ' ' + quantity.noun + ' '),
+              ]),
+            ]
+          ));
+          // children.push(createElement('span', quantity.noun + ' '));
+        });
+
+        children.push(createElement(
+          'span',
+          ' found at this address.'
+        ));
+
+        return createElement(
+          'h3',
+          children
+        );
+      }
+    };
+
     app.views.parcelTabs = new Vue({
       el: '#parcel-tab-container',
       mounted: function () {
         $(document).foundation();
+      },
+      components: {
+        'parcel-tab-summary': ParcelTabSummary
       },
       data: {
         app: app,
@@ -219,7 +270,7 @@ var app = _.extend(app || {},
         activeParcel: '',
         documents: [],
         regmaps: [],
-        activeRegmap: '',
+        activeRegmap: ''
       },
       watch: {
         activeParcel: app.map.didActivateParcel,
@@ -284,7 +335,40 @@ var app = _.extend(app || {},
           }
 
           return quantitiesJoined + ' found at this address.';
-        }
+        },
+        quantities: function () {
+          var PARCEL_CLASSES = [
+                'active',
+                'remainder',
+                'inactive',
+              ],
+              PARCEL_CLASS_COLORS = {
+                active: 'green',
+                remainder: 'blue',
+                inactive: 'purple',
+              },
+              self = this,
+              quantities = [];
+
+          _.forEach(PARCEL_CLASSES, function (parcelClass) {
+            var parcels = self[parcelClass + 'Parcels'];
+                length = parcels.length;
+            if (length === 0) {
+              return;
+            }
+            quantities.push({
+              // text: [length, parcelClass, self.parcelNoun(parcels)].join(' '),
+              status: parcelClass,
+              quantity: length,
+              noun: self.parcelNoun(parcels),
+              style: {
+                'color': PARCEL_CLASS_COLORS[parcelClass],
+              }
+            });
+          });
+
+          return quantities;
+        },
       },
       methods: {
         dateFormat: function (date) {
@@ -294,6 +378,17 @@ var app = _.extend(app || {},
             return '<none>';
           }
         },
+        parcelNoun: function (parcels) {
+          return 'parcel' + (parcels.length === 1 ? '' : 's');
+        },
+        colorForParcelStatus: function (status) {
+          var PARCEL_CLASS_COLORS = {
+            active: 'green',
+            remainder: 'blue',
+            inactive: 'purple',
+          };
+          return PARCEL_CLASS_COLORS[status];
+        }
       },
     });
   },

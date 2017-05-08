@@ -465,3 +465,7 @@ table {
 #parcel-tab-container .tabs a.parcel-status-inactive {
   font-style: italic;
 }
+
+.tabs li {
+  /*width: 220px;*/
+}
