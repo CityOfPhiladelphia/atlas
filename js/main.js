@@ -259,7 +259,6 @@ var app = _.extend(app || {},
     app.views.parcelTabs = new Vue({
       el: '#parcel-tab-container',
       mounted: function () {
-        console.log('mounted ParcelTabs view');
         $(document).foundation();
       },
       components: {
@@ -314,7 +313,6 @@ var app = _.extend(app || {},
                 }
               })),
               quantitiesJoined;
-          console.log('quants', quantities);
 
           // if (quantities.length === 0) {
           //   return 'No parcels found at this address.';
@@ -331,7 +329,7 @@ var app = _.extend(app || {},
               quantitiesJoined = quantities.slice(0, 2).join(', ') + ', and ' + quantities[2];
               break;
             default:
-              console.warn('no parcel quantities');
+              // console.warn('no parcel quantities');
               break;
           }
 
@@ -491,7 +489,8 @@ var app = _.extend(app || {},
 
   // fires ais search
   searchAis: function (address) {
-    console.log('search for address', address);
+    // console.log('search for address', address);
+
     var url = app.config.ais.url + encodeURIComponent(address),
         params = {};
 
@@ -675,7 +674,8 @@ var app = _.extend(app || {},
   // this gets called after ais state has been set (either by making an AJAX
   // call or rehydrating state)
   didGetAisResult: function () {
-    console.log('didGetAisResult is running');
+    // console.log('didGetAisResult is running');
+
     // open topic
     app.state.shouldOpenTopics = true;
     app.activateTopic(app.state.activeTopic || 'property');
@@ -770,7 +770,7 @@ var app = _.extend(app || {},
       app.getDorParcel();
     }
     else {
-      console.log('did get ais result && did click map');
+      // console.log('did get ais result && did click map');
       // app.renderParcelTopic();
       app.didGetDorParcels(null, app.state.dor, null);
     }
@@ -817,7 +817,7 @@ var app = _.extend(app || {},
   },
 
   getDorParcel: function () {
-    console.log('get dor parcel is running');
+    // console.log('get dor parcel is running');
 
     var aisFeature = app.state.ais.feature,
         parcelId = aisFeature.properties.dor_parcel_id;
@@ -841,7 +841,7 @@ var app = _.extend(app || {},
   },
 
   didGetDorParcels: function (error, featureCollection, response) {
-    console.log('didGetDorParcels is running', featureCollection);
+    // console.log('didGetDorParcels is running', featureCollection);
 
     app.state.didFinishDorRequest = true;
 
@@ -885,8 +885,6 @@ var app = _.extend(app || {},
     // tell map we got a dor parcel
     app.map.didGetDorParcels();
 
-    console.log('$$$$ FEATURES SORTED', featuresSorted);
-
     // loop over parcels
     _.forEach(featuresSorted, function (parcel) {
       // console.warn('par', parcel);
@@ -906,7 +904,6 @@ var app = _.extend(app || {},
           lengthUnit: 9002,
         },
         success: function (dataString) {
-          console.log('got polygon with area', JSON.parse(dataString), this.url);
           var data = JSON.parse(dataString),
               area = Math.round(data.areas[0]),
               perimeter = Math.round(data.lengths[0]);
@@ -914,7 +911,6 @@ var app = _.extend(app || {},
           // $('#deeds-perimeter').text(perimeter + ' ft');
           parcel.properties.AREA = area + ' sq ft';
           parcel.properties.PERIMETER = perimeter + ' ft';
-          console.log('%%%% PARCEL', parcel);
         },
         error: function (err) {
           // console.log('polygon area error', err);
@@ -923,7 +919,8 @@ var app = _.extend(app || {},
 
       // get dor documents
       var parcelAddress = app.util.concatDorAddress(parcel);
-      console.warn('getting docs for parcel', parcelAddress);
+
+      // console.warn('getting docs for parcel', parcelAddress);
 
       $.ajax({
         url: app.config.dor.documents.documentIdQueryUrl,
@@ -949,7 +946,6 @@ var app = _.extend(app || {},
         },
       });
 
-      console.log('did get dor parcels, now render');
       app.renderParcelTopic();
 
       // get intersecting regmaps
@@ -1248,9 +1244,9 @@ var app = _.extend(app || {},
 
   // render deeds (assumes there's a parcel in the state)
   renderParcelTopic: function () {
-    console.log('render parcel topic')
+    // console.log('render parcel topic')
+
     var parcels = app.state.dor.features;
-    console.log('@@@@ PARCELS', parcels);
 
     if (!parcels[0]) {
       // console.log('render parcel topic, but no parcel feature', app.state.dor);
@@ -1411,7 +1407,8 @@ var app = _.extend(app || {},
   },
 
   didGetZoningOverlayResult: function (error, featureCollection, response) {
-    console.log('did get zoning overlay result', featureCollection);
+    // console.log('did get zoning overlay result', featureCollection);
+
     var features = featureCollection.features,
         $tbody = $('#zoning-overlays').find('tbody'),
         fields = ['OVERLAY_NAME', 'CODE_SECTION'],
@@ -1589,7 +1586,7 @@ var app = _.extend(app || {},
 
   // get a parcel by a leaflet latlng
   getParcelsByLatLng: function (latLng, callback) {
-    console.log('get parcels by latlng');
+    // console.log('get parcels by latlng');
 
     if (app.state.activeTopic == 'deeds' || app.state.activeTopic == 'zoning') {
       var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerDOR.url});
@@ -1600,7 +1597,7 @@ var app = _.extend(app || {},
           // console.log('get parcel by latlng error', error);
           return;
         }
-        console.log('GETPARCELSBYLATLNG featureCollection', featureCollection);
+
         // if empty response
         if (featureCollection.features.length === 0) {
           // show alert

@@ -296,9 +296,6 @@ app.util = (function () {
     },
 
     filterFeatClassByTimeframe: function (array, dateField, daysBack) {
-      console.log('filterFeatClassByTimeframe');
-      console.log('array length', array.length);
-      console.log('dateField', dateField);
       var minDate = moment().subtract(daysBack, 'days');
       return _.filter(array, function (row) {
         var rowDateRaw = row.properties.REQUESTED_DATETIME;

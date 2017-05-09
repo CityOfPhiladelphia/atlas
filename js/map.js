@@ -534,7 +534,8 @@ app.map = (function ()
     },
 
 		didCreateAddressMarker: function (markerType) {
-			console.log('did create address marker', markerType);
+			// console.log('did create address marker', markerType);
+
 			var targetMarkerType = this.addressMarkerTypeForTopic(app.state.activeTopic);
 			if (markerType === targetMarkerType) {
 				// // console.log('this is the marker we want to show')
@@ -667,7 +668,6 @@ app.map = (function ()
 		// },
 
     didClickMap: function (e) {
-			console.log('RUNNING DIDCLICKMAP');
 			//app.state.dor = app.state.pwd = null;
 
       // set state
@@ -684,7 +684,6 @@ app.map = (function ()
 
 			// otherwise, it was a parcel click. get the parcel ID and query AIS.
       app.getParcelsByLatLng(e.latlng, function () {
-				console.log('RUNNING CALLBACK TO GETPARCELSBYLATLNG');
 				// which parcels are being displayed?
 				var activeTopic = app.state.activeTopic,
 						DOR_TOPICS = ['deeds', 'zoning'],
@@ -707,11 +706,9 @@ app.map = (function ()
 						break;
 				}
 
-				console.log('parcelId is', parcelId);
 
         // if this is the result of a map click, query ais
         if (app.state.map.clickedOnMap) {
-					console.log('about to search ais')
           app.searchAis(parcelId);
           app.state.map.clickedOnMap = true;
         }
@@ -844,7 +841,7 @@ app.map = (function ()
     },
 
 		showAddressMarker: function (markerType) {
-			console.log('show address marker', markerType);
+			// console.log('show address marker', markerType);
 
 			// if (!app.state.map.addressMarkers) {
 			// 	// console.log('show address marker, but we havent created them yet');
@@ -980,9 +977,7 @@ app.map = (function ()
 
 			// remove existing sliders
 			if (prevOverlays !== undefined && prevOverlays[0] !== undefined && prevOverlays[0] !== null) {
-				// console.log('prevOverlays', prevOverlays)
 				_.forEach(prevOverlays, function (prevOverlay) {
-					// console.log('$$$$$$$$$$$$$$$ prevOverlay ', prevOverlay)
 					var name = prevOverlay.options.name;
 					if (_.keys(opacitySliders).indexOf(name) > -1) {
 						var opacitySlider = opacitySliders[name];
@@ -992,12 +987,9 @@ app.map = (function ()
 				});
 			}
 			// add next slider
-			// console.log('^^^^^^^^^^^^^^ nextOverlays is ', nextOverlays);
 			_.forEach(nextOverlays, function (nextOverlay) {
-				// console.log('@@@@@@@@@@@ forEach with nextOverlay', nextOverlay)
 				if(nextOverlay){
 					var name = nextOverlay.options.name;
-					// console.log('name is ', name);
 					if (_.keys(opacitySliders).indexOf(name) > -1) {
 						var opacitySlider = opacitySliders[name];
 						opacitySlider.addTo(_map);
@@ -1265,7 +1257,7 @@ app.map = (function ()
 		},
 
 		addNearbyActivity: function (rows) {
-			console.debug('add nearby activity', rows);
+			// console.debug('add nearby activity', rows);
 
 			app.state.map.nearbyActivity = app.state.map.nearbyActivity || {};
 
@@ -1377,7 +1369,7 @@ app.map = (function ()
 			_nearbyActivityLayerGroup.eachLayer(function (layer) {
 				// make sure it's a nearby marker
 				var layerRowId = layer.options.rowId;
-				if (!layerRowId) console.log('layerRowId not found');
+				// if (!layerRowId) console.log('layerRowId not found');
 
 				if (id == layerRowId) {
 					markerlatlng = layer._latlng
@@ -1468,7 +1460,7 @@ app.map = (function ()
 		},
 
 		didSelectRegmap: function (nextRegmap) {
-			console.log('MAP: did change regmap =>', nextRegmap);
+			// console.log('MAP: did change regmap =>', nextRegmap);
 
 			var prevRegmap = app.state.map.mapServices.regmap;
 
