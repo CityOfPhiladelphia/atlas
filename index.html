@@ -531,11 +531,12 @@
                                   <td>
                                     {{ rco.properties.PRIMARY_NAME }}<br>
                                     {{ app.util.formatPhoneNumber(rco.properties.PRIMARY_PHONE) }}<br>
-                                    {{ rco.properties.PRIMARY_EMAIL }}<br>
+                                    <a :href="'mailto:' + rco.properties.PRIMARY_EMAIL">{{ rco.properties.PRIMARY_EMAIL }}</a><br>
                                   </td>
                                   <td>{{ rco.properties.PREFFERED_CONTACT_METHOD }}</td>
                                 </tr>
                               </table>
+                              <a href="//www.phila.gov/CityPlanning/projectreviews/RCO%20Related/List_of_RCOs.pdf" class="external">See a list of all RCOs in the city [PDF]</a>
                             </div>
                         </div>
 
