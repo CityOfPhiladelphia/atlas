@@ -1548,7 +1548,7 @@ app.map = (function ()
 			app.map.didGetParcel('dor');
 		},
 
-		drawBuffer(data){
+		drawBuffer: function (data) {
 	    //console.log('running drawBuffer', data['geometries'][0]['rings'][0]);
 	    var buffer = L.polygon(data['geometries'][0]['rings'][0], {color: 'green'});
 	    buffer.addTo(_overlayLayerGroup);
