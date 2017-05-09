@@ -208,11 +208,61 @@ var app = _.extend(app || {},
 
     // PARCEL TABS
     app.views = {};
+
+    var ParcelTabSummary = {
+      props: ['quantities'],
+      render: function (createElement) {
+        var quantities = this.quantities,
+            children = [],
+            self = this;
+
+        _.forEach(quantities, function (quantity, index) {
+          var child;
+
+          // check for ands and commas
+          if (quantities.length === 2 && index == 1) {
+            children.push(createElement('span', ' and '));
+          } else if (quantities.length === 3) {
+            if (index === 1) {
+              children.push(createElement('span', ','));
+            } else if (index === 2) {
+              children.push(createElement('span', ' and '));
+            }
+          }
+
+          // children.push(createElement('span', quantity.quantity + ' '));
+          children.push(createElement(
+            'span',
+            {style: 'color: ' + self.$parent.colorForParcelStatus(quantity.status)},
+            [
+              createElement('strong', [
+                createElement('span', quantity.quantity + ' '),
+                createElement('span', quantity.status + ' ' + quantity.noun + ' '),
+              ]),
+            ]
+          ));
+          // children.push(createElement('span', quantity.noun + ' '));
+        });
+
+        children.push(createElement(
+          'span',
+          ' found at this address.'
+        ));
+
+        return createElement(
+          'h3',
+          children
+        );
+      }
+    };
+
     app.views.parcelTabs = new Vue({
       el: '#parcel-tab-container',
       mounted: function () {
-        console.log('mounted ParcelTabs view');
         $(document).foundation();
+      },
+      components: {
+        'parcel-tab-summary': ParcelTabSummary
       },
       data: {
         app: app,
@@ -220,18 +270,124 @@ var app = _.extend(app || {},
         activeParcel: '',
         documents: [],
         regmaps: [],
-        activeRegmap: '',
+        activeRegmap: ''
       },
       watch: {
         activeParcel: app.map.didActivateParcel,
         activeRegmap: app.map.didSelectRegmap,
       },
+      computed: {
+        activeParcels: function () {
+          return _.filter(this.parcels, function (parcel) {
+            return parcel.properties.STATUS === 1;
+          });
+        },
+        inactiveParcels: function () {
+          return _.filter(this.parcels, function (parcel) {
+            return parcel.properties.STATUS === 2;
+          });
+        },
+        remainderParcels: function () {
+          return _.filter(this.parcels, function (parcel) {
+            return parcel.properties.STATUS === 3;
+          });
+        },
+        summary: function () {
+          // var actives = this.activeParcels,
+          //     inactives = this.inactiveParcels,
+          //     remainders = this.remainderParcels,
+          var parcelNoun = function (parcels) {
+                return 'parcel' + (parcels.length === 1 ? '' : 's');
+              },
+              PARCEL_CLASSES = [
+                'active',
+                'remainder',
+                'inactive',
+              ],
+              self = this,
+              quantities = _.compact(_.map(PARCEL_CLASSES, function (parcelClass) {
+                var parcels = self[parcelClass + 'Parcels'];
+                    length = parcels.length;
+                if (length > 0) {
+                  return [length, parcelClass, parcelNoun(parcels)].join(' ');
+                }
+              })),
+              quantitiesJoined;
+
+          // if (quantities.length === 0) {
+          //   return 'No parcels found at this address.';
+          // }
+
+          switch (quantities.length) {
+            case 1:
+              quantitiesJoined = quantities[0];
+              break;
+            case 2:
+              quantitiesJoined = quantities[0] + ' and ' + quantities[1];
+              break;
+            case 3:
+              quantitiesJoined = quantities.slice(0, 2).join(', ') + ', and ' + quantities[2];
+              break;
+            default:
+              // console.warn('no parcel quantities');
+              break;
+          }
+
+          return quantitiesJoined + ' found at this address.';
+        },
+        quantities: function () {
+          var PARCEL_CLASSES = [
+                'active',
+                'remainder',
+                'inactive',
+              ],
+              PARCEL_CLASS_COLORS = {
+                active: 'green',
+                remainder: 'blue',
+                inactive: 'purple',
+              },
+              self = this,
+              quantities = [];
+
+          _.forEach(PARCEL_CLASSES, function (parcelClass) {
+            var parcels = self[parcelClass + 'Parcels'];
+                length = parcels.length;
+            if (length === 0) {
+              return;
+            }
+            quantities.push({
+              // text: [length, parcelClass, self.parcelNoun(parcels)].join(' '),
+              status: parcelClass,
+              quantity: length,
+              noun: self.parcelNoun(parcels),
+              style: {
+                'color': PARCEL_CLASS_COLORS[parcelClass],
+              }
+            });
+          });
+
+          return quantities;
+        },
+      },
       methods: {
         dateFormat: function (date) {
-          if (!isNaN(date)){
+          if (date && !isNaN(date)){
             return moment(parseInt(date)).format('YYYY-MM-DD');
+          } else {
+            return '<none>';
           }
         },
+        parcelNoun: function (parcels) {
+          return 'parcel' + (parcels.length === 1 ? '' : 's');
+        },
+        colorForParcelStatus: function (status) {
+          var PARCEL_CLASS_COLORS = {
+            active: 'green',
+            remainder: 'blue',
+            inactive: 'purple',
+          };
+          return PARCEL_CLASS_COLORS[status];
+        }
       },
     });
   },
@@ -333,7 +489,8 @@ var app = _.extend(app || {},
 
   // fires ais search
   searchAis: function (address) {
-    console.log('search for address', address);
+    // console.log('search for address', address);
+
     var url = app.config.ais.url + encodeURIComponent(address),
         params = {};
 
@@ -517,7 +674,8 @@ var app = _.extend(app || {},
   // this gets called after ais state has been set (either by making an AJAX
   // call or rehydrating state)
   didGetAisResult: function () {
-    console.log('didGetAisResult is running');
+    // console.log('didGetAisResult is running');
+
     // open topic
     app.state.shouldOpenTopics = true;
     app.activateTopic(app.state.activeTopic || 'property');
@@ -612,7 +770,7 @@ var app = _.extend(app || {},
       app.getDorParcel();
     }
     else {
-      console.log('did get ais result && did click map');
+      // console.log('did get ais result && did click map');
       // app.renderParcelTopic();
       app.didGetDorParcels(null, app.state.dor, null);
     }
@@ -659,7 +817,7 @@ var app = _.extend(app || {},
   },
 
   getDorParcel: function () {
-    console.log('get dor parcel is running');
+    // console.log('get dor parcel is running');
 
     var aisFeature = app.state.ais.feature,
         parcelId = aisFeature.properties.dor_parcel_id;
@@ -683,7 +841,7 @@ var app = _.extend(app || {},
   },
 
   didGetDorParcels: function (error, featureCollection, response) {
-    console.log('didGetDorParcels is running', featureCollection);
+    // console.log('didGetDorParcels is running', featureCollection);
 
     app.state.didFinishDorRequest = true;
 
@@ -727,8 +885,6 @@ var app = _.extend(app || {},
     // tell map we got a dor parcel
     app.map.didGetDorParcels();
 
-    console.log('$$$$ FEATURES SORTED', featuresSorted);
-
     // loop over parcels
     _.forEach(featuresSorted, function (parcel) {
       // console.warn('par', parcel);
@@ -748,7 +904,6 @@ var app = _.extend(app || {},
           lengthUnit: 9002,
         },
         success: function (dataString) {
-          console.log('got polygon with area', JSON.parse(dataString), this.url);
           var data = JSON.parse(dataString),
               area = Math.round(data.areas[0]),
               perimeter = Math.round(data.lengths[0]);
@@ -756,7 +911,6 @@ var app = _.extend(app || {},
           // $('#deeds-perimeter').text(perimeter + ' ft');
           parcel.properties.AREA = area + ' sq ft';
           parcel.properties.PERIMETER = perimeter + ' ft';
-          console.log('%%%% PARCEL', parcel);
         },
         error: function (err) {
           // console.log('polygon area error', err);
@@ -765,7 +919,8 @@ var app = _.extend(app || {},
 
       // get dor documents
       var parcelAddress = app.util.concatDorAddress(parcel);
-      console.warn('getting docs for parcel', parcelAddress);
+
+      // console.warn('getting docs for parcel', parcelAddress);
 
       $.ajax({
         url: app.config.dor.documents.documentIdQueryUrl,
@@ -791,7 +946,6 @@ var app = _.extend(app || {},
         },
       });
 
-      console.log('did get dor parcels, now render');
       app.renderParcelTopic();
 
       // get intersecting regmaps
@@ -1090,9 +1244,9 @@ var app = _.extend(app || {},
 
   // render deeds (assumes there's a parcel in the state)
   renderParcelTopic: function () {
-    console.log('render parcel topic')
+    // console.log('render parcel topic')
+
     var parcels = app.state.dor.features;
-    console.log('@@@@ PARCELS', parcels);
 
     if (!parcels[0]) {
       // console.log('render parcel topic, but no parcel feature', app.state.dor);
@@ -1253,7 +1407,8 @@ var app = _.extend(app || {},
   },
 
   didGetZoningOverlayResult: function (error, featureCollection, response) {
-    console.log('did get zoning overlay result', featureCollection);
+    // console.log('did get zoning overlay result', featureCollection);
+
     var features = featureCollection.features,
         $tbody = $('#zoning-overlays').find('tbody'),
         fields = ['OVERLAY_NAME', 'CODE_SECTION'],
@@ -1431,7 +1586,7 @@ var app = _.extend(app || {},
 
   // get a parcel by a leaflet latlng
   getParcelsByLatLng: function (latLng, callback) {
-    console.log('get parcels by latlng');
+    // console.log('get parcels by latlng');
 
     if (app.state.activeTopic == 'deeds' || app.state.activeTopic == 'zoning') {
       var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerDOR.url});
@@ -1442,7 +1597,7 @@ var app = _.extend(app || {},
           // console.log('get parcel by latlng error', error);
           return;
         }
-        console.log('GETPARCELSBYLATLNG featureCollection', featureCollection);
+
         // if empty response
         if (featureCollection.features.length === 0) {
           // show alert
@@ -1726,7 +1881,6 @@ var app = _.extend(app || {},
       }
     );
   },
-
 
 // New 311 Stuff:
   getBufferFor311: function () {
