@@ -506,6 +506,37 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
+
+                            <div id="zoning-rco-container">
+                              <h4>
+                                Registered Community Organizations
+                                ({{ isLoading ? 'Loading...' : rcos.length }})
+                                <!-- <span class="table-subheader">aka "RCOs"</span> -->
+                              </h4>
+                              <table>
+                                <tr>
+                                  <th scope="col">RCO</th>
+                                  <th scope="col">Meeting Address</th>
+                                  <th scope="col">Type</th>
+                                  <th scope="col">Contact</th>
+                                  <th scope="col">Preferred Method</th>
+                                </tr>
+                                <tr v-for="rco in rcosSorted">
+                                  <td>
+                                    <strong>{{ rco.properties.ORGANIZATION_NAME }}</strong><br>
+                                    {{ rco.properties.ORGANIZATION_ADDRESS }}
+                                  </td>
+                                  <td>{{ rco.properties.MEETING_LOCATION_ADDRESS }}</td>
+                                  <td>{{ rco.properties.ORG_TYPE }}</td>
+                                  <td>
+                                    {{ rco.properties.PRIMARY_NAME }}<br>
+                                    {{ app.util.formatPhoneNumber(rco.properties.PRIMARY_PHONE) }}<br>
+                                    {{ rco.properties.PRIMARY_EMAIL }}<br>
+                                  </td>
+                                  <td>{{ rco.properties.PREFFERED_CONTACT_METHOD }}</td>
+                                </tr>
+                              </table>
+                            </div>
                         </div>
 
                         <a id="topic-link-water" class="topic-link" href="/#/water/"><span class="topic-link-icon flaticon-drop"></span>Water</a>
