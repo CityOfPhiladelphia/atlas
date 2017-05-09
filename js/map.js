@@ -1139,10 +1139,11 @@ app.map = (function ()
 		},
 
 		addressMarkerTypeForTopic: function (topic) {
-			// // console.log('running addressMarkerTypeForTopic with topic ' + topic);
+			// console.log('running addressMarkerTypeForTopic with topic ' + topic);
+			// console.log('ais type is ' + app.state.ais.feature.ais_feature_type);
 
 			var markerType;
-			if (topic === 'deeds') {
+			if (topic === 'deeds' && app.state.ais.feature.ais_feature_type != 'intersection') {
 				markerType = 'parcelPolyDOR';
 			} else if (topic === 'water') {
 				markerType = 'parcelPolyWater';
