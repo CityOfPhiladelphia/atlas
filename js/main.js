@@ -259,6 +259,7 @@ var app = _.extend(app || {},
     app.views.parcelTabs = new Vue({
       el: '#parcel-tab-container',
       mounted: function () {
+        console.log('mounted ParcelTabs view');
         $(document).foundation();
       },
       components: {
@@ -884,6 +885,8 @@ var app = _.extend(app || {},
     // tell map we got a dor parcel
     app.map.didGetDorParcels();
 
+    console.log('$$$$ FEATURES SORTED', featuresSorted);
+
     // loop over parcels
     _.forEach(featuresSorted, function (parcel) {
       // console.warn('par', parcel);
@@ -903,12 +906,15 @@ var app = _.extend(app || {},
           lengthUnit: 9002,
         },
         success: function (dataString) {
-          // // console.log('got polygon with area', dataString, this.url);
+          console.log('got polygon with area', JSON.parse(dataString), this.url);
           var data = JSON.parse(dataString),
               area = Math.round(data.areas[0]),
               perimeter = Math.round(data.lengths[0]);
-          $('#deeds-area').text(area + ' sq ft');
-          $('#deeds-perimeter').text(perimeter + ' ft');
+          // $('#deeds-area').text(area + ' sq ft');
+          // $('#deeds-perimeter').text(perimeter + ' ft');
+          parcel.properties.AREA = area + ' sq ft';
+          parcel.properties.PERIMETER = perimeter + ' ft';
+          console.log('%%%% PARCEL', parcel);
         },
         error: function (err) {
           // console.log('polygon area error', err);
@@ -927,9 +933,10 @@ var app = _.extend(app || {},
           f: 'json',
         },
         success: function (data) {
-          //// console.warn('docs for', parcelAddress, data);
+          // console.warn('docs for', parcelAddress, data);
           app.state.dorDocuments = data;
           var features = _.map(JSON.parse(app.state.dorDocuments).features, function (feature) { return feature.attributes; });
+          // console.log('$$$$ DOR FEATURES', features);
               //recordLimit = app.config.topicRecordLimit,
               //featuresLimited = features.slice(0, recordLimit)
           // app.didGetDorDocuments();
@@ -1243,6 +1250,7 @@ var app = _.extend(app || {},
   renderParcelTopic: function () {
     console.log('render parcel topic')
     var parcels = app.state.dor.features;
+    console.log('@@@@ PARCELS', parcels);
 
     if (!parcels[0]) {
       // console.log('render parcel topic, but no parcel feature', app.state.dor);
@@ -1581,7 +1589,7 @@ var app = _.extend(app || {},
 
   // get a parcel by a leaflet latlng
   getParcelsByLatLng: function (latLng, callback) {
-    // console.log('get parcels by latlng');
+    console.log('get parcels by latlng');
 
     if (app.state.activeTopic == 'deeds' || app.state.activeTopic == 'zoning') {
       var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerDOR.url});
@@ -1592,7 +1600,7 @@ var app = _.extend(app || {},
           // console.log('get parcel by latlng error', error);
           return;
         }
-
+        console.log('GETPARCELSBYLATLNG featureCollection', featureCollection);
         // if empty response
         if (featureCollection.features.length === 0) {
           // show alert
@@ -1627,10 +1635,8 @@ var app = _.extend(app || {},
         //parcelQuery.where('STATUS IN (1, 3)')
         parcelQuery.run(function (error, featureCollection, response) {
           if (error || !featureCollection) {
-            // console.log('get parcel by latlng error', error);
             return;
           }
-
           // if empty response
           if (featureCollection.features.length === 0) {
             // show alert
@@ -1728,7 +1734,7 @@ var app = _.extend(app || {},
   },
 
   getNearbyActivity: function () {
-    console.log('running getNearbyActivity');
+    // console.log('running getNearbyActivity');
     var activeTopic = app.state.activeTopic,
         prefix = activeTopic === 'nearby' ? 'nearby' : 'vacancy-nearby',
         $nearbyActivityType = $('#'+prefix+'-activity-type'),
@@ -1823,8 +1829,8 @@ var app = _.extend(app || {},
         tbodyHtml = app.util.makeTableRowsFromJson(rowsSorted, fields),
         $tbody = $('#' + tableId + ' > tbody');
 
-    console.log('nearby rowsSorted', rowsSorted);
-    console.log('nearby fields', fields);
+    // console.log('nearby rowsSorted', rowsSorted);
+    // console.log('nearby fields', fields);
 
     app.state.nearby.rowsSorted = rowsSorted;
 
@@ -1911,7 +1917,7 @@ var app = _.extend(app || {},
   },
 
   getNearby311: function (data) {
-    console.log('running getNearby311', data);
+    // console.log('running getNearby311', data);
     var buffer = L.polygon(data['geometries'][0]['rings'][0], {color: 'green'});
     threeOneOneUrl = app.config.esri.otherLayers.threeOneOneLayer.url
 
@@ -1921,7 +1927,7 @@ var app = _.extend(app || {},
   },
 
   didGet311: function (error, featureCollection, response) {
-    console.log('didGet311 is running', featureCollection);
+    // console.log('didGet311 is running', featureCollection);
     app.state.nearby311.data = featureCollection.features;
 
     var activeTopic = app.state.activeTopic,
@@ -1943,8 +1949,8 @@ var app = _.extend(app || {},
         $tbody = $('#' + tableId + ' > tbody');
         // tbodyHtml = app.util.makeTableRowsFromFeatClass(rowsSorted, fields),
 
-    console.log('rowsSorted', rowsSorted);
-    console.log('fields', fields);
+    // console.log('rowsSorted', rowsSorted);
+    // console.log('fields', fields);
     app.state.nearby311.rowsSorted = rowsSorted;
 
     var rowsSortedGeom = [];
@@ -1979,7 +1985,7 @@ var app = _.extend(app || {},
       rowsSortedGeom.push(curRow);
     }) // end of forEach
 
-    console.log('$$$$$ROWSSORTEDGEOM', rowsSortedGeom);
+    // console.log('$$$$$ROWSSORTEDGEOM', rowsSortedGeom);
     app.state.nearby311.rowsSortedGeom = rowsSortedGeom
     //var tbodyHtml = app.util.makeTableRowsFromJson(rowsSortedGeom, fields);
     tbodyHtml = app.util.makeTableRowsFromJson(rowsSortedGeom, fields);
