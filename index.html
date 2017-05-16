@@ -513,12 +513,11 @@
                                 ({{ isLoading ? 'Loading...' : rcos.length }})
                                 <!-- <span class="table-subheader">aka "RCOs"</span> -->
                               </h4>
-                              <table>
+                              <table role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
                                 <tr>
                                   <th scope="col">RCO</th>
                                   <th scope="col">Meeting Address</th>
-                                  <th scope="col">Type</th>
-                                  <th scope="col">Contact</th>
+                                  <th scope="col">Primary Contact</th>
                                   <th scope="col">Preferred Method</th>
                                 </tr>
                                 <tr v-for="rco in rcosSorted">
@@ -527,7 +526,6 @@
                                     {{ rco.properties.ORGANIZATION_ADDRESS }}
                                   </td>
                                   <td>{{ rco.properties.MEETING_LOCATION_ADDRESS }}</td>
-                                  <td>{{ rco.properties.ORG_TYPE }}</td>
                                   <td>
                                     {{ rco.properties.PRIMARY_NAME }}<br>
                                     {{ app.util.formatPhoneNumber(rco.properties.PRIMARY_PHONE) }}<br>
