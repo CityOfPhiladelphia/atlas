@@ -1037,16 +1037,18 @@ app.map = (function ()
 				this.addNearbyActivity();
 			}
 			else if (prevTopic === 'vacancy') {
+				// console.log('prevTopic === vacancy is calling removeNearbyActivity');
 				app.map.removeNearbyActivity();
 			}
 
 			// handle nearby activity
-			if (nextTopic === 'nearby') {
-				this.addNearbyActivity();
-			}
-			else if (prevTopic === 'nearby') {
-				this.removeNearbyActivity();
-			}
+			// if (nextTopic === 'nearby') {
+			// 	this.addNearbyActivity();
+			// }
+			// else if (prevTopic === 'nearby') {
+			// 	console.log('prevTopic === nearby is calling removeNearbyActivity');
+			// 	this.removeNearbyActivity();
+			// }
 
 
 			// handle nearby activity
@@ -1054,7 +1056,10 @@ app.map = (function ()
 				this.addNearbyActivity(app.state.nearby311.rowsSortedGeom);
 			}
 			else if (prevTopic === '311') {
-				this.removeNearbyActivity();
+				if (nextTopic != 'vacancy') {
+					// console.log('prevTopic === 311 is calling removeNearbyActivity');
+					this.removeNearbyActivity();
+				}
 			}
 
 
@@ -1173,6 +1178,7 @@ app.map = (function ()
 		},
 
 		removeNearbyActivity: function () {
+			// console.log('removeNearbyActivity is running');
 			_nearbyActivityLayerGroup.clearLayers();
     },
 
@@ -1257,7 +1263,7 @@ app.map = (function ()
 		},
 
 		addNearbyActivity: function (rows) {
-			console.log('add nearby activity', rows);
+			//console.log('map - add nearby activity', rows);
 
 			app.state.map.nearbyActivity = app.state.map.nearbyActivity || {};
 
@@ -1265,20 +1271,25 @@ app.map = (function ()
 			if (!rows) {
 					app.state.map.nearbyActivity.data = app.state.nearby.rowsSorted || {};
 					rows = app.state.map.nearbyActivity.data;
+					//console.log('map - if is running', rows);
 			} else {
 				app.state.map.nearbyActivity.data = rows;
+				//console.log('map - if did not run', rows);
 			}
 
 			// TODO clear existing
+			// console.log('addNearbyActivity is calling removeNearbyActivity');
 			this.removeNearbyActivity();
 
 			// if we still don't have rows, then the app was probably just opened to
 			// the /nearby route. return and wait for the api call to finish.
 			if (_.isEmpty(rows)) {
+				//console.log('map - rows is empty');
 				return;
 			}
 
 			_.forEach(rows, function (row) {
+				// console.log('map - forEach rows', row);
 				var lon = row.x,
 						lat = row.y,
 						newMarker = new L.Marker.SVGMarker([lat, lon], {
@@ -1327,6 +1338,7 @@ app.map = (function ()
 							// $('[data-id ='+row.id+']').css('background', '');
 							$('[data-id =' + row.id + ']').trigger('mouseout');
 						});
+						//console.log(newMarker);
 				_nearbyActivityLayerGroup.addLayer(newMarker);
 			});
 

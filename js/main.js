@@ -1733,7 +1733,7 @@ var app = _.extend(app || {},
   },
 
   getNearbyActivity: function () {
-    console.log('running getNearbyActivity');
+    // console.log('running getNearbyActivity');
     var activeTopic = app.state.activeTopic,
         prefix = activeTopic === 'nearby' ? 'nearby' : 'vacancy-nearby',
         $nearbyActivityType = $('#'+prefix+'-activity-type'),
@@ -1805,7 +1805,7 @@ var app = _.extend(app || {},
   },
 
   didGetNearbyActivity: function () {
-    console.info('did get nearby activity', app.state.nearby.data);
+    // console.info('did get nearby activity', app.state.nearby.data);
 
     var activeTopic = app.state.activeTopic,
         prefix = activeTopic === 'nearby' ? 'nearby' : 'vacancy-nearby';
@@ -1860,9 +1860,8 @@ var app = _.extend(app || {},
 
     // refresh them on map if topic accordion is open
     var $targetTopic = prefix === 'nearby' ? $('#topic-nearby') : $('#topic-vacancy');
-    console.log($targetTopic)
+    // console.log($targetTopic)
     if ($targetTopic.is(':visible')){
-      console.log('if is running');
       //if ($('#topic-nearby').attr('style') == 'display: block;') {
       // app.map.removeNearbyActivity();
       app.map.addNearbyActivity(rowsSorted);
