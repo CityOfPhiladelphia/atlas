@@ -1257,7 +1257,7 @@ app.map = (function ()
 		},
 
 		addNearbyActivity: function (rows) {
-			// console.debug('add nearby activity', rows);
+			console.log('add nearby activity', rows);
 
 			app.state.map.nearbyActivity = app.state.map.nearbyActivity || {};
 
@@ -1269,14 +1269,14 @@ app.map = (function ()
 				app.state.map.nearbyActivity.data = rows;
 			}
 
+			// TODO clear existing
+			this.removeNearbyActivity();
+
 			// if we still don't have rows, then the app was probably just opened to
 			// the /nearby route. return and wait for the api call to finish.
 			if (_.isEmpty(rows)) {
 				return;
 			}
-
-			// TODO clear existing
-			this.removeNearbyActivity();
 
 			_.forEach(rows, function (row) {
 				var lon = row.x,

@@ -164,12 +164,9 @@ var app = _.extend(app || {},
     // // $('#nearby-activity-sort').change(app.sortNearbyActivity);
     // $('#vacancy-nearby-activity-sort').change(app.didGetNearbyActivity);
 
-    /*
-    NEARBY
-    */
+
     // populate dropdown
     _.forEach(app.config.nearby.activityTypes, function (activityType) {
-      console.log(activityType);
       var $option = $('<option>'),
           label = activityType.label,
           slug = app.util.slugify(label);
@@ -192,6 +189,11 @@ var app = _.extend(app || {},
     $('[id$=nearby-activity-timeframe]').change(app.didGetNearbyActivity);
     // $('#nearby-activity-sort').change(app.sortNearbyActivity);
     $('[id$=nearby-activity-sort]').change(app.didGetNearbyActivity);
+
+
+    $('[id$=nearby-311-timeframe]').change(app.getBufferFor311);
+    // $('#nearby-activity-sort').change(app.sortNearbyActivity);
+    $('[id$=nearby-311-sort]').change(app.getBufferFor311);
 
     /*
     ROUTING
@@ -1731,7 +1733,7 @@ var app = _.extend(app || {},
   },
 
   getNearbyActivity: function () {
-    // console.log('running getNearbyActivity');
+    console.log('running getNearbyActivity');
     var activeTopic = app.state.activeTopic,
         prefix = activeTopic === 'nearby' ? 'nearby' : 'vacancy-nearby',
         $nearbyActivityType = $('#'+prefix+'-activity-type'),
@@ -1803,7 +1805,7 @@ var app = _.extend(app || {},
   },
 
   didGetNearbyActivity: function () {
-    // console.info('did get nearby activity', app.state.nearby.data);
+    console.info('did get nearby activity', app.state.nearby.data);
 
     var activeTopic = app.state.activeTopic,
         prefix = activeTopic === 'nearby' ? 'nearby' : 'vacancy-nearby';
@@ -1826,8 +1828,9 @@ var app = _.extend(app || {},
         tbodyHtml = app.util.makeTableRowsFromJson(rowsSorted, fields),
         $tbody = $('#' + tableId + ' > tbody');
 
-    // console.log('nearby rowsSorted', rowsSorted);
-    // console.log('nearby fields', fields);
+    // console.log('vacancy rowsFiltered', rowsFiltered);
+    // console.log('vacancy sortMethod', sortMethod);
+    // console.log('vacancy sortField', sortField);
 
     app.state.nearby.rowsSorted = rowsSorted;
 
@@ -1857,7 +1860,9 @@ var app = _.extend(app || {},
 
     // refresh them on map if topic accordion is open
     var $targetTopic = prefix === 'nearby' ? $('#topic-nearby') : $('#topic-vacancy');
+    console.log($targetTopic)
     if ($targetTopic.is(':visible')){
+      console.log('if is running');
       //if ($('#topic-nearby').attr('style') == 'display: block;') {
       // app.map.removeNearbyActivity();
       app.map.addNearbyActivity(rowsSorted);
@@ -1936,18 +1941,20 @@ var app = _.extend(app || {},
         daysBack = $('#' + tableId + '-timeframe').val(),
         label = $('#' + tableId + '-type :selected').text(),
         fieldMap = app.config.nearby311.fieldMap,
-        dateField = fieldMap.date,
+        // dateField = fieldMap.date,
+        dateField = 'properties.REQUESTED_DATETIME',
         rowsFiltered = app.util.filterFeatClassByTimeframe(array, dateField, daysBack),
-        sortMethod = $('#' + tableId + '-sort').val(),
-        sortField = sortMethod === 'date' ? dateField : 'distance',
-        sortDirection = sortMethod === 'date'? 'desc' : 'asc',
+        //sortMethod = $('#' + tableId + '-sort').val(),
+        // sortField = sortMethod === 'date' ? dateField : 'distance',
+        sortField = dateField,
+        sortDirection = 'desc',
+        // sortDirection = sortMethod === 'date'? 'desc' : 'asc',
         rowsSorted = _.orderBy(rowsFiltered, sortField, [sortDirection]),
         fields = _.values(fieldMap).concat(['distance']),
         $tbody = $('#' + tableId + ' > tbody');
         // tbodyHtml = app.util.makeTableRowsFromFeatClass(rowsSorted, fields),
 
-    // console.log('rowsSorted', rowsSorted);
-    // console.log('fields', fields);
+
     app.state.nearby311.rowsSorted = rowsSorted;
 
     var rowsSortedGeom = [];
