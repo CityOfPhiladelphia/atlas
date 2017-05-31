@@ -169,6 +169,7 @@ var app = _.extend(app || {},
     */
     // populate dropdown
     _.forEach(app.config.nearby.activityTypes, function (activityType) {
+      console.log(activityType);
       var $option = $('<option>'),
           label = activityType.label,
           slug = app.util.slugify(label);
@@ -180,10 +181,9 @@ var app = _.extend(app || {},
       // console.warn('%%%%%%%% ', label)
       // console.warn($('#nearby-activity-type').children().length)
 
-      // don't add appeals to vacancy nearby selector
-      if (['311 Requests', 'Crime Incidents'].indexOf(label) > -1) {
-        $('#vacancy-nearby-activity-type').append($option.clone());
-      }
+      // if (['311 Requests', 'Crime Incidents'].indexOf(label) > -1) {
+      $('#vacancy-nearby-activity-type').append($option.clone());
+      // }
     });
 
     // listen for changes to nearby activity dropdown selection
