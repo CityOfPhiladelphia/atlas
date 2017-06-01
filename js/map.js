@@ -933,7 +933,12 @@ app.map = (function ()
 					// update state
 					app.state.nameBaseLayer = nextBasemapName;
 				}
+			} else {
+				var prevBasemapName = app.state.map.nameBaseLayer;
+				var nextBasemapName = app.state.map.nameBaseLayer;
 			}
+
+
 
 			// handle overlays
 			// console.warn('didChangeTopic is clearing _overlayLayerGroup');
@@ -954,8 +959,10 @@ app.map = (function ()
       $('#deeds-regmaps a:not(.hollow)').addClass('hollow');*/
 
 			// handle labels
-			var prevLabelLayer = this.labelsForTopicAndBasemap(prevTopic, prevBasemapName),
-					nextLabelLayer = this.labelsForTopicAndBasemap(nextTopic, nextBasemapName);
+			// console.log('setting prevLabelLayer prevTopic is', prevTopic, 'prevBasemapName is', prevBasemapName);
+			var prevLabelLayer = this.labelsForTopicAndBasemap(prevTopic, prevBasemapName);
+			// console.log('setting nextLabelLayer nextTopic is', nextTopic, 'nextBasemapName is', nextBasemapName);
+			var	nextLabelLayer = this.labelsForTopicAndBasemap(nextTopic, nextBasemapName);
 			// // console.log('prevTopic is ' +  prevTopic);
 			// // console.log('prevBasemapName is ' + prevBasemapName);
 			// // console.log('prevLabelLayer is ' + prevLabelLayer);
@@ -1128,7 +1135,7 @@ app.map = (function ()
 		// labels depend on both the topic and the basemap being shown
 		labelsForTopicAndBasemap: function (topic, basemap) {
 			// always show imagery labels for imagery basemap
-			// // console.log('basemap is ' + basemap);
+			// console.log('topic is '+ topic + ' basemap is ' + basemap);
 			if (basemap.indexOf('Imagery') > -1) {
 				return 'overlayImageryLabels';
 			}

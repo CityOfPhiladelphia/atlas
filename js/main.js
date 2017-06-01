@@ -643,6 +643,7 @@ var app = _.extend(app || {},
     } else {
       prevTopic = null;
     }
+    // console.log('activateTopic is calling map.didChangeTopic');
     app.map.didChangeTopic(prevTopic, targetTopicName);
 
     // console.log('activate topic finished');
