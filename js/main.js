@@ -820,7 +820,7 @@ var app = _.extend(app || {},
   },
 
   getDorParcel: function () {
-    // console.log('get dor parcel is running');
+    console.log('get dor parcel is running');
 
     var aisFeature = app.state.ais.feature,
         parcelId = aisFeature.properties.dor_parcel_id;
@@ -1589,9 +1589,10 @@ var app = _.extend(app || {},
 
   // get a parcel by a leaflet latlng
   getParcelsByLatLng: function (latLng, callback) {
-    // console.log('get parcels by latlng');
+    console.log('getParcelsByLatlng is running');
 
     if (app.state.activeTopic == 'deeds' || app.state.activeTopic == 'zoning') {
+      console.log('if is running');
       var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerDOR.url});
       parcelQuery.contains(latLng);
       // parcelQuery.where('STATUS IN (1, 3)')
@@ -1630,6 +1631,7 @@ var app = _.extend(app || {},
         callback && callback();
       })
     } else {
+        console.log('else is running');
         var parcelQuery = L.esri.query({url: app.config.esri.otherLayers.parcelLayerWater.url});
         parcelQuery.contains(latLng);
         //parcelQuery.where('STATUS IN (1, 3)')
@@ -1647,6 +1649,8 @@ var app = _.extend(app || {},
           // update state
           app.state.pwd = featureCollection;
           // if there's a callback, call it
+          console.log('callback', callback);
+          console.log('callback()', callback());
           callback && callback();
       })
     }

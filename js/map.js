@@ -132,6 +132,7 @@ app.map = (function ()
 	        name: i,
 	        type: layer.type,
 	        zIndex: layer.zIndex,
+					attribution: layer.attribution,
 	      });
 			});
 
@@ -143,6 +144,7 @@ app.map = (function ()
 	        name: i,
 	        type: layer.type,
 	        zIndex: layer.zIndex,
+					attribution: layer.attribution,
 	      });
 			});
 
@@ -160,6 +162,7 @@ app.map = (function ()
 						name: i,
 						type: layer.type,
 						zIndex: layer.zIndex,
+						attribution: layer.attribution,
 					});
 				}
 			});
@@ -399,6 +402,7 @@ app.map = (function ()
 
 		// adds and removes baseLayer and overlay
 		toggleBasemap: function() {
+			console.log('toggleBasemap is running');
 			if (app.state.map.nameBaseLayer == 'baseMapLight' || app.state.map.nameBaseLayer == 'baseMapDORParcels') {
 				_baseLayerGroup.clearLayers();
 				_labelLayerGroup.clearLayers();
@@ -410,6 +414,7 @@ app.map = (function ()
 					_baseLayerGroup.addLayer(app.state.map.tiledLayers.parcels);
 				}
 				_labelLayerGroup.addLayer(app.state.map.tiledLayers.overlayImageryLabels);
+				_map.attributionControl.removeAttribution('overwrite');
 				theEasyBar.addTo(_map);
 
 			} else {
@@ -422,12 +427,14 @@ app.map = (function ()
 					app.state.map.tiledLayers.baseMapDORParcels.addTo(_baseLayerGroup);
 					app.state.map.tiledLayers.overlayBaseDORLabels.addTo(_labelLayerGroup);
 				}
+				_map.attributionControl.removeAttribution('overwrite');
 				theEasyBar.remove();
 			}
 			app.map.domLayerList();
 		},
 
 		toggleYear: function(control, requestedLayer) {
+			console.log('toggleYear is running');
 			// gray all buttons
 			for (i = 0; i < app.state.map.historicalImageryButtons.length; i++) {
 				//// console.log(app.state.map.historicalImageryButtons[i].options.id);
@@ -436,6 +443,8 @@ app.map = (function ()
 			_baseLayerGroup.clearLayers();
 			_baseLayerGroup.addLayer(requestedLayer);
 			_baseLayerGroup.addLayer(app.state.map.tiledLayers.parcels);
+
+			_map.attributionControl.removeAttribution('overwrite');
 
 			// highlight current button
 			control.state('dateSelected');
@@ -534,11 +543,13 @@ app.map = (function ()
     },
 
 		didCreateAddressMarker: function (markerType) {
-			// console.log('did create address marker', markerType);
+			console.log('didCreateAddressMarker is running for', markerType);
+			console.log(app.state.map.addressMarkers);
 
 			var targetMarkerType = this.addressMarkerTypeForTopic(app.state.activeTopic);
 			if (markerType === targetMarkerType) {
 				// // console.log('this is the marker we want to show')
+				console.log('didCreatAddressMarker is calling showAddressMarker with markerType', markerType);
 				this.showAddressMarker(markerType);
 			}
 			// else if (app.state.map.addressMarkers.aisMarker) {
@@ -550,7 +561,9 @@ app.map = (function ()
 			// console.log('MAP: did get ais result');
 
 			// clear out old address markers
+			console.log('didGetAisResult is starting', app.state.map.addressMarkers);
 			app.state.map.addressMarkers = {};
+
 
 			var aisGeom = app.state.ais.feature.geometry;
 			if (aisGeom) {
@@ -572,6 +585,7 @@ app.map = (function ()
 
 			app.state.map.addressMarkers.aisMarker = aisMarker;
 
+			console.log('didGetAisResult is calling didCreateAddressMarker', app.state.map.addressMarkers);
 			this.didCreateAddressMarker('aisMarker');
 
 			//// console.log('didGetAisResult is running LSinit');
@@ -589,7 +603,7 @@ app.map = (function ()
 		},
 
 		didGetDorParcels: function () {
-			// console.log('MAP: did get dor parcels');
+			console.log('MAP: did get dor parcels');
 
 			// if there's no parcel in state, clear the map and don't render
 			// TODO zoom to AIS xy
@@ -597,6 +611,7 @@ app.map = (function ()
 
 			try {
 				parcelDOR = app.state.dor.features[0];
+				console.log('parcelDOR being defined', parcelDOR);
 				if (!parcelDOR) throw 'no parcel';
 				geomDOR = parcelDOR.geometry;
 				//center = geom.getBounds().getCenter();
@@ -618,7 +633,9 @@ app.map = (function ()
 				// return;
 			}
 
+			console.warn('PARCELPOLYDOR is being defined')
 			app.state.map.addressMarkers.parcelPolyDOR = parcelPolyDOR;
+			console.warn(app.state.map.addressMarkers);
 
 			this.didCreateAddressMarker('parcelPolyDOR');
 
@@ -646,7 +663,8 @@ app.map = (function ()
 		},
 
 		didGetParcel: function (parcelLayer) {
-			// // console.log('MAP: did get parcel', parcelLayer);
+			console.log('MAP: did get parcel', parcelLayer);
+			console.log(app.state.map.addressMarkers);
 
 			var didGetResult = !!app.state[parcelLayer],
 					otherRequest = parcelLayer === 'pwd' ? 'didFinishDorRequest' : 'didFinishPwdRequest',
@@ -684,6 +702,7 @@ app.map = (function ()
 
 			// otherwise, it was a parcel click. get the parcel ID and query AIS.
       app.getParcelsByLatLng(e.latlng, function () {
+				console.log('getParcelsByLatLng callback is happening');
 				// which parcels are being displayed?
 				var activeTopic = app.state.activeTopic,
 						DOR_TOPICS = ['deeds', 'zoning'],
@@ -692,11 +711,13 @@ app.map = (function ()
 
 				switch (parcelLayer) {
 					case 'dor':
+						console.log('dor part is running');
 						var parcel = app.state.dor.features[0];
 						parcelId = parcel.properties.MAPREG;
 						// console.log('dor parcel, id:', parcelId);
 						break;
 					case 'pwd':
+						console.log('pwd part is running');
 						var parcel = app.state.pwd.features[0];
 						parcelId = parcel.properties.PARCELID;
 						// console.log('pwd parcel, id:', parcelId);
@@ -709,6 +730,7 @@ app.map = (function ()
 
         // if this is the result of a map click, query ais
         if (app.state.map.clickedOnMap) {
+					console.log('the clicked on map part is running');
           app.searchAis(parcelId);
           app.state.map.clickedOnMap = true;
         }
@@ -841,7 +863,8 @@ app.map = (function ()
     },
 
 		showAddressMarker: function (markerType) {
-			// console.log('show address marker', markerType);
+			console.log('showAddressMarker is running', markerType);
+			console.log('address markers', app.state.map.addressMarkers);
 
 			// if (!app.state.map.addressMarkers) {
 			// 	// console.log('show address marker, but we havent created them yet');
@@ -904,17 +927,22 @@ app.map = (function ()
 
 		// this is called when we change topics
     didChangeTopic: function (prevTopic, nextTopic) {
-			// console.log('did change topic', prevTopic, '=>', nextTopic);
+			console.log('did change topic', prevTopic, '=>', nextTopic);
 
 			// handle address marker
-			var prevMarkerType = this.addressMarkerTypeForTopic(prevTopic),
-					nextMarkerType = this.addressMarkerTypeForTopic(nextTopic);
+			var prevMarkerType = this.addressMarkerTypeForTopic(prevTopic);
+			console.log('prevMarkerType is', prevMarkerType)
+			var	nextMarkerType = this.addressMarkerTypeForTopic(nextTopic);
+			console.log('nextMarkerType is', nextMarkerType)
 			if (prevMarkerType !== nextMarkerType) {
+				console.log('if is running because marker type changed');
 				// clear the marker
 				_parcelLayerGroup.clearLayers();
 				// add the new one
 				nextMarker = this.addressMarkerForTopic(nextTopic);
+				console.log('nextMarker is', nextMarker);
 				if (nextMarker) {
+					console.log('if is running because there is a next marker');
 					nextMarker.addTo(_parcelLayerGroup);
 				}
 				else {
@@ -933,6 +961,7 @@ app.map = (function ()
 					// update state
 					app.state.nameBaseLayer = nextBasemapName;
 				}
+			// else if imagery is showing
 			} else {
 				var prevBasemapName = app.state.map.nameBaseLayer;
 				var nextBasemapName = app.state.map.nameBaseLayer;
@@ -1163,7 +1192,7 @@ app.map = (function ()
 		},
 
 		addressMarkerForTopic: function (topic) {
-			// console.log('running addressMarkerForTopic with topic ' + topic);
+			console.log('running addressMarkerForTopic with topic ' + topic);
 			var addressMarkers = app.state.map.addressMarkers;
 
 			// check for markers
@@ -1173,6 +1202,8 @@ app.map = (function ()
 			}
 
 			var markerType = this.addressMarkerTypeForTopic(topic);
+			console.log('markerType is', markerType)
+			console.log(app.state.map.addressMarkers);
 			return addressMarkers[markerType];
 		},
 
@@ -1528,6 +1559,7 @@ app.map = (function ()
 		},
 
 		didActivateParcel: function () {
+			console.log('didActivateParcel is running');
 			// if there's no parcel in state, clear the map and don't render
 			// TODO zoom to AIS xy
 			var parcelDOR, geomDOR;
@@ -1560,7 +1592,9 @@ app.map = (function ()
 				// return;
 			}
 
+			console.warn('PARCELPOLYDOR is being defined')
 			app.state.map.addressMarkers.parcelPolyDOR = parcelPolyDOR;
+			console.warn(app.state.map.addressMarkers);
 
 			app.map.didCreateAddressMarker('parcelPolyDOR');
 
