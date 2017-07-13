@@ -410,7 +410,7 @@ app.map = (function ()
 					_baseLayerGroup.addLayer(app.state.map.lastYearViewed);
 					_baseLayerGroup.addLayer(app.state.map.tiledLayers.parcels);
 				} else {
-					_baseLayerGroup.addLayer(app.state.map.tiledLayers.baseMapImagery2016);
+					_baseLayerGroup.addLayer(app.state.map.tiledLayers.baseMapImagery2017);
 					_baseLayerGroup.addLayer(app.state.map.tiledLayers.parcels);
 				}
 				_labelLayerGroup.addLayer(app.state.map.tiledLayers.overlayImageryLabels);
