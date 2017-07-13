@@ -196,17 +196,8 @@ var app = _.extend(app || {},
     $('[id$=nearby-311-sort]').change(app.getBufferFor311);
 
     /*
-    ROUTING
+    VUE
     */
-
-    // listen for back button
-    window.onpopstate = function () {
-      // // console.log('popped state', location.href);
-      app.route();
-    };
-
-    // route one time on load
-    app.route();
 
     // PARCEL TABS
     app.views = {};
@@ -392,6 +383,35 @@ var app = _.extend(app || {},
         }
       },
     });
+
+    app.views.rcos = new Vue({
+      el: '#zoning-rco-container',
+      data: {
+        rcos: [],
+        isLoading: false,
+        app: app
+      },
+      computed: {
+        rcosSorted: function () {
+          return _.sortBy(this.rcos, function (rco) {
+            return rco.properties.ORGANIZATION_NAME;
+          });
+        }
+      }
+    });
+
+    /*
+    ROUTING
+    */
+
+    // listen for back button
+    window.onpopstate = function () {
+      // // console.log('popped state', location.href);
+      app.route();
+    };
+
+    // route one time on load
+    app.route();
   },
 
   showCyclo: function () {
@@ -1113,6 +1133,12 @@ var app = _.extend(app || {},
       },
     });
 
+    // RCOs
+    var rcoQuery = L.esri.query({url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Zoning_RCO/FeatureServer/0'});
+    rcoQuery.contains(aisGeom);
+    this.views.rcos.isLoading = true;
+    rcoQuery.run(app.didGetRcos);
+
     /*
     VACANCY
     */
@@ -1433,6 +1459,20 @@ var app = _.extend(app || {},
 
     var count = features.length;
     $('#zoning-overlays-count').html(' (' + count + ')');
+  },
+
+  didGetRcos: function (error, featureCollection, response) {
+    // console.log('did get rcos', featureCollection);
+
+    app.views.rcos.isLoading = false;
+
+    if (error || !featureCollection || !featureCollection.features) {
+      console.warn('rco error', error);
+    }
+
+    // put it state
+    var features = featureCollection.features;
+    app.views.rcos.rcos = features;
   },
 
   runVacancyQueries: function (aisGeom) {

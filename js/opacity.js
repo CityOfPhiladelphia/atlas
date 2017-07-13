@@ -19,7 +19,7 @@ L.Control.opacitySlider = L.Control.extend({
       this._layer = layer;
     },
     onAdd: function (map, options) {
-      console.warn('adding slider')
+      // console.warn('adding slider')
       var curOpacity = app.state.map.opacitySliders[this._layer.options.name].options.opacity,
           defaultOpacity = app.config.map.opacitySliders[this._layer.options.name].defaultOpacity;
 
