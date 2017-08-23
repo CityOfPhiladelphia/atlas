@@ -1,5 +1,5 @@
-body {width:100%; height:100%; overflow:hidden; margin:0; }
-html {width:100%; height:100%; overflow:hidden; }
+body {width:100%; height:100%; margin:0; }
+html {width:100%; height:100%; }
 
 header.site-header > .row:last-of-type {
     background: #2176d2;
@@ -63,8 +63,13 @@ header.site-header > .row:last-of-type {
     background: #fff;
     padding-left: 12px;
     padding-right: 12px;
+}
+
+@media screen and (min-width: 1024px) {
+  #topic-panel {
     height: 100%;
     overflow: auto;
+  }
 }
 
 /*#topic-panel-header {*/
