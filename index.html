@@ -33,7 +33,7 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-MC6CR2');</script>
     <!-- End Google Tag Manager -->
-    
+
     <div class="full" id="application">
       <!-- Begin header -->
       <header data-swiftype-index='false' class="site-header app">
@@ -60,7 +60,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.1.2/foundation.min.js"></script>
     <script src="//cityofphiladelphia.github.io/patterns/dist/1.4.1/js/patterns.min.js"></script>
 
-    <!-- JS: Mapboard -->
+    <!-- JS: Mapboard dependencies -->
     <script src="//unpkg.com/vue@2.3.3"></script>
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="//unpkg.com/axios@0.16.2/dist/axios.min.js"></script>
@@ -86,7 +86,14 @@
 
     <!-- JS: Local -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+
+    <!-- Sentry -->
+    <script src="//cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
+    <script>Raven.config('https://0e97477faf4b4693a88eb87604a42b27@sentry.io/211586').install()</script>
+
+    <!-- Mapboard -->
     <script src="//unpkg.com/@cityofphiladelphia/mapboard@1.0.1/dist/build.js"></script>
+
     <script src="main.js"></script>
   </body>
 </html>
