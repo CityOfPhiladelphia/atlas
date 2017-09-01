@@ -205,15 +205,6 @@ Mapboard.default({
         }
       }
     },
-    zoningAppeals: {
-      type: 'http-get',
-      url: 'https://phl.carto.com/api/v2/sql',
-      options: {
-        params: {
-          q: feature => "select * from li_appeals where address = '" + feature.properties.street_address + "'"// + "' or addrkey = " + feature.properties.li_address_key,
-        }
-      }
-    },
     liPermits: {
       type: 'http-get',
       url: 'https://phl.carto.com/api/v2/sql',
@@ -238,6 +229,33 @@ Mapboard.default({
       options: {
         params: {
           q: feature => "select * from li_violations where address = '" + feature.properties.street_address + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'",
+        }
+      }
+    },
+    liBusinessLicenses: {
+      type: 'http-get',
+      url: 'https://phl.carto.com/api/v2/sql',
+      options: {
+        params: {
+          q: feature => "select * from li_business_licenses where street_address = '" + feature.properties.street_address + "'",// + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'",
+        }
+      }
+    },
+    zoningAppeals: {
+      type: 'http-get',
+      url: 'https://phl.carto.com/api/v2/sql',
+      options: {
+        params: {
+          q(feature) {
+            let stmt = "select * from li_appeals where address = '" + feature.properties.street_address + "'";
+            const addressKey = feature.properties.li_address_key;
+
+            if (addressKey && addressKey.length > 0) {
+              stmt += " or addresskey = '" + feature.properties.li_address_key.toString() + "'";
+            }
+
+            return stmt;
+          }
         }
       }
     },
@@ -282,7 +300,7 @@ Mapboard.default({
       type: 'http-get',
       targets: {
         get(state) {
-          return state.dorParcels;
+          return state.dorParcels.data;
         },
         getTargetId(target) {
           return target.properties.OBJECTID;
@@ -293,7 +311,6 @@ Mapboard.default({
         params: {
           where(feature, state) {
             // METHOD 1: via address
-            // const parcel = state.dorParcels[0];
             const parcelBaseAddress = concatDorAddress(feature);
 
             // REVIEW if the parcel has no address, we don't want to query
@@ -327,20 +344,34 @@ Mapboard.default({
     },
     '311': {
       type: 'esri-nearby',
-      url: 'http://192.168.103.143:6080/arcgis/rest/services/GSG/GIS311_365DAYS04/MapServer/0',
+      url: 'http://192.168.103.143:6080/arcgis/rest/services/GSG/GIS311_365DAYSab/MapServer/0',
       options: {
         geometryServerUrl: 'http://192.168.103.143:6080/arcgis/rest/services/Utilities/Geometry/GeometryServer/',
         radius: 500,
         units: 'feet',
+        calculateDistance: true,
       },
     },
     crimeIncidents: {
       type: 'http-get-nearby',
       url: 'https://phl.carto.com/api/v2/sql',
       options: {
-        params: {
-          q: feature => "select * from incidents_part1_part2"// where dc_key = '201501056051'"//the_geom.STDistance(" + ")"// + feature.properties.street_address + "'"// + "' or addrkey = " + feature.properties.li_address_key,
-        }
+        table: 'incidents_part1_part2',
+        dateMinNum: 1,
+        dateMinType: 'year',
+        dateField: 'dispatch_date',
+        params: {},
+      }
+    },
+    nearbyZoningAppeals: {
+      type: 'http-get-nearby',
+      url: 'https://phl.carto.com/api/v2/sql',
+      options: {
+        table: 'li_appeals',
+        dateMinNum: 1,
+        dateMinType: 'year',
+        dateField: 'decisiondate',
+        params: {}
       }
     },
     vacantLand: {
@@ -382,23 +413,50 @@ Mapboard.default({
     regmaps: {
       type: 'esri',
       url: '//gis.phila.gov/arcgis/rest/services/DOR_ParcelExplorer/rtt_basemap/MapServer/0',
+      deps: ['dorParcels'],
       options: {
         relationship: 'intersects',
+        targetGeometry(state, Leaflet) {
+          // get combined extent of dor parcels
+          const parcels = state.dorParcels.data;
+
+          // build up sets of x and y values
+          const xVals = [];
+          const yVals = [];
+
+          // loop over parcels
+          for (let parcel of parcels) {
+            const coordSets = parcel.geometry.coordinates;
+            // loop over coordinate sets
+            for (let coordSet of coordSets) {
+              // loop over coordinates
+              for (let coord of coordSet) {
+                const [x, y] = coord;
+                xVals.push(x);
+                yVals.push(y);
+              }
+            }
+          }
+
+          // take max/min
+          const xMin = Math.min(...xVals);
+          const xMax = Math.max(...xVals);
+          const yMin = Math.min(...yVals);
+          const yMax = Math.max(...yVals);
+
+          // construct geometry
+          const bounds = L.latLngBounds([
+            [yMin, xMin],
+            [yMax, xMax]
+          ]);
+
+          return bounds;
+        }
       },
       success(data) {
         return data;
       }
     },
-    // zoningOverlays: {
-    //   type: 'esri',
-    //   url: 'https://gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/1/',
-    //   options: {
-    //     relationship: 'contains',
-    //   },
-    //   success(data) {
-    //     return data;
-    //   }
-    // },
   },
   imageOverlayGroups: {
     regmaps: {
@@ -415,43 +473,43 @@ Mapboard.default({
         'Other Impervious Surface': '#F2DCFF'
       }
   },
-  overlays: {
-    '311': {
-      type: 'point',
-      dataSource: '311',
-      options: {
-        marker: 'circle',
-        style: {
-          radius: 6,
-          fillColor: '#ff3f3f',
-        	color: '#ff0000',
-        	weight: 1,
-        	opacity: 1,
-        	fillOpacity: 1.0
-        },
-      },
-    },
-    'crimeIncidents': {
-      type: 'point',
-      dataSource: 'crimeIncidents',
-      options: {
-        marker: 'circle',
-        style: {
-          radius: 6,
-          fillColor: '#477bd2',
-        	color: '#477bd2',
-        	weight: 1,
-        	opacity: 1,
-        	fillOpacity: 1.0
-        },
-      },
-    },
-  },
+  // overlays: {
+  //   '311': {
+  //     type: 'point',
+  //     dataSource: '311',
+  //     options: {
+  //       marker: 'circle',
+  //       style: {
+  //         radius: 6,
+  //         fillColor: '#ff3f3f',
+  //       	color: '#ff0000',
+  //       	weight: 1,
+  //       	opacity: 1,
+  //       	fillOpacity: 1.0
+  //       },
+  //     },
+  //   },
+  //   'crimeIncidents': {
+  //     type: 'point',
+  //     dataSource: 'crimeIncidents',
+  //     options: {
+  //       marker: 'circle',
+  //       style: {
+  //         radius: 6,
+  //         fillColor: '#477bd2',
+  //       	color: '#477bd2',
+  //       	weight: 1,
+  //       	opacity: 1,
+  //       	fillOpacity: 1.0
+  //       },
+  //     },
+  //   },
+  // },
   cyclomedia: {
-    enabled: false
+    enabled: true
   },
   pictometry: {
-    enabled: false
+    enabled: true
   },
   // reusable transforms for topic data. see `topics` section for usage.
   transforms: {
@@ -468,11 +526,7 @@ Mapboard.default({
       globals: ['moment'],
       transform(value, globals) {
         const moment = globals.moment;
-        const transformed = moment(value).format('MM-DD-YYYY');
-        // const transformed = moment(value).format('YYYY-MM-DD');
-        // console.log(value, transformed);
-        return moment(value).format('MM-DD-YYYY');
-        // return moment(value).format('YYYY-MM-DD');
+        return moment(value).format('MM/DD/YYYY');
       }
     },
     phoneNumber: {
@@ -635,7 +689,7 @@ Mapboard.default({
           },
           slots: {
             items(state) {
-              return state.dorParcels;
+              return state.dorParcels.data;
             }
           }
         },
@@ -805,7 +859,7 @@ Mapboard.default({
             // REVIEW should this go in options? maybe not, since it should be
             // reactive.
             items(state) {
-              return state.dorParcels;
+              return state.dorParcels.data;
             }
           }
         }, // end dor parcel tab group comp
@@ -845,7 +899,8 @@ Mapboard.default({
       dataSources: [
         'liPermits',
         'liInspections',
-        'liViolations'
+        'liViolations',
+        'liBusinessLicenses'
       ],
       components: [
         {
@@ -867,7 +922,7 @@ Mapboard.default({
               {
                 label: 'ID',
                 value(state, item){
-                  return "<a target='_blank' href='//li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"'>"+item.permitnumber+" <i class='fa fa-external-link'></i></a>"
+                  return "<a target='_blank' href='//li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.permitnumber+" <i class='fa fa-external-link'></i></a>"
                 }
               },
               {
@@ -936,7 +991,8 @@ Mapboard.default({
               {
                 label: 'ID',
                 value(state, item){
-                  return item.casenumber
+                  return "<a target='_blank' href='//li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link'></i></a>"
+                  // return item.casenumber
                 }
               },
               {
@@ -1005,7 +1061,8 @@ Mapboard.default({
               {
                 label: 'ID',
                 value(state, item){
-                  return item.casenumber
+                  return "<a target='_blank' href='//li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link'></i></a>"
+                  // return item.casenumber
                 }
               },
               {
@@ -1055,6 +1112,82 @@ Mapboard.default({
             },
           },
         },
+        {
+          type: 'horizontal-table',
+          options: {
+            topicKey: 'permits',
+            id: 'liBusinessLicenses',
+            limit: 5,
+            fields: [
+              {
+                label: 'Issue Date',
+                value(state, item){
+                  return item.initialissuedate
+                },
+                transforms: [
+                  'date'
+                ]
+              },
+              {
+                label: 'License Number',
+                value(state, item){
+                  return "<a target='_blank' href='//li.phila.gov/#details?entity=licenses&eid="+item.licensenum+"&key="+item.street_address+"&address="+item.street_address+"'>"+item.licensenum+" <i class='fa fa-external-link'></i></a>"
+                  return item.licensenum
+                }
+              },
+              {
+                label: 'Name',
+                value(state, item){
+                  return item.business_name
+                }
+              },
+              {
+                label: 'Type',
+                value(state, item){
+                  return item.licensetype
+                }
+              },
+              {
+                label: 'Status',
+                value(state, item){
+                  return item.licensestatus
+                }
+              },
+            ],
+            sort: {
+              // this should return the val to sort on
+              getValue(item) {
+                return item.caseaddeddate;
+              },
+              // asc or desc
+              order: 'desc'
+            },
+            externalLink: {
+              action(count) {
+                return `See ${count} more at L&I Property History`;
+              },
+              name: 'L&I Property History',
+              href(state) {
+                const address = state.geocode.data.properties.street_address;
+                const addressEncoded = encodeURIComponent(address);
+                return `//li.phila.gov/#summary?address=${addressEncoded}`;
+              }
+            }
+          },
+          slots: {
+            title: 'Business Licenses',
+            items(state) {
+              const data = state.sources['liBusinessLicenses'].data.rows;
+              const rows = data.map(row => {
+                const itemRow = Object.assign({}, row);
+                //itemRow.DISTANCE = 'TODO';
+                return itemRow;
+              });
+              // console.log('rows', rows);
+              return rows;
+            },
+          },
+        }
       ],
       basemap: 'pwd',
       dynamicMapLayers: [
@@ -1131,9 +1264,9 @@ Mapboard.default({
             // limit: 100,
             fields: [
               {
-                label: 'Date',
-                value(state, item){
-                  return item.processeddate
+                label: 'Processed Date',
+                value(state, item) {
+                  return item.processeddate;
                 },
                 transforms: [
                   'date'
@@ -1143,14 +1276,24 @@ Mapboard.default({
                 label: 'ID',
                 value(state, item){
                   //return item.appeal_key
-                  return "<a target='_blank' href='//li.phila.gov/#details?entity=zoningboardappeals&eid="+item.appealno+"'>"+item.appealno+"<i class='fa fa-external-link'></i></a>"
+                  // return "<a target='_blank' href='//li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link'></i></a>"
+                  return "<a target='_blank' href='//li.phila.gov/#details?entity=appeals&eid="+item.appeal_key+"&key="+item.addresskey+"&address="+item.address+"'>"+item.appealno+"<i class='fa fa-external-link'></i></a>"
                 }
               },
               {
                 label: 'Description',
                 value(state, item){
-                  return item.appealgrounds
+                  return item.appealgrounds;
                 }
+              },
+              {
+                label: 'Scheduled Date',
+                value(state, item) {
+                  return item.date_scheduled;
+                },
+                transforms: [
+                  'date'
+                ]
               },
               {
                 label: 'Status',
@@ -1163,7 +1306,7 @@ Mapboard.default({
             sort: {
               // this should return the val to sort on
               getValue(item) {
-                return item.processeddate;
+                return item.date_scheduled;
               },
               // asc or desc
               order: 'desc'
@@ -1544,10 +1687,10 @@ Mapboard.default({
                     label: 'Crime Incidents',
                     value: 'crimeIncidents',
                   },
-                  // {
-                  //   label: 'Zoning Appeals',
-                  //   value: 'zoningAppeals',
-                  // }
+                  {
+                    label: 'Zoning Appeals',
+                    value: 'nearbyZoningAppeals',
+                  }
                 ]
               },
             ],
@@ -1558,17 +1701,26 @@ Mapboard.default({
                 options: {
                   topicKey: 'vacancy',
                   id: '311',
-                  // limit: 100,
-                  // TODO this isn't used yet, but should be for highlighting rows/
-                  // map features.
-                  // filterForm: true,
+                  sort: {
+                    getValue(item, method) {
+                      let val;
+
+                      if (method === 'date') {
+                        val = item.properties.REQUESTED_DATETIME;
+                      } else if (method === 'distance') {
+                        val = item._distance;
+                      }
+
+                      return val;
+                    }
+                  },
                   filters: [
                     {
                       type: 'time',
                       getValue(item) {
                         return item.properties.REQUESTED_DATETIME;
                       },
-                      label: 'from the last',
+                      label: 'From the last',
                       values: [
                         {
                           label: '30 days',
@@ -1650,8 +1802,7 @@ Mapboard.default({
                     {
                       label: 'Distance',
                       value(state, item) {
-                        // return item.properties.DISTANCE;
-                        return 'TODO';
+                        return `${item._distance} ft`;
                       }
                     }
                   ]
@@ -1675,17 +1826,13 @@ Mapboard.default({
                 options: {
                   topicKey: 'vacancy',
                   id: 'crimeIncidents',
-                  // TODO this isn't used yet, but should be for highlighting rows/
-                  // map features.
-                  // filterForm: true,
-                  // limit: 100,
                   filters: [
                     {
                       type: 'time',
                       getValue(item) {
                         return item.dispatch_date;
                       },
-                      label: 'from the last',
+                      label: 'From the last',
                       values: [
                         {
                           label: '30 days',
@@ -1699,12 +1846,12 @@ Mapboard.default({
                           unit: 'days',
                           direction: 'subtract',
                         },
-                        {
-                          label: 'year',
-                          value: '1',
-                          unit: 'years',
-                          direction: 'subtract',
-                        }
+                        // {
+                        //   label: 'year',
+                        //   value: '1',
+                        //   unit: 'years',
+                        //   direction: 'subtract',
+                        // }
                       ]
                     }
                   ],
@@ -1755,8 +1902,7 @@ Mapboard.default({
                     {
                       label: 'Distance',
                       value(state, item) {
-                        // return item.properties.DISTANCE;
-                        return 'TODO';
+                        return parseInt(item.distance) + ' ft';
                       }
                     }
                   ]
@@ -1769,6 +1915,76 @@ Mapboard.default({
                     const rows = data.map(row => {
                       const itemRow = Object.assign({}, row);
                       itemRow.DISTANCE = 'TODO';
+                      return itemRow;
+                    });
+                    return rows;
+                  },
+                } // end of slots
+              }, // end of horizontal-table
+              {
+                type: 'horizontal-table',
+                options: {
+                  topicKey: 'vacancy',
+                  id: 'nearbyZoningAppeals',
+                  filterFieldsByText: [
+                    'appealgrounds',
+                  ],
+                  mapOverlay: {
+                    marker: 'circle',
+                    style: {
+                      radius: 6,
+                      fillColor: '#009900',
+                    	color: '#009900',
+                    	weight: 1,
+                    	opacity: 1,
+                    	fillOpacity: 1.0
+                    },
+                    hoverStyle: {
+                      radius: 6,
+                      fillColor: 'yellow',
+                    	color: '#009900',
+                    	weight: 1,
+                    	opacity: 1,
+                    	fillOpacity: 1.0
+                    }
+                  },
+                  fields: [
+                    {
+                      label: 'Date',
+                      value(state, item) {
+                        return item.decisiondate;
+                      },
+                      transforms: [
+                        'date'
+                      ]
+                    },
+                    {
+                      label: 'Location',
+                      value(state, item) {
+                        return item.address;
+                      }
+                    },
+                    {
+                      label: 'Description',
+                      value(state, item) {
+                        return item.appealgrounds;
+                      }
+                    },
+                    // {
+                    //   label: 'Distance',
+                    //   value(state, item) {
+                    //     return parseInt(item.distance) + ' ft';
+                    //   }
+                    // }
+                  ]
+                },
+                slots: {
+                  title: 'Zoning Appeals',
+                  data: 'nearbyZoningAppeals',
+                  items(state) {
+                    const data = state.sources['nearbyZoningAppeals'].data || [];
+                    const rows = data.map(row => {
+                      const itemRow = Object.assign({}, row);
                       return itemRow;
                     });
                     return rows;
@@ -1814,7 +2030,7 @@ Mapboard.default({
                 getValue(item) {
                   return item.properties.REQUESTED_DATETIME;
                 },
-                label: 'from the last',
+                label: 'From the last',
                 values: [
                   {
                     label: '30 days',
@@ -1896,8 +2112,7 @@ Mapboard.default({
               {
                 label: 'Distance',
                 value(state, item) {
-                  // return item.properties.DISTANCE;
-                  return 'TODO';
+                  return `${item._distance} ft`;
                 }
               }
             ]
