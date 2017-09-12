@@ -1,937 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Atlas | phila.gov</title>
-        <link rel='icon' type='image/x-icon' href="//cityofphiladelphia.github.io/patterns/images/favicon.ico">
-        <meta name="description" content="">
+    <title>Atlas | phila.gov</title>
+    <link rel='icon' type='image/x-icon' href="//cityofphiladelphia.github.io/patterns/images/favicon.ico">
+    <meta name="description" content="">
 
-        <!-- CSS -->
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="//cityofphiladelphia.github.io/patterns/dist/1.3.0/css/patterns.css">
-        <link rel="canonical" href="">
-        <link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.min.css">
-        <link rel="stylesheet" href="//unpkg.com/leaflet@1.0.3/dist/leaflet.css">
-        <link rel="stylesheet" href="//ljagis.github.io/leaflet-measure/leaflet-measure.css">
-        <link rel="stylesheet" href="css/main.css">
-        <link rel="stylesheet" href="css/cyclo.css">
-        <link rel="stylesheet" href="css/flaticon.css">
-        <link rel="stylesheet" href="css/opacity.css">
-        <link rel="stylesheet" href="css/easy-button.css">
-    </head>
+    <!-- CSS -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css">
 
-    <body>
-        <!-- Google Tag Manager [phila.gov] -->
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKCTSVS"
-        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-NKCTSVS');</script>
-        <!-- End Google Tag Manager -->
+    <link rel="stylesheet" href="//unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!--pattern stylesheet includes foundation css -->
+    <link rel="stylesheet" href="//cityofphiladelphia.github.io/patterns/dist/1.4.1/css/patterns.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css">
+    <link rel="stylesheet" href="//unpkg.com/Leaflet.vector-markers@0.0.6/dist/leaflet-vector-markers.css">
+    <link rel="stylesheet" href="//unpkg.com/leaflet-measure@2.1.7/dist/leaflet-measure.css">
+    <link rel="canonical" href="">
+    <link rel="stylesheet" href="styles.css">
+  </head>
 
-        <div class="full" id="application">
-            <!-- demo alert -->
-            <div id="alpha-alert">
-                <div class="row">
-                    <div class="large-16 columns">
-                        <p>
-                            Thanks for trying out this demo of Atlas.
-                            We're still working on this app and would like to
-                            <a class="external" href="//philagsg.typeform.com/to/v0xlIR" target="_blank">get your feedback<span class="accessible"> Opens in new window</span></a>.
-                        </p>
-                    </div>
-                </div>
-            </div>
+  <body>
+    <!-- Google Tag Manager [phila.gov] -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MC6CR2"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MC6CR2');</script>
+    <!-- End Google Tag Manager -->
 
-            <!-- Begin header -->
-            <header data-swiftype-index='false' class="site-header app">
-              <div class="row">
-                <div class="small-24 columns">
-                  <a href="http://alpha.phila.gov/" class="logo">
-                    <img data-interchange="[//cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-mobile.png, small], [//cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-white.png, medium]" src="//cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-white.png" alt="City of Philadelphia">
-                  </a>
-                  <div class="page-title-container">
-                    <a href="#/">
-                      <h1 class="page-title">Atlas
-                        <span id="demo-badge">DEMO</span>
-                      </h1>
-                      <!--<h2 class="page-subtitle">Explore and visualize addresses in the City of Philadelphia.</h2>-->
-                      <!-- <h2 class="page-subtitle">Philadelphia in 360 Degrees: Data, Street and Sky [Demo]</h2> -->
-                      <h2 class="page-subtitle">Explore Philadelphia in 360&deg;</h2>
-                    </a>
-                  </div>
-                  <div id="search-container">
-                    <input type="text" placeholder="Enter an address, intersection, OPA number or regmap ID" id="search-input">
-                    <a href="#" id="search-button" class="button no-margin">Go</a>
-                    <!--<a href="#" class="button no-margin" id="test-toggle-button">Test Toggle</a>-->
-                  </div>
-                </div>
+    <div class="full" id="application">
+      <!-- demo alert -->
+      <div id="alpha-alert">
+          <div class="row">
+              <div class="large-16 columns">
+                  <p>
+                      We value your
+                      <a class="external" href="//philagsg.typeform.com/to/v0xlIR" target="_blank">feedback<span class="accessible">Opens in new window</span></a>.
+                      Please let us know how we can improve this application.
+                  </p>
               </div>
-            </header>
-
-            <div id="container" class="row collapse">
-                <!-- TOPIC PANEL-->
-                <div id="topic-panel" class="large-12 columns">
-                    <!-- multiple address modal -->
-                    <div id="addressModal" class="reveal" data-reveal aria-labelledby="modal-title" aria-hidden="true" role="dialog">
-                        <h1 id="addressModal-title">Select Address</h1>
-                        <ul id="addressList"></ul>
-                        <button class="close-button" data-close aria-label="Close modal" type="button"></button>
-                    </div>
-
-                    <div id="topic-panel-header">
-                        <div class="row">
-                            <div id="topic-panel-header-greeting" class="topic-panel-header-item">
-                                <div class="columns medium-18 medium-centered">
-                                    <div class="callout">
-                                        <p>To start your search, type an address into the search box or click anywhere on the map.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="topic-panel-header-address" class="topic-panel-header-item">
-                                <h1 id="topic-panel-header-address-line-1"></h1>
-                                <div id="topic-panel-header-address-line-2" class="small-text"></div>
-
-                            </div>
-
-                        </div>
-
-                        <div id="estimated-warning">
-                          This isn't an address we know about, but we've tried to place it
-                          on the map and retrieve as much information as possible. If something doesn't look right,
-                          please <a href="http://philagsg.typeform.com/to/v0xlIR">let us know</a>.
-                        </div>
-                    </div>
-
-                    <div id="topic-list">
-                        <!--Address Information-->
-                        <!--<a id="topic-link-address-info" class="topic-link" href="#"><span class="topic-link-icon flaticon-copy"></span>Address Information</a>-->
-                        <!--<div id="topic-address-info" class="topic">-->
-                        <!--    <table>-->
-                        <!--        <tr>-->
-                        <!--            <th>Mailing Address</th>-->
-                        <!--            <td id="address-info-mailing-address"></td>-->
-                        <!--        </tr>-->
-                                <!--<tr>-->
-                                <!--    <th>Owner</th>-->
-                                <!--    <td id="address-info-owner"></td>-->
-                                <!--</tr>-->
-                        <!--        <tr>-->
-                        <!--            <th>Street Code</th>-->
-                        <!--            <td id="address-info-street-code"></td>-->
-                        <!--        </tr>-->
-                        <!--    </table>-->
-                            <!--TODO update this link dynamically-->
-                        <!--    <a id="address-info-property-link" href="#" class="external">See more at Property Search</a><br><br>-->
-
-                            <!--<h4>Imagery</h4>-->
-                            <!--<div id="imagery-buttons">-->
-                                <!--<p>Use the buttons below to see interactive imagery for this location.</p>-->
-                            <!--    <a href="#" class="button no-margin" id="pict-button">Oblique View</a>-->
-                            <!--    <a href="#" class="button no-margin" id="cyclo-button">Street View</a>-->
-                            <!--</div>-->
-                            <!--<div class="callout">-->
-                            <!--    <p>Use these buttons below to open new windows with oblique and/or street view imagery. When you move the map on the right, the imagery windows will move as well.</p>-->
-                            <!--</div>-->
-                        <!--</div>-->
-
-                        <!-- RELATED -->
-                        <a id="topic-link-related" class="topic-link" href="#"><span class="topic-link-icon flaticon-house"></span>Related Addresses</a>
-                        <div id="topic-related" class="topic">
-                            <div class="topic-content">
-                              <ul id="related-list"></ul>
-                            </div>
-
-                            <div class="topic-content-not-found">
-                              No related addresses were found for this address.
-                            </div>
-                        </div>
-
-                        <!-- PROPERTY -->
-                        <a id="topic-link-property" class="topic-link" href="#"><span class="topic-link-icon flaticon-house"></span>Assessments</a>
-                        <div id="topic-property" class="topic">
-                            <div class="topic-content">
-                                <div class="callout">
-                                  <p>
-                                      This information is provided by the Office of Property Assessments (<span class="keyword">OPA</span>),
-                                      the agency responsible for estimating property values
-                                      in the City of Philadelphia. OPA was formerly a part of the
-                                      Bureau of Revision of Taxes (<span class="keyword">BRT</span>) and some City websites
-                                      may still use that name.
-                                  </p>
-                                </div>
-                                <table id="topic-property-table">
-                                    <tr>
-                                        <th>OPA Account #</th>
-                                        <td id="property-account-num"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>OPA Address</th>
-                                        <td id="property-address"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Owner</th>
-                                        <td id="property-owners"></td>
-                                    </tr>
-                                    <tr>
-                                        <th data-field-type="currency">Assessed Value (2017)</th>
-                                        <td id="property-value"></td>
-                                    </tr>
-                                    <tr>
-                                        <th data-field-type="date">Sale Date</th>
-                                        <td id="property-sale-date" data-field-type="date"></td>
-                                    </tr>
-                                    <tr>
-                                        <th data-field-type="currency">Sale Price</th>
-                                        <td id="property-sale-price"></td>
-                                    </tr>
-                                    <!--<tr>-->
-                                    <!--    <th>Land Area</th>-->
-                                    <!--    <td id="property-land-area"></td>-->
-                                    <!--</tr>-->
-                                    <!--<tr>-->
-                                    <!--    <th>Improvement Area</th>-->
-                                    <!--    <td id="property-improvement-area"></td>-->
-                                    <!--</tr>-->
-                                </table>
-                                <a id="property-search-link" href="" class="external">See more at Property Search</a>
-                            </div>
-                            <div class="topic-content-not-found">
-                                There is no Office of Property Assessment tax account number associated with this address.
-                                 To retrieve assessment information, the address entered must match an address on file with OPA.
-                            </div>
-                        </div>
-
-                        <!-- LAND RECORDS -->
-                        <a id="topic-link-deeds" class="topic-link" href="#"><span class="topic-link-icon flaticon-copy"></span>Deeds</a>
-                        <div id="topic-deeds" class="topic">
-                            <div class="topic-content">
-                                <div id="parcel-tab-container"><!-- start of vue -->
-                                  <!-- <div>
-                                    <parcel-tab-summary :quantities="quantities" />
-                                  </div> -->
-                                  <h3 id="parcel-tab-summary">
-                                  <!-- <h3 id="parcel-tab-summary" v-show="parcels.length > 1"> -->
-                                    <!-- <span v-for="(quantity, index) in quantities">
-                                      {{ quantity.quantity }} <strong>{{ quantity.status }}</strong> {{ quantity.noun}}
-                                    </span>
-                                    found at this address. -->
-                                    {{ summary }}
-                                  </h3>
-
-                                  <ul class="tabs" data-tabs id="parcel-tabs">
-                                  <!-- <ul class="tabs" data-tabs id="parcel-tabs" v-show="parcels.length > 1"> -->
-                                    <li class="tabs-title"
-                                        v-for="parcel in parcels"
-                                        v-bind:class="{'is-active': (activeParcel === parcel.properties.MAPREG)}">
-                                      <a v-bind:href="'#parcel-' + parcel.properties.MAPREG"
-                                         v-on:click="activeParcel = parcel.properties.MAPREG"
-                                      >
-                                        {{ parcel.properties.MAPREG }}
-                                      </a>
-                                    </li>
-                                  </ul>
-
-                                  <div id="parcel-tabs-panels" class="tabs-content" data-tabs-content="parcel-tabs-content">
-                                    <div class="tabs-panel" v-for="parcel in parcels" v-bind:class="{'is-active': (activeParcel === parcel.properties.MAPREG)}" v-bind:id="'parcel-' + parcel.properties.MAPREG">
-                                      <h4>Parcel Details</h4>
-                                      <table>
-                                        <tr>
-                                            <th>Map Registry #</th>
-                                            <td>{{ parcel.properties.MAPREG }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Parcel Address</th>
-                                            <td>{{ app.util.concatDorAddress(parcel) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Status</th>
-                                            <td>{{ app.PARCEL_STATUS[parcel.properties.STATUS] }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Origination Date</th>
-                                            <td>{{ dateFormat(parcel.properties.ORIG_DATE) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Inactive Date</th>
-                                            <td>{{ dateFormat(parcel.properties.INACTDATE) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Has Air Rights</th>
-                                            <td>{{ parcel.properties.SUFFIX === 'A' ? 'Yes' : 'No' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Is Condo</th>
-                                            <td>{{ parcel.properties.CONDOFLAG ? 'Yes' : 'No' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Perimeter</th>
-                                            <td>{{ parcel.properties.PERIMETER }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Area</th>
-                                            <td>{{ parcel.properties.AREA }}</td>
-                                        </tr>
-                                      </table>
-
-                                      <h4>Documents ({{ documents.length }})</h4>
-                                      <table id="deeds-documents" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                                        <thead>
-                                          <tr>
-                                            <th scope="col" data-field-type="date">Date</th>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">Type</th>
-                                            <th scope="col">Grantor</th>
-                                            <th scope="col">Grantee</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <tr v-for="document in documents">
-                                            <td>{{ dateFormat(document.RECORDING_DATE) }}</td>
-                                            <td>
-                                              <a class='external'v-bind:href="app.config.dor.documents.documentUrl + document.R_NUM">
-                                                {{ document.R_NUM }}
-                                              </a>
-                                            </td>
-                                            <td>{{ document.DOC_TYPE }}</td>
-                                            <td>{{ document.GRANTOR }}</td>
-                                            <td>{{ document.GRANTEE }}</td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-
-                                      <h4>Registry Maps<span id="deeds-regmaps-count"></span></h4>
-                                      <!-- <ul id="deeds-regmaps-list">
-                                      </ul> -->
-                                      <div id="deeds-regmaps">
-                                        <a class="button" href="#" v-for="regmap in regmaps"
-                                           v-on:click="activeRegmap = (activeRegmap == regmap.properties.RECMAP) ? null : regmap.properties.RECMAP"
-                                           v-bind:class="{'hollow': (activeRegmap != regmap.properties.RECMAP)}">
-                                            {{ regmap.properties.RECMAP }}
-                                        </a>
-                                      </div>
-
-
-                                    </div><!-- end of panel -->
-
-                                    <div class="tabs-panel" id="panel2">
-                                      <p>This is the second panel of the basic tab example. This is the second panel of the basic tab example.</p>
-                                    </div>
-                                    <div class="tabs-panel" id="panel3">
-                                      <p>This is the third panel of the basic tab example. This is the third panel of the basic tab example.</p>
-                                    </div>
-                                    <div class="tabs-panel" id="panel4">
-                                      <p>This is the fourth panel of the basic tab example. This is the fourth panel of the basic tab example.</p>
-                                    </div>
-                                  </div>
-
-                                  <div class="callout">
-                                    <p>
-                                      The property boundaries displayed on the map are for reference only and may not be used in place of
-                                       recorded deeds or land surveys.
-                                       Source: Department of Records.
-                                    </p>
-                                  </div>
-
-                                </div><!-- end of parcel-tab-container -->
-
-                            </div>
-
-                            <div class="topic-content-not-found">
-                                No deeded properties were found at this address.
-                            </div>
-                        </div>
-
-                        <!--L & I-->
-                        <a id="topic-link-li" class="topic-link" href="/#/licenses-and-inspections/"><span class="topic-link-icon flaticon-hard-hat"></span>Permits</a>
-                        <div id="topic-li" class="topic">
-                            <div id="li-section-permits" class="li-section">
-                                <h4 class="topic-subsection-title">Permits<span class="li-count"></span></h4>
-                                <table id="li-table-permits" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" data-field-type="date">Date</th>
-                                            <th scope="col" data-field-type="li-permit-id">ID</th>
-                                            <th scope="col">Description</th>
-                                            <th scope="col">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-
-                            <!--<div id="li-section-appeals" class="li-section">-->
-                            <!--    <h4 class="topic-subsection-title">Appeals<span class="li-count"></span></h4>-->
-                                <!--<table id="li-table-appeals" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">-->
-                                <!--    <thead>-->
-                                <!--        <tr>-->
-                                <!--            <th scope="col">Date</th>-->
-                                <!--            <th scope="col">ID</th>-->
-                                <!--            <th scope="col">Description</th>-->
-                                <!--            <th scope="col">Status</th>-->
-                                <!--        </tr>-->
-                                <!--    </thead>-->
-                                <!--    <tbody></tbody>-->
-                                <!--</table>-->
-                            <!--</div>-->
-
-                            <div id="li-section-inspections" class="li-section">
-                                <h4 class="topic-subsection-title">Inspections<span class="li-count"></span></h4>
-                                <table id="li-table-inspections" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" data-field-type="date">Date</th>
-                                            <th scope="col">ID</th>
-                                            <!-- <th scope="col" data-field-type="li-inspection-id">ID</th> -->
-                                            <th scope="col">Description</th>
-                                            <th scope="col">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-
-                            <div id="li-section-violations" class="li-section">
-                                <h4 class="topic-subsection-title">Violations<span class="li-count"></span></h4>
-                                <table id="li-table-violations" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" data-field-type="date">Date</th>
-                                            <th scope="col">ID</th>
-                                            <!-- <th scope="col" data-field-type="li-violation-id">ID</th> -->
-                                            <th scope="col">Description</th>
-                                            <th scope="col">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-
-                            <!--<div id="li-section-appeals" class="li-section">-->
-                            <!--    <h4>Appeals</h4>-->
-                            <!--    <table id="li-table-appeals" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">-->
-                            <!--        <thead>-->
-                            <!--            <tr>-->
-                            <!--                <th scope="col">Date</th>-->
-                            <!--                <th scope="col">ID</th>-->
-                            <!--                <th scope="col">Description</th>-->
-                            <!--                <th scope="col">Status</th>-->
-                            <!--            </tr>-->
-                            <!--        </thead>-->
-                            <!--        <tbody></tbody>-->
-                            <!--    </table>-->
-                            <!--</div>-->
-                        </div>
-
-
-                        <a id="topic-link-zoning" class="topic-link" href="/#/zoning/"><span class="topic-link-icon flaticon-industrial-zone"></span>Zoning</a>
-                        <div id="topic-zoning" class="topic">
-                            <!--OPTION 1: Zoning Badge-->
-                            <div class="topic-badge panel center">
-                                <h4 class="alternate">Base District</h4>
-                                <div class="topic-badge-body">
-                                    <h1 id="zoning-code"></h1>
-                                    <strong><span id="zoning-description"><span></strong>
-                                </div>
-                                <!--<div class="topic-badge-footer"></div>-->
-                            </div>
-
-                            <!--OPTION 2: A Regular Table-->
-                            <!--<h4 class="has-tip" title="A base district is the main zoning code for an address.">Base District</h4>-->
-                            <!--<table>-->
-                            <!--    <tr>-->
-                            <!--        <th>Code</th>-->
-                            <!--        <td id="zoning-code">CMX5</td>-->
-                            <!--    </tr>-->
-                            <!--    <tr>-->
-                            <!--        <th>Description</th>-->
-                            <!--        <td id="zoning-description">Multi-Family Commercial/Residential</td>-->
-                            <!--    </tr>-->
-                            <!--    <tr>-->
-                            <!--        <th>Pending</th>-->
-                            <!--        <td id="zoning-code">No</td>-->
-                            <!--    </tr>-->
-                            <!--    <tr>-->
-                            <!--        <th>Pending URL</th>-->
-                            <!--        <td id="zoning-code">n/a</td>-->
-                            <!--    </tr>-->
-                            <!--</table>-->
-
-                            <h4>Overlays<span id="zoning-overlays-count"></span></h4>
-                            <table id="zoning-overlays" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Code Section</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-
-                            <h4>Appeals<span id="zoning-appeals-count"></span></h4>
-                            <table id="zoning-appeals" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" data-field-type="date">Date</th>
-                                        <th scope="col" data-field-type="zoning-appeal-id">ID</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-
-                            <h4>
-                              <!-- <span class="has-tip" title="Also known as the Zoning Archive">Documents</span> -->
-                              Documents
-                              <span id="zoning-documents-count"></span>
-                              <span class="table-subheader">aka "Zoning Archive"</span>
-                            </h4>
-                            <!-- <p class="callout">Also known as the "Zoning Archive"</p> -->
-                            <table id="zoning-documents" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" data-field-type="date">Date</th>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Type</th>
-                                        <th scope="col"># Pages</th>
-                                        <th scope="col" data-field-type="zoning-document-link">Link</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-
-                            <div id="zoning-rco-container">
-                              <h4>
-                                Registered Community Organizations
-                                ({{ isLoading ? 'Loading...' : rcos.length }})
-                                <!-- <span class="table-subheader">aka "RCOs"</span> -->
-                              </h4>
-                              <table role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                                <tr>
-                                  <th scope="col">RCO</th>
-                                  <th scope="col">Meeting Address</th>
-                                  <th scope="col">Primary Contact</th>
-                                  <th scope="col">Preferred Method</th>
-                                </tr>
-                                <tr v-for="rco in rcosSorted">
-                                  <td>
-                                    <strong>{{ rco.properties.ORGANIZATION_NAME }}</strong><br>
-                                    {{ rco.properties.ORGANIZATION_ADDRESS }}
-                                  </td>
-                                  <td>{{ rco.properties.MEETING_LOCATION_ADDRESS }}</td>
-                                  <td>
-                                    {{ rco.properties.PRIMARY_NAME }}<br>
-                                    {{ app.util.formatPhoneNumber(rco.properties.PRIMARY_PHONE) }}<br>
-                                    <a :href="'mailto:' + rco.properties.PRIMARY_EMAIL">{{ rco.properties.PRIMARY_EMAIL }}</a><br>
-                                  </td>
-                                  <td>{{ rco.properties.PREFFERED_CONTACT_METHOD }}</td>
-                                </tr>
-                              </table>
-                              <a href="//www.phila.gov/CityPlanning/projectreviews/RCO%20Related/List_of_RCOs.pdf" class="external">See a list of all RCOs in the city [PDF]</a>
-                            </div>
-                        </div>
-
-                        <a id="topic-link-water" class="topic-link" href="/#/water/"><span class="topic-link-icon flaticon-drop"></span>Water</a>
-                        <div id="topic-water" class="topic">
-                            <div class="topic-content">
-                                <div class="callout">
-                                    <p>
-                                        <!--This information is provided by the Philadelphia Water Department (<span class="keyword">PWD</span>).
-                                        The parcels shown on the map have been
-                                        simplified for stormwater billing purposes
-                                        and may not represent the legal bounds
-                                        of the property. For the deeded
-                                        parcel, see the <span class="keyword">
-                                        Deeds</span> tab.-->
-                                        The property boundaries displayed on the map for reference only and may not be used in place of recorded
-                                         deeds or land surveys. Boundaries are generalized for ease of visualization. Source: Philadelphia Water
-
-                                    </p>
-                                </div>
-
-                                <h4>Parcel</h4>
-                                <table>
-                                    <tr>
-                                        <th>Parcel ID</th>
-                                        <td id="water-parcel-id"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Address</th>
-                                        <td id="water-parcel-address"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Building Type</th>
-                                        <td id="water-parcel-building-type"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Gross Area</th>
-                                        <td id="water-parcel-gross-area"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Impervious Area</th>
-                                        <td id="water-parcel-impervious-area"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>CAP Eligble</th>
-                                        <td id="water-parcel-cap-eligible"></td>
-                                    </tr>
-                                </table>
-
-                                <h4>Accounts <span id="water-accounts-count"></span></h4>
-                                <table id="water-accounts">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Account #</th>
-                                            <th scope="col">Customer</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Service Type</th>
-                                            <th scope="col">Size</th>
-                                            <th scope="col">Stormwater</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-
-                                <a id="water-link" href="" class="external">See more at Stormwater Billing</a>
-                            </div>
-
-                            <div class="topic-content-not-found">
-                                No water accounts were found at this address.
-                            </div>
-                        </div>
-
-                        <!--<a class="topic-link" href="/#/trash/"><span class="topic-link-icon flaticon-garbage"></span>Trash + Recycling</a>-->
-                        <!--<div class="topic">-->
-                        <!--    <table>-->
-                        <!--        <tr>-->
-                        <!--            <th>Trash/Recycle Day</th>-->
-                        <!--            <td>Tues</td>-->
-                        <!--        </tr>-->
-                        <!--        <tr>-->
-                        <!--            <th>Recycling Rate</th>-->
-                        <!--            <td>28%</td>-->
-                        <!--        </tr>-->
-                        <!--    </table>-->
-                        <!--    <a href="http://www.philadelphiastreets.com/" class="external">See more at the Streets Department</a>-->
-                        <!--</div>-->
-
-                        <!--<a id="topic-link-schools" class="topic-link" href="/#/schools/"><span class="topic-link-icon flaticon-graduate-diploma"></span>School Catchments</a>-->
-                        <!--<div id="topic-schools" class="topic">-->
-                        <!--    <table>-->
-                        <!--        <tr>-->
-                        <!--            <th>Elementary School</th>-->
-                        <!--            <td>McCall</td>-->
-                        <!--        </tr>-->
-                        <!--        <tr>-->
-                        <!--            <th>Middle School</th>-->
-                        <!--            <td>McCall</td>-->
-                        <!--        </tr>-->
-                        <!--        <tr>-->
-                        <!--            <th>High School</th>-->
-                        <!--            <td>Franklin</td>-->
-                        <!--        </tr>-->
-                        <!--    </table>-->
-                        <!--    <a href="http://www.phila.k12.pa.us/" class="external">See more at the School District of Philadelphia</a>-->
-                        <!--</div>-->
-
-                        <!--<a class="topic-link" href="/#/schools/"><span class="topic-link-icon flaticon-leaf"></span>Parks + Recreation</a>
-                        <div class="topic">
-                            <table>
-                                <tr>
-                                    <th>Nearby Parks</th>
-                                    <td>
-                                        <ul>
-                                            <li>Dilworth Park</li>
-                                            <li>John F Kennedy Plaza</li>
-                                            <li>Seger Park</li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Nearest Playground</th>
-                                    <td>Seger Park</td>
-                                </tr>
-                                <tr>
-                                    <th>Nearest Pool</th>
-                                    <td>Marian Anderson Recreation Center</td>
-                                </tr>
-                                <tr>
-                                    <th>Nearest Basketball Court</th>
-                                    <td>Seger Park</td>
-                                </tr>
-                            </table>
-                            <a href="http://www.phila.gov/parksandrecreation/Pages/default.aspx" class="external">See more at Philadelphia Parks and Recreation</a>
-                        </div>-->
-                        <!--<a class="topic-link" href="/#/deeds/"><span class="topic-link-icon flaticon-copy"></span>Land Records</a>-->
-                        <!--<a class="topic-link" href="/#/voting/"><span class="topic-link-icon flaticon-correct"></span>Voting + Government</a>-->
-                        <!--<a class="topic-link" href="/#/311/"><span class="topic-link-icon flaticon-telephone"></span>311</a>-->
-
-                        <!-- PUBLIC SAFETY -->
-                        <!-- <a id="topic-link-public-safety" class="topic-link" href="#">
-                            <span class="topic-link-icon flaticon-correct"></span>Public Safety
-                        </a>
-                        <div id="topic-public-safety" class="topic">
-                            <div class="topic-content">
-                                kjalsjdlkfasd
-                            </div>
-
-                            <div class="topic-content-not-found">
-                                No public safety information was found for this address.
-                            </div>
-                        </div> -->
-
-                        <!-- ELECTIONS -->
-                        <!--<a id="topic-link-elections" class="topic-link" href="#">
-                            <span class="topic-link-icon flaticon-correct"></span>Elections
-                        </a>
-                        <div id="topic-elections" class="topic">
-                            <div class="topic-content">
-                                <div class="topic-badge panel center">
-                                    <h4 class="alternate">Next Election</h4>
-                                    <div class="topic-badge-body">
-                                        <h1 id="elections-next-date">May 16, 2017</h1>
-                                        <strong><span id="elections-next-description">Municipal Primary<span></strong>
-                                    </div>
-                                </div>
-                                <table>
-                                    <tr>
-                                        <th>Polling Place</th>
-                                        <td id="elections-location-name"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Address</th>
-                                        <td id="elections-location-address"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Accessiblity</th>
-                                        <td id="elections-location-accessibility"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Parking</th>
-                                        <td id="elections-location-parking"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Ward</th>
-                                        <td id="elections-ward"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Division</th>
-                                        <td id="elections-division"></td>
-                                    </tr>
-                                </table>
-
-                                <a id="elections-link" href="" class="external">See more at Philadelphia Votes</a>
-                            </div>
-
-                            <div class="topic-content-not-found">
-                                Could not find elections information for this address.
-                            </div>
-                        </div>-->
-
-
-                        <!--vacancy-->
-                        <a id="topic-link-vacancy" class="topic-link" href="#"><span class="topic-link-icon flaticon-placeholder-1"></span>Vacancy</a>
-
-                        <div id="topic-vacancy" class="topic">
-                          <div class="callout">
-                            <p>
-                              The location of properties across Philadelphia that are likely to be a vacant lot or vacant building based on an assessment of City of Philadelphia administrative datasets.
-                            </p>
-                          </div>
-
-                          <div class="topic-badge panel center">
-                              <h4 class="alternate">Vacancy</h4>
-                              <div class="topic-badge-body">
-                                  <h1 id="vacancy-likelihood"></h1>
-                              </div>
-                              <div class="topic-badge-footer"></div>
-                          </div>
-                          <div id="vacancy-nearby-activity-selector-wrapper" class="center">
-                            <h3>What nearby activity would you like to see?</h3>
-                            <select id="vacancy-nearby-activity-type" style="margin: 10px; width: 250px"></select>
-                            from the last
-                            <select id="vacancy-nearby-activity-timeframe" style="margin: 10px; width: 125px">
-                              <option value="30">30 days</option>
-                              <option value="90">90 days</option>
-                              <option value="365">year</option>
-                            </select>
-                            sorted by
-                            <select id="vacancy-nearby-activity-sort" style="margin: 10px; width: 125px">
-                              <option value="date">date</option>
-                              <option value="distance">distance</option>
-                            </select>
-                          </div>
-
-                          <h4 style="margin-top: 20px">
-                              <span id="vacancy-nearby-activity-table-title"></span><span id="vacancy-nearby-activity-count"></span>
-                          </h4>
-                          <table id="vacancy-nearby-activity" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                              <thead>
-                                  <tr>
-                                      <th scope="col" class="date-col" data-field-type="date">Date</th>
-                                      <th scope="col">Address</th>
-                                      <th scope="col">Description</th>
-                                      <th scope="col" data-field-type="distance">Distance</th>
-                                  </tr>
-                              </thead>
-                              <tbody></tbody>
-                          </table>
-                        </div><!-- /vacancy -->
-
-
-
-
-                        <!-- NEARBY-->
-                        <!-- <a id="topic-link-nearby" class="topic-link" href="#"><span class="topic-link-icon flaticon-placeholder-1"></span>Nearby</a>
-                        <div id="topic-nearby" class="topic">
-                            <div id="nearby-activity-selector-wrapper" class="center">
-                              <h3>What activity would you like to see?</h3>
-                              <select id="nearby-activity-type" style="margin: 10px; width: 250px"></select>
-                              from the last
-                              <select id="nearby-activity-timeframe" style="margin: 10px; width: 125px">
-                                <option value="30">30 days</option>
-                                <option value="90">90 days</option>
-                                <option value="365">year</option>
-                              </select>
-                              sorted by
-                              <select id="nearby-activity-sort" style="margin: 10px; width: 125px">
-                                <option value="date">date</option>
-                                <option value="distance">distance</option>
-                              </select>
-                            </div>
-                            <h4 style="margin-top: 20px">
-                                <span id="nearby-activity-table-title"></span><span id="nearby-activity-count"></span>
-                            </h4>
-                            <table id="nearby-activity" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="date-col" data-field-type="date">Date</th>
-                                        <th scope="col">Address</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col" data-field-type="distance">Distance</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div> -->
-                        <!-- /nearby -->
-
-
-                        <!--311-->
-                        <a id="topic-link-311" class="topic-link" href="#"><span class="topic-link-icon flaticon-placeholder-1"></span>311</a>
-                          <div id="topic-311" class="topic">
-
-                            <div class="callout">
-                              <p>
-                                The information shown includes records marked private by the public, as well as a "Description" field which can not be shared with the public for any record.
-                              </p>
-                            </div>
-
-                            <div id="nearby-311-selector-wrapper" class="center">
-                              from the last
-                              <select id="nearby-311-timeframe" style="margin: 10px; width: 125px">
-                                <option value="30">30 days</option>
-                                <option value="90">90 days</option>
-                                <option value="365">year</option>
-                              </select>
-                              <!-- sorted by
-                              <select id="nearby-311-sort" style="margin: 10px; width: 125px">
-                                <option value="date">date</option>
-                                <option value="distance">distance</option>
-                              </select> -->
-                            </div>
-
-                            <h4 style="margin-top: 20px">
-                                <span id="nearby-311-table-title"></span><span id="nearby-311-count"></span>
-                            </h4>
-                            <table id="nearby-311" role="grid" class="tablesaw tablesaw-stack" data-tablesaw-mode="stack">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="date-col" data-field-type="date">Date</th>
-                                        <th scope="col">Address</th>
-                                        <th scope="col">Subject</th>
-                                        <th scope="col"><b>Description (not shared with the public)</b></th>
-                                        <th scope="col"><b>Private?<b></th>
-                                        <!-- <th scope="col">MediaURL</th> -->
-                                        <th scope="col" data-field-type="distance">Distance</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div><!-- /311 -->
-                    </div>
-                </div>
-
-                <!--RIGHT PANEL-->
-                <div id="map-panel" class="large-12 columns">
-                    <div id="map"></div>
-                </div>
-                <div id="cyclo-panel" class="large-12 columns"></div>
+          </div>
+      </div>
+      <!-- Begin header -->
+      <header data-swiftype-index='false' class="site-header app">
+        <div class="row">
+          <div class="small-24 columns">
+            <a href="http://alpha.phila.gov/" class="logo">
+              <img data-interchange="[//cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-mobile.png, small], [//cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-white.png, medium]" src="//cityofphiladelphia.github.io/patterns/images/city-of-philadelphia-white.png" alt="City of Philadelphia">
+            </a>
+            <div class="page-title-container">
+              <a href="#/">
+                <h1 class="page-title">Atlas</h1>
+              </a>
             </div>
-        </div><!-- End #page -->
-
-        <!--MODALS-->
-        <!-- no results address modal -->
-        <div id="no-results-modal" class="reveal" data-reveal aria-labelledby="modal-title" aria-hidden="true" role="dialog">
-            <h2>Sorry, no addresses were found.</h2>
-            <p>Please try your search again.</p>
-            <!--<button class="close-button" data-close aria-label="Close modal" type="button">OK</button>-->
+          </div>
         </div>
+      </header>
 
-        <!-- no parcel address modal -->
-        <div id="no-parcel-address-modal" class="reveal" data-reveal aria-labelledby="modal-title" aria-hidden="true" role="dialog">
-            <h2>Sorry, we can't find an address for that parcel.</h2>
-            <p>
-                The address for that parcel is
-                <strong><span id="parcel-id"></span></strong>, which isn't enough information for us to search on.
-                If you know the full parcel address, trying entering it in the
-                search box above.
-            </p>
-            <!--<button class="close-button" data-close aria-label="Close modal" type="button">OK</button>-->
-        </div>
+      <!-- Mapboard -->
+      <div id="mapboard"></div>
+    </div><!-- end of application div -->
 
-        <!-- JS: VENDOR -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-        <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.1.2/foundation.min.js"></script> -->
-        <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.1.2/foundation.js"></script>
-        <script src="//cityofphiladelphia.github.io/patterns/dist/1.3.0/js/patterns.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.6/lodash.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue.js"></script>
-        <script src="js/leaflet_1_0_3.js"></script>
-        <!-- <script src="//unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script> -->
-        <script src="//unpkg.com/esri-leaflet@2.0.6"></script>
-        <script src="//ljagis.github.io/leaflet-measure/leaflet-measure.min.js"></script>
-        <script src="//unpkg.com/leaflet-rotatedmarker@0.1.2"></script>
-        <script src="//momentjs.com/downloads/moment.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
-        <!-- Cyclomedia -->
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react.min.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react-dom.min.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.17.1/ol.js"></script>
-        <script type="text/javascript" src="//streetsmart.cyclomedia.com/api/v16.1/Aperture.js"></script>
-        <script type="text/javascript" src="//streetsmart.cyclomedia.com/api/v16.1/StreetSmartApi.js"></script>
-        <!-- TODO load jquery-ui from cdn -->
-        <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+    <!-- JS: Patterns -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/foundation/6.1.2/foundation.min.js"></script>
+    <script src="//cityofphiladelphia.github.io/patterns/dist/1.4.1/js/patterns.min.js"></script>
 
-        <!-- JS: LOCAL -->
-        <script src="js/config.js"></script>
-        <script src="js/opacity.js"></script>
-        <script src="js/easy-button.js"></script>
-        <script src="js/svg-icon.js"></script>
-        <script src="js/triangleIcon.js"></script>
-        <script src="js/wfsclient.js"></script>
-        <script src="js/cyclo.js"></script>
-        <script src="js/main.js"></script>
-        <script src="js/proj4.js"></script>
-        <script src="js/util.js"></script>
-        <script src="js/map.js"></script>
-        <script src="js/scroll.js"></script>
-    </body>
+    <!-- JS: Mapboard dependencies -->
+    <script src="//unpkg.com/vue@2.3.3"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="//unpkg.com/axios@0.16.2/dist/axios.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
+    <script src="//unpkg.com/esri-leaflet@2.0.7"></script>
+    <script src="//unpkg.com/turf@3.0.14/turf.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4.js"></script>
+    <script src="//unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.js"></script>
+    <script src="//unpkg.com/Leaflet.vector-markers@0.0.6"></script>
+    <script src="//unpkg.com/leaflet-rotatedmarker@0.2.0"></script>
+    <script src="//unpkg.com/leaflet-measure@2.1.7/dist/leaflet-measure.min.js"></script>
+
+    <!-- JS: Cyclomedia (optional) -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react-dom.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.17.1/ol.js"></script>
+    <script type="text/javascript" src="//streetsmart.cyclomedia.com/api/v16.1/Aperture.js"></script>
+    <script type="text/javascript" src="//streetsmart.cyclomedia.com/api/v16.1/StreetSmartApi.js"></script>
+
+    <!-- JS: Pictometry (optional) -->
+    <script src="//unpkg.com/blueimp-md5@2.10.0/js/md5.min.js"></script>
+
+    <!-- JS: Local -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
+
+    <!-- Sentry -->
+    <script src="//cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
+    <script>Raven.config('https://0e97477faf4b4693a88eb87604a42b27@sentry.io/211586').install()</script>
+
+    <!-- Mapboard -->
+    <script src="//unpkg.com/@cityofphiladelphia/mapboard@1.0.2/dist/build.js"></script>
+
+    <script src="main.js"></script>
+  </body>
 </html>
