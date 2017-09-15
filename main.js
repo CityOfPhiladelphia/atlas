@@ -1,6 +1,6 @@
 var GATEKEEPER_KEY = '35ae5b7bf8f0ff2613134935ce6b4c1e';
 // var BASE_CONFIG_URL = '//raw.githubusercontent.com/rbrtmrtn/mapboard-base-config/develop/config.js';
-var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/bb610c01d77b30719dcef667b9997ed0d70e58ab/config.js';
+var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/b897bfe890cda97af079a6883895d89fbe3adfad/config.js';
 
 var ZONING_CODE_MAP = {
   'RSD-1': 'Residential Single Family Detached-1',
@@ -347,16 +347,19 @@ Mapboard.default({
 
             // REVIEW if the parcel has no address, we don't want to query
             // WHERE ADDRESS = 'null' (doesn't make sense), so use this for now
-            if (!parcelBaseAddress || parcelBaseAddress === 'null') return '1 = 0';
+            // if (!parcelBaseAddress || parcelBaseAddress === 'null') return '1 = 0';
+            if (!parcelBaseAddress || parcelBaseAddress === 'null'){
+              var where = "MATCHED_REGMAP = '" + state.dorParcels.data[0].properties.BASEREG + "'";
+            } else {
+              // var where = `ADDRESS = '${parcelBaseAddress}'`;
+              var where = "STREET_ADDRESS = '" + parcelBaseAddress + "'";
 
-            // var where = `ADDRESS = '${parcelBaseAddress}'`;
-            var where = "STREET_ADDRESS = '" + parcelBaseAddress + "'";
+              // check for unit num
+              var unitNum = cleanDorAttribute(feature.properties.UNIT);
 
-            // check for unit num
-            var unitNum = cleanDorAttribute(feature.properties.UNIT);
-
-            if (unitNum) {
-              where += " AND UNIT_NUM = '" + unitNum + "'";
+              if (unitNum) {
+                where += " AND UNIT_NUM = '" + unitNum + "'";
+              }
             }
 
             // METHOD 2: via parcel id - the layer doesn't have mapreg yet, though
@@ -624,7 +627,7 @@ Mapboard.default({
     {
       key: 'opa',
       icon: 'map-marker',
-      label: 'Property Assessments',
+      label: 'Assessments',
       // REVIEW can these be calculated from vue deps?
       dataSources: ['opa'],
       components: [
@@ -715,7 +718,7 @@ Mapboard.default({
       icon: 'book',
       label: 'Deeds',
       // TODO uncommenting this causes the no-content view to show up.
-      dataSources: ['dorDocuments'],
+      // dataSources: ['dorDocuments'],
       components: [
         {
           type: 'collection-summary',
@@ -871,7 +874,8 @@ Mapboard.default({
                     {
                       label: 'Date',
                       value: function(state, item) {
-                        return item.attributes.RECORDING_DATE;
+                        // return item.attributes.RECORDING_DATE;
+                        return item.attributes.DOCUMENT_DATE;
                       },
                       nullValue: 'no date available',
                       transforms: [
@@ -900,7 +904,8 @@ Mapboard.default({
                   sort: {
                     // this should return the val to sort on
                     getValue: function(item) {
-                      return item.attributes.RECORDING_DATE;
+                      // return item.attributes.RECORDING_DATE;
+                      return item.attributes.DOCUMENT_DATE;
                     },
                     // asc or desc
                     order: 'desc'
@@ -1502,7 +1507,20 @@ Mapboard.default({
               {
                 label: 'ID',
                 value: function(state, item){
-                  return item.appid + '-' + item.docid
+                  return "<a target='_blank' href='//www.phila.gov/zoningarchive/Preview.aspx?address="
+                          + item.address
+                          + "&&docType="
+                          + item.doctype
+                          + "&numofPages="
+                          + item.page_numbers
+                          + "&docID="
+                          + item.docid
+                          + "&app="
+                          + item.appid
+                          +"'>"
+                          + item.appid + '-' + item.docid + ' '
+                          + "<i class='fa fa-external-link'></i></a>"
+                  // return item.appid + '-' + item.docid
                 }
               },
               {
@@ -1517,13 +1535,13 @@ Mapboard.default({
                   return item.page_numbers
                 }
               },
-              {
-                label: 'Link',
-                value: function(state, item){
-                  // return "<a href='//www.washingtonpost.com/'>View Scan</a>"
-                  return "<a target='_blank' href='//www.phila.gov/zoningarchive/Preview.aspx?address=" + item.address + "&&docType=" + item.doctype + "&numofPages=" + item.page_numbers + "&docID=" + item.docid + "&app=" + item.appid +"'>View Scan <i class='fa fa-external-link'></i></a>"
-                }
-              },
+              // {
+              //   label: 'Link',
+              //   value: function(state, item){
+              //     // return "<a href='//www.washingtonpost.com/'>View Scan</a>"
+              //     return "<a target='_blank' href='//www.phila.gov/zoningarchive/Preview.aspx?address=" + item.address + "&&docType=" + item.doctype + "&numofPages=" + item.page_numbers + "&docID=" + item.docid + "&app=" + item.appid +"'>View Scan <i class='fa fa-external-link'></i></a>"
+              //   }
+              // },
             ],
             sort: {
               // this should return the val to sort on
@@ -1535,7 +1553,7 @@ Mapboard.default({
             },
           },
           slots: {
-            title: 'Documents',
+            title: 'Archived Documents',
             subtitle: 'aka "Zoning Archive"',
             items: function(state) {
               if (state.sources['zoningDocs'].data) {
@@ -2072,6 +2090,7 @@ Mapboard.default({
             topicKey: '311',
             id: '311',
             sort: {
+              select: true,
               getValue: function(item, method) {
                 var val;
 
