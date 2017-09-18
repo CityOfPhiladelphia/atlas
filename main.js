@@ -1,6 +1,6 @@
 var GATEKEEPER_KEY = '35ae5b7bf8f0ff2613134935ce6b4c1e';
 // var BASE_CONFIG_URL = '//raw.githubusercontent.com/rbrtmrtn/mapboard-base-config/develop/config.js';
-var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/b897bfe890cda97af079a6883895d89fbe3adfad/config.js';
+var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/affe2b676697273ca10805c1cb3f663754dd08ae/config.js';
 
 var ZONING_CODE_MAP = {
   'RSD-1': 'Residential Single Family Detached-1',
@@ -63,7 +63,8 @@ function concatDorAddress(parcel, includeUnit) {
   // handle house num
   var addressLow = cleanDorAttribute(props.HOUSE);
   var addressHigh = cleanDorAttribute(props.STEX);
-  var addressSuffix = cleanDorAttribute(props.SUFFIX);
+  // maybe should be props.SUF below (it said props.SUFFIX)
+  var addressSuffix = cleanDorAttribute(props.SUF);
   var address = addressLow;
   address = address + (addressHigh ? '-' + addressHigh : '');
   address = address + (addressSuffix || '');
@@ -230,9 +231,6 @@ Mapboard.default({
         success: function(data) {
           return data.features;
         },
-        // success: function(data) {
-        //   return data;
-        // }
       },
     },
     liInspections: {
@@ -285,15 +283,12 @@ Mapboard.default({
       url: 'https://phl.carto.com/api/v2/sql',
       options: {
         params: {
-          // q: feature => "select * from zoning_documents_20170420 where address_std = '" + feature.properties.street_address + "' or addrkey = " + feature.properties.li_address_key,
           q: function(feature) {
             var stmt = "select * from zoning_documents_20170420 where address_std = '" + feature.properties.street_address + "'";
             var addressKey = feature.properties.li_address_key;
-
             if (addressKey && addressKey.length > 0) {
               stmt += " or addrkey = " + feature.properties.li_address_key;
             }
-
             return stmt;
           }
         }
@@ -1260,6 +1255,73 @@ Mapboard.default({
               return rows;
             },
           },
+        },
+        {
+          type: 'horizontal-table',
+          options: {
+            topicKey: 'permits',
+            id: 'liPermitsAdditional',
+            fields: [
+              {
+                label: 'Date',
+                value: function(state, item){
+                  return item.attributes.PERMITISSUEDATE
+                },
+                nullValue: 'no date available',
+                transforms: [
+                  'date'
+                ]
+              },
+              {
+                label: 'ID',
+                value: function(state, item){
+                  return "<a target='_blank' href='//li.phila.gov/#details?entity=permits&eid="+item.attributes.PERMITNUMBER+"&key="+item.attributes.ADDRESSKEY+"&address="+item.attributes.ADDRESS+"'>"+item.attributes.PERMITNUMBER+" <i class='fa fa-external-link'></i></a>"
+                }
+              },
+              {
+                label: 'Building Area',
+                value: function(state, item){
+                  return item.attributes.BLDGAREA
+                },
+                nullValue: 'no area available',
+                transforms: [
+                  'thousandsPlace'
+                ]
+              },
+              {
+                label: 'Declared Value',
+                value: function(state, item){
+                  return item.attributes.DECLAREDVALUE
+                },
+                nullValue: 'no value available',
+                transforms: [
+                  'currency'
+                ]
+              },
+            ],
+            sort: {
+              // this should return the val to sort on
+              getValue: function(item) {
+                return item.attributes.PERMITISSUEDATE;
+              },
+              // asc or desc
+              order: 'desc'
+            },
+          },
+          slots: {
+            title: 'Building Area and Value',
+            items: function(state) {
+              var data = state.sources['liPermitsAdditional'].data;
+              var rows = data.map(function(row){
+                var itemRow = row;
+                // var itemRow = Object.assign({}, row);
+                //itemRow.DISTANCE = 'TODO';
+                return itemRow;
+              });
+              // console.log('rows', rows);
+              return rows;
+            },
+          },
         }
       ],
       basemap: 'pwd',
@@ -1269,7 +1331,7 @@ Mapboard.default({
       identifyFeature: 'address-marker',
       parcels: 'pwd'
     },
-    {
+/*    {
       key: 'permitsAdditional',
       icon: 'plus',
       label: 'Additional Permit Information',
@@ -1351,7 +1413,7 @@ Mapboard.default({
       ],
       identifyFeature: 'address-marker',
       parcels: 'pwd'
-    },
+    },*/
     {
       key: 'zoning',
       icon: 'building-o',
