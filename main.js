@@ -1,6 +1,6 @@
 var GATEKEEPER_KEY = '35ae5b7bf8f0ff2613134935ce6b4c1e';
 // var BASE_CONFIG_URL = '//raw.githubusercontent.com/rbrtmrtn/mapboard-base-config/develop/config.js';
-var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/b897bfe890cda97af079a6883895d89fbe3adfad/config.js';
+var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/affe2b676697273ca10805c1cb3f663754dd08ae/config.js';
 
 var ZONING_CODE_MAP = {
   'RSD-1': 'Residential Single Family Detached-1',
@@ -42,20 +42,28 @@ var ZONING_CODE_MAP = {
 };
 
 function cleanDorAttribute(attr) {
+  // console.log('cleanDorAttribute is running with attr', attr);
   // trim leading and trailing whitespace
   var cleanAttr = attr ? String(attr) : '';
   cleanAttr = cleanAttr.replace(/\s+/g, '');
 
   // return null for zeros and empty strings
-  if (['', '0'].indexOf(cleanAttr) > -1) {
-    return null;
+  // if (['', '0'].indexOf(cleanAttr) > -1) {
+  //   return null;
+  // }
+
+  // return empty for zeros and null
+  if ([null, '0'].indexOf(cleanAttr) > -1) {
+    return '';
   }
 
+  // console.log('cleanDorAttribute cleanAttr result:', cleanAttr);
   return cleanAttr;
 }
 
 // TODO put this in base config transforms
 function concatDorAddress(parcel, includeUnit) {
+  // console.log('concatDorAddress is running with parcel:', parcel, 'includeUnit:', includeUnit);
   includeUnit = typeof includeUnit !== 'undefined' ? includeUnit: true;
   var STREET_FIELDS = ['STDIR', 'STNAM', 'STDES', 'STDESSUF'];
   var props = parcel.properties;
@@ -63,14 +71,15 @@ function concatDorAddress(parcel, includeUnit) {
   // handle house num
   var addressLow = cleanDorAttribute(props.HOUSE);
   var addressHigh = cleanDorAttribute(props.STEX);
-  var addressSuffix = cleanDorAttribute(props.SUFFIX);
+  // maybe should be props.SUF below (it said props.SUFFIX)
+  var addressSuffix = cleanDorAttribute(props.SUF);
   var address = addressLow;
   address = address + (addressHigh ? '-' + addressHigh : '');
   address = address + (addressSuffix || '');
 
   // handle unit
   var unit = cleanDorAttribute(props.UNIT);
-  if (unit) unit += '# ' + unit;
+  if (unit) unit = '# ' + unit;
 
   // clean up attributes
   var comps = STREET_FIELDS.map(function(streetField) {
@@ -94,6 +103,10 @@ function concatDorAddress(parcel, includeUnit) {
   // remove nulls and concat
   address = comps.filter(Boolean).join(' ');
 
+  // console.log('concatDorAddress address result:', address);
+  if (address === '') {
+    address = 'Parcel has no address';
+  }
   return address;
 }
 
@@ -230,9 +243,6 @@ Mapboard.default({
         success: function(data) {
           return data.features;
         },
-        // success: function(data) {
-        //   return data;
-        // }
       },
     },
     liInspections: {
@@ -285,15 +295,12 @@ Mapboard.default({
       url: 'https://phl.carto.com/api/v2/sql',
       options: {
         params: {
-          // q: feature => "select * from zoning_documents_20170420 where address_std = '" + feature.properties.street_address + "' or addrkey = " + feature.properties.li_address_key,
           q: function(feature) {
             var stmt = "select * from zoning_documents_20170420 where address_std = '" + feature.properties.street_address + "'";
             var addressKey = feature.properties.li_address_key;
-
             if (addressKey && addressKey.length > 0) {
               stmt += " or addrkey = " + feature.properties.li_address_key;
             }
-
             return stmt;
           }
         }
