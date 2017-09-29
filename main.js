@@ -1229,7 +1229,7 @@ Mapboard.default({
                       label: 'Date',
                       value: function(state, item) {
                         // return item.attributes.RECORDING_DATE;
-                        return item.attributes.RECORDING_DATE;
+                        return item.attributes.DISPLAY_DATE;
                       },
                       nullValue: 'no date available',
                       transforms: [
