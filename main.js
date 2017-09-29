@@ -416,7 +416,9 @@ Mapboard.default({
 
             return where;
           },
-          outFields: '*',
+          outFields: "R_NUM, DISPLAY_DATE, DOCUMENT_TYPE, GRANTORS, GRANTEES",
+          returnDistinctValues: 'true',
+          returnGeometry: 'false',
           f: 'json'
         },
         success: function(data) {
