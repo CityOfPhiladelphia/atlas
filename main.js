@@ -386,9 +386,13 @@ Mapboard.default({
               var where = "ADDRESS_LOW = " + state.geocode.data.properties.address_low
                         + " AND STREET_NAME = '" + state.geocode.data.properties.street_name
                         + "' AND STREET_SUFFIX = '" + state.geocode.data.properties.street_suffix
-                        + "' AND STREET_PREDIR = '" + state.geocode.data.properties.street_predir
-                         + "'"
+                        // + "' AND STREET_PREDIR = '" + state.geocode.data.properties.street_predir
+                        + "'"
               console.log('where', where);
+
+              if (state.geocode.data.properties.street_predir != '') {
+                where += " AND STREET_PREDIR = '" + state.geocode.data.properties.street_predir + "'";
+              }
 
               // check for unit num
               var unitNum = cleanDorAttribute(feature.properties.UNIT);
