@@ -358,7 +358,6 @@ Mapboard.default({
       type: 'http-get',
       targets: {
         get: function(state) {
-          // return state.dorParcels.data;
           return state.parcels.dor.data;
         },
         getTargetId: function(target) {
@@ -372,6 +371,7 @@ Mapboard.default({
           where: function(feature, state) {
             // METHOD 1: via address
             var parcelBaseAddress = concatDorAddress(feature);
+            var geocode = state.geocode.data.properties;
             console.log('parcelBaseAddress', parcelBaseAddress)
 
             // REVIEW if the parcel has no address, we don't want to query
@@ -385,22 +385,24 @@ Mapboard.default({
               const address_floor = roundto100(address_low);
               const address_remainder = address_low - address_floor;
               console.log('address_low:', address_low, 'address_floor:', address_floor);
-              // var where = "ADDRESS_LOW = " + state.geocode.data.properties.address_low
-              //           + " AND STREET_NAME = '" + state.geocode.data.properties.street_name
-              //           + "' AND STREET_SUFFIX = '" + state.geocode.data.properties.street_suffix
-              //           + "'"
               var where = "((ADDRESS_LOW = " + address_low
                         + " OR (ADDRESS_LOW >= " + address_floor + " AND ADDRESS_LOW <= " + address_low + " AND ADDRESS_HIGH >= " + address_remainder + " ))"
-                        + " AND STREET_NAME = '" + state.geocode.data.properties.street_name
-                        + "' AND STREET_SUFFIX = '" + state.geocode.data.properties.street_suffix
+                        + " AND STREET_NAME = '" + geocode.street_name
+                        + "' AND STREET_SUFFIX = '" + geocode.street_suffix
                         + "'"
-              if (state.geocode.data.properties.street_predir != '') {
-                where += " AND STREET_PREDIR = '" + state.geocode.data.properties.street_predir + "'";
+              if (geocode.street_predir != '') {
+                where += " AND STREET_PREDIR = '" + geocode.street_predir + "'";
+              }
+              if (geocode.address_low_suffix != '') {
+                where += " AND ADDRESS_LOW_SUFFIX = '" + geocode.address_low_suffix + "'";
+              }
+              if (geocode.street_postdir != '') {
+                where += " AND STREET_POSTDIR = '" + geocode.street_postdir + "'";
               }
               // check for unit num
               var unitNum = cleanDorAttribute(feature.properties.UNIT);
               console.log('DOR Parcel BASEREG - feature:', feature);
-              var unitNum2 = state.geocode.data.properties.unit_num;
+              var unitNum2 = geocode.unit_num;
               if (unitNum) {
                 where += " AND UNIT_NUM = '" + unitNum + "'";
               } else if (unitNum2 != '') {
