@@ -316,11 +316,20 @@ Mapboard.default({
       options: {
         params: {
           q: function(feature) {
-            var stmt = "select * from zoning_documents_20170420 where address_std = '" + feature.properties.street_address + "'";
-            var addressKey = feature.properties.li_address_key;
-            if (addressKey && addressKey.length > 0) {
-              stmt += " or addrkey = " + feature.properties.li_address_key;
-            }
+            // var stmt = "select * from zoning_documents_20170420 where address_std = '" + feature.properties.street_address + "'";
+
+            var stmt = "select * from ais_zoning_documents where doc_id = ANY('{" + feature.properties.zoning_document_ids + "}'::text[])";
+
+            // var stmt = "select * from ais_zoning_documents where doc_id in '"
+            // for (i = 0; i < feature.properties.zoning_document_ids.length; i++) {
+            //   stmt += feature.properties.zoning_document_ids[i] + "', '"
+            // }
+            // stmt += "']";
+
+            // var addressKey = feature.properties.li_address_key;
+            // if (addressKey && addressKey.length > 0) {
+            //   stmt += " or addrkey = " + feature.properties.li_address_key;
+            // }
             return stmt;
           }
         }
@@ -1980,7 +1989,7 @@ Mapboard.default({
               {
                 label: 'Date',
                 value: function(state, item){
-                  return item.scandate
+                  return item.scan_date
                 },
                 nullValue: 'no date available',
                 transforms: [
@@ -1993,15 +2002,16 @@ Mapboard.default({
                   return "<a target='_blank' href='//www.phila.gov/zoningarchive/Preview.aspx?address="
                           + item.address
                           + "&&docType="
-                          + item.doctype
+                          + item.doc_type
                           + "&numofPages="
-                          + item.page_numbers
+                          + item.num_pages
                           + "&docID="
-                          + item.docid
+                          + item.app_doc_id
                           + "&app="
-                          + item.appid
+                          + item.app_id
                           +"'>"
-                          + item.appid + '-' + item.docid + ' '
+                          // + item.app_id + '-'
+                          + item.doc_id + ' '
                           + "<i class='fa fa-external-link'></i></a>"
                   // return item.appid + '-' + item.docid
                 }
@@ -2009,13 +2019,13 @@ Mapboard.default({
               {
                 label: 'Type',
                 value: function(state, item){
-                  return item.doctype
+                  return item.doc_type
                 }
               },
               {
                 label: '# Pages',
                 value: function(state, item){
-                  return item.page_numbers
+                  return item.num_pages
                 }
               },
               // {
