@@ -389,7 +389,7 @@ Mapboard.default({
               //           + " AND STREET_NAME = '" + state.geocode.data.properties.street_name
               //           + "' AND STREET_SUFFIX = '" + state.geocode.data.properties.street_suffix
               //           + "'"
-              var where = "(ADDRESS_LOW = " + address_low
+              var where = "((ADDRESS_LOW = " + address_low
                         + " OR (ADDRESS_LOW >= " + address_floor + " AND ADDRESS_LOW <= " + address_low + " AND ADDRESS_HIGH >= " + address_remainder + " ))"
                         + " AND STREET_NAME = '" + state.geocode.data.properties.street_name
                         + "' AND STREET_SUFFIX = '" + state.geocode.data.properties.street_suffix
@@ -406,6 +406,12 @@ Mapboard.default({
               } else if (unitNum2 != '') {
                 where += " AND UNIT_NUM = '" + unitNum2 + "'";
               }
+
+              where += ") OR (STREET_ADDRESS='" + parcelBaseAddress + "'";
+              if (unitNum) {
+                where +="AND UNIT_NUM = '" + unitNum + "'";
+              }
+              where += ")"
             }
 
             // METHOD 2: via parcel id - the layer doesn't have mapreg yet, though
