@@ -997,7 +997,7 @@ Mapboard.default({
       identifyFeature: 'address-marker',
       // we might not need this anymore, now that we have identifyFeature
       parcels: 'pwd',
-      errorMessage(state) {
+      errorMessage: function(state) {
         if (state.sources.condoList.data){
           if (state.sources.condoList.data.features.length > 1) {
             return 'There is no OPA record for this address. Please select a condominum unit address above to see the record for that unit.';
