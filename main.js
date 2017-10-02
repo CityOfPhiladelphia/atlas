@@ -256,7 +256,9 @@ Mapboard.default({
       url: 'http://ase.phila.gov/arcgis/rest/services/GSG/GIS_LNI_LI_PERMITS_PLANNING/FeatureServer/0/query?',
       options: {
         params: {
-          where: function(feature){ return 'ADDRESSKEY = ' + feature.properties.li_address_key },
+          where: function(feature) {
+            return "ADDRESS = '" + feature.properties.street_address + "' OR ADDRESSKEY = '" + feature.properties.li_address_key + "'"
+          },
           outFields: '*',
           f: 'json'
         },
@@ -445,7 +447,7 @@ Mapboard.default({
     },
     '311': {
       type: 'esri-nearby',
-      url: 'http://192.168.103.143:6080/arcgis/rest/services/GSG/GIS311_365DAYSab/MapServer/0',
+      url: 'http://192.168.103.143:6080/arcgis/rest/services/GSG/GIS311_365DAYSabj/MapServer/0',
       options: {
         geometryServerUrl: 'http://192.168.103.143:6080/arcgis/rest/services/Utilities/Geometry/GeometryServer/',
         radius: 500,
@@ -690,10 +692,10 @@ Mapboard.default({
   //   },
   // },
   cyclomedia: {
-    enabled: true
+    enabled: false
   },
   pictometry: {
-    enabled: true
+    enabled: false
   },
   // reusable transforms for topic data. see `topics` section for usage.
   transforms: {
@@ -750,6 +752,12 @@ Mapboard.default({
         return number + ' ' + label;
       }
     }
+  },
+  greeting:{
+    initialMessage: "Explore permits, zoning, deeds and other related City data by searching on an address.<br><br> \
+    See results mapped against present and past aerial and street-view imagery or using historical maps of Philadelphia.<br><br> \
+    To start your search, type an address, street intersection, tax account number, or deed Map Registry number into the search box – or – click anywhere on the map.",
+
   },
   topics: [
     {
@@ -836,7 +844,8 @@ Mapboard.default({
         {
           type: 'callout',
           slots: {
-            text: 'This information is provided by the Office of Property Assessments (OPA), the agency responsible for estimating property values in the City of Philadelphia. OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City websites may still use that name.'
+            // text: 'This information is provided by the Office of Property Assessments (OPA), the agency responsible for estimating property values in the City of Philadelphia. OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City websites may still use that name.'
+            text: 'Property assessment and sale information. Source: Office of Property Assessments (OPA). OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City records may still use that name.'
           }
         },
 
@@ -1032,6 +1041,13 @@ Mapboard.default({
       // TODO uncommenting this causes the no-content view to show up.
       // dataSources: ['dorDocuments'],
       components: [
+        {
+          type: 'callout',
+          slots: {
+            text: 'Deed information as maintained by the Department of Records. The map faithfully reflects property boundaries as described in recorded deeds including multiple types of easements. Click on Registry Maps to see images of the last hard-copy deed maps some of which have hand written information that may be useful in historical deed research.<br><br> \
+                  The property boundaries displayed on the map are for reference only and should not be used in place of the recorded deeds or land surveys. Source: Department of Records'
+          }
+        },
         {
           type: 'collection-summary',
           options: {
@@ -1366,12 +1382,12 @@ Mapboard.default({
             }
           }
         },
-        {
-          type: 'callout',
-          slots: {
-            text: 'The property boundaries displayed on the map are for reference only and may not be used in place of recorded deeds or land surveys. Source: Department of Records.'
-          }
-        }
+        // {
+        //   type: 'callout',
+        //   slots: {
+        //     text: 'The property boundaries displayed on the map are for reference only and may not be used in place of recorded deeds or land surveys. Source: Department of Records.'
+        //   }
+        // }
       ], // end deeds comps
       basemap: 'dor',
       identifyFeature: 'dor-parcel',
@@ -1392,6 +1408,12 @@ Mapboard.default({
         'liBusinessLicenses'
       ],
       components: [
+        {
+          type: 'callout',
+          slots: {
+            text: 'Building permits, licenses, property maintenance code violations. Source: Department of Licenses and Inspections.'
+          }
+        },
         {
           type: 'horizontal-table',
           options: {
@@ -1739,7 +1761,7 @@ Mapboard.default({
             title: 'Building Area and Value',
             items: function(state) {
               var data = state.sources['liPermitsAdditional'].data;
-              if (data === null) {
+              if (data === null || data === undefined) {
                 return;
               }
               var rows = data.map(function(row){
@@ -1753,6 +1775,77 @@ Mapboard.default({
             },
           },
         }
+        // {
+        //   type: 'horizontal-table',
+        //   options: {
+        //     topicKey: 'permits',
+        //     id: 'liPermitsAdditional',
+        //     defaultIncrement: 25,
+        //     fields: [
+        //       {
+        //         label: 'Date',
+        //         value: function(state, item){
+        //           return item.attributes.PERMITISSUEDATE
+        //         },
+        //         nullValue: 'no date available',
+        //         transforms: [
+        //           'date'
+        //         ]
+        //       },
+        //       {
+        //         label: 'ID',
+        //         value: function(state, item){
+        //           return "<a target='_blank' href='//li.phila.gov/#details?entity=permits&eid="+item.attributes.PERMITNUMBER+"&key="+item.attributes.ADDRESSKEY+"&address="+item.attributes.ADDRESS+"'>"+item.attributes.PERMITNUMBER+" <i class='fa fa-external-link'></i></a>"
+        //         }
+        //       },
+        //       {
+        //         label: 'Building Area',
+        //         value: function(state, item){
+        //           return item.attributes.BLDGAREA
+        //         },
+        //         nullValue: 'no area available',
+        //         transforms: [
+        //           'thousandsPlace'
+        //         ]
+        //       },
+        //       {
+        //         label: 'Declared Value',
+        //         value: function(state, item){
+        //           return item.attributes.DECLAREDVALUE
+        //         },
+        //         nullValue: 'no value available',
+        //         transforms: [
+        //           'currency'
+        //         ]
+        //       },
+        //     ],
+        //     sort: {
+        //       // this should return the val to sort on
+        //       getValue: function(item) {
+        //         return item.attributes.PERMITISSUEDATE;
+        //       },
+        //       // asc or desc
+        //       order: 'desc'
+        //     },
+        //   },
+        //   slots: {
+        //     title: 'Building Area and Value',
+        //     items: function(state) {
+        //       var data = state.sources['liPermitsAdditional'].data;
+        //       if (data === null) {
+        //         return;
+        //       }
+        //       var rows = data.map(function(row){
+        //         var itemRow = row;
+        //         // var itemRow = Object.assign({}, row);
+        //         //itemRow.DISTANCE = 'TODO';
+        //         return itemRow;
+        //       });
+        //       // console.log('rows', rows);
+        //       return rows;
+        //     },
+        //   },
+        // }
       ],
       basemap: 'pwd',
       dynamicMapLayers: [
@@ -1761,89 +1854,6 @@ Mapboard.default({
       identifyFeature: 'address-marker',
       parcels: 'pwd'
     },
-/*    {
-      key: 'permitsAdditional',
-      icon: 'plus',
-      label: 'Additional Permit Information',
-      dataSources: [
-        'liPermitsAdditional',
-      ],
-      components: [
-        {
-          type: 'horizontal-table',
-          options: {
-            topicKey: 'permits',
-            id: 'liPermitsAdditional',
-            fields: [
-              {
-                label: 'Date',
-                value: function(state, item){
-                  return item.attributes.PERMITISSUEDATE
-                },
-                nullValue: 'no date available',
-                transforms: [
-                  'date'
-                ]
-              },
-              {
-                label: 'ID',
-                value: function(state, item){
-                  return "<a target='_blank' href='//li.phila.gov/#details?entity=permits&eid="+item.attributes.PERMITNUMBER+"&key="+item.attributes.ADDRESSKEY+"&address="+item.attributes.ADDRESS+"'>"+item.attributes.PERMITNUMBER+" <i class='fa fa-external-link'></i></a>"
-                }
-              },
-              {
-                label: 'Building Area',
-                value: function(state, item){
-                  return item.attributes.BLDGAREA
-                },
-                nullValue: 'no area available',
-                transforms: [
-                  'thousandsPlace'
-                ]
-              },
-              {
-                label: 'Declared Value',
-                value: function(state, item){
-                  return item.attributes.DECLAREDVALUE
-                },
-                nullValue: 'no value available',
-                transforms: [
-                  'currency'
-                ]
-              },
-            ],
-            sort: {
-              // this should return the val to sort on
-              getValue: function(item) {
-                return item.attributes.PERMITISSUEDATE;
-              },
-              // asc or desc
-              order: 'desc'
-            },
-          },
-          slots: {
-            title: 'Permits',
-            items: function(state) {
-              var data = state.sources['liPermitsAdditional'].data;
-              var rows = data.map(function(row){
-                var itemRow = row;
-                // var itemRow = Object.assign({}, row);
-                //itemRow.DISTANCE = 'TODO';
-                return itemRow;
-              });
-              // console.log('rows', rows);
-              return rows;
-            },
-          },
-        },
-      ],
-      basemap: 'pwd',
-      dynamicMapLayers: [
-        //'zoning'
-      ],
-      identifyFeature: 'address-marker',
-      parcels: 'pwd'
-    },*/
     {
       key: 'zoning',
       icon: 'building-o',
@@ -1852,6 +1862,12 @@ Mapboard.default({
         'zoningOverlay'
       ],
       components: [
+        {
+          type: 'callout',
+          slots: {
+            text: 'Base district zoning maps and associated zoning overlays and Registered Community Organizations. Source: Department of Planning and Development'
+          }
+        },
         {
           type: 'badge',
           options: {
@@ -2170,7 +2186,7 @@ Mapboard.default({
         {
           type: 'callout',
           slots: {
-            text: 'The location of properties across Philadelphia that are likely to be a vacant lot or vacant building based on an assessment of City of Philadelphia administrative datasets.'
+            text: 'See 311 requests, neighborhood services, vacant property and more in the last 30 or 90 days near your search address. Filter or sort by records.'
           }
         },
         {
@@ -2575,7 +2591,7 @@ Mapboard.default({
         {
           type: 'callout',
           slots: {
-            text: 'The information shown includes records marked private by the public, as well as a "Description" field which can not be shared with the public for any record.'
+            text: 'A more detailed look at 311 requests near the search address that includes records marked private by the public and Description field content that cannot be shared with the public.'
           }
         },
         {
