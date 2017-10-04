@@ -1,4 +1,5 @@
 var GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
+// var BASE_CONFIG_URL = '//raw.githubusercontent.com/rbrtmrtn/mapboard-base-config/develop/config.js';
 var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/b047f22e6cc59eaa6857008f04babe229ea6b00a/config.js';
 
 var ZONING_CODE_MAP = {
