@@ -2682,10 +2682,10 @@ Mapboard.default({
                     getValue: function(item, method) {
                       var val;
 
-                      if (method === 'date') {
-                        val = item.decisiondate;
-                      } else if (method === 'distance') {
-                        val = item.distance;
+                      if (method === 'address') {
+                        val = item.properties.ADDRESS;
+                      } else if (method === 'type') {
+                        val = item.properties.VACANT_FLAG;
                       }
 
                       return val;
@@ -2694,15 +2694,16 @@ Mapboard.default({
                   filterByText: {
                     label: 'Filter by',
                     fields: [
-                      'appealgrounds'
+                      'ADDRESS',
+                      'VACANT_FLAG'
                     ]
                   },
                   mapOverlay: {
                     marker: 'circle',
                     style: {
                       radius: 6,
-                      fillColor: '#a953f6',
-                    	color: '#a953f6',
+                      fillColor: '#9400c6',
+                    	color: '#9400c6',
                     	weight: 1,
                     	opacity: 1,
                     	fillOpacity: 1.0
@@ -2717,16 +2718,6 @@ Mapboard.default({
                     }
                   },
                   fields: [
-                    // {
-                    //   label: 'Date',
-                    //   value: function(state, item) {
-                    //     return item.decisiondate;
-                    //   },
-                    //   nullValue: 'no date available',
-                    //   transforms: [
-                    //     'date'
-                    //   ]
-                    // },
                     {
                       label: 'Address',
                       value: function(state, item) {
@@ -2734,21 +2725,27 @@ Mapboard.default({
                       }
                     },
                     {
-                      label: 'Vacancy Rank',
+                      label: 'Property Type',
                       value: function(state, item) {
-                        return item.properties.VACANT_RANK;
+                        return item.properties.VACANT_FLAG;
                       }
                     },
-                    // {
-                    //   label: 'Distance',
-                    //   value: function(state, item) {
-                    //     return parseInt(item.distance) + ' ft';
-                    //   }
-                    // }
-                  ]
+                  ],
+                  externalLink: {
+                    forceShow: true,
+                    action: function(count) {
+                      return 'See more at Vacancy Property Viewer';
+                    },
+                    name: 'Vacancy Property Viewer',
+                    href: function(state) {
+                      // var address = state.geocode.data.properties.street_address;
+                      // var addressEncoded = encodeURIComponent(address);
+                      return '//phl.maps.arcgis.com/apps/webappviewer/index.html?id=64ac160773d04952bc17ad895cc00680';
+                    }
+                  }
                 },
                 slots: {
-                  title: 'Vacant Properties',
+                  title: 'Likely Vacant Properties',
                   data: 'vacantIndicatorsPoints',
                   items: function(state) {
                     var data = state.sources['vacantIndicatorsPoints'].data || [];
