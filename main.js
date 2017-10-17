@@ -2679,6 +2679,10 @@ Mapboard.default({
                   id: 'vacantIndicatorsPoints',
                   sort: {
                     select: true,
+                    methods: [
+                      'address',
+                      'type'
+                    ],
                     getValue: function(item, method) {
                       var val;
 
