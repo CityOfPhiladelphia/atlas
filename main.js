@@ -511,32 +511,32 @@ Mapboard.default({
         params: {}
       }
     },
-    vacantLand: {
-      type: 'esri',
-      url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Land/FeatureServer/0',
-      options: {
-        relationship: 'contains',
-      },
-      // params: {
-      //   query: feature => L.esri.query({url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Land/FeatureServer/0'}).contains(feature)
-      // },
-      success: function(data) {
-        return data;
-      }
-    },
-    vacantBuilding: {
-      type: 'esri',
-      url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Bldg/FeatureServer/0',
-      options: {
-        relationship: 'contains',
-      },
-      // params: {
-      //   query: feature => L.esri.query({url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Bldg/FeatureServer/0'}).contains(feature)
-      // },
-      success: function(data) {
-        return data;
-      }
-    },
+    // vacantLand: {
+    //   type: 'esri',
+    //   url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Land/FeatureServer/0',
+    //   options: {
+    //     relationship: 'contains',
+    //   },
+    //   // params: {
+    //   //   query: feature => L.esri.query({url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Land/FeatureServer/0'}).contains(feature)
+    //   // },
+    //   success: function(data) {
+    //     return data;
+    //   }
+    // },
+    // vacantBuilding: {
+    //   type: 'esri',
+    //   url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Bldg/FeatureServer/0',
+    //   options: {
+    //     relationship: 'contains',
+    //   },
+    //   // params: {
+    //   //   query: feature => L.esri.query({url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Bldg/FeatureServer/0'}).contains(feature)
+    //   // },
+    //   success: function(data) {
+    //     return data;
+    //   }
+    // },
     vacantIndicatorsPoints: {
       type: 'esri-nearby',
       url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Points/FeatureServer/0',
@@ -2680,16 +2680,16 @@ Mapboard.default({
                   sort: {
                     select: true,
                     methods: [
-                      'address',
-                      'type'
+                      'type',
+                      'distance'
                     ],
                     getValue: function(item, method) {
                       var val;
 
-                      if (method === 'address') {
-                        val = item.properties.ADDRESS;
-                      } else if (method === 'type') {
+                      if (method === 'type') {
                         val = item.properties.VACANT_FLAG;
+                      } else if (method === 'distance') {
+                        val = item._distance;
                       }
 
                       return val;
@@ -2732,6 +2732,12 @@ Mapboard.default({
                       label: 'Property Type',
                       value: function(state, item) {
                         return item.properties.VACANT_FLAG;
+                      }
+                    },
+                    {
+                      label: 'Distance',
+                      value: function(state, item) {
+                        return item._distance + ' ft';
                       }
                     },
                   ],
