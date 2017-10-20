@@ -562,11 +562,6 @@ Mapboard.default({
       url: 'http://api.phila.gov/ais/v1/search/',
       options: {
         params: {
-          urlAddition: function(feature) {
-            console.log('testing feature in params:', feature);
-            const street_address = feature.properties.street_address;
-            return street_address;
-          },
           gatekeeperKey: GATEKEEPER_KEY,
           include_units: true,
           opa_only: true,
