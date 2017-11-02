@@ -399,10 +399,11 @@ Mapboard.default({
         },
       },
       // url: '//ase.phila.gov/arcgis/rest/services/RTT/MapServer/0/query',
-      url: '//ase.phila.gov/arcgis/rest/services/DOR/rttsummary/MapServer/0/query',
+      // url: '//ase.phila.gov/arcgis/rest/services/DOR/rttsummary/MapServer/0/query',
+      url: 'https://phl.carto.com/api/v2/sql',
       options: {
         params: {
-          where: function(feature, state) {
+          q: function(feature, state) {
             // METHOD 1: via address
             var parcelBaseAddress = concatDorAddress(feature);
             var geocode = state.geocode.data.properties;
@@ -411,7 +412,7 @@ Mapboard.default({
             // REVIEW if the parcel has no address, we don't want to query
             // WHERE ADDRESS = 'null' (doesn't make sense), so use this for now
             if (!parcelBaseAddress || parcelBaseAddress === 'null'){
-              var where = "MATCHED_REGMAP = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
+              var where = "select * from vw_rtt_summary where MATCHED_REGMAP = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
               console.log('DOR Parcel BASEREG', state.parcels.dor.data[0].properties.BASEREG);
             } else {
               const address_low = state.geocode.data.properties.address_low
@@ -419,7 +420,7 @@ Mapboard.default({
               const address_floor = roundto100(address_low);
               const address_remainder = address_low - address_floor;
               console.log('address_low:', address_low, 'address_floor:', address_floor);
-              var where = "((ADDRESS_LOW = " + address_low
+              var where = "select * from vw_rtt_summary where ((ADDRESS_LOW = " + address_low
                         + " OR (ADDRESS_LOW >= " + address_floor + " AND ADDRESS_LOW <= " + address_low + " AND ADDRESS_HIGH >= " + address_remainder + " ))"
                         + " AND STREET_NAME = '" + geocode.street_name
                         + "' AND STREET_SUFFIX = '" + geocode.street_suffix
