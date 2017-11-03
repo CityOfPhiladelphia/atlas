@@ -444,13 +444,8 @@ Mapboard.default({
               } else if (unitNum2 != '') {
                 where += " and unit_num = '" + unitNum2 + "'";
               }
-
-              where += ") or (street_address='" + parcelBaseAddress + "'";
-              if (unitNum) {
-                where +="and unit_num = '" + unitNum + "'";
-              }
-              where += ")"
-              console.log('where', where);
+              where += ") or matched_regmap = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
+              // console.log('where', where);
             }
 
             // METHOD 2: via parcel id - the layer doesn't have mapreg yet, though
