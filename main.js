@@ -415,10 +415,10 @@ Mapboard.default({
               var where = "select * from vw_rtt_summary where matched_regmap = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
               console.log('DOR Parcel BASEREG', state.parcels.dor.data[0].properties.BASEREG);
             } else {
-              const address_low = state.geocode.data.properties.address_low
+              var address_low = state.geocode.data.properties.address_low
               roundto100 = function(address) { return Math.floor(address/100, 1)*100}
-              const address_floor = roundto100(address_low);
-              const address_remainder = address_low - address_floor;
+              var address_floor = roundto100(address_low);
+              var address_remainder = address_low - address_floor;
               console.log('address_low:', address_low, 'address_floor:', address_floor, 'address_remainder', address_remainder);//, 'address_high', address_high);
                 var where = "select * from vw_rtt_summary where ((address_low = " + address_low
                           + " or (address_low >= " + address_floor + " and address_low <= " + address_low
@@ -1126,7 +1126,7 @@ Mapboard.default({
               return item.properties.MAPREG;
             },
             getAddress: function(item) {
-              const address = concatDorAddress(item);
+              var address = concatDorAddress(item);
               return address;
             },
             // components for the content pane. this essentially a topic body.
