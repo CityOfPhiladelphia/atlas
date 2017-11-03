@@ -254,22 +254,22 @@ Mapboard.default({
         }
       }
     },
-    liPermitsAdditional: {
-      type: 'http-get',
-      url: 'http://ase.phila.gov/arcgis/rest/services/GSG/GIS_LNI_LI_PERMITS_PLANNING/FeatureServer/0/query?',
-      options: {
-        params: {
-          where: function(feature) {
-            return "ADDRESS = '" + feature.properties.street_address + "' OR ADDRESSKEY = '" + feature.properties.li_address_key + "'"
-          },
-          outFields: '*',
-          f: 'json'
-        },
-        success: function(data) {
-          return data.features;
-        },
-      },
-    },
+    // liPermitsAdditional: {
+    //   type: 'http-get',
+    //   url: 'http://ase.phila.gov/arcgis/rest/services/GSG/GIS_LNI_LI_PERMITS_PLANNING/FeatureServer/0/query?',
+    //   options: {
+    //     params: {
+    //       where: function(feature) {
+    //         return "ADDRESS = '" + feature.properties.street_address + "' OR ADDRESSKEY = '" + feature.properties.li_address_key + "'"
+    //       },
+    //       outFields: '*',
+    //       f: 'json'
+    //     },
+    //     success: function(data) {
+    //       return data.features;
+    //     },
+    //   },
+    // },
     liInspections: {
       type: 'http-get',
       url: 'https://phl.carto.com/api/v2/sql',
@@ -399,10 +399,11 @@ Mapboard.default({
         },
       },
       // url: '//ase.phila.gov/arcgis/rest/services/RTT/MapServer/0/query',
-      url: '//ase.phila.gov/arcgis/rest/services/DOR/rttsummary/MapServer/0/query',
+      // url: '//ase.phila.gov/arcgis/rest/services/DOR/rttsummary/MapServer/0/query',
+      url: 'https://phl.carto.com/api/v2/sql',
       options: {
         params: {
-          where: function(feature, state) {
+          q: function(feature, state) {
             // METHOD 1: via address
             var parcelBaseAddress = concatDorAddress(feature);
             var geocode = state.geocode.data.properties;
@@ -411,43 +412,46 @@ Mapboard.default({
             // REVIEW if the parcel has no address, we don't want to query
             // WHERE ADDRESS = 'null' (doesn't make sense), so use this for now
             if (!parcelBaseAddress || parcelBaseAddress === 'null'){
-              var where = "MATCHED_REGMAP = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
+              var where = "select * from vw_rtt_summary where matched_regmap = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
               console.log('DOR Parcel BASEREG', state.parcels.dor.data[0].properties.BASEREG);
             } else {
               const address_low = state.geocode.data.properties.address_low
               roundto100 = function(address) { return Math.floor(address/100, 1)*100}
               const address_floor = roundto100(address_low);
               const address_remainder = address_low - address_floor;
-              console.log('address_low:', address_low, 'address_floor:', address_floor);
-              var where = "((ADDRESS_LOW = " + address_low
-                        + " OR (ADDRESS_LOW >= " + address_floor + " AND ADDRESS_LOW <= " + address_low + " AND ADDRESS_HIGH >= " + address_remainder + " ))"
-                        + " AND STREET_NAME = '" + geocode.street_name
-                        + "' AND STREET_SUFFIX = '" + geocode.street_suffix
-                        + "'"
+              console.log('address_low:', address_low, 'address_floor:', address_floor, 'address_remainder', address_remainder);//, 'address_high', address_high);
+                var where = "select * from vw_rtt_summary where ((address_low = " + address_low
+                          + " or (address_low >= " + address_floor + " and address_low <= " + address_low
+                          + " and (CASE WHEN address_high <> '' and address_high <> 'N' THEN address_high::numeric END) >= " + address_remainder + " ))"
+                          + " and street_name = '" + geocode.street_name
+                          + "' and street_suffix = '" + geocode.street_suffix
+                          + "'"
+              console.log('got past where');
               if (geocode.street_predir != '') {
-                where += " AND STREET_PREDIR = '" + geocode.street_predir + "'";
+                where += " and street_predir = '" + geocode.street_predir + "'";
               }
               if (geocode.address_low_suffix != '') {
-                where += " AND ADDRESS_LOW_SUFFIX = '" + geocode.address_low_suffix + "'";
+                where += " and address_low_suffix = '" + geocode.address_low_suffix + "'";
               }
               if (geocode.street_postdir != '') {
-                where += " AND STREET_POSTDIR = '" + geocode.street_postdir + "'";
+                where += " and street_postdir = '" + geocode.street_postdir + "'";
               }
               // check for unit num
               var unitNum = cleanDorAttribute(feature.properties.UNIT);
               console.log('DOR Parcel BASEREG - feature:', feature);
               var unitNum2 = geocode.unit_num;
               if (unitNum) {
-                where += " AND UNIT_NUM = '" + unitNum + "'";
+                where += " and unit_num::int = '" + unitNum + "'";
               } else if (unitNum2 != '') {
-                where += " AND UNIT_NUM = '" + unitNum2 + "'";
+                where += " and unit_num = '" + unitNum2 + "'";
               }
 
-              where += ") OR (STREET_ADDRESS='" + parcelBaseAddress + "'";
+              where += ") or (street_name='" + parcelBaseAddress + "'";
               if (unitNum) {
-                where +="AND UNIT_NUM = '" + unitNum + "'";
+                where +="and unit_num = '" + unitNum + "'";
               }
               where += ")"
+              console.log('where', where);
             }
 
             // METHOD 2: via parcel id - the layer doesn't have mapreg yet, though
@@ -464,7 +468,7 @@ Mapboard.default({
           f: 'json'
         },
         success: function(data) {
-          return data.features;
+          return data.rows;
         }
       },
     },
@@ -511,37 +515,38 @@ Mapboard.default({
         params: {}
       }
     },
-    vacantLand: {
-      type: 'esri',
-      url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Land/FeatureServer/0',
-      options: {
-        relationship: 'contains',
-      },
-      // params: {
-      //   query: feature => L.esri.query({url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Land/FeatureServer/0'}).contains(feature)
-      // },
-      success: function(data) {
-        return data;
-      }
-    },
-    vacantBuilding: {
-      type: 'esri',
-      url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Bldg/FeatureServer/0',
-      options: {
-        relationship: 'contains',
-      },
-      // params: {
-      //   query: feature => L.esri.query({url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Bldg/FeatureServer/0'}).contains(feature)
-      // },
-      success: function(data) {
-        return data;
-      }
-    },
+    // vacantLand: {
+    //   type: 'esri',
+    //   url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Land/FeatureServer/0',
+    //   options: {
+    //     relationship: 'contains',
+    //   },
+    //   // params: {
+    //   //   query: feature => L.esri.query({url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Land/FeatureServer/0'}).contains(feature)
+    //   // },
+    //   success: function(data) {
+    //     return data;
+    //   }
+    // },
+    // vacantBuilding: {
+    //   type: 'esri',
+    //   url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Bldg/FeatureServer/0',
+    //   options: {
+    //     relationship: 'contains',
+    //   },
+    //   // params: {
+    //   //   query: feature => L.esri.query({url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Bldg/FeatureServer/0'}).contains(feature)
+    //   // },
+    //   success: function(data) {
+    //     return data;
+    //   }
+    // },
     vacantIndicatorsPoints: {
       type: 'esri-nearby',
       url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Points/FeatureServer/0',
       options: {
-        geometryServerUrl: 'http://192.168.103.143:6080/arcgis/rest/services/Utilities/Geometry/GeometryServer/',
+        geometryServerUrl: 'http://gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/',
+        // geometryServerUrl: 'http://192.168.103.143:6080/arcgis/rest/services/Utilities/Geometry/GeometryServer/',
         // radius: 500,
         // units: 'feet',
         calculateDistance: true,
@@ -562,11 +567,6 @@ Mapboard.default({
       url: 'http://api.phila.gov/ais/v1/search/',
       options: {
         params: {
-          urlAddition: function(feature) {
-            console.log('testing feature in params:', feature);
-            const street_address = feature.properties.street_address;
-            return street_address;
-          },
           gatekeeperKey: GATEKEEPER_KEY,
           include_units: true,
           opa_only: true,
@@ -1387,14 +1387,14 @@ Mapboard.default({
                       label: 'ID',
                       value: function(state, item) {
                         // return "<a target='_blank' href='//pdx-app01/recorder/eagleweb/viewDoc.jsp?node=DOCC"+item.attributes.R_NUM+"'>"+item.attributes.R_NUM+"<i class='fa fa-external-link'></i></a>"
-                        return item.attributes.R_NUM;
+                        return item.document_id;
                       },
                     },
                     {
                       label: 'Date',
                       value: function(state, item) {
                         // return item.attributes.RECORDING_DATE;
-                        return item.attributes.DISPLAY_DATE;
+                        return item.display_date;
                       },
                       nullValue: 'no date available',
                       transforms: [
@@ -1404,19 +1404,19 @@ Mapboard.default({
                     {
                       label: 'Type',
                       value: function(state, item) {
-                        return item.attributes.DOCUMENT_TYPE;
+                        return item.document_type;
                       },
                     },
                     {
                       label: 'Grantor',
                       value: function(state, item) {
-                        return item.attributes.GRANTORS;
+                        return item.grantors;
                       },
                     },
                     {
                       label: 'Grantee',
                       value: function(state, item) {
-                        return item.attributes.GRANTEES;
+                        return item.grantees;
                       },
                     },
                   ], // end fields
@@ -1424,7 +1424,7 @@ Mapboard.default({
                     // this should return the val to sort on
                     getValue: function(item) {
                       // return item.attributes.RECORDING_DATE;
-                      return item.attributes.DISPLAY_DATE;
+                      return item.display_date;
                     },
                     // asc or desc
                     order: 'desc'
@@ -2679,13 +2679,17 @@ Mapboard.default({
                   id: 'vacantIndicatorsPoints',
                   sort: {
                     select: true,
+                    methods: [
+                      'type',
+                      'distance'
+                    ],
                     getValue: function(item, method) {
                       var val;
 
-                      if (method === 'date') {
-                        val = item.decisiondate;
+                      if (method === 'type') {
+                        val = item.properties.VACANT_FLAG;
                       } else if (method === 'distance') {
-                        val = item.distance;
+                        val = item._distance;
                       }
 
                       return val;
@@ -2694,15 +2698,16 @@ Mapboard.default({
                   filterByText: {
                     label: 'Filter by',
                     fields: [
-                      'appealgrounds'
+                      'ADDRESS',
+                      'VACANT_FLAG'
                     ]
                   },
                   mapOverlay: {
                     marker: 'circle',
                     style: {
                       radius: 6,
-                      fillColor: '#a953f6',
-                    	color: '#a953f6',
+                      fillColor: '#9400c6',
+                    	color: '#9400c6',
                     	weight: 1,
                     	opacity: 1,
                     	fillOpacity: 1.0
@@ -2717,16 +2722,6 @@ Mapboard.default({
                     }
                   },
                   fields: [
-                    // {
-                    //   label: 'Date',
-                    //   value: function(state, item) {
-                    //     return item.decisiondate;
-                    //   },
-                    //   nullValue: 'no date available',
-                    //   transforms: [
-                    //     'date'
-                    //   ]
-                    // },
                     {
                       label: 'Address',
                       value: function(state, item) {
@@ -2734,21 +2729,33 @@ Mapboard.default({
                       }
                     },
                     {
-                      label: 'Vacancy Rank',
+                      label: 'Property Type',
                       value: function(state, item) {
-                        return item.properties.VACANT_RANK;
+                        return item.properties.VACANT_FLAG;
                       }
                     },
-                    // {
-                    //   label: 'Distance',
-                    //   value: function(state, item) {
-                    //     return parseInt(item.distance) + ' ft';
-                    //   }
-                    // }
-                  ]
+                    {
+                      label: 'Distance',
+                      value: function(state, item) {
+                        return item._distance + ' ft';
+                      }
+                    },
+                  ],
+                  externalLink: {
+                    forceShow: true,
+                    action: function(count) {
+                      return 'See more at Vacancy Property Viewer';
+                    },
+                    name: 'Vacancy Property Viewer',
+                    href: function(state) {
+                      // var address = state.geocode.data.properties.street_address;
+                      // var addressEncoded = encodeURIComponent(address);
+                      return '//phl.maps.arcgis.com/apps/webappviewer/index.html?id=64ac160773d04952bc17ad895cc00680';
+                    }
+                  }
                 },
                 slots: {
-                  title: 'Vacant Properties',
+                  title: 'Likely Vacant Properties',
                   data: 'vacantIndicatorsPoints',
                   items: function(state) {
                     var data = state.sources['vacantIndicatorsPoints'].data || [];
@@ -2939,152 +2946,155 @@ Mapboard.default({
     //     }
     //   ]
     // },
-    {
-      key: 'water',
-      icon: 'tint',
-      label: 'Stormwater',
-      dataSources: ['stormwater'],
-      basemap: 'pwd',
-      dynamicMapLayers: [
-        'stormwater'
-      ],
-      identifyFeature: 'pwd-parcel',
-      parcels: 'pwd',
-      components: [
-        {
-          type: 'callout',
-          slots: {
-            text: 'The property boundaries displayed on the map for reference only and may not be used in place of recorded deeds or land surveys. Boundaries are generalized for ease of visualization. Source: Philadelphia Water'
-          }
-        },
-        {
-          type: 'vertical-table',
-          slots: {
-            title: 'Parcel',
-            fields: [
-              {
-                label: 'Parcel ID',
-                value: function(state) {
-                  // return state.geocode.data.properties.pwd_parcel_id;
-                  return state.sources.stormwater.data.Parcel.ParcelID;
-                }
-              },
-              {
-                label: 'Address',
-                value: function(state) {
-                  return state.sources.stormwater.data.Parcel.Address;
-                }
-              },
-              {
-                label: 'Building Type',
-                value: function(state) {
-                  return state.sources.stormwater.data.Parcel.BldgType;
-                }
-              },
-              {
-                label: 'Gross Area',
-                value: function(state) {
-                  return state.sources.stormwater.data.Parcel.GrossArea + ' sq ft';
-                },
-                transforms: [
-                  'thousandsPlace'
-                ]
-              },
-              {
-                label: 'Impervious Area',
-                value: function(state) {
-                  return state.sources.stormwater.data.Parcel.ImpervArea + ' sq ft';
-                },
-                transforms: [
-                  'thousandsPlace'
-                ]
-              },
-              {
-                label: 'CAP Eligible',
-                value: function(state) {
-                  return state.sources.stormwater.data.Parcel.CAPEligible;
-                },
-                transforms: [
-                  'booleanToYesNo'
-                ]
-              },
-            ]
-          },
-        },
-        {
-          type: 'horizontal-table',
-          options: {
-            topicKey: 'water',
-            id: 'stormwater',
-            // limit: 100,
-            // TODO this isn't used yet, but should be for highlighting rows/
-            // map features.
-            // overlay: '311',
-            fields: [
-              {
-                label: 'Account #',
-                value: function(state, item) {
-                  return item.AccountNumber;
-                }
-              },
-              {
-                label: 'Customer',
-                value: function(state, item) {
-                  return item.CustomerName;
-                }
-              },
-              {
-                label: 'Status',
-                value: function(state, item) {
-                  return item.AcctStatus;
-                }
-              },
-              {
-                label: 'Service Type',
-                value: function(state, item) {
-                  return item.ServiceTypeLabel;
-                }
-              },
-              {
-                label: 'Size',
-                value: function(state, item) {
-                  return item.MeterSize;
-                }
-              },
-              {
-                label: 'Stormwater',
-                value: function(state, item) {
-                  return item.StormwaterStatus;
-                }
-              }
-            ],
-            externalLink: {
-              forceShow: true,
-              action: function(count) {
-                return 'See more at Stormwater Billing';
-              },
-              name: 'Stormwater Billing',
-              href: function(state) {
-                var id = state.sources.stormwater.data.Parcel.ParcelID;
-                return '//www.phila.gov/water/swmap/Parcel.aspx?parcel_id=' + id;
-              }
-            }
-          },
-          slots: {
-            title: 'Accounts',
-            items: function(state) {
-              var data = state.sources['stormwater'].data
-              var rows = data.Accounts.map(function(row){
-                var itemRow = row;
-                // var itemRow = Object.assign({}, row);
-                return itemRow;
-              });
-              return rows;
-            }
-          }
-        }
-      ]
-    },
+
+    // {
+    //   key: 'water',
+    //   icon: 'tint',
+    //   label: 'Stormwater',
+    //   dataSources: ['stormwater'],
+    //   basemap: 'pwd',
+    //   dynamicMapLayers: [
+    //     'stormwater'
+    //   ],
+    //   identifyFeature: 'pwd-parcel',
+    //   parcels: 'pwd',
+    //   components: [
+    //     {
+    //       type: 'callout',
+    //       slots: {
+    //         text: 'The property boundaries displayed on the map for reference only and may not be used in place of recorded deeds or land surveys. Boundaries are generalized for ease of visualization. Source: Philadelphia Water'
+    //       }
+    //     },
+    //     {
+    //       type: 'vertical-table',
+    //       slots: {
+    //         title: 'Parcel',
+    //         fields: [
+    //           {
+    //             label: 'Parcel ID',
+    //             value: function(state) {
+    //               // return state.geocode.data.properties.pwd_parcel_id;
+    //               return state.sources.stormwater.data.Parcel.ParcelID;
+    //             }
+    //           },
+    //           {
+    //             label: 'Address',
+    //             value: function(state) {
+    //               return state.sources.stormwater.data.Parcel.Address;
+    //             }
+    //           },
+    //           {
+    //             label: 'Building Type',
+    //             value: function(state) {
+    //               return state.sources.stormwater.data.Parcel.BldgType;
+    //             }
+    //           },
+    //           {
+    //             label: 'Gross Area',
+    //             value: function(state) {
+    //               return state.sources.stormwater.data.Parcel.GrossArea + ' sq ft';
+    //             },
+    //             transforms: [
+    //               'thousandsPlace'
+    //             ]
+    //           },
+    //           {
+    //             label: 'Impervious Area',
+    //             value: function(state) {
+    //               return state.sources.stormwater.data.Parcel.ImpervArea + ' sq ft';
+    //             },
+    //             transforms: [
+    //               'thousandsPlace'
+    //             ]
+    //           },
+    //           {
+    //             label: 'CAP Eligible',
+    //             value: function(state) {
+    //               return state.sources.stormwater.data.Parcel.CAPEligible;
+    //             },
+    //             transforms: [
+    //               'booleanToYesNo'
+    //             ]
+    //           },
+    //         ]
+    //       },
+    //     },
+    //     {
+    //       type: 'horizontal-table',
+    //       options: {
+    //         topicKey: 'water',
+    //         id: 'stormwater',
+    //         // limit: 100,
+    //         // TODO this isn't used yet, but should be for highlighting rows/
+    //         // map features.
+    //         // overlay: '311',
+    //         fields: [
+    //           {
+    //             label: 'Account #',
+    //             value: function(state, item) {
+    //               return item.AccountNumber;
+    //             }
+    //           },
+    //           {
+    //             label: 'Customer',
+    //             value: function(state, item) {
+    //               return item.CustomerName;
+    //             }
+    //           },
+    //           {
+    //             label: 'Status',
+    //             value: function(state, item) {
+    //               return item.AcctStatus;
+    //             }
+    //           },
+    //           {
+    //             label: 'Service Type',
+    //             value: function(state, item) {
+    //               return item.ServiceTypeLabel;
+    //             }
+    //           },
+    //           {
+    //             label: 'Size',
+    //             value: function(state, item) {
+    //               return item.MeterSize;
+    //             }
+    //           },
+    //           {
+    //             label: 'Stormwater',
+    //             value: function(state, item) {
+    //               return item.StormwaterStatus;
+    //             }
+    //           }
+    //         ],
+    //         externalLink: {
+    //           forceShow: true,
+    //           action: function(count) {
+    //             return 'See more at Stormwater Billing';
+    //           },
+    //           name: 'Stormwater Billing',
+    //           href: function(state) {
+    //             var id = state.sources.stormwater.data.Parcel.ParcelID;
+    //             return '//www.phila.gov/water/swmap/Parcel.aspx?parcel_id=' + id;
+    //           }
+    //         }
+    //       },
+    //       slots: {
+    //         title: 'Accounts',
+    //         items: function(state) {
+    //           var data = state.sources['stormwater'].data
+    //           var rows = data.Accounts.map(function(row){
+    //             var itemRow = row;
+    //             // var itemRow = Object.assign({}, row);
+    //             return itemRow;
+    //           });
+    //           return rows;
+    //         }
+    //       }
+    //     }
+    //   ]
+    // },
+
+
     // {
     //   key: 'related',
     //   icon: 'home',
