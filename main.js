@@ -407,26 +407,25 @@ Mapboard.default({
             // METHOD 1: via address
             var parcelBaseAddress = concatDorAddress(feature);
             var geocode = state.geocode.data.properties;
-            console.log('parcelBaseAddress', parcelBaseAddress)
+            // console.log('parcelBaseAddress', parcelBaseAddress)
 
             // REVIEW if the parcel has no address, we don't want to query
             // WHERE ADDRESS = 'null' (doesn't make sense), so use this for now
             if (!parcelBaseAddress || parcelBaseAddress === 'null'){
               var where = "select * from vw_rtt_summary where matched_regmap = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
-              console.log('DOR Parcel BASEREG', state.parcels.dor.data[0].properties.BASEREG);
+              // console.log('DOR Parcel BASEREG', state.parcels.dor.data[0].properties.BASEREG);
             } else {
-              const address_low = state.geocode.data.properties.address_low
+              var address_low = state.geocode.data.properties.address_low
               roundto100 = function(address) { return Math.floor(address/100, 1)*100}
-              const address_floor = roundto100(address_low);
-              const address_remainder = address_low - address_floor;
-              console.log('address_low:', address_low, 'address_floor:', address_floor, 'address_remainder', address_remainder);//, 'address_high', address_high);
+              var address_floor = roundto100(address_low);
+              var address_remainder = address_low - address_floor;
+              // console.log('address_low:', address_low, 'address_floor:', address_floor, 'address_remainder', address_remainder);//, 'address_high', address_high);
                 var where = "select * from vw_rtt_summary where ((address_low = " + address_low
                           + " or (address_low >= " + address_floor + " and address_low <= " + address_low
                           + " and (CASE WHEN address_high <> '' and address_high <> 'N' THEN address_high::numeric END) >= " + address_remainder + " ))"
                           + " and street_name = '" + geocode.street_name
                           + "' and street_suffix = '" + geocode.street_suffix
                           + "'"
-              console.log('got past where');
               if (geocode.street_predir != '') {
                 where += " and street_predir = '" + geocode.street_predir + "'";
               }
@@ -438,7 +437,7 @@ Mapboard.default({
               }
               // check for unit num
               var unitNum = cleanDorAttribute(feature.properties.UNIT);
-              console.log('DOR Parcel BASEREG - feature:', feature);
+              // console.log('DOR Parcel BASEREG - feature:', feature);
               var unitNum2 = geocode.unit_num;
               if (unitNum) {
                 where += " and unit_num::int = '" + unitNum + "'";
@@ -446,7 +445,7 @@ Mapboard.default({
                 where += " and unit_num = '" + unitNum2 + "'";
               }
 
-              where += ") or (street_name='" + parcelBaseAddress + "'";
+              where += ") or (street_address='" + parcelBaseAddress + "'";
               if (unitNum) {
                 where +="and unit_num = '" + unitNum + "'";
               }
@@ -474,9 +473,10 @@ Mapboard.default({
     },
     '311': {
       type: 'esri-nearby',
-      url: 'http://192.168.103.143:6080/arcgis/rest/services/GSG/GIS311_365DAYS/MapServer/0',
+      url: 'https://192.168.103.143:6443/arcgis/rest/services/GSG/GIS311_365DAYS/MapServer/0',
       options: {
-        geometryServerUrl: 'http://192.168.103.143:6080/arcgis/rest/services/Utilities/Geometry/GeometryServer/',
+        // geometryServerUrl: 'http://192.168.103.143:6080/arcgis/rest/services/Utilities/Geometry/GeometryServer/',
+        geometryServerUrl: '//gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/',
         radius: 500,
         units: 'feet',
         calculateDistance: true,
@@ -545,7 +545,7 @@ Mapboard.default({
       type: 'esri-nearby',
       url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Points/FeatureServer/0',
       options: {
-        geometryServerUrl: 'http://gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/',
+        geometryServerUrl: '//gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/',
         // geometryServerUrl: 'http://192.168.103.143:6080/arcgis/rest/services/Utilities/Geometry/GeometryServer/',
         // radius: 500,
         // units: 'feet',
@@ -564,7 +564,7 @@ Mapboard.default({
     },
     condoList: {
       type: 'http-get',
-      url: 'http://api.phila.gov/ais/v1/search/',
+      url: '//api.phila.gov/ais/v1/search/',
       options: {
         params: {
           gatekeeperKey: GATEKEEPER_KEY,
@@ -1126,7 +1126,7 @@ Mapboard.default({
               return item.properties.MAPREG;
             },
             getAddress: function(item) {
-              const address = concatDorAddress(item);
+              var address = concatDorAddress(item);
               return address;
             },
             // components for the content pane. this essentially a topic body.
