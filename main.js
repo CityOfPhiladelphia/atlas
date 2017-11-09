@@ -557,11 +557,16 @@ Mapboard.default({
         return data;
       }
     },
+    // TODO call this opaCondoList or something to explain how it's different
+    // from dorCondoList
     condoList: {
       type: 'http-get',
       url: '//api.phila.gov/ais/v1/search/',
       options: {
         params: {
+          urlAddition: function (feature) {
+            return feature.properties.street_address;
+          },
           gatekeeperKey: GATEKEEPER_KEY,
           include_units: true,
           opa_only: true,
