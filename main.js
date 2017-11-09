@@ -1373,10 +1373,10 @@ Mapboard.default({
                   }
                 },
                 slots: {
-                  title: 'DOR Condominium Records',
-                  items: function(state, item) {
-                    console.log('dorcondo item', item);
+                  title: 'Condominiums',
+                  items: function (state, item) {
                     var id = item.properties.OBJECTID;
+
                     if (state.sources.dorCondoList.targets[id]) {
                       if (state.sources.dorCondoList.targets[id].data) {
                         return state.sources.dorCondoList.targets[id].data.rows;
