@@ -808,8 +808,9 @@ Mapboard.default({
         {
           type: 'callout',
           slots: {
-            // text: 'This information is provided by the Office of Property Assessments (OPA), the agency responsible for estimating property values in the City of Philadelphia. OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City websites may still use that name.'
-            text: 'Property assessment and sale information. Source: Office of Property Assessments (OPA). OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City records may still use that name.'
+            text: '\
+              Property assessment and sale information for this address. Source: Office of Property Assessments (OPA). OPA was formerly a part of the Bureau of Revision of Taxes (BRT) and some City records may still use that name.\
+            '
           }
         },
 
@@ -1013,7 +1014,7 @@ Mapboard.default({
         {
           type: 'callout',
           slots: {
-            text: 'Click any individual condominium unit below to see information on that unit.  Use the back button to get back to this list.'
+            text: 'Condominium units at your search address, as recorded for property assessment purposes. Click one of the addresses below to see information for that unit.  Use the back button to return to this list. Source: Office of Property Assessment'
           }
         },
         {
@@ -1082,8 +1083,14 @@ Mapboard.default({
         {
           type: 'callout',
           slots: {
-            text: 'Deed information as maintained by the Department of Records. The map faithfully reflects property boundaries as described in recorded deeds including multiple types of easements. Click on Registry Maps to see images of the last hard-copy deed maps some of which have hand written information that may be useful in historical deed research.<br><br> \
-                  The property boundaries displayed on the map are for reference only and should not be used in place of the recorded deeds or land surveys. Source: Department of Records'
+            text: '\
+              Deed information and document transactions for this address.\
+              The map faithfully reflects property boundaries as described in \
+              recorded deeds including multiple types of easements.\
+              The property boundaries displayed on the map are for reference \
+              only and should not be used in place of the recorded deeds or \
+              land surveys. Source: Department of Records\
+            ',
           }
         },
         {
@@ -1382,6 +1389,18 @@ Mapboard.default({
               }, // end condos table
 
               {
+                type: 'callout',
+                slots: {
+                  text: 'The list of documents \
+                    shown below may not be a complete history of title to this \
+                    parcel. The list is based solely on documents recorded from\
+                    1974 forward where those documents contained street addresses\
+                    in the original recorded document.\
+                  '
+                },
+              },
+
+              {
                 type: 'horizontal-table',
                 options: {
                   topicKey: 'deeds',
@@ -1474,6 +1493,16 @@ Mapboard.default({
           }
         }, // end dor parcel tab group comp
         {
+          type: 'callout',
+          slots: {
+            text: '\
+              Use the buttons below to view images of hard-copy deed maps, some\
+              of which have handwritten information that may be useful for\
+              historical deed research.\
+            ',
+          },
+        },
+        {
           type: 'overlay-toggle-group',
           options: {
             getKey: function(item) {
@@ -1516,7 +1545,11 @@ Mapboard.default({
         {
           type: 'callout',
           slots: {
-            text: 'Building permits, licenses, property maintenance code violations. Source: Department of Licenses and Inspections.'
+            text: '\
+              Licenses, inspections, permits, and property maintenance \
+              violations at your search address. Source: Department of \
+              Licenses & Inspections\
+            '
           }
         },
         {
@@ -1971,7 +2004,7 @@ Mapboard.default({
         {
           type: 'callout',
           slots: {
-            text: 'Base district zoning maps and associated zoning overlays and Registered Community Organizations. Source: Department of Planning and Development'
+            text: 'Base district zoning maps, associated zoning overlays, and Registered Community Organizations applicable to your search address. Source: Department of Planning and Development'
           }
         },
         {
@@ -2293,7 +2326,11 @@ Mapboard.default({
         {
           type: 'callout',
           slots: {
-            text: 'See 311 requests, neighborhood services, vacant property and more in the last 30 or 90 days near your search address. Filter or sort by records.'
+            text: '
+              See recent activity near your search address including 311 \
+              service requests, crimes, zoning appeals, and more. Hover over a\
+              record below to highlight it on the map.\
+            '
           }
         },
         // {
