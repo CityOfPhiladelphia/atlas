@@ -1,6 +1,6 @@
 var GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
 // var BASE_CONFIG_URL = '//raw.githubusercontent.com/rbrtmrtn/mapboard-base-config/develop/config.js';
-var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/c61e2da2593776f5095240315eb371e9d4461753/config.js';
+var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/d9892943dc4df94ba2b1e51dbe2aeb0b0bcd4aab/config.js';
 
 var ZONING_CODE_MAP = {
   'RSD-1': 'Residential Single Family Detached-1',
@@ -1260,7 +1260,7 @@ Mapboard.default({
                     {
                       label: 'Perimeter',
                       value: function (state, item) {
-                        return (item.properties || {}).SHAPE_Length;
+                        return (item.properties || {})['SHAPE.LEN'];
                       },
                       transforms: [
                         'integer',
@@ -1271,7 +1271,7 @@ Mapboard.default({
                     {
                       label: 'Area',
                       value: function(state, item) {
-                        return (item.properties || {}).SHAPE_Area;
+                        return (item.properties || {})['SHAPE.AREA'];
                       },
                       transforms: [
                         'integer',
