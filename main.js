@@ -1,3 +1,12 @@
+/*
+   _____   __  .__
+  /  _  \_/  |_|  | _____    ______
+ /  /_\  \   __\  | \__  \  /  ___/
+/    |    \  | |  |__/ __ \_\___ \
+\____|__  /__| |____(____  /____  >
+        \/               \/     \/
+*/
+
 var GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
 // var BASE_CONFIG_URL = '//raw.githubusercontent.com/rbrtmrtn/mapboard-base-config/develop/config.js';
 var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/d9892943dc4df94ba2b1e51dbe2aeb0b0bcd4aab/config.js';
