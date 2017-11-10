@@ -1055,7 +1055,7 @@ Mapboard.default({
     },
     {
       key: 'condos',
-      icon: 'map-marker',
+      icon: 'building',
       label: 'Condominiums',
       dataSources: ['condoList'],
       onlyShowTopicIfDataExists: {
@@ -1911,7 +1911,7 @@ Mapboard.default({
     },
     {
       key: 'zoning',
-      icon: 'building-o',
+      icon: 'university',
       label: 'Zoning',
       dataSources: [
         'zoningOverlay'
