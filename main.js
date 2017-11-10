@@ -778,12 +778,25 @@ Mapboard.default({
         return value ? 'Yes' : 'No';
       }
     },
-    thousandsPlace: {
-      transform: function(value) {
-        var number = String(value).match(/\d+/)[0].replace(/(.)(?=(\d{3})+$)/g,'$1,');
-        var label = String(value).replace(/[0-9]/g, '') || '';
-        return number + ' ' + label;
-      }
+    integer: {
+      transform: function (value) {
+        return !isNaN(value) && parseInt(value);
+      },
+    },
+    prettyNumber: {
+      transform: function (value) {
+        return !isNaN(value) && value.toLocaleString();
+      },
+    },
+    feet: {
+      transform: function (value) {
+        return value && value + ' ft';
+      },
+    },
+    squareFeet: {
+      transform: function (value) {
+        return value && value + ' sq ft';
+      },
     }
   },
   greeting:{
@@ -1246,20 +1259,24 @@ Mapboard.default({
                     },
                     {
                       label: 'Perimeter',
-                      value: function(state, item) {
-                        return Math.round(item.properties['SHAPE.LEN']) + ' ft';
+                      value: function (state, item) {
+                        return (item.properties || {}).SHAPE_Length;
                       },
                       transforms: [
-                        'thousandsPlace'
+                        'integer',
+                        'prettyNumber',
+                        'feet',
                       ]
                     },
                     {
                       label: 'Area',
                       value: function(state, item) {
-                        return Math.round(item.properties['SHAPE.AREA']) + ' sq ft';
+                        return (item.properties || {}).SHAPE_Area;
                       },
                       transforms: [
-                        'thousandsPlace'
+                        'integer',
+                        'prettyNumber',
+                        'squareFeet',
                       ]
                     },
                   ]
