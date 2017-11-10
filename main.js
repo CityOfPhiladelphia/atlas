@@ -1260,7 +1260,7 @@ Mapboard.default({
                     {
                       label: 'Perimeter',
                       value: function (state, item) {
-                        return (item.properties || {}).SHAPE_LEN;
+                        return (item.properties || {})['SHAPE.LEN'];
                       },
                       transforms: [
                         'integer',
@@ -1271,7 +1271,7 @@ Mapboard.default({
                     {
                       label: 'Area',
                       value: function(state, item) {
-                        return (item.properties || {}).SHAPE_AREA;
+                        return (item.properties || {})['SHAPE.AREA'];
                       },
                       transforms: [
                         'integer',
