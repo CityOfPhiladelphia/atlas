@@ -1005,7 +1005,7 @@ Mapboard.default({
               name: 'Property Search',
               href: function(state) {
                 var id = state.geocode.data.properties.opa_account_num;
-                return '//property.phila.gov/?p=' + id;
+                return 'http://property.phila.gov/?p=' + id;
               }
             }
           }
@@ -1631,7 +1631,7 @@ Mapboard.default({
               {
                 label: 'ID',
                 value: function(state, item){
-                  return "<a target='_blank' href='//li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.permitnumber+" <i class='fa fa-external-link'></i></a>"
+                  return "<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.permitnumber+" <i class='fa fa-external-link'></i></a>"
                 }
               },
               {
@@ -1663,7 +1663,7 @@ Mapboard.default({
               href: function(state) {
                 var address = state.geocode.data.properties.street_address;
                 var addressEncoded = encodeURIComponent(address);
-                return '//li.phila.gov/#summary?address=' + addressEncoded;
+                return 'http://li.phila.gov/#summary?address=' + addressEncoded;
               }
             }
           },
@@ -1699,7 +1699,7 @@ Mapboard.default({
               {
                 label: 'ID',
                 value: function(state, item){
-                  return "<a target='_blank' href='//li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link'></i></a>"
+                  return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link'></i></a>"
                   // return item.casenumber
                 }
               },
@@ -1733,7 +1733,7 @@ Mapboard.default({
               href: function(state) {
                 var address = state.geocode.data.properties.street_address;
                 var addressEncoded = encodeURIComponent(address);
-                return '//li.phila.gov/#summary?address=' + addressEncoded;
+                return 'http://li.phila.gov/#summary?address=' + addressEncoded;
               }
             }
           },
@@ -1772,7 +1772,7 @@ Mapboard.default({
               {
                 label: 'ID',
                 value: function(state, item){
-                  return "<a target='_blank' href='//li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link'></i></a>"
+                  return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link'></i></a>"
                   // return item.casenumber
                 }
               },
@@ -1805,7 +1805,7 @@ Mapboard.default({
               href: function(state) {
                 var address = state.geocode.data.properties.street_address;
                 var addressEncoded = encodeURIComponent(address);
-                return '//li.phila.gov/#summary?address=' + addressEncoded;
+                return 'http://li.phila.gov/#summary?address=' + addressEncoded;
               }
             }
           },
@@ -1843,7 +1843,7 @@ Mapboard.default({
               {
                 label: 'License Number',
                 value: function(state, item){
-                  return "<a target='_blank' href='//li.phila.gov/#details?entity=licenses&eid="+item.licensenum+"&key="+item.street_address+"&address="+item.street_address+"'>"+item.licensenum+" <i class='fa fa-external-link'></i></a>"
+                  return "<a target='_blank' href='http://li.phila.gov/#details?entity=licenses&eid="+item.licensenum+"&key="+item.street_address+"&address="+item.street_address+"'>"+item.licensenum+" <i class='fa fa-external-link'></i></a>"
                   return item.licensenum
                 }
               },
@@ -1882,7 +1882,7 @@ Mapboard.default({
               href: function(state) {
                 var address = state.geocode.data.properties.street_address;
                 var addressEncoded = encodeURIComponent(address);
-                return '//li.phila.gov/#summary?address=' + addressEncoded;
+                return 'http://li.phila.gov/#summary?address=' + addressEncoded;
               }
             }
           },
@@ -1997,7 +1997,7 @@ Mapboard.default({
                 value: function(state, item){
                   //return item.appeal_key
                   // return "<a target='_blank' href='//li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link'></i></a>"
-                  return "<a target='_blank' href='//li.phila.gov/#details?entity=appeals&eid="+item.appeal_key+"&key="+item.addresskey+"&address="+item.address+"'>"+item.appealno+"<i class='fa fa-external-link'></i></a>"
+                  return "<a target='_blank' href='http://li.phila.gov/#details?entity=appeals&eid="+item.appeal_key+"&key="+item.addresskey+"&address="+item.address+"'>"+item.appealno+"<i class='fa fa-external-link'></i></a>"
                 }
               },
               {
