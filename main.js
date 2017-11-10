@@ -7,6 +7,10 @@
         \/               \/     \/
 */
 
+// turn off console logging in production
+// TODO come up with better way of doing this with webpack + env vars
+console.log = console.info = console.debug = console.error = function () {};
+
 var GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
 // var BASE_CONFIG_URL = '//raw.githubusercontent.com/rbrtmrtn/mapboard-base-config/develop/config.js';
 var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/d9892943dc4df94ba2b1e51dbe2aeb0b0bcd4aab/config.js';
