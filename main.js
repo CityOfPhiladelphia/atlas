@@ -2288,15 +2288,15 @@ Mapboard.default({
                     select: true,
                     getValue: function(item, method) {
                       var val;
-
-                      if (method === 'date') {
+                      if (method === 'date' || !method) {
                         val = item.requested_datetime;
                       } else if (method === 'distance') {
                         val = item.distance;
                       }
 
                       return val;
-                    }
+                    },
+                    order: 'asc'
                   },
                   filters: [
                     {
@@ -2411,13 +2411,11 @@ Mapboard.default({
                     select: true,
                     getValue: function(item, method) {
                       var val;
-
-                      if (method === 'date') {
+                      if (method === 'date' || !method) {
                         val = item.dispatch_date;
                       } else if (method === 'distance') {
                         val = item.distance;
                       }
-
                       return val;
                     }
                   },
@@ -2524,7 +2522,7 @@ Mapboard.default({
                     getValue: function(item, method) {
                       var val;
 
-                      if (method === 'date') {
+                      if (method === 'date' || !method) {
                         val = item.decisiondate;
                       } else if (method === 'distance') {
                         val = item.distance;
@@ -2617,7 +2615,7 @@ Mapboard.default({
                     getValue: function(item, method) {
                       var val;
 
-                      if (method === 'type') {
+                      if (method === 'type' || !method) {
                         val = item.properties.VACANT_FLAG;
                       } else if (method === 'distance') {
                         val = item._distance;
