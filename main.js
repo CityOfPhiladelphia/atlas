@@ -1479,7 +1479,8 @@ Mapboard.default({
                     // this should return the val to sort on
                     getValue: function(item) {
                       // return item.attributes.RECORDING_DATE;
-                      return item.display_date;
+                      // console.log('dor docs sort function running, display_date:', Date.parse(item.display_date));
+                      return Date.parse(item.display_date);
                     },
                     // asc or desc
                     order: 'desc'
