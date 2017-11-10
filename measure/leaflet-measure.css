@@ -72,8 +72,8 @@
 }
 .leaflet-touch .leaflet-control-measure .leaflet-control-measure-toggle,
 .leaflet-touch .leaflet-control-measure .leaflet-control-measure-toggle:hover {
-    width: 44px;
-    height: 44px
+    width: 36px;
+    height: 36px;
 }
 .leaflet-control-measure .startprompt h3 {
     margin-bottom: 10px
