@@ -413,52 +413,57 @@ Mapboard.default({
       },
       // url: '//ase.phila.gov/arcgis/rest/services/RTT/MapServer/0/query',
       // url: '//ase.phila.gov/arcgis/rest/services/DOR/rttsummary/MapServer/0/query',
-      url: 'https://phl.carto.com/api/v2/sql',
+      url: '//gis.phila.gov/arcgis/rest/services/DOR/rtt_service/MapServer/0/query',
+      // url: 'https://phl.carto.com/api/v2/sql',
       options: {
         params: {
-          q: function(feature, state) {
+          where: function(feature, state) {
             // METHOD 1: via address
             var parcelBaseAddress = concatDorAddress(feature);
             var geocode = state.geocode.data.properties;
-            // console.log('parcelBaseAddress', parcelBaseAddress)
+            console.log('parcelBaseAddress', parcelBaseAddress)
 
             // REVIEW if the parcel has no address, we don't want to query
             // WHERE ADDRESS = 'null' (doesn't make sense), so use this for now
             if (!parcelBaseAddress || parcelBaseAddress === 'null'){
-              var where = "select * from vw_rtt_summary where matched_regmap = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
-              // console.log('DOR Parcel BASEREG', state.parcels.dor.data[0].properties.BASEREG);
+              var where = "MATCHED_REGMAP = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
+              console.log('DOR Parcel BASEREG', state.parcels.dor.data[0].properties.BASEREG);
             } else {
-              var address_low = state.geocode.data.properties.address_low
+              const address_low = state.geocode.data.properties.address_low
               roundto100 = function(address) { return Math.floor(address/100, 1)*100}
-              var address_floor = roundto100(address_low);
-              var address_remainder = address_low - address_floor;
-              // console.log('address_low:', address_low, 'address_floor:', address_floor, 'address_remainder', address_remainder);//, 'address_high', address_high);
-                var where = "select * from vw_rtt_summary where ((address_low = " + address_low
-                          + " or (address_low >= " + address_floor + " and address_low <= " + address_low
-                          + " and (CASE WHEN address_high <> '' and address_high <> 'N' THEN address_high::numeric END) >= " + address_remainder + " ))"
-                          + " and street_name = '" + geocode.street_name
-                          + "' and street_suffix = '" + geocode.street_suffix
-                          + "'"
+              const address_floor = roundto100(address_low);
+              const address_remainder = address_low - address_floor;
+              console.log('address_low:', address_low, 'address_floor:', address_floor);
+              var where = "((ADDRESS_LOW = " + address_low
+                        + " OR (ADDRESS_LOW >= " + address_floor + " AND ADDRESS_LOW <= " + address_low + " AND ADDRESS_HIGH >= " + address_remainder + " ))"
+                        + " AND STREET_NAME = '" + geocode.street_name
+                        + "' AND STREET_SUFFIX = '" + geocode.street_suffix
+                        + "'"
               if (geocode.street_predir != '') {
-                where += " and street_predir = '" + geocode.street_predir + "'";
+                where += " AND STREET_PREDIR = '" + geocode.street_predir + "'";
               }
               if (geocode.address_low_suffix != '') {
-                where += " and address_low_suffix = '" + geocode.address_low_suffix + "'";
+                where += " AND ADDRESS_LOW_SUFFIX = '" + geocode.address_low_suffix + "'";
               }
               if (geocode.street_postdir != '') {
-                where += " and street_postdir = '" + geocode.street_postdir + "'";
+                where += " AND STREET_POSTDIR = '" + geocode.street_postdir + "'";
               }
               // check for unit num
               var unitNum = cleanDorAttribute(feature.properties.UNIT);
-              // console.log('DOR Parcel BASEREG - feature:', feature);
+              console.log('DOR Parcel BASEREG - feature:', feature);
               var unitNum2 = geocode.unit_num;
               if (unitNum) {
-                where += " and unit_num::int = '" + unitNum + "'";
+                where += " AND UNIT_NUM = '" + unitNum + "'";
               } else if (unitNum2 != '') {
-                where += " and unit_num = '" + unitNum2 + "'";
+                where += " AND UNIT_NUM = '" + unitNum2 + "'";
               }
-              where += ") or matched_regmap = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
-              // console.log('where', where);
+
+              where += ") or MATCHED_REGMAP = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
+              // where += ") OR (STREET_ADDRESS='" + parcelBaseAddress + "'";
+              // if (unitNum) {
+              //   where +="AND UNIT_NUM = '" + unitNum + "'";
+              // }
+              // where += ")"
             }
 
             // METHOD 2: via parcel id - the layer doesn't have mapreg yet, though
@@ -468,6 +473,60 @@ Mapboard.default({
             // console.log('dor docs where', where);
 
             return where;
+
+          // q: function(feature, state) {
+          //   // METHOD 1: via address
+          //   var parcelBaseAddress = concatDorAddress(feature);
+          //   var geocode = state.geocode.data.properties;
+          //   // console.log('parcelBaseAddress', parcelBaseAddress)
+          //
+          //   // REVIEW if the parcel has no address, we don't want to query
+          //   // WHERE ADDRESS = 'null' (doesn't make sense), so use this for now
+          //   if (!parcelBaseAddress || parcelBaseAddress === 'null'){
+          //     var where = "select * from vw_rtt_summary where matched_regmap = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
+          //     // console.log('DOR Parcel BASEREG', state.parcels.dor.data[0].properties.BASEREG);
+          //   } else {
+          //     var address_low = state.geocode.data.properties.address_low
+          //     roundto100 = function(address) { return Math.floor(address/100, 1)*100}
+          //     var address_floor = roundto100(address_low);
+          //     var address_remainder = address_low - address_floor;
+          //     // console.log('address_low:', address_low, 'address_floor:', address_floor, 'address_remainder', address_remainder);//, 'address_high', address_high);
+          //       var where = "select * from vw_rtt_summary where ((address_low = " + address_low
+          //                 + " or (address_low >= " + address_floor + " and address_low <= " + address_low
+          //                 + " and (CASE WHEN address_high ~ '^\d+$' THEN address_high::numeric END) >= " + address_remainder + " ))"
+          //                 // + " and (CASE WHEN address_high <> '' and address_high <> 'N' THEN address_high::numeric END) >= " + address_remainder + " ))"
+          //                 + " and street_name = '" + geocode.street_name
+          //                 + "' and street_suffix = '" + geocode.street_suffix
+          //                 + "'"
+          //     if (geocode.street_predir != '') {
+          //       where += " and street_predir = '" + geocode.street_predir + "'";
+          //     }
+          //     if (geocode.address_low_suffix != '') {
+          //       where += " and address_low_suffix = '" + geocode.address_low_suffix + "'";
+          //     }
+          //     if (geocode.street_postdir != '') {
+          //       where += " and street_postdir = '" + geocode.street_postdir + "'";
+          //     }
+          //     // check for unit num
+          //     var unitNum = cleanDorAttribute(feature.properties.UNIT);
+          //     // console.log('DOR Parcel BASEREG - feature:', feature);
+          //     var unitNum2 = geocode.unit_num;
+          //     if (unitNum) {
+          //       where += " and unit_num::int = '" + unitNum + "'";
+          //     } else if (unitNum2 != '') {
+          //       where += " and unit_num = '" + unitNum2 + "'";
+          //     }
+          //     where += ") or matched_regmap = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
+          //     // console.log('where', where);
+          //   }
+          //
+          //   // METHOD 2: via parcel id - the layer doesn't have mapreg yet, though
+          //   // var mapreg = feature.properties.MAPREG;
+          //   // var where = `MAPREG = '${mapreg}'`;
+          //
+          //   // console.log('dor docs where', where);
+          //
+          //   return where;
           },
           outFields: "R_NUM, DISPLAY_DATE, DOCUMENT_TYPE, GRANTORS, GRANTEES",
           returnDistinctValues: 'true',
@@ -475,7 +534,8 @@ Mapboard.default({
           f: 'json'
         },
         success: function(data) {
-          return data.rows;
+          return data.features;
+          // return data.rows;
         }
       },
     },
@@ -1469,14 +1529,16 @@ Mapboard.default({
                       label: 'ID',
                       value: function (state, item) {
                         // return "<a target='_blank' href='//pdx-app01/recorder/eagleweb/viewDoc.jsp?node=DOCC"+item.attributes.R_NUM+"'>"+item.attributes.R_NUM+"<i class='fa fa-external-link'></i></a>"
-                        return item.document_id;
+                        // return item.document_id;
+                        return item.attributes.R_NUM;
                       },
                     },
                     {
                       label: 'Date',
                       value: function(state, item) {
                         // return item.attributes.RECORDING_DATE;
-                        return item.display_date;
+                        // return item.display_date;
+                        return item.attributes.DISPLAY_DATE;
                       },
                       nullValue: 'no date available',
                       transforms: [
@@ -1486,19 +1548,22 @@ Mapboard.default({
                     {
                       label: 'Type',
                       value: function(state, item) {
-                        return item.document_type;
+                        // return item.document_type;
+                        return item.attributes.DOCUMENT_TYPE;
                       },
                     },
                     {
                       label: 'Grantor',
                       value: function(state, item) {
-                        return item.grantors;
+                        // return item.grantors;
+                        return item.attributes.GRANTORS;
                       },
                     },
                     {
                       label: 'Grantee',
                       value: function(state, item) {
-                        return item.grantees;
+                        // return item.grantees;
+                        return item.attributes.GRANTEES;
                       },
                     },
                   ], // end fields
@@ -1507,7 +1572,8 @@ Mapboard.default({
                     getValue: function(item) {
                       // return item.attributes.RECORDING_DATE;
                       // console.log('dor docs sort function running, display_date:', Date.parse(item.display_date));
-                      return Date.parse(item.display_date);
+                      return item.attributes.DISPLAY_DATE;
+                      // return Date.parse(item.display_date);
                     },
                     // asc or desc
                     order: 'desc'
