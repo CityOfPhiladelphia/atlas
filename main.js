@@ -1134,25 +1134,22 @@ Mapboard.default({
         {
           type: 'horizontal-table',
           options: {
-            topicKey: 'condos',
+            topicKey: 'condominiums',
             id: 'condoList',
             useApiCount: true,
             defaultIncrement: 25,
             fields: [
               {
-                label: 'OPA Account',
-                value: function(state, item) {
-                  var url = window.location.origin + window.location.pathname + '#/' + item.properties.opa_account_num + '/opa'
-                  return "<a href="+url+">"+item.properties.opa_account_num+" <i class='fa fa-external-link'></i></a>";
-                  // console.log('value function item:', item, 'controller:', controller);
-                  // return "<a onclick='" + controller + "'>"+item.properties.opa_account_num+"</a>"
+                label: 'Address',
+                value: function (state, item) {
+                  var address = item.properties.street_address;
+                  return '<a href="#/' + address + '/property">' + address + '</a>';
                 },
               },
               {
-                label: 'Address',
-                value: function(state, item) {
-                  var url = window.location.origin + window.location.pathname + '#/' + item.properties.opa_account_num + '/opa'
-                  return "<a href="+url+">"+item.properties.street_address+" <i class='fa fa-external-link'></i></a>";
+                label: 'OPA Account #',
+                value: function (state, item) {
+                  return item.properties.opa_account_num;
                 },
               },
             ], // end fields
