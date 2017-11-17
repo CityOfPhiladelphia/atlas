@@ -9,7 +9,7 @@
 
 // turn off console logging in production
 // TODO come up with better way of doing this with webpack + env vars
-console.log = console.info = console.debug = console.error = function () {};
+// console.log = console.info = console.debug = console.error = function () {};
 
 var GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
 // var BASE_CONFIG_URL = '//raw.githubusercontent.com/rbrtmrtn/mapboard-base-config/develop/config.js';
@@ -435,14 +435,16 @@ Mapboard.default({
                   address_floor = Math.floor(address_low / 100, 1) * 100,
                   address_remainder = address_low - address_floor,
                   addressHigh = props.address_high,
-                  addressCeil = addressHigh || address_low;
+                  addressCeil = addressHigh || address_low,
 
               // form where clause
-              var where = "((ADDRESS_LOW = " + address_low
+              var where = "(((ADDRESS_LOW >= " + address_low + " AND ADDRESS_LOW <= " + addressCeil + ")"
                         + " OR (ADDRESS_LOW >= " + address_floor + " AND ADDRESS_LOW <= " + addressCeil + " AND ADDRESS_HIGH >= " + address_remainder + " ))"
                         + " AND STREET_NAME = '" + geocode.street_name
                         + "' AND STREET_SUFFIX = '" + geocode.street_suffix
-                        + "'";
+                        + "' AND (MOD(ADDRESS_LOW,2) = MOD( " + address_low + ",2))"
+
+
 
               if (geocode.street_predir != '') {
                 where += " AND STREET_PREDIR = '" + geocode.street_predir + "'";
