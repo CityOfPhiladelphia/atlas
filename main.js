@@ -429,104 +429,49 @@ Mapboard.default({
               var where = "MATCHED_REGMAP = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
               console.log('DOR Parcel BASEREG', state.parcels.dor.data[0].properties.BASEREG);
             } else {
-              const address_low = state.geocode.data.properties.address_low
-              roundto100 = function(address) { return Math.floor(address/100, 1)*100}
-              const address_floor = roundto100(address_low);
-              const address_remainder = address_low - address_floor;
-              console.log('address_low:', address_low, 'address_floor:', address_floor);
-              var where = "((ADDRESS_LOW = " + address_low
-                        + " OR (ADDRESS_LOW >= " + address_floor + " AND ADDRESS_LOW <= " + address_low + " AND ADDRESS_HIGH >= " + address_remainder + " ))"
+              // TODO make these all camel case
+              var props = state.geocode.data.properties,
+                  address_low = props.address_low,
+                  address_floor = Math.floor(address_low / 100, 1) * 100,
+                  address_remainder = address_low - address_floor,
+                  addressHigh = props.address_high,
+                  addressCeil = addressHigh || address_low;
+
+              // form where clause
+              var where = "(((ADDRESS_LOW >= " + address_low + " AND ADDRESS_LOW <= " + addressCeil + ")"
+                        + " OR (ADDRESS_LOW >= " + address_floor + " AND ADDRESS_LOW <= " + addressCeil + " AND ADDRESS_HIGH >= " + address_remainder + " ))"
                         + " AND STREET_NAME = '" + geocode.street_name
                         + "' AND STREET_SUFFIX = '" + geocode.street_suffix
-                        + "'"
+                        + "' AND (MOD(ADDRESS_LOW,2) = MOD( " + address_low + ",2))";
+
+
+
               if (geocode.street_predir != '') {
                 where += " AND STREET_PREDIR = '" + geocode.street_predir + "'";
               }
+
               if (geocode.address_low_suffix != '') {
                 where += " AND ADDRESS_LOW_SUFFIX = '" + geocode.address_low_suffix + "'";
               }
+
               if (geocode.street_postdir != '') {
                 where += " AND STREET_POSTDIR = '" + geocode.street_postdir + "'";
               }
+
               // check for unit num
-              var unitNum = cleanDorAttribute(feature.properties.UNIT);
-              console.log('DOR Parcel BASEREG - feature:', feature);
-              var unitNum2 = geocode.unit_num;
+              var unitNum = cleanDorAttribute(feature.properties.UNIT),
+                  unitNum2 = geocode.unit_num;
+
               if (unitNum) {
                 where += " AND UNIT_NUM = '" + unitNum + "'";
-              } else if (unitNum2 != '') {
+              } else if (unitNum2 !== '') {
                 where += " AND UNIT_NUM = '" + unitNum2 + "'";
               }
 
               where += ") or MATCHED_REGMAP = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
-              // where += ") OR (STREET_ADDRESS='" + parcelBaseAddress + "'";
-              // if (unitNum) {
-              //   where +="AND UNIT_NUM = '" + unitNum + "'";
-              // }
-              // where += ")"
             }
 
-            // METHOD 2: via parcel id - the layer doesn't have mapreg yet, though
-            // var mapreg = feature.properties.MAPREG;
-            // var where = `MAPREG = '${mapreg}'`;
-
-            // console.log('dor docs where', where);
-
             return where;
-
-          // q: function(feature, state) {
-          //   // METHOD 1: via address
-          //   var parcelBaseAddress = concatDorAddress(feature);
-          //   var geocode = state.geocode.data.properties;
-          //   // console.log('parcelBaseAddress', parcelBaseAddress)
-          //
-          //   // REVIEW if the parcel has no address, we don't want to query
-          //   // WHERE ADDRESS = 'null' (doesn't make sense), so use this for now
-          //   if (!parcelBaseAddress || parcelBaseAddress === 'null'){
-          //     var where = "select * from vw_rtt_summary where matched_regmap = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
-          //     // console.log('DOR Parcel BASEREG', state.parcels.dor.data[0].properties.BASEREG);
-          //   } else {
-          //     var address_low = state.geocode.data.properties.address_low
-          //     roundto100 = function(address) { return Math.floor(address/100, 1)*100}
-          //     var address_floor = roundto100(address_low);
-          //     var address_remainder = address_low - address_floor;
-          //     // console.log('address_low:', address_low, 'address_floor:', address_floor, 'address_remainder', address_remainder);//, 'address_high', address_high);
-          //       var where = "select * from vw_rtt_summary where ((address_low = " + address_low
-          //                 + " or (address_low >= " + address_floor + " and address_low <= " + address_low
-          //                 + " and (CASE WHEN address_high ~ '^\d+$' THEN address_high::numeric END) >= " + address_remainder + " ))"
-          //                 // + " and (CASE WHEN address_high <> '' and address_high <> 'N' THEN address_high::numeric END) >= " + address_remainder + " ))"
-          //                 + " and street_name = '" + geocode.street_name
-          //                 + "' and street_suffix = '" + geocode.street_suffix
-          //                 + "'"
-          //     if (geocode.street_predir != '') {
-          //       where += " and street_predir = '" + geocode.street_predir + "'";
-          //     }
-          //     if (geocode.address_low_suffix != '') {
-          //       where += " and address_low_suffix = '" + geocode.address_low_suffix + "'";
-          //     }
-          //     if (geocode.street_postdir != '') {
-          //       where += " and street_postdir = '" + geocode.street_postdir + "'";
-          //     }
-          //     // check for unit num
-          //     var unitNum = cleanDorAttribute(feature.properties.UNIT);
-          //     // console.log('DOR Parcel BASEREG - feature:', feature);
-          //     var unitNum2 = geocode.unit_num;
-          //     if (unitNum) {
-          //       where += " and unit_num::int = '" + unitNum + "'";
-          //     } else if (unitNum2 != '') {
-          //       where += " and unit_num = '" + unitNum2 + "'";
-          //     }
-          //     where += ") or matched_regmap = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
-          //     // console.log('where', where);
-          //   }
-          //
-          //   // METHOD 2: via parcel id - the layer doesn't have mapreg yet, though
-          //   // var mapreg = feature.properties.MAPREG;
-          //   // var where = `MAPREG = '${mapreg}'`;
-          //
-          //   // console.log('dor docs where', where);
-          //
-          //   return where;
           },
           outFields: "R_NUM, DISPLAY_DATE, DOCUMENT_TYPE, GRANTORS, GRANTEES",
           returnDistinctValues: 'true',
