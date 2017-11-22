@@ -604,34 +604,50 @@ Mapboard.default({
       deps: ['parcels.dor'],
       options: {
         relationship: 'intersects',
-        targetGeometry: function(state, Leaflet) {
+        targetGeometry: function (state, Leaflet) {
           // get combined extent of dor parcels
           // var parcels = state.dorParcels.data;
           var parcels = state.parcels.dor.data;
-          // console.log('parcels', parcels);
 
           // build up sets of x and y values
-          var xVals = [];
-          var yVals = [];
+          var xVals = [],
+              yVals = [];
 
           // loop over parcels
-          for (var i=0; i < parcels.length; i++) {
-            // console.log('parcels[i]', parcels[i])
-            var coordSets = parcels[i].geometry.coordinates;
-            // loop over coordinate sets
-            for (var j=0; j < coordSets.length; j++) {
-              // console.log('coordSets[j]', coordSets[j]);
-              // loop over coordinates
-              for (var k=0; k < coordSets[j].length; k++) {
-                // console.log('coordSets[j][k]', coordSets[j][k]);
-                var x = coordSets[j][k][0];
-                var y = coordSets[j][k][1];
+          parcels.forEach(function (parcel) {
+            var geom = parcel.geometry,
+                parts = geom.coordinates;
 
-                xVals.push(x);
-                yVals.push(y);
-              }
-            }
-          }
+            // loop over parts (whether it's simple or multipart)
+            parts.forEach(function (coordPairs) {
+              coordPairs.forEach(function (coordPair) {
+                console.log('coordPair', coordPair);
+
+                // if the polygon has a hole, it has another level of coord
+                // pairs, presumably one for the outer coords and another for
+                // inner. for simplicity, add them all.
+                var hasHole = Array.isArray(coordPair[0]);
+
+                if (hasHole) {
+                  // loop through inner pairs
+                  coordPair.forEach(function (innerCoordPair) {
+                    var x = innerCoordPair[0],
+                        y = innerCoordPair[1];
+
+                    xVals.push(x);
+                    yVals.push(y)
+                  });
+                // for all other polys
+                } else {
+                  var x = coordPair[0],
+                      y = coordPair[1];
+
+                  xVals.push(x);
+                  yVals.push(y)
+                }
+              });
+            });
+          });
 
           // take max/min
           var xMin = Math.min.apply(null, xVals);
@@ -643,6 +659,7 @@ Mapboard.default({
           var coordsAreDefined = [xMin, xMax, yMin, yMax].every(
             function (coord) { return coord; }
           );
+
           // if they aren't
           if (!coordsAreDefined) {
             //  exit with null to avoid an error calling lat lng bounds
