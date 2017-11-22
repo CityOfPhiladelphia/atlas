@@ -695,7 +695,7 @@ Mapboard.default({
           'height': '12px',
           'font-size': '10px',
         },
-        'Transparcels': {
+        'Trans Parcels': {
           'border-color': 'rgb(0, 168, 132)',
           'border-style': 'solid',
           'border-weight': '1px',
