@@ -639,10 +639,18 @@ Mapboard.default({
           var yMin = Math.min.apply(null, yVals);
           var yMax = Math.max.apply(null, yVals);
 
-          // console.log('xVals', xVals, 'xMin', xMin, 'xMax', xMax);
-          // console.log('yVals', yVals, 'yMin', yMin, 'yMax', yMax);
+          // make sure all coords are defined. no NaNs allowed.
+          var coordsAreDefined = [xMin, xMax, yMin, yMax].every(
+            function (coord) { return coord; }
+          );
+          // if they aren't
+          if (!coordsAreDefined) {
+            //  exit with null to avoid an error calling lat lng bounds
+            // constructor
+            return null;
+          }
 
-          // varruct geometry
+          // construct geometry
           var bounds = L.latLngBounds([
             [yMin, xMin],
             [yMax, xMax]
