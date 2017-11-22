@@ -9,7 +9,9 @@
 
 // turn off console logging in production
 // TODO come up with better way of doing this with webpack + env vars
-console.log = console.info = console.debug = console.error = function () {};
+if (location.hostname !== 'localhost') {
+  console.log = console.info = console.debug = console.error = function () {};
+}
 
 var GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
 // var BASE_CONFIG_URL = '//raw.githubusercontent.com/rbrtmrtn/mapboard-base-config/develop/config.js';
@@ -637,10 +639,18 @@ Mapboard.default({
           var yMin = Math.min.apply(null, yVals);
           var yMax = Math.max.apply(null, yVals);
 
-          // console.log('xVals', xVals, 'xMin', xMin, 'xMax', xMax);
-          // console.log('yVals', yVals, 'yMin', yMin, 'yMax', yMax);
+          // make sure all coords are defined. no NaNs allowed.
+          var coordsAreDefined = [xMin, xMax, yMin, yMax].every(
+            function (coord) { return coord; }
+          );
+          // if they aren't
+          if (!coordsAreDefined) {
+            //  exit with null to avoid an error calling lat lng bounds
+            // constructor
+            return null;
+          }
 
-          // varruct geometry
+          // construct geometry
           var bounds = L.latLngBounds([
             [yMin, xMin],
             [yMax, xMax]
@@ -668,6 +678,7 @@ Mapboard.default({
         topics: ['water'],
         showWithBaseMapOnly: false
       },
+      // TODO give these an id instead of using the label as a key
       data: {
         'Roof': {
           'background-color': '#FEFF7F',
@@ -683,6 +694,7 @@ Mapboard.default({
         showWithBaseMapOnly: true
       },
       data: {
+        // TODO give these an id instead of using the label as a key
         'Easements': {
           'border-color': 'rgb(255, 0, 197)',
           'border-style': 'solid',
@@ -691,7 +703,7 @@ Mapboard.default({
           'height': '12px',
           'font-size': '10px',
         },
-        'Transparcels': {
+        'Trans Parcels': {
           'border-color': 'rgb(0, 168, 132)',
           'border-style': 'solid',
           'border-weight': '1px',
