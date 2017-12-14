@@ -572,6 +572,7 @@ Mapboard.default({
       url: 'https://gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/1/',
       options: {
         relationship: 'contains',
+        returnGeometry: false,
       },
       success: function(data) {
         return data;
