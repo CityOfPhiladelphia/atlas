@@ -17,6 +17,18 @@
     <meta name="description" content="">
     <link rel="shortcut icon" type="image/x-icon" href="http://standards.phila.gov/img/favicon.png">
 
+    <!--
+      open graph/twitter card. this makes links to atlas.phila.gov look nice on
+      social media.
+    -->
+    <meta name="twitter:card" content="summary">
+    <meta property="og:title" content="Atlas | phila.gov">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="http://atlas.phila.gov/src/assets/screenshot.png">
+    <meta property="og:url" content="http://atlas.phila.gov/">
+    <meta property="og:description" content="Explore the City's property data in one place, including deeds, zoning, permits, and more.">
+    <meta property="og:site_name" content="phila.gov">
+
     <!-- CSS -->
     <link rel="stylesheet" href="//unpkg.com/phila-standards@0.12.0/dist/css/phila-app.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css">
@@ -131,10 +143,10 @@
 
     <!-- Sentry -->
     <script src="//cdn.ravenjs.com/3.19.1/raven.min.js" crossorigin="anonymous"></script>
-    <script>Raven.config('//e0f764cf33c94596a09281b07107984f@sentry.io/228451').install()</script>
+    <script>Raven.config('https://0e97477faf4b4693a88eb87604a42b27@sentry.io/211586').install()</script>
 
     <!-- Mapboard -->
-    <script src="//unpkg.com/@cityofphiladelphia/mapboard@1.1.8/dist/build.js"></script>
+    <script src="//unpkg.com/@cityofphiladelphia/mapboard@1.2.1/dist/build.js"></script>
 
     <script src="main.js"></script>
   </body>

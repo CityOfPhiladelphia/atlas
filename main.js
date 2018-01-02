@@ -572,6 +572,7 @@ Mapboard.default({
       url: 'https://gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/1/',
       options: {
         relationship: 'contains',
+        returnGeometry: false,
       },
       success: function(data) {
         return data;
@@ -604,34 +605,50 @@ Mapboard.default({
       deps: ['parcels.dor'],
       options: {
         relationship: 'intersects',
-        targetGeometry: function(state, Leaflet) {
+        targetGeometry: function (state, Leaflet) {
           // get combined extent of dor parcels
           // var parcels = state.dorParcels.data;
           var parcels = state.parcels.dor.data;
-          // console.log('parcels', parcels);
 
           // build up sets of x and y values
-          var xVals = [];
-          var yVals = [];
+          var xVals = [],
+              yVals = [];
 
           // loop over parcels
-          for (var i=0; i < parcels.length; i++) {
-            // console.log('parcels[i]', parcels[i])
-            var coordSets = parcels[i].geometry.coordinates;
-            // loop over coordinate sets
-            for (var j=0; j < coordSets.length; j++) {
-              // console.log('coordSets[j]', coordSets[j]);
-              // loop over coordinates
-              for (var k=0; k < coordSets[j].length; k++) {
-                // console.log('coordSets[j][k]', coordSets[j][k]);
-                var x = coordSets[j][k][0];
-                var y = coordSets[j][k][1];
+          parcels.forEach(function (parcel) {
+            var geom = parcel.geometry,
+                parts = geom.coordinates;
 
-                xVals.push(x);
-                yVals.push(y);
-              }
-            }
-          }
+            // loop over parts (whether it's simple or multipart)
+            parts.forEach(function (coordPairs) {
+              coordPairs.forEach(function (coordPair) {
+                console.log('coordPair', coordPair);
+
+                // if the polygon has a hole, it has another level of coord
+                // pairs, presumably one for the outer coords and another for
+                // inner. for simplicity, add them all.
+                var hasHole = Array.isArray(coordPair[0]);
+
+                if (hasHole) {
+                  // loop through inner pairs
+                  coordPair.forEach(function (innerCoordPair) {
+                    var x = innerCoordPair[0],
+                        y = innerCoordPair[1];
+
+                    xVals.push(x);
+                    yVals.push(y)
+                  });
+                // for all other polys
+                } else {
+                  var x = coordPair[0],
+                      y = coordPair[1];
+
+                  xVals.push(x);
+                  yVals.push(y)
+                }
+              });
+            });
+          });
 
           // take max/min
           var xMin = Math.min.apply(null, xVals);
@@ -639,10 +656,19 @@ Mapboard.default({
           var yMin = Math.min.apply(null, yVals);
           var yMax = Math.max.apply(null, yVals);
 
-          // console.log('xVals', xVals, 'xMin', xMin, 'xMax', xMax);
-          // console.log('yVals', yVals, 'yMin', yMin, 'yMax', yMax);
+          // make sure all coords are defined. no NaNs allowed.
+          var coordsAreDefined = [xMin, xMax, yMin, yMax].every(
+            function (coord) { return coord; }
+          );
 
-          // varruct geometry
+          // if they aren't
+          if (!coordsAreDefined) {
+            //  exit with null to avoid an error calling lat lng bounds
+            // constructor
+            return null;
+          }
+
+          // construct geometry
           var bounds = L.latLngBounds([
             [yMin, xMin],
             [yMax, xMax]
@@ -670,6 +696,7 @@ Mapboard.default({
         topics: ['water'],
         showWithBaseMapOnly: false
       },
+      // TODO give these an id instead of using the label as a key
       data: {
         'Roof': {
           'background-color': '#FEFF7F',
@@ -685,6 +712,7 @@ Mapboard.default({
         showWithBaseMapOnly: true
       },
       data: {
+        // TODO give these an id instead of using the label as a key
         'Easements': {
           'border-color': 'rgb(255, 0, 197)',
           'border-style': 'solid',
@@ -693,7 +721,7 @@ Mapboard.default({
           'height': '12px',
           'font-size': '10px',
         },
-        'Transparcels': {
+        'Trans Parcels': {
           'border-color': 'rgb(0, 168, 132)',
           'border-style': 'solid',
           'border-weight': '1px',
@@ -2323,17 +2351,28 @@ Mapboard.default({
                   id: '311',
                   sort: {
                     select: true,
-                    getValue: function(item, method) {
+                    sortFields: [
+                      'date',
+                      'distance'
+                    ],
+                    getValue: function(item, sortField) {
                       var val;
-                      if (method === 'date' || !method) {
+                      if (sortField === 'date' || !sortField) {
                         val = item.requested_datetime;
-                      } else if (method === 'distance') {
+                      } else if (sortField === 'distance') {
                         val = item.distance;
                       }
-
                       return val;
                     },
-                    order: 'asc'
+                    order: function(sortField) {
+                      var val;
+                      if (sortField === 'date') {
+                        val = 'desc';
+                      } else {
+                        val = 'asc';
+                      }
+                      return val;
+                    }
                   },
                   filters: [
                     {
@@ -2446,15 +2485,28 @@ Mapboard.default({
                   id: 'crimeIncidents',
                   sort: {
                     select: true,
-                    getValue: function(item, method) {
+                    sortFields: [
+                      'date',
+                      'distance'
+                    ],
+                    getValue: function(item, sortField) {
                       var val;
-                      if (method === 'date' || !method) {
+                      if (sortField === 'date' || !sortField) {
                         val = item.dispatch_date;
-                      } else if (method === 'distance') {
+                      } else if (sortField === 'distance') {
                         val = item.distance;
                       }
                       return val;
-                    }
+                    },
+                    order: function(sortField) {
+                      var val;
+                      if (sortField === 'date') {
+                        val = 'desc';
+                      } else {
+                        val = 'asc';
+                      }
+                      return val;
+                    },
                   },
                   filters: [
                     {
@@ -2556,17 +2608,28 @@ Mapboard.default({
                   id: 'nearbyZoningAppeals',
                   sort: {
                     select: true,
-                    getValue: function(item, method) {
+                    sortFields: [
+                      'date',
+                      'distance'
+                    ],
+                    getValue: function(item, sortField) {
                       var val;
-
-                      if (method === 'date' || !method) {
+                      if (sortField === 'date' || !sortField) {
                         val = item.decisiondate;
-                      } else if (method === 'distance') {
+                      } else if (sortField === 'distance') {
                         val = item.distance;
                       }
-
                       return val;
-                    }
+                    },
+                    order: function(sortField) {
+                      var val;
+                      if (sortField === 'date') {
+                        val = 'desc';
+                      } else {
+                        val = 'asc';
+                      }
+                      return val;
+                    },
                   },
                   filterByText: {
                     label: 'Filter by',
@@ -2645,19 +2708,17 @@ Mapboard.default({
                   id: 'vacantIndicatorsPoints',
                   sort: {
                     select: true,
-                    methods: [
+                    sortFields: [
                       'type',
                       'distance'
                     ],
-                    getValue: function(item, method) {
+                    getValue: function(item, sortField) {
                       var val;
-
-                      if (method === 'type' || !method) {
+                      if (sortField === 'type' || !sortField) {
                         val = item.properties.VACANT_FLAG;
-                      } else if (method === 'distance') {
+                      } else if (sortField === 'distance') {
                         val = item._distance;
                       }
-
                       return val;
                     }
                   },
