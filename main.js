@@ -2351,17 +2351,28 @@ Mapboard.default({
                   id: '311',
                   sort: {
                     select: true,
-                    getValue: function(item, method) {
+                    sortFields: [
+                      'date',
+                      'distance'
+                    ],
+                    getValue: function(item, sortField) {
                       var val;
-                      if (method === 'date' || !method) {
+                      if (sortField === 'date' || !sortField) {
                         val = item.requested_datetime;
-                      } else if (method === 'distance') {
+                      } else if (sortField === 'distance') {
                         val = item.distance;
                       }
-
                       return val;
                     },
-                    order: 'asc'
+                    order: function(sortField) {
+                      var val;
+                      if (sortField === 'date') {
+                        val = 'desc';
+                      } else {
+                        val = 'asc';
+                      }
+                      return val;
+                    }
                   },
                   filters: [
                     {
@@ -2474,15 +2485,28 @@ Mapboard.default({
                   id: 'crimeIncidents',
                   sort: {
                     select: true,
-                    getValue: function(item, method) {
+                    sortFields: [
+                      'date',
+                      'distance'
+                    ],
+                    getValue: function(item, sortField) {
                       var val;
-                      if (method === 'date' || !method) {
+                      if (sortField === 'date' || !sortField) {
                         val = item.dispatch_date;
-                      } else if (method === 'distance') {
+                      } else if (sortField === 'distance') {
                         val = item.distance;
                       }
                       return val;
-                    }
+                    },
+                    order: function(sortField) {
+                      var val;
+                      if (sortField === 'date') {
+                        val = 'desc';
+                      } else {
+                        val = 'asc';
+                      }
+                      return val;
+                    },
                   },
                   filters: [
                     {
@@ -2584,17 +2608,28 @@ Mapboard.default({
                   id: 'nearbyZoningAppeals',
                   sort: {
                     select: true,
-                    getValue: function(item, method) {
+                    sortFields: [
+                      'date',
+                      'distance'
+                    ],
+                    getValue: function(item, sortField) {
                       var val;
-
-                      if (method === 'date' || !method) {
+                      if (sortField === 'date' || !sortField) {
                         val = item.decisiondate;
-                      } else if (method === 'distance') {
+                      } else if (sortField === 'distance') {
                         val = item.distance;
                       }
-
                       return val;
-                    }
+                    },
+                    order: function(sortField) {
+                      var val;
+                      if (sortField === 'date') {
+                        val = 'desc';
+                      } else {
+                        val = 'asc';
+                      }
+                      return val;
+                    },
                   },
                   filterByText: {
                     label: 'Filter by',
@@ -2673,19 +2708,17 @@ Mapboard.default({
                   id: 'vacantIndicatorsPoints',
                   sort: {
                     select: true,
-                    methods: [
+                    sortFields: [
                       'type',
                       'distance'
                     ],
-                    getValue: function(item, method) {
+                    getValue: function(item, sortField) {
                       var val;
-
-                      if (method === 'type' || !method) {
+                      if (sortField === 'type' || !sortField) {
                         val = item.properties.VACANT_FLAG;
-                      } else if (method === 'distance') {
+                      } else if (sortField === 'distance') {
                         val = item._distance;
                       }
-
                       return val;
                     }
                   },
