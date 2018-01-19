@@ -774,7 +774,8 @@ Mapboard.default({
   // },
   cyclomedia: {
     enabled: true,
-    measurementAllowed: false
+    measurementAllowed: false,
+    popoutAble: false,
   },
   pictometry: {
     enabled: true
