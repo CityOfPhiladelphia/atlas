@@ -1316,7 +1316,7 @@ Mapboard.default({
                     {
                       label: 'Perimeter',
                       value: function (state, item) {
-                        return (item.properties || {})['Shape__Length'];
+                        return (item.properties || {})['TURF_PERIMETER'];
                       },
                       transforms: [
                         'integer',
@@ -1327,7 +1327,7 @@ Mapboard.default({
                     {
                       label: 'Area',
                       value: function(state, item) {
-                        return (item.properties || {})['Shape__Area'];
+                        return (item.properties || {})['TURF_AREA'];
                       },
                       transforms: [
                         'integer',
