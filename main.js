@@ -228,7 +228,7 @@ Mapboard.default({
       }
     },
     elections: {
-      url: 'http://api.phila.gov/pollingtest',
+      url: 'https://api.phila.gov/pollingtest',
       type: 'http-get',
       options: {
         params: {
