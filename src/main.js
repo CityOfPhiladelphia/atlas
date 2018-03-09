@@ -7,13 +7,16 @@
         \/               \/     \/
 */
 
+import accounting from 'accounting';
+import mapboard from '@cityofphiladelphia/mapboard';
+import moment from 'moment';
+
 // turn off console logging in production
 // TODO come up with better way of doing this with webpack + env vars
 if (location.hostname !== 'localhost') {
   console.log = console.info = console.debug = console.error = function () {};
 }
 
-var GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
 // var BASE_CONFIG_URL = '//raw.githubusercontent.com/rbrtmrtn/mapboard-base-config/develop/config.js';
 var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/e45803b240e14717fb452805fa90c134870eb14b/config.js';
 
@@ -140,7 +143,7 @@ function getVacancyText(state) {
 // configure accounting.js
 accounting.settings.currency.precision = 0;
 
-Mapboard.default({
+mapboard({
   // DEV
   // defaultAddress: '1234 MARKET ST',
   router: {
@@ -421,13 +424,11 @@ Mapboard.default({
             // METHOD 1: via address
             var parcelBaseAddress = concatDorAddress(feature);
             var geocode = state.geocode.data.properties;
-            console.log('parcelBaseAddress', parcelBaseAddress)
 
             // REVIEW if the parcel has no address, we don't want to query
             // WHERE ADDRESS = 'null' (doesn't make sense), so use this for now
             if (!parcelBaseAddress || parcelBaseAddress === 'null'){
               var where = "MATCHED_REGMAP = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
-              console.log('DOR Parcel BASEREG', state.parcels.dor.data[0].properties.BASEREG);
             } else {
               // TODO make these all camel case
               var props = state.geocode.data.properties,
@@ -522,32 +523,6 @@ Mapboard.default({
         params: {}
       }
     },
-    // vacantLand: {
-    //   type: 'esri',
-    //   url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Land/FeatureServer/0',
-    //   options: {
-    //     relationship: 'contains',
-    //   },
-    //   // params: {
-    //   //   query: feature => L.esri.query({url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Land/FeatureServer/0'}).contains(feature)
-    //   // },
-    //   success: function(data) {
-    //     return data;
-    //   }
-    // },
-    // vacantBuilding: {
-    //   type: 'esri',
-    //   url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Bldg/FeatureServer/0',
-    //   options: {
-    //     relationship: 'contains',
-    //   },
-    //   // params: {
-    //   //   query: feature => L.esri.query({url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Bldg/FeatureServer/0'}).contains(feature)
-    //   // },
-    //   success: function(data) {
-    //     return data;
-    //   }
-    // },
     vacantIndicatorsPoints: {
       type: 'esri-nearby',
       url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Vacant_Indicators_Points/FeatureServer/0',
@@ -612,8 +587,6 @@ Mapboard.default({
             // loop over parts (whether it's simple or multipart)
             parts.forEach(function (coordPairs) {
               coordPairs.forEach(function (coordPair) {
-                console.log('coordPair', coordPair);
-
                 // if the polygon has a hole, it has another level of coord
                 // pairs, presumably one for the outer coords and another for
                 // inner. for simplicity, add them all.
@@ -659,7 +632,7 @@ Mapboard.default({
           }
 
           // construct geometry
-          var bounds = L.latLngBounds([
+          var bounds = Leaflet.latLngBounds([
             [yMin, xMin],
             [yMax, xMax]
           ]);
@@ -768,7 +741,7 @@ Mapboard.default({
     popoutAble: true,
   },
   pictometry: {
-    enabled: true
+    enabled: true,
   },
   // reusable transforms for topic data. see `topics` section for usage.
   transforms: {
@@ -776,27 +749,28 @@ Mapboard.default({
       // a list of global objects this transform depends on
       globals: ['accounting'],
       // this is the function that gets called to perform the transform
-      transform: function(value, globals) {
-        var accounting = globals.accounting;
+      transform: function (value, globals) {
+        // var accounting = globals.accounting;
+        // console.log('gonna format some money!!', accounting);
         return accounting.formatMoney(value);
       }
     },
     date: {
       globals: ['moment'],
-      transform: function(value, globals) {
-        var moment = globals.moment;
+      transform: function (value, globals) {
+        // var moment = globals.moment;
         return moment(value).format('MM/DD/YYYY');
-      }
+      },
     },
     phoneNumber: {
-      transform: function(value) {
+      transform: function (value) {
         var s2 = (""+value).replace(/\D/g, '');
         var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
         return (!m) ? null : "(" + m[1] + ") " + m[2] + "-" + m[3];
       }
     },
     rcoPrimaryContact: {
-      transform: function(value) {
+      transform: function (value) {
         var PHONE_NUMBER_PAT = /\(?(\d{3})\)?( |-)?(\d{3})(-| )?(\d{4})/g;
         var m = PHONE_NUMBER_PAT.exec(value);
 

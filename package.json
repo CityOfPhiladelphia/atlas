@@ -1,0 +1,28 @@
+{
+  "name": "atlas",
+  "version": "0.0.1",
+  "description": "A map-based data viewer for the City of Philadelphia",
+  "main": "",
+  "repository": "https://github.com/cityofphiladelphia/atlas",
+  "author": "City of Philadelphia <maps@phila.gov>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "yarn build -w"
+  },
+  "devDependencies": {
+    "rollup": "^0.56.5",
+    "rollup-plugin-commonjs": "^9.0.0",
+    "rollup-plugin-json": "^2.3.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.1.0",
+    "rollup-plugin-node-resolve": "^3.2.0",
+    "rollup-plugin-replace": "^2.0.0",
+    "rollup-plugin-serve": "^0.4.2"
+  },
+  "dependencies": {
+    "accounting": "^0.4.1",
+    "moment": "^2.21.0"
+  }
+}
