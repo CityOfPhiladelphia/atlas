@@ -7,8 +7,8 @@
         \/               \/     \/
 */
 
-import accounting from 'accounting';
 import mapboard from '@cityofphiladelphia/mapboard';
+import accounting from 'accounting';
 import moment from 'moment';
 
 // turn off console logging in production
