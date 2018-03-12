@@ -8,21 +8,16 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "rollup -c",
-    "dev": "yarn build -w"
-  },
-  "devDependencies": {
-    "rollup": "^0.56.5",
-    "rollup-plugin-commonjs": "^9.0.0",
-    "rollup-plugin-json": "^2.3.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.1.0",
-    "rollup-plugin-node-resolve": "^3.2.0",
-    "rollup-plugin-replace": "^2.0.0",
-    "rollup-plugin-serve": "^0.4.2"
+    "build": "npx webpack",
+    "dev": "webpack-dev-server"
   },
   "dependencies": {
     "accounting": "^0.4.1",
     "moment": "^2.21.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.11",
+    "webpack-dev-server": "^3.1.1"
   }
 }
