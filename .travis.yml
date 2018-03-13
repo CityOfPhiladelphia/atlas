@@ -26,3 +26,4 @@ deploy:
     on:
       branch: webpack4
     local_dir: public
+    skip_cleanup: true
