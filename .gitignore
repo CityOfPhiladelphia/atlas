@@ -1,4 +1,4 @@
 node_modules
 yarn-error.log
-public/app.js
-public/app.js.map
+public/*.js
+public/*.js.map

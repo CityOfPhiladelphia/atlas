@@ -6,12 +6,8 @@ const isDevelopment = env === 'development';
 console.log('NODE_ENV:', env);
 
 module.exports = {
-  // entry: './src/main.js',
   entry: {
     app: './src/main.js',
-    mapboard: '@cityofphiladelphia/mapboard',
-    // TODO figure out how to get this to resolve to the vendor chunk
-    vendor: 'vendor',
   },
   devtool: isDevelopment ? 'inline-source-map' : 'source-map',
   devServer: {
@@ -20,7 +16,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: '[name].js',
-    chunkFilename: '[name].js',
+    // chunkFilename: '[name].js',
     publicPath: '/',
   },
   devtool: isDevelopment ? 'inline-source-map' : 'source-map',
@@ -43,11 +39,18 @@ module.exports = {
   optimization: {
     splitChunks: {
       cacheGroups: {
+        mapboard: {
+          test: /mapboard/,
+          chunks: 'initial',
+          name: 'mapboard',
+          priority: 5,
+        },
         vendor: {
+          test: /node_modules/,
           chunks: 'initial',
           name: 'vendor',
-          test: /[\\/]node_modules[\\/]/,
           enforce: true,
+          priority: 10,
         },
       },
     },
