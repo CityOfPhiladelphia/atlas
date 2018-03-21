@@ -16,7 +16,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: '[name].js',
-    // chunkFilename: '[name].js',
     publicPath: '/',
   },
   devtool: isDevelopment ? 'inline-source-map' : 'source-map',
