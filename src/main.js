@@ -82,8 +82,7 @@ function cleanDorAttribute(attr) {
 
 // TODO put this in base config transforms
 function concatDorAddress(parcel, includeUnit) {
-  console.log('concatDorAddress is running with parcel:', parcel, 'includeUnit:', includeUnit);
-  includeUnit = typeof includeUnit !== 'undefined' ? includeUnit: true;
+  includeUnit = !!includeUnit;
   var STREET_FIELDS = ['STDIR', 'STNAM', 'STDES', 'STDESSUF'];
   var props = parcel.properties;
 
@@ -402,9 +401,8 @@ mapboard({
       options: {
         params: {
           q: function(feature, state){
-            console.log(state.parcels.dor.data[0].properties, 'mapreg', state.parcels.dor.data[0].properties.MAPREG);
             return "select * from condominium where mapref = '" + state.parcels.dor.data[0].properties.MAPREG + "'"
-          },// + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'",
+          },
         }
       }
     },
