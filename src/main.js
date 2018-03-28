@@ -369,14 +369,29 @@ mapboard({
     },
     // // TODO take zoningBase out and use AIS for base zoning district
     zoningBase: {
-      type: 'esri',
-      // url: 'https://gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/6/',
-      url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Zoning_BaseDistricts/FeatureServer/0/',
+      // type: 'esri',
+      // // url: 'https://gis.phila.gov/arcgis/rest/services/PhilaGov/ZoningMap/MapServer/6/',
+      // url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Zoning_BaseDistricts/FeatureServer/0/',
+      // options: {
+      //   relationship: 'contains',
+      // },
+      // success: function(data) {
+      //   return data;
+      // }
+      type: 'http-get',
+      url: 'https://phl.carto.com/api/v2/sql',
       options: {
-        relationship: 'contains',
-      },
-      success: function(data) {
-        return data;
+        params: {
+          q: function(feature) {
+            var stmt = "with all_zoning as (select * from zoning_basedistricts),"
+                     + "parcel as (select * from dor_parcel where dor_parcel.mapreg = '" + feature.properties.dor_parcel_id + "'),"
+                     + "zp as (select all_zoning.* from all_zoning, parcel where st_intersects(parcel.the_geom, all_zoning.the_geom))"
+                     // + "select zp.source_object_id, zp.value, st_area(st_intersection(zp.the_geom, parcel.the_geom)) / st_area(parcel.the_geom) as geom from zp, parcel";
+                     + "select zp.objectid, zp.long_code, st_area(st_intersection(zp.the_geom, parcel.the_geom)) / st_area(parcel.the_geom) as geom from zp, parcel";
+                     // + "select * from zp";
+            return stmt;
+          }
+        }
       }
     },
     rco: {
@@ -744,7 +759,7 @@ mapboard({
   //   },
   // },
   cyclomedia: {
-    enabled: true,
+    enabled: false,
     measurementAllowed: false,
     popoutAble: true,
   },
@@ -1926,7 +1941,7 @@ mapboard({
       icon: 'university',
       label: 'Zoning',
       dataSources: [
-        'zoningOverlay'
+        'zoningOverlay', 'zoningBase'
       ],
       components: [
         {
@@ -1936,20 +1951,70 @@ mapboard({
           }
         },
         {
-          type: 'badge',
+          type: 'tab-badge',
           options: {
-            titleBackground: '#58c04d'
+            titleBackground: '#58c04d',
+            components: [
+              {
+                type: 'horizontal-table',
+                options: {
+                  topicKey: 'zoning',
+                  id: 'baseZoning',
+                  // defaultIncrement: 10,
+                  // showAllRowsOnFirstClick: true,
+                  // showOnlyIfData: true,
+                  fields: [
+                    {
+                      label: 'code',
+                      value: function(state, item) {
+                        return item.long_code;
+                      },
+                    },
+                    {
+                      label: 'definition',
+                      value: function(state, item) {
+                        return ZONING_CODE_MAP[item.long_code];
+                      },
+                    },
+                  ], // end fields
+                  // sort: {
+                  //   // this should return the val to sort on
+                  //   getValue: function(item) {
+                  //     return item.long_code;
+                  //   },
+                  //   // asc or desc
+                  //   order: 'asc'
+                  // }
+                },
+                slots: {
+                  title: 'Base Zoning',
+                  items: function(state) {
+                    // console.log('state.sources:', state.sources['zoningBase'].data.rows);
+                    var data = state.sources['zoningBase'].data.rows;
+                    var rows = data.map(function(row){
+                      var itemRow = row;
+                      return itemRow;
+                    });
+                    return rows;
+                  },
+                } // end slots
+              }, // end table
+
+            ],
           },
           slots: {
             title: 'Base District',
-            value: function(state) {
-              return state.geocode.data.properties.zoning;
+            data: function(state) {
+              return state.sources.zoningBase.data.rows;
             },
-            description: function(state) {
-              var code = state.geocode.data.properties.zoning;
-              return ZONING_CODE_MAP[code];
-            },
-          }
+            // value: function(state) {
+            //   return state.sources.zoningBase.data.rows;
+            // },
+            // description: function(state) {
+            //   var code = state.sources.zoningBase.data.rows;
+            //   return ZONING_CODE_MAP[code];
+            // },
+          },
         },
         {
           type: 'horizontal-table',
