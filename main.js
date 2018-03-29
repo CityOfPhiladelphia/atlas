@@ -2167,6 +2167,12 @@ Mapboard.default({
           },
         },
         {
+          type: 'callout',
+          slots: {
+            text: 'Looking for zoning documents? They are now located in the Licenses & Inspections tab under "Zoning Permit Documents".',
+          },
+        },
+        {
           type: 'horizontal-table',
           options: {
             topicKey: 'zoning',
