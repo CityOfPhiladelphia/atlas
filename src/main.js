@@ -552,6 +552,7 @@ mapboard({
       options: {
         geometryServerUrl: '//gis.phila.gov/arcgis/rest/services/Geometry/GeometryServer/',
         calculateDistance: true,
+        distances: 500,
       },
     },
     zoningOverlay: {
@@ -1951,7 +1952,7 @@ mapboard({
           }
         },
         {
-          type: 'tab-badge',
+          type: 'badge-with-table',
           options: {
             titleBackground: '#58c04d',
             components: [
@@ -1959,6 +1960,7 @@ mapboard({
                 type: 'horizontal-table',
                 options: {
                   topicKey: 'zoning',
+                  shouldShowHeaders: false,
                   id: 'baseZoning',
                   // defaultIncrement: 10,
                   // showAllRowsOnFirstClick: true,
@@ -1987,7 +1989,7 @@ mapboard({
                   // }
                 },
                 slots: {
-                  title: 'Base Zoning',
+                  // title: 'Base Zoning',
                   items: function(state) {
                     // console.log('state.sources:', state.sources['zoningBase'].data.rows);
                     var data = state.sources['zoningBase'].data.rows;
@@ -2292,7 +2294,8 @@ mapboard({
       key: 'nearby',
       icon: 'map-marker',
       label: 'Nearby',
-      dataSources: ['311Carto', 'crimeIncidents', 'nearbyZoningAppeals', 'vacantIndicatorsPoints'],
+      dataSources: ['311Carto', 'crimeIncidents', 'nearbyZoningAppeals'],
+      // dataSources: ['311Carto', 'crimeIncidents', 'nearbyZoningAppeals', 'vacantIndicatorsPoints'],
       // dataSources: ['vacantLand', 'vacantBuilding', '311Carto', 'crimeIncidents', 'nearbyZoningAppeals'],
       basemap: 'pwd',
       // featureLayers: [
