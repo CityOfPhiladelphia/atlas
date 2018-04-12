@@ -1810,14 +1810,13 @@ mapboard({
           }
         },
         {
-          type: 'badge-with-table',
+          type: 'badge-custom',
           options: {
             titleBackground: '#58c04d',
             components: [
               {
                 type: 'horizontal-table',
                 options: {
-                  topicKey: 'zoning',
                   shouldShowHeaders: false,
                   id: 'baseZoning',
                   // defaultIncrement: 10,
@@ -2205,7 +2204,7 @@ mapboard({
         //   }
         // },
         {
-          type: 'table-group',
+          type: 'horizontal-table-group',
           options: {
             filters: [
               {
@@ -2235,17 +2234,16 @@ mapboard({
               },
             ],
             // components for the content pane.
-            components: [
+            tables: [
               {
                 type: 'horizontal-table',
                 options: {
-                  topicKey: 'nearby',
                   id: '311',
                   sort: {
                     select: true,
                     sortFields: [
+                      'distance',
                       'date',
-                      'distance'
                     ],
                     getValue: function(item, sortField) {
                       var val;
@@ -2373,13 +2371,12 @@ mapboard({
               {
                 type: 'horizontal-table',
                 options: {
-                  topicKey: 'nearby',
                   id: 'crimeIncidents',
                   sort: {
                     select: true,
                     sortFields: [
+                      'distance',
                       'date',
-                      'distance'
                     ],
                     getValue: function(item, sortField) {
                       var val;
@@ -2496,13 +2493,12 @@ mapboard({
               {
                 type: 'horizontal-table',
                 options: {
-                  topicKey: 'nearby',
                   id: 'nearbyZoningAppeals',
                   sort: {
                     select: true,
                     sortFields: [
+                      'distance',
                       'date',
-                      'distance'
                     ],
                     getValue: function(item, sortField) {
                       var val;
@@ -2596,13 +2592,12 @@ mapboard({
               {
                 type: 'horizontal-table',
                 options: {
-                  topicKey: 'nearby',
                   id: 'vacantIndicatorsPoints',
                   sort: {
                     select: true,
                     sortFields: [
+                      'distance',
                       'type',
-                      'distance'
                     ],
                     getValue: function(item, sortField) {
                       var val;
