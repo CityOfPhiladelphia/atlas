@@ -869,80 +869,6 @@ mapboard({
             '
           }
         },
-
-        // TODO - remove all of this code eventually, now that we are not using a table-group
-        // {
-        //   type: 'table-group',
-        //   options: {
-        //     alternate: {
-        //       mainTable: {
-        //         dataSource: 'opa',
-        //         id:'opaData',
-        //       },
-        //       dependentTable: {
-        //         dataSource: 'condoList',
-        //         id: 'condoList',
-        //       }
-        //     },
-        //     components: [
-
-              // {
-              //   type: 'horizontal-table',
-              //   options: {
-              //     topicKey: 'opa',
-              //     id: 'condoList',
-              //     useApiCount: true,
-              //     // limit: 100,
-              //     fields: [
-              //       {
-              //         label: 'OPA Account',
-              //         value: function(state, item) {
-              //           var url = window.location.origin + window.location.pathname + '#/' + item.properties.opa_account_num + '/opa'
-              //           return "<a href="+url+">"+item.properties.opa_account_num+" <i class='fa fa-external-link'></i></a>";
-              //         },
-              //       },
-              //       {
-              //         label: 'Address',
-              //         value: function(state, item) {
-              //           var url = window.location.origin + window.location.pathname + '#/' + item.properties.opa_account_num + '/opa'
-              //           return "<a href="+url+">"+item.properties.street_address+" <i class='fa fa-external-link'></i></a>";
-              //         },
-              //       },
-              //       {
-              //         label: 'Owners',
-              //         value: function(state, item) {
-              //           var owners = item.properties.opa_owners;
-              //           var ownersJoined = owners.join(', ');
-              //           return ownersJoined;
-              //         }
-              //       }
-              //     ], // end fields
-              //     // sort: {
-              //     //   // this should return the val to sort on
-              //     //   getValue: function(item) {
-              //     //     // return item.attributes.RECORDING_DATE;
-              //     //     return item.attributes.DOCUMENT_DATE;
-              //     //   },
-              //     //   // asc or desc
-              //     //   order: 'desc'
-              //     // }
-              //   },
-              //   slots: {
-              //     title: 'Condominiums',
-              //     highestPageRetrieved: function(state) { return state.sources['condoList'].data.page },
-              //     pageCount: function(state) { return state.sources['condoList'].data.page_count },
-              //     totalSize: function(state) { return state.sources['condoList'].data.total_size },
-              //     items: function(state) {
-              //       var data = state.sources['condoList'].data.features;
-              //       var rows = data.map(function(row){
-              //         var itemRow = row;
-              //         return itemRow;
-              //       });
-              //       return rows;
-              //     },
-              //   } // end slots
-              // },
-
         {
           type: 'vertical-table',
           slots: {
@@ -1099,7 +1025,6 @@ mapboard({
         {
           type: 'horizontal-table',
           options: {
-            topicKey: 'condominiums',
             id: 'condoList',
             useApiCount: true,
             defaultIncrement: 25,
@@ -1340,71 +1265,9 @@ mapboard({
                   ]
                 }  // end slots
               },  // end vertical table
-              // {
-              //   type: 'horizontal-table',
-              //   options: {
-              //     topicKey: 'dor',
-              //     id: 'condoList',
-              //     shouldShowButton: true,
-              //     useApiCount: true,
-              //     // limit: 100,
-              //     fields: [
-              //       {
-              //         label: 'OPA Account',
-              //         value: function(state, item) {
-              //           var url = window.location.origin + window.location.pathname + '#/' + item.properties.opa_account_num + '/opa'
-              //           return "<a href="+url+">"+item.properties.opa_account_num+" <i class='fa fa-external-link'></i></a>";
-              //         },
-              //       },
-              //       {
-              //         label: 'Address',
-              //         value: function(state, item) {
-              //           var url = window.location.origin + window.location.pathname + '#/' + item.properties.opa_account_num + '/opa'
-              //           return "<a href="+url+">"+item.properties.street_address+" <i class='fa fa-external-link'></i></a>";
-              //         },
-              //       },
-              //       {
-              //         label: 'Owners',
-              //         value: function(state, item) {
-              //           var owners = item.properties.opa_owners;
-              //           var ownersJoined = owners.join(', ');
-              //           return ownersJoined;
-              //         }
-              //       }
-              //     ], // end fields
-              //     // sort: {
-              //     //   // this should return the val to sort on
-              //     //   getValue: function(item) {
-              //     //     // return item.attributes.RECORDING_DATE;
-              //     //     return item.attributes.DOCUMENT_DATE;
-              //     //   },
-              //     //   // asc or desc
-              //     //   order: 'desc'
-              //     // }
-              //   },
-              //   slots: {
-              //     title: 'Condominiums',
-              //     highestPageRetrieved: function(state) { return state.sources['condoList'].data.page },
-              //     pageCount: function(state) { return state.sources['condoList'].data.page_count },
-              //     totalSize: function(state) { return state.sources['condoList'].data.total_size },
-              //     items: function(state) {
-              //       var data = state.sources['condoList'].data.features;
-              //       var rows = data.map(function(row){
-              //         var itemRow = row;
-              //         return itemRow;
-              //       });
-              //       return rows;
-              //     },
-              //   } // end slots
-              // },
-
-              //     ]
-              //   }
-              // },
               {
                 type: 'horizontal-table',
                 options: {
-                  topicKey: 'deeds',
                   id: 'dorCondoList',
                   defaultIncrement: 10,
                   showAllRowsOnFirstClick: true,
@@ -1483,7 +1346,6 @@ mapboard({
               {
                 type: 'horizontal-table',
                 options: {
-                  topicKey: 'deeds',
                   id: 'dorDocuments',
                   defaultIncrement: 25,
                   fields: [
@@ -1642,7 +1504,6 @@ mapboard({
         {
           type: 'horizontal-table',
           options: {
-            topicKey: 'permits',
             id: 'liPermits',
             limit: 5,
             fields: [
@@ -1710,7 +1571,6 @@ mapboard({
         {
           type: 'horizontal-table',
           options: {
-            topicKey: 'permits',
             id: 'liInspections',
             limit: 5,
             fields: [
@@ -1783,7 +1643,6 @@ mapboard({
         {
           type: 'horizontal-table',
           options: {
-            topicKey: 'permits',
             id: 'liViolations',
             limit: 5,
             fields: [
@@ -1855,7 +1714,6 @@ mapboard({
         {
           type: 'horizontal-table',
           options: {
-            topicKey: 'permits',
             id: 'liBusinessLicenses',
             limit: 5,
             fields: [
@@ -2021,9 +1879,7 @@ mapboard({
         {
           type: 'horizontal-table',
           options: {
-            topicKey: 'zoning',
             id: 'zoningOverlay',
-            // limit: 100,
             fields: [
               {
                 label: 'Name',
@@ -2058,9 +1914,7 @@ mapboard({
         {
           type: 'horizontal-table',
           options: {
-            topicKey: 'zoning',
             id: 'zoningAppeals',
-            // limit: 100,
             fields: [
               {
                 label: 'Processed Date',
@@ -2132,9 +1986,7 @@ mapboard({
         {
           type: 'horizontal-table',
           options: {
-            topicKey: 'zoning',
             id: 'zoningDocs',
-            // limit: 100,
             fields: [
               {
                 label: 'Date',
@@ -2217,9 +2069,7 @@ mapboard({
         {
           type: 'horizontal-table',
           options: {
-            topicKey: 'zoning',
             id: 'rco',
-            // limit: 100,
             fields: [
               {
                 label: 'RCO',
