@@ -23,12 +23,12 @@ import 'leaflet-measure/dist/leaflet-measure.css';
 // turn off console logging in production
 // TODO come up with better way of doing this with webpack + env vars
 if (location.hostname !== 'localhost') {
-  console.log = console.info = console.debug = console.error = function () {};
+  // console.log = console.info = console.debug = console.error = function () {};
 }
 
 // var BASE_CONFIG_URL = '//raw.githubusercontent.com/rbrtmrtn/mapboard-base-config/develop/config.js';
 // var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/e45803b240e14717fb452805fa90c134870eb14b/config.js';
-var BASE_CONFIG_URL = '//cdn.rawgit.com/rbrtmrtn/mapboard-base-config/e45803b240e14717fb452805fa90c134870eb14b/config.js';
+var BASE_CONFIG_URL = 'https://cdn.rawgit.com/rbrtmrtn/mapboard-base-config/e45803b240e14717fb452805fa90c134870eb14b/config.js';
 
 var ZONING_CODE_MAP = {
   'RSD-1': 'Residential Single Family Detached-1',
@@ -760,7 +760,7 @@ mapboard({
   //   },
   // },
   cyclomedia: {
-    enabled: false,
+    enabled: true,
     measurementAllowed: false,
     popoutAble: true,
   },
