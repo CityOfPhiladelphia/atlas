@@ -1800,7 +1800,10 @@ mapboard({
       icon: 'university',
       label: 'Zoning',
       dataSources: [
-        'zoningOverlay', 'zoningBase'
+        'zoningOverlay',
+        'zoningBase',
+        // 'zoningAppeals',
+        // 'rco',
       ],
       components: [
         {
