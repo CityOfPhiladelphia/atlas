@@ -30,6 +30,7 @@ var GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
 
 // var BASE_CONFIG_URL = '//raw.githubusercontent.com/rbrtmrtn/mapboard-base-config/develop/config.js';
 // var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/e45803b240e14717fb452805fa90c134870eb14b/config.js';
+// var BASE_CONFIG_URL = 'https://cdn.rawgit.com/rbrtmrtn/mapboard-base-config/e45803b240e14717fb452805fa90c134870eb14b/config.js';
 var BASE_CONFIG_URL = 'https://cdn.rawgit.com/Alexander-M-Waldman/mapboard-base-config/e446a4ddbef74c22281c42d4d0dc5d34f7ba1abd/config.js';
 
 var ZONING_CODE_MAP = {
@@ -1823,21 +1824,21 @@ Mapboard.default({
               },
               {
                 label: 'ID',
-                value: function(state, item){
-                  return "<a target='_blank' href='//www.phila.gov/zoningarchive/Preview.aspx?address="
-                          + item.address
-                          + "&&docType="
-                          + item.doc_type
-                          + "&numofPages="
-                          + item.num_pages
-                          + "&docID="
-                          + item.app_doc_id
-                          + "&app="
-                          + item.app_id
-                          +"'>"
-                          // + item.app_id + '-'
-                          + item.doc_id + ' '
-                          + "<i class='fa fa-external-link'></i></a>"
+                value: function (state, item) {
+                  console.log('zoning doc', item);
+
+                  var appId = item.app_id;
+
+                  if (appId.length < 3) {
+                    appId = '0' + appId;
+                  }
+
+                  return '<a target="_blank" class="external" href="//s3.amazonaws.com/lni-zoning-pdfs/'
+                          + item.doc_id
+                          + '.pdf">'
+                          + item.doc_id
+                          // + '<i class='fa fa-external-link'></i></a>'
+                          + '</a>'
                   // return item.appid + '-' + item.docid
                 }
               },
@@ -2126,6 +2127,8 @@ Mapboard.default({
       dataSources: [
         'zoningOverlay',
         'zoningBase',
+        // 'zoningAppeals',
+        // 'rco',
       ],
       components: [
         {
@@ -2256,9 +2259,9 @@ Mapboard.default({
                 },
                 slots: {
                   title: 'Base District',
-                  data: function(state) {
-                    return state.sources.zoningBase.data.rows;
-                  },
+                  // data: function(state) {
+                  //   return state.sources.zoningBase.data.rows;
+                  // },
                   // value: function(state) {
                   //   return state.sources.zoningBase.data.rows;
                   // },
@@ -2582,8 +2585,8 @@ Mapboard.default({
                   sort: {
                     select: true,
                     sortFields: [
+                      'distance',
                       'date',
-                      'distance'
                     ],
                     getValue: function(item, sortField) {
                       var val;
@@ -2716,8 +2719,8 @@ Mapboard.default({
                   sort: {
                     select: true,
                     sortFields: [
+                      'distance',
                       'date',
-                      'distance'
                     ],
                     getValue: function(item, sortField) {
                       var val;
@@ -2839,8 +2842,8 @@ Mapboard.default({
                   sort: {
                     select: true,
                     sortFields: [
+                      'distance',
                       'date',
-                      'distance'
                     ],
                     getValue: function(item, sortField) {
                       var val;
