@@ -30,8 +30,8 @@ var GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
 
 // var BASE_CONFIG_URL = '//raw.githubusercontent.com/rbrtmrtn/mapboard-base-config/develop/config.js';
 // var BASE_CONFIG_URL = '//rawgit.com/rbrtmrtn/mapboard-base-config/e45803b240e14717fb452805fa90c134870eb14b/config.js';
-// var BASE_CONFIG_URL = 'https://cdn.rawgit.com/rbrtmrtn/mapboard-base-config/e45803b240e14717fb452805fa90c134870eb14b/config.js';
-var BASE_CONFIG_URL = 'https://cdn.rawgit.com/Alexander-M-Waldman/mapboard-base-config/e446a4ddbef74c22281c42d4d0dc5d34f7ba1abd/config.js';
+var BASE_CONFIG_URL = 'https://cdn.rawgit.com/rbrtmrtn/mapboard-base-config/e45803b240e14717fb452805fa90c134870eb14b/config.js';
+// var BASE_CONFIG_URL = 'https://cdn.rawgit.com/Alexander-M-Waldman/mapboard-base-config/e446a4ddbef74c22281c42d4d0dc5d34f7ba1abd/config.js';
 
 var ZONING_CODE_MAP = {
   'RSD-1': 'Residential Single Family Detached-1',
@@ -462,32 +462,43 @@ Mapboard.default({
             //          + "select * from total where overlap_area >= 0.01"
             var mapreg = feature.properties.MAPREG,
                 stmt = "\
-                  WITH all_zoning AS \
-                    ( \
-                      SELECT * \
-                      FROM   phl.zoning_overlays \
-                    ), \
-                  parcel AS \
-                    ( \
-                      SELECT * \
-                      FROM   phl.dor_parcel \
-                      WHERE  dor_parcel.mapreg = '" + mapreg + "' \
-                    ), \
-                  zp AS \
-                    ( \
-                      SELECT all_zoning.* \
-                      FROM all_zoning, parcel \
-                      WHERE st_intersects(parcel.the_geom, all_zoning.the_geom) \
-                    ), \
-                  total AS \
-                    ( \
-                      SELECT zp.*, st_area(St_intersection(zp.the_geom, parcel.the_geom)) / st_area(parcel.the_geom) AS overlap_area \
-                      FROM   zp, parcel \
-                    ) \
-                  SELECT * \
-                  FROM total \
-                  WHERE overlap_area >= 0.01 \
-                ";
+                WITH all_zoning AS \
+                  ( \
+                    SELECT * \
+                    FROM   phl.zoning_overlays \
+                  ), \
+                parcel AS \
+                  ( \
+                    SELECT * \
+                    FROM   phl.dor_parcel \
+                    WHERE  dor_parcel.mapreg = '" + mapreg + "' \
+                  ), \
+                zp AS \
+                  ( \
+                    SELECT all_zoning.* \
+                    FROM all_zoning, parcel \
+                    WHERE st_intersects(parcel.the_geom, all_zoning.the_geom) \
+                  ), \
+                total AS \
+                  ( \
+                    SELECT zp.*, st_area(St_intersection(zp.the_geom, parcel.the_geom)) / st_area(parcel.the_geom) AS overlap_area \
+                    FROM   zp, parcel \
+                  ) \
+                SELECT cartodb_id, \
+                      code_section, \
+                      code_section_link, \
+                      objectid, \
+                      overlap_area, \
+                      overlay_name, \
+                      overlay_symbol, \
+                      pending, \
+                      pendingbill, \
+                      pendingbillurl, \
+                      sunset_date, \
+                      type \
+                FROM total \
+                WHERE overlap_area >= 0.01 \
+              ";
             return stmt;
           }
         }
@@ -658,7 +669,7 @@ Mapboard.default({
     // from dorCondoList
     condoList: {
       type: 'http-get',
-      url: '//api.phila.gov/ais_dev/v1/search/',
+      url: '//api.phila.gov/ais/v1/search/',
       options: {
         params: {
           urlAddition: function (feature) {
