@@ -27,3 +27,11 @@ deploy:
       branch: webpack4
     local_dir: public
     skip_cleanup: true
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: 'atlas-webpack4-split-zoning.phila.gov'
+    on:
+      branch: webpack4-split-zoning
+    local_dir: public
+    skip_cleanup: true
