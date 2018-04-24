@@ -857,7 +857,7 @@ mapboard({
   //   },
   // },
   cyclomedia: {
-    enabled: false,
+    enabled: true,
     measurementAllowed: false,
     popoutAble: true,
   },
@@ -1742,7 +1742,7 @@ mapboard({
             sort: {
               // this should return the val to sort on
               getValue: function(item) {
-                return item.scandate;
+                return item.scan_date;
               },
               // asc or desc
               order: 'desc'
@@ -2569,7 +2569,7 @@ mapboard({
                 },
                 slots: {
                   title: 'Nearby Service Requests',
-                  data: '311',
+                  data: '311Carto',
                   items: function(state) {
                     var data = state.sources['311Carto'].data || [];
                     var rows = data.map(function(row){
