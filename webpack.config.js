@@ -3,7 +3,7 @@ const path = require('path');
 const env = process.env.NODE_ENV;
 const isDevelopment = env === 'development';
 
-console.log('NODE_ENV:', env);
+console.log('NODE_ENV:', env, 'process.env.NODE_ENV:', process.env.NODE_ENV);
 
 module.exports = {
   entry: {
@@ -34,7 +34,8 @@ module.exports = {
       },
     ],
   },
-  mode: process.env.NODE_ENV,
+  // mode: process.env.NODE_ENV,
+  mode: 'development',
   optimization: {
     splitChunks: {
       cacheGroups: {

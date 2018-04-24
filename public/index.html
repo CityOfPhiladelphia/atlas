@@ -30,9 +30,11 @@
     <meta property="og:site_name" content="phila.gov">
 
     <!-- CSS -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css">
     <link rel="stylesheet" href="//unpkg.com/phila-standards@0.12.0/dist/css/phila-app.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="//unpkg.com/Leaflet.vector-markers@0.0.6/dist/leaflet-vector-markers.css">
+
     <link rel="stylesheet" href="styles.css">
   </head>
 
@@ -108,6 +110,7 @@
 
     <!-- JS: Foundation -->
     <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
     <!-- JS: Mapboard dependencies -->
     <!-- TODO these should be included in the vendor bundle instead of being
@@ -124,7 +127,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/4.1.0/ol.js"></script>
-    <script src="//streetsmart.cyclomedia.com/api/v18.1/StreetSmartApi.js"></script>
+    <script src="//streetsmart.cyclomedia.com/api/v18.4/StreetSmartApi.js"></script>
 
     <!-- JS: Pictometry (optional) -->
     <!-- <script src="//unpkg.com/blueimp-md5@2.10.0/js/md5.min.js"></script> -->
@@ -138,9 +141,17 @@
     <script>Raven.config('https://0e97477faf4b4693a88eb87604a42b27@sentry.io/211586').install()</script>
 
     <!-- Mapboard -->
-    <!-- <script src="//unpkg.com/@cityofphiladelphia/mapboard@1.2.30/dist/build.js"></script> -->
 
-    <!-- TEMP -->
+    <!-- <script src="//unpkg.com/@cityofphiladelphia/mapboard@1.2.35/build.js"></script> -->
+
+    <!-- <script src='//cdn.maptiks.com/maptiks-leaflet.min.js'></script>
+    <script>
+    maptiks.trackcode='c926505f-036b-49b6-9f57-ca24f332d887';
+    </script> -->
+
+
+
+  <!-- TEMP -->
     <script src="gatekeeper-shim.js"></script>
 
     <script src="vendor.js"></script>
