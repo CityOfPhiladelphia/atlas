@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 const env = process.env.NODE_ENV;
 const isDevelopment = env === 'development';
@@ -8,6 +9,9 @@ console.log('NODE_ENV:', env, 'process.env.NODE_ENV:', process.env.NODE_ENV);
 module.exports = {
   entry: {
     app: './src/main.js',
+  },
+  resolve: {
+    mainFields: ["module", "main", "browser"],
   },
   devtool: isDevelopment ? 'inline-source-map' : 'source-map',
   devServer: {
@@ -34,8 +38,11 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
+  ],
   // mode: process.env.NODE_ENV,
-  mode: 'development',
+  // mode: 'development',
   optimization: {
     splitChunks: {
       cacheGroups: {
