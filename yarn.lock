@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@cityofphiladelphia/mapboard@2.0.0-3":
-  version "2.0.0-3"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/mapboard/-/mapboard-2.0.0-3.tgz#d6f0889caebb092db3b50d8f22a1a1a765bf18b6"
+"@cityofphiladelphia/mapboard@2.0.0-4":
+  version "2.0.0-4"
+  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/mapboard/-/mapboard-2.0.0-4.tgz#e7274ba7230824e2726c861001a6d818f837306b"
   dependencies:
     "@turf/turf" "^5.1.6"
     axios "^0.18.0"
@@ -13,7 +13,7 @@
     esri-leaflet "^2.1.4"
     jquery "^3.2.1"
     jquery-ui "^1.12.1"
-    leaflet "https://github.com/Leaflet/Leaflet"
+    leaflet "^1.3.1"
     leaflet-easybutton "^2.2.2"
     leaflet-measure "https://github.com/CityOfPhiladelphia/leaflet-measure#c91eedea328e02a50b7849ef6e2b3adab3a55e49"
     leaflet-rotatedmarker "^0.2.0"
@@ -2209,8 +2209,8 @@ chalk@^1.0.0, chalk@^1.1.1, chalk@^1.1.3:
     supports-color "^2.0.0"
 
 chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.3.0, chalk@^2.3.1, chalk@^2.3.2:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.0.tgz#a060a297a6b57e15b61ca63ce84995daa0fe6e52"
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.1.tgz#18c49ab16a037b6eb0152cc83e3471338215b66e"
   dependencies:
     ansi-styles "^3.2.1"
     escape-string-regexp "^1.0.5"
@@ -4316,10 +4316,6 @@ leaflet-virtual-grid@^1.0.5:
 leaflet@^1.0.0, leaflet@^1.0.1, leaflet@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.3.1.tgz#86f336d2fb0e2d0ff446677049a5dc34cf0ea60e"
-
-"leaflet@git+https://github.com/Leaflet/Leaflet.git":
-  version "1.3.1"
-  resolved "git+https://github.com/Leaflet/Leaflet.git#bd89edd56792004fa6ffbc01c36fc570b4af8dd0"
 
 lineclip@^1.1.5:
   version "1.1.5"
@@ -6910,8 +6906,8 @@ vuex@^3.0.1:
   resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.0.1.tgz#e761352ebe0af537d4bb755a9b9dc4be3df7efd2"
 
 watchpack@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.5.0.tgz#231e783af830a22f8966f65c4c4bacc814072eed"
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.6.0.tgz#4bc12c2ebe8aa277a71f1d3f14d685c7b446cd00"
   dependencies:
     chokidar "^2.0.2"
     graceful-fs "^4.1.2"
