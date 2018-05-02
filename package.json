@@ -12,11 +12,12 @@
     "dev": "webpack-dev-server"
   },
   "dependencies": {
-    "@cityofphiladelphia/mapboard": "2.0.0-5",
+    "@cityofphiladelphia/mapboard": "2.0.0-13",
     "accounting": "^0.4.1",
     "moment": "^2.21.0"
   },
   "devDependencies": {
+    "cross-env": "^5.1.4",
     "css-loader": "^0.28.11",
     "file-loader": "^1.1.11",
     "style-loader": "^0.20.3",
