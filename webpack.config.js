@@ -11,7 +11,7 @@ module.exports = {
     app: './src/main.js',
   },
   resolve: {
-    mainFields: ["module", "main", "browser"],
+    mainFields: ['module', 'main', 'browser'],
   },
   devtool: isDevelopment ? 'inline-source-map' : 'source-map',
   devServer: {
@@ -22,7 +22,6 @@ module.exports = {
     filename: '[name].js',
     publicPath: '/',
   },
-  devtool: isDevelopment ? 'inline-source-map' : 'source-map',
   module: {
     rules: [
       {
@@ -41,7 +40,7 @@ module.exports = {
   plugins: [
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
   ],
-  // mode: process.env.NODE_ENV,
+  mode: env,
   // mode: 'development',
   optimization: {
     splitChunks: {
