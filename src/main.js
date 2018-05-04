@@ -26,7 +26,6 @@ if (location.hostname !== 'localhost') {
   console.log = console.info = console.debug = console.error = function () {};
 }
 
-
 var BASE_CONFIG_URL = 'https://cdn.rawgit.com/rbrtmrtn/mapboard-base-config/11f9644110fa1d6ff8a198f206d17631c8981947/config.js',
     GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11',
     ZONING_CODE_MAP = {
