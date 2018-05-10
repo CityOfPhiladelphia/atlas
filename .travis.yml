@@ -1,5 +1,9 @@
-language: c
-script: ':'
+language: node_js
+node_js:
+  - "8"
+script: npm run build
+before_deploy:
+  - rm -rf node_modules
 deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
@@ -7,9 +11,26 @@ deploy:
     bucket: 'atlas.phila.gov'
     on:
       branch: master
+    local_dir: public
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: 'atlas-dev.phila.gov'
     on:
       branch: develop
+    local_dir: public
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: 'atlas-webpack4'
+    on:
+      branch: webpack4
+    local_dir: public
+    skip_cleanup: true
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: 'atlas-dev2.phila.gov'
+    on:
+      branch: develop2
+    local_dir: public
