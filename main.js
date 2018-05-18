@@ -589,7 +589,7 @@ Mapboard.default({
               }
 
               // this is hardcoded right now to handle DOR address suffixes that are actually fractions
-              if (geocode.address_low_frac = '1/2') {
+              if (geocode.address_low_frac === '1/2') {
                 where += " AND ADDRESS_LOW_SUFFIX = '2'" //+ geocode.address_low_frac + "'";
               }
 
