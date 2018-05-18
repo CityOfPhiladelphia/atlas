@@ -23,7 +23,8 @@ import 'leaflet-measure/dist/leaflet-measure.css';
 
 // turn off console logging in production
 // TODO come up with better way of doing this with webpack + env vars
-if (location.hostname !== 'localhost') {
+const { hostname='' } = location;
+if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
   console.log = console.info = console.debug = console.error = function () {};
 }
 
