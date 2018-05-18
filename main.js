@@ -1579,11 +1579,13 @@ Mapboard.default({
               {
                 type: 'callout',
                 slots: {
-                  text: 'The list of documents \
-                    shown below may not be a complete history of title to this \
-                    parcel. The list is based solely on documents recorded from\
-                    1974 forward where those documents contained street addresses\
-                    in the original recorded document.\
+                  text: 'You can access digital copies of the deeds \
+                    below by purchasing a subscription to \
+                    <a target="_blank" class="external" href="http://epay.phila-records.com/phillyepay/web/">PhilaDox</a>.\
+                    Please note that the following list\
+                    shows documents recorded from\
+                    1974 forward, and may not be a complete history\
+                    of title for the parcel.\
                   '
                 },
               },
