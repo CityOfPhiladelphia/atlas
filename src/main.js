@@ -435,14 +435,17 @@ mapboard({
                     ( \
                       SELECT zp.objectid, \
                       zp.long_code, \
+                      zp.pending, \
+                      zp.pendingbill, \
+                      zp.pendingbillurl, \
                       St_area(St_intersection(zp.the_geom, parcel.the_geom)) / St_area(parcel.the_geom) AS overlap_area \
                       FROM zp, parcel \
                     ), \
                   total AS \
                     ( \
-                      SELECT long_code, sum(overlap_area) as sum_overlap_area \
+                      SELECT long_code, pending, pendingbill, pendingbillurl, sum(overlap_area) as sum_overlap_area \
                       FROM combine \
-                      GROUP BY long_code \
+                      GROUP BY long_code, pending, pendingbill, pendingbillurl \
                     ) \
                   SELECT * \
                   FROM total \
@@ -2089,6 +2092,7 @@ mapboard({
                       type: 'horizontal-table',
                       options: {
                         topicKey: 'zoning',
+                        shouldShowFilters: false,
                         shouldShowHeaders: false,
                         id: 'baseZoning',
                         // defaultIncrement: 10,
@@ -2096,9 +2100,9 @@ mapboard({
                         // showOnlyIfData: true,
                         fields: [
                           {
-                            label: 'code',
-                            value: function(state, item) {
-                              return item.long_code;
+                            label: 'Code',
+                            value: function (state, item) {
+                              return item;
                             },
                             transforms: [
                               'nowrap',
@@ -2106,62 +2110,35 @@ mapboard({
                             ]
                           },
                           {
-                            label: 'definition',
-                            value: function(state, item) {
-                              return ZONING_CODE_MAP[item.long_code];
+                            label: 'Description',
+                            value: function (state, item) {
+                              return ZONING_CODE_MAP[item];
                             },
                           },
                         ], // end fields
-                        // sort: {
-                        //   // this should return the val to sort on
-                        //   getValue: function(item) {
-                        //     return item.long_code;
-                        //   },
-                        //   // asc or desc
-                        //   order: 'asc'
-                        // }
                       },
                       slots: {
                         // title: 'Base Zoning',
-                        items: function(state, item) {
+                        items(state, item) {
                           // console.log('state.sources:', state.sources['zoningBase'].data.rows);
-                          var id = item.properties.OBJECTID,
-                              target = state.sources.zoningBase.targets[id] || {},
-                              data = target.data || {};
-                          // console.log('zoningbase target:', target);
-                          return data.rows || [];
-                          // if (target) {
-                          //   return target.data;
-                          // } else {
-                          //   return [];
-                          // }
+                          const id = item.properties.OBJECTID;
+                          const target = state.sources.zoningBase.targets[id] || {};
+                          const { data={} } = target;
+                          const { rows=[] } = data;
+
+                          // get unique zoning codes
+                          const longCodes = rows.map(row => row.long_code);
+                          const longCodesUniqueSet = new Set(longCodes);
+                          const longCodesUnique = Array.from(longCodesUniqueSet);
+
+                          return longCodesUnique;
                         },
-
-
-                          // var data = state.sources['zoningBase'].data.rows;
-                          // var rows = data.map(function(row){
-                          //   var itemRow = row;
-                          //   return itemRow;
-                          // });
-                          // return rows;
-                        // },
                       }, // end slots
                     }, // end table
-
                   ],
                 },
                 slots: {
                   title: 'Base District',
-                  // data: function(state) {
-                  //   return state.sources.zoningBase.data.rows;
-                  // },
-                  // value: function(state) {
-                  //   return state.sources.zoningBase.data.rows;
-                  // },
-                  // description: function(state) {
-                  //   var code = state.sources.zoningBase.data.rows;
-                  //   return ZONING_CODE_MAP[code];
-                  // },
                 },
               }, // end of badge-custom
               {
@@ -2173,13 +2150,13 @@ mapboard({
                   fields: [
                     {
                       label: 'Name',
-                      value: function(state, item){
+                      value: function (state, item) {
                         return item.overlay_name
                       }
                     },
                     {
                       label: 'Code Section',
-                      value: function(state, item){
+                      value: function (state, item) {
                         return "<a target='_blank' href='"+item.code_section_link+"'>"+item.code_section+" <i class='fa fa-external-link'></i></a>"
                       }
                     },
@@ -2196,19 +2173,72 @@ mapboard({
                     return data.rows || [];
                   },
                 },
-
-
-                  // items: function(state) {
-                  //   var data = state.sources['zoningOverlay'].data.rows
-                  //   var rows = data.map(function(row){
-                  //     var itemRow = row;
-                  //     // var itemRow = Object.assign({}, row);
-                  //     //itemRow.DISTANCE = 'TODO';
-                  //     return itemRow;
-                  //   });
-                  //   return rows;
-                  // },
               },
+              {
+                type: 'horizontal-table',
+                options: {
+                  topicKey: 'zoning',
+                  // shouldShowFilters: false,
+                  id: 'baseZoning',
+                  // defaultIncrement: 10,
+                  // showAllRowsOnFirstClick: true,
+                  // showOnlyIfData: true,
+                  fields: [
+                    {
+                      label: 'Bill Type',
+                      value: function (state, item) {
+                        return item.billType;
+                      },
+                    },
+                    {
+                      label: 'Current Zoning',
+                      value: function(state, item) {
+                        return item.currentZoning;
+                      },
+                    },
+                    {
+                      label: 'Pending Bill',
+                      value: function (state, item) {
+                        return `<a target="_blank" href="${item.pendingbillurl}">${item.pendingbill} <i class="fa fa-external-link"></i></a>`;
+                      }
+                    },
+                  ], // end fields
+                },
+                slots: {
+                  title: 'Pending Bills',
+                  items: function(state, item) {
+                    // console.log('state.sources:', state.sources['zoningBase'].data.rows);
+                    var id = item.properties.OBJECTID,
+                        target = state.sources.zoningBase.targets[id] || {},
+                        data = target.data || {};
+
+                    // include only rows where pending is true
+                    const { rows=[] } = data;
+                    const rowsFiltered = rows.filter(row => row.pending === 'Yes');
+
+                    // give each pending zoning bill a type of "zoning"
+                    const rowsFilteredWithType = rowsFiltered.map((row) => {
+                      row.billType = 'Base District';
+                      row.currentZoning = row.long_code;
+                      return row;
+                    });
+
+                    // append pending overlays
+                    const overlayRows = state.sources.zoningOverlay.targets[id].data.rows;
+                    const overlayRowsFiltered = overlayRows.filter(row => row.pending === 'Yes');
+                    const overlayRowsFilteredWithType = overlayRowsFiltered.map((row) => {
+                      row.billType = 'Overlay';
+                      row.currentZoning = row.overlay_name;
+                      return row;
+                    });
+
+                    // combine pending zoning and overlays
+                    const zoningAndOverlays = rowsFilteredWithType.concat(overlayRowsFilteredWithType);
+
+                    return zoningAndOverlays;
+                  },
+                }, // end slots
+              }, // end table
             ], // end of tab-group components
           },
           slots: {
