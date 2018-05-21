@@ -2023,8 +2023,8 @@ mapboard({
       dataSources: [
         'zoningOverlay',
         'zoningBase',
-        // 'zoningAppeals',
-        // 'rco',
+        'zoningAppeals',
+        'rco',
       ],
       components: [
         {
@@ -2223,14 +2223,20 @@ mapboard({
                       return row;
                     });
 
+                    let overlayRowsFilteredWithType = [];
+
                     // append pending overlays
-                    const overlayRows = state.sources.zoningOverlay.targets[id].data.rows;
-                    const overlayRowsFiltered = overlayRows.filter(row => row.pending === 'Yes');
-                    const overlayRowsFilteredWithType = overlayRowsFiltered.map((row) => {
-                      row.billType = 'Overlay';
-                      row.currentZoning = row.overlay_name;
-                      return row;
-                    });
+                    if (state.sources.zoningOverlay.targets[id]) {
+                      const overlayRows = state.sources.zoningOverlay.targets[id].data.rows;
+                      const overlayRowsFiltered = overlayRows.filter(row => row.pending === 'Yes');
+                      overlayRowsFilteredWithType = overlayRowsFiltered.map((row) => {
+                        row.billType = 'Overlay';
+                        row.currentZoning = row.overlay_name;
+                        return row;
+                      });
+                    } else {
+                      overlayRowsFilteredWithType = [];
+                    }
 
                     // combine pending zoning and overlays
                     const zoningAndOverlays = rowsFilteredWithType.concat(overlayRowsFilteredWithType);
