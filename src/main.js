@@ -163,7 +163,7 @@ mapboard({
     enabled: false
   },
   addressAutocomplete: {
-    enabled: true
+    enabled: false
   },
   rootStyle: {
     position: 'absolute',
