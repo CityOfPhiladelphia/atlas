@@ -28,7 +28,7 @@ if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
   console.log = console.info = console.debug = console.error = function () {};
 }
 
-var BASE_CONFIG_URL = 'https://cdn.rawgit.com/rbrtmrtn/mapboard-base-config/11f9644110fa1d6ff8a198f206d17631c8981947/config.js',
+var BASE_CONFIG_URL = 'https://cdn.rawgit.com/rbrtmrtn/mapboard-base-config/27ed0e6d9f3e983dade442ea6780ae85cd483e2e/config.js',
     GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11',
     ZONING_CODE_MAP = {
       'RSD-1': 'Residential Single Family Detached-1',
