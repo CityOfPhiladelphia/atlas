@@ -1,0 +1,36 @@
+{
+  "name": "atlas",
+  "version": "0.0.1",
+  "description": "A map-based data viewer for the City of Philadelphia",
+  "main": "",
+  "repository": "https://github.com/cityofphiladelphia/atlas",
+  "author": "City of Philadelphia <maps@phila.gov>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "cross-env NODE_ENV=production npx webpack",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server"
+  },
+  "dependencies": {
+    "@cityofphiladelphia/mapboard": "2.0.8",
+    "accounting": "^0.4.1",
+    "moment": "^2.21.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "cross-env": "^5.1.4",
+    "css-loader": "^0.28.11",
+    "file-loader": "^1.1.11",
+    "style-loader": "^0.20.3",
+    "webpack": "^4.2.0",
+    "webpack-cli": "^2.0.13",
+    "webpack-dev-server": "^3.1.1"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  }
+}

@@ -1,2 +1,4 @@
-node_modules/
-public/
+node_modules
+yarn-error.log
+public/*.js
+public/*.js.map
