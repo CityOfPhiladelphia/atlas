@@ -879,12 +879,12 @@ mapboard({
   //   },
   // },
   cyclomedia: {
-    enabled: true,
+    enabled: false,
     measurementAllowed: false,
     popoutAble: true,
   },
   pictometry: {
-    enabled: true,
+    enabled: false,
   },
   // reusable transforms for topic data. see `topics` section for usage.
   transforms: {
