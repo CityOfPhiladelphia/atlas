@@ -1948,6 +1948,14 @@ babel-plugin-transform-strict-mode@^6.24.1:
     babel-runtime "^6.22.0"
     babel-types "^6.24.1"
 
+babel-polyfill@^6.26.0:
+  version "6.26.0"
+  resolved "https://registry.yarnpkg.com/babel-polyfill/-/babel-polyfill-6.26.0.tgz#379937abc67d7895970adc621f284cd966cf2153"
+  dependencies:
+    babel-runtime "^6.26.0"
+    core-js "^2.5.0"
+    regenerator-runtime "^0.10.5"
+
 babel-preset-env@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/babel-preset-env/-/babel-preset-env-1.7.0.tgz#dea79fa4ebeb883cd35dab07e260c1c9c04df77a"
@@ -4546,9 +4554,9 @@ leaflet-easybutton@^2.2.2:
   dependencies:
     leaflet "^1.0.1"
 
-"leaflet-measure@git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6":
+"leaflet-measure@https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6":
   version "4.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6"
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
   dependencies:
     "@turf/area" "^5.1.5"
     "@turf/length" "^5.1.5"
@@ -4559,9 +4567,9 @@ leaflet-rotatedmarker@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/leaflet-rotatedmarker/-/leaflet-rotatedmarker-0.2.0.tgz#4467f49f98d1bfd56959bd9c6705203dd2601277"
 
-"leaflet-vector-icon@git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#8419d4025be2c3acc26a1e66b6a1a1e95c340142":
+"leaflet-vector-icon@https://github.com/CityOfPhiladelphia/leaflet-vector-icon#8419d4025be2c3acc26a1e66b6a1a1e95c340142":
   version "1.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#8419d4025be2c3acc26a1e66b6a1a1e95c340142"
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-vector-icon#8419d4025be2c3acc26a1e66b6a1a1e95c340142"
 
 leaflet-virtual-grid@^1.0.5:
   version "1.0.6"
@@ -6101,6 +6109,10 @@ reduce-function-call@^1.0.1:
 regenerate@^1.2.1:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
+
+regenerator-runtime@^0.10.5:
+  version "0.10.5"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz#336c3efc1220adcedda2c9fab67b5a7955a33658"
 
 regenerator-runtime@^0.11.0:
   version "0.11.1"

@@ -7,6 +7,8 @@
         \/               \/     \/
 */
 
+// import 'babel-polyfill';
+
 import mapboard from '@cityofphiladelphia/mapboard';
 import accounting from 'accounting';
 import moment from 'moment';
