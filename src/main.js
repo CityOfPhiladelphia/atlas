@@ -12,28 +12,46 @@ import axios from 'axios';
 import moment from 'moment';
 import mapboard from '@cityofphiladelphia/mapboard';
 
-
 // General Config Modules
 import helpers from './util/helpers';
-import map from './config/map';
-import dataSources from './config/dataSources';
-import parcels from './config/parcels';
-import legendControls from './config/legendControls';
-import transforms from './config/transforms';
-import imageOverlayGroups from './config/imageOverlayGroups';
-import greeting from './config/greeting';
+import map from './general/map';
+import transforms from './general/transforms';
+import parcels from './general/parcels';
+import legendControls from './general/legendControls';
+import imageOverlayGroups from './general/imageOverlayGroups';
+import greeting from './general/greeting';
 
+// data sources
+import threeOneOneCarto from './data-sources/311-carto';
+import condoList from './data-sources/condo-list';
+import crimeIncidents from './data-sources/crime-incidents';
+import divisions from './data-sources/divisions';
+import dorCondoList from './data-sources/dor-condo-list';
+import dorDocuments from './data-sources/dor-documents';
+import elections from './data-sources/elections';
+import liBusinessLicenses from './data-sources/li-business-licenses';
+import liInspections from './data-sources/li-inspections';
+import liPermits from './data-sources/li-permits';
+import liViolations from './data-sources/li-violations';
+import nearbyZoningAppeals from './data-sources/nearby-zoning-appeals';
+import opa from './data-sources/opa';
+import rco from './data-sources/rco';
+import regmaps from './data-sources/regmaps';
+import vacantIndicatorsPoints from './data-sources/vacant-indicator-points';
+import zoningAppeals from './data-sources/zoning-appeals';
+import zoningBase from './data-sources/zoning-base';
+import zoningDocs from './data-sources/zoning-docs';
+import zoningOverlay from './data-sources/zoning-overlay';
 
 // Topics
-import property from './config/topics/property';
-import condos from './config/topics/condos';
-import deeds from './config/topics/deeds';
-import li from './config/topics/li';
-import zoning from './config/topics/zoning';
-// import polling from './config/topics/polling';
-// import rco from './config/topics/rco';
-import nearby from './config/topics/nearby';
-
+import property from './topics/property';
+import condos from './topics/condos';
+import deeds from './topics/deeds';
+import li from './topics/li';
+import zoning from './topics/zoning';
+// import polling from './topics/polling';
+// import rco from './topics/rco';
+import nearby from './topics/nearby';
 
 // styles
 // TODO move all styles here (that have a npm package)
@@ -50,6 +68,8 @@ const { hostname='' } = location;
 if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
   console.log = console.info = console.debug = console.error = function () {};
 }
+
+// console.log('data source', dataSources);
 
 var BASE_CONFIG_URL = 'https://cdn.rawgit.com/rbrtmrtn/mapboard-base-config/11f9644110fa1d6ff8a198f206d17631c8981947/config.js';
 
@@ -80,7 +100,6 @@ mapboard({
   map,
   baseConfig: BASE_CONFIG_URL,
   parcels,
-  dataSources,
   imageOverlayGroups,
   legendControls,
   cyclomedia: {
@@ -93,6 +112,28 @@ mapboard({
   },
   transforms,
   greeting,
+  dataSources: {
+    threeOneOneCarto,
+    condoList,
+    crimeIncidents,
+    divisions,
+    dorCondoList,
+    dorDocuments,
+    elections,
+    liBusinessLicenses,
+    liInspections,
+    liPermits,
+    liViolations,
+    nearbyZoningAppeals,
+    opa,
+    rco,
+    regmaps,
+    vacantIndicatorsPoints,
+    zoningAppeals,
+    zoningBase,
+    zoningDocs,
+    zoningOverlay,
+  },
   topics: [
     property,
     condos,

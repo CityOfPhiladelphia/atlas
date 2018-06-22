@@ -1,3 +1,5 @@
+import helpers from '../util/helpers';
+
 export default {
   key: 'deeds',
   icon: 'book',
@@ -63,7 +65,7 @@ export default {
           return item.properties.MAPREG;
         },
         getAddress: function(item) {
-          var address = hf.concatDorAddress(item);
+          var address = helpers.concatDorAddress(item);
           return address;
         },
         // components for the content pane. this essentially a topic body.
@@ -101,7 +103,7 @@ export default {
                 {
                   label: 'Parcel Address',
                   value: function(state, item) {
-                    return hf.concatDorAddress(item);
+                    return helpers.concatDorAddress(item);
                   },
                 },
                 {

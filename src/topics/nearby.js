@@ -2,7 +2,7 @@ export default {
   key: 'nearby',
   icon: 'map-marker',
   label: 'Nearby',
-  dataSources: ['311Carto', 'crimeIncidents', 'nearbyZoningAppeals'],
+  dataSources: ['threeOneOneCarto', 'crimeIncidents', 'nearbyZoningAppeals'],
   // dataSources: ['311Carto', 'crimeIncidents', 'nearbyZoningAppeals', 'vacantIndicatorsPoints'],
   // dataSources: ['vacantLand', 'vacantBuilding', '311Carto', 'crimeIncidents', 'nearbyZoningAppeals'],
   basemap: 'pwd',
@@ -215,9 +215,9 @@ export default {
             },
             slots: {
               title: 'Nearby Service Requests',
-              data: '311Carto',
+              data: 'threeOneOneCarto',
               items: function(state) {
-                var data = state.sources['311Carto'].data || [];
+                var data = state.sources['threeOneOneCarto'].data || [];
                 var rows = data.map(function(row){
                   var itemRow = row;
                   // var itemRow = Object.assign({}, row);

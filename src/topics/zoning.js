@@ -1,4 +1,4 @@
-import helpers from '../../util/helpers';
+import helpers from '../util/helpers';
 
 export default {
   key: 'zoning',
