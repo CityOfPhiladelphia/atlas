@@ -1,7 +1,6 @@
 export default {
   id: 'divisions',
-  url: 'https://gis.phila.gov/arcgis/rest/services/PhilaGov/ServiceAreas/MapServer/22',
-  // type: 'http-get',
+  url: 'http://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Political_Divisions/FeatureServer/0',
   type: 'esri',
   options: {
     relationship: 'contains',
