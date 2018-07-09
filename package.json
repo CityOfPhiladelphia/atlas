@@ -1,6 +1,6 @@
 {
   "name": "atlas",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A map-based data viewer for the City of Philadelphia",
   "main": "",
   "repository": "https://github.com/cityofphiladelphia/atlas",
@@ -12,8 +12,9 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server"
   },
   "dependencies": {
-    "@cityofphiladelphia/mapboard": "2.0.9",
+    "@cityofphiladelphia/mapboard": "2.0.14",
     "accounting": "^0.4.1",
+    "axios": "^0.18.0",
     "moment": "^2.21.0"
   },
   "devDependencies": {
