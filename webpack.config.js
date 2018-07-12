@@ -15,7 +15,8 @@ module.exports = {
   devServer: {
     contentBase: './public',
     host: process.env.WEBPACK_DEV_HOST,
-    port: process.env.WEBPACK_DEV_PORT
+    // port: process.env.WEBPACK_DEV_PORT
+    port: 8082
   },
   output: {
     path: path.resolve(__dirname, 'public'),

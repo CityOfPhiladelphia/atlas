@@ -2,14 +2,16 @@
 # yarn lockfile v1
 
 
-"@cityofphiladelphia/mapboard@2.0.14":
-  version "2.0.14"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/mapboard/-/mapboard-2.0.14.tgz#b21b8aff50d78606634ef3a3ddbda324e4b0f34b"
+"@cityofphiladelphia/mapboard@2.0.16":
+  version "2.0.16"
+  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/mapboard/-/mapboard-2.0.16.tgz#0ad7e798e685a02e315eba48be43335461d8e93f"
   dependencies:
+    "@cityofphiladelphia/phila-vue-comps" "^0.0.2"
+    "@cityofphiladelphia/phila-vue-mapping" "^0.0.5"
     "@turf/turf" "^5.1.6"
     axios "^0.18.0"
     blueimp-md5 "^2.10.0"
-    esri-leaflet "^2.1.4"
+    esri-leaflet "2.1.4"
     jquery "^3.2.1"
     jquery-ui "^1.12.1"
     leaflet "^1.3.1"
@@ -23,7 +25,39 @@
     vue "^2.5.16"
     vuex "^3.0.1"
 
-"@esri/arcgis-to-geojson-utils@^1.3.0":
+"@cityofphiladelphia/phila-vue-comps@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/phila-vue-comps/-/phila-vue-comps-0.0.2.tgz#3090b76cf8216a04051723c3853f242b173335ee"
+  dependencies:
+    jquery "^3.2.1"
+    jquery-ui "^1.12.1"
+    lodash.debounce "^4.0.8"
+    moment "^2.21.0"
+    vue "^2.5.16"
+    vuex "^3.0.1"
+
+"@cityofphiladelphia/phila-vue-mapping@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/phila-vue-mapping/-/phila-vue-mapping-0.0.5.tgz#358d247faa5bc491a965b42cf3a655f0429ec8d2"
+  dependencies:
+    "@turf/turf" "^5.1.6"
+    axios "^0.18.0"
+    blueimp-md5 "^2.10.0"
+    esri-leaflet "2.1.4"
+    jquery "^3.2.1"
+    jquery-ui "^1.12.1"
+    leaflet "^1.3.1"
+    leaflet-easybutton "^2.2.2"
+    leaflet-measure "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
+    leaflet-rotatedmarker "^0.2.0"
+    leaflet-vector-icon "https://github.com/CityOfPhiladelphia/leaflet-vector-icon#8419d4025be2c3acc26a1e66b6a1a1e95c340142"
+    lodash.debounce "^4.0.8"
+    moment "^2.21.0"
+    proj4 "^2.4.4"
+    vue "^2.5.16"
+    vuex "^3.0.1"
+
+"@esri/arcgis-to-geojson-utils@^1.1.1":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@esri/arcgis-to-geojson-utils/-/arcgis-to-geojson-utils-1.3.0.tgz#79ab65bf3e40c039dbdebceff4b3b0ec088b189c"
 
@@ -3113,8 +3147,8 @@ ejs@^2.5.9:
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.6.1.tgz#498ec0d495655abc6f23cd61868d926464071aa0"
 
 electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.47:
-  version "1.3.51"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.51.tgz#6a42b49daaf7f22a5b37b991daf949f34dbdb9b5"
+  version "1.3.52"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.52.tgz#d2d9f1270ba4a3b967b831c40ef71fb4d9ab5ce0"
 
 elegant-spinner@^1.0.1:
   version "1.0.1"
@@ -3247,13 +3281,13 @@ esrecurse@^4.1.0:
   dependencies:
     estraverse "^4.1.0"
 
-esri-leaflet@^2.1.4:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/esri-leaflet/-/esri-leaflet-2.2.0.tgz#b6ad6ae0d9e0edd3bea0bd06ddc88784bbf4cdc9"
+esri-leaflet@2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/esri-leaflet/-/esri-leaflet-2.1.4.tgz#57d81cee72e8d51c8009b7682e3c38c8412879e1"
   dependencies:
-    "@esri/arcgis-to-geojson-utils" "^1.3.0"
-    leaflet-virtual-grid "^1.0.7"
-    tiny-binary-search "^1.0.3"
+    "@esri/arcgis-to-geojson-utils" "^1.1.1"
+    leaflet-virtual-grid "^1.0.5"
+    tiny-binary-search "^1.0.2"
 
 estraverse@^4.1.0, estraverse@^4.1.1:
   version "4.2.0"
@@ -4570,7 +4604,7 @@ leaflet-rotatedmarker@^0.2.0:
   version "1.0.0"
   resolved "git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#8419d4025be2c3acc26a1e66b6a1a1e95c340142"
 
-leaflet-virtual-grid@^1.0.7:
+leaflet-virtual-grid@^1.0.5:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/leaflet-virtual-grid/-/leaflet-virtual-grid-1.0.7.tgz#0dbb0dacd506b6e6d291314da5022d348729f8ad"
   dependencies:
@@ -4936,8 +4970,8 @@ mimic-fn@^1.0.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-1.2.0.tgz#820c86a39334640e99516928bd03fca88057d022"
 
 mimic-response@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-1.0.0.tgz#df3d3652a73fded6b9b0b24146e6fd052353458e"
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-1.0.1.tgz#4923538878eef42063cb8a3e3b0798781487ab1b"
 
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
@@ -6858,7 +6892,7 @@ timers-browserify@^2.0.4:
   dependencies:
     setimmediate "^1.0.4"
 
-tiny-binary-search@^1.0.3:
+tiny-binary-search@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tiny-binary-search/-/tiny-binary-search-1.0.3.tgz#9d52e3d16dd1171eb74486caf704ba08c0c62186"
 
@@ -7275,8 +7309,8 @@ webpack-sources@^1.0.1, webpack-sources@^1.1.0:
     source-map "~0.6.1"
 
 webpack@^4.2.0:
-  version "4.15.1"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.15.1.tgz#dc716779a3b88827c369f18c71a6137fa7e582fd"
+  version "4.16.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.16.0.tgz#660dae90890e55b8ed17c6f9d17bebb01dab5b4c"
   dependencies:
     "@webassemblyjs/ast" "1.5.13"
     "@webassemblyjs/helper-module-context" "1.5.13"
