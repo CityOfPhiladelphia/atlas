@@ -2,11 +2,11 @@
 # yarn lockfile v1
 
 
-"@cityofphiladelphia/mapboard@2.0.18":
-  version "2.0.18"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/mapboard/-/mapboard-2.0.18.tgz#e72c073955664c2b973f6dd8f403f99a1d87bf35"
+"@cityofphiladelphia/mapboard@2.0.19":
+  version "2.0.19"
+  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/mapboard/-/mapboard-2.0.19.tgz#474bd12a654bb1e0afa3fc0591982889ca696fba"
   dependencies:
-    "@cityofphiladelphia/phila-vue-comps" "^0.0.2"
+    "@cityofphiladelphia/phila-vue-comps" "^0.0.3"
     "@cityofphiladelphia/phila-vue-datafetch" "^0.0.3"
     "@cityofphiladelphia/phila-vue-mapping" "^0.0.5"
     "@turf/turf" "^5.1.6"
@@ -26,10 +26,11 @@
     vue "^2.5.16"
     vuex "^3.0.1"
 
-"@cityofphiladelphia/phila-vue-comps@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/phila-vue-comps/-/phila-vue-comps-0.0.2.tgz#3090b76cf8216a04051723c3853f242b173335ee"
+"@cityofphiladelphia/phila-vue-comps@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/phila-vue-comps/-/phila-vue-comps-0.0.3.tgz#598f9050f4a70206f73375f6cbe8f270c5fb723d"
   dependencies:
+    axios "^0.18.0"
     jquery "^3.2.1"
     jquery-ui "^1.12.1"
     lodash.debounce "^4.0.8"
@@ -4606,7 +4607,6 @@ leaflet-easybutton@^2.2.2:
 
 "leaflet-measure@git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6":
   version "4.0.0"
-  uid b70886af342f19597dc2937d79d64bad6bab07c6
   resolved "git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6"
   dependencies:
     "@turf/area" "^5.1.5"
@@ -4629,7 +4629,6 @@ leaflet-rotatedmarker@^0.2.0:
 
 "leaflet-vector-icon@git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#8419d4025be2c3acc26a1e66b6a1a1e95c340142":
   version "1.0.0"
-  uid "8419d4025be2c3acc26a1e66b6a1a1e95c340142"
   resolved "git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#8419d4025be2c3acc26a1e66b6a1a1e95c340142"
 
 "leaflet-vector-icon@https://github.com/CityOfPhiladelphia/leaflet-vector-icon#8419d4025be2c3acc26a1e66b6a1a1e95c340142":
