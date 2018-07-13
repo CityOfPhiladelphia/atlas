@@ -88,7 +88,7 @@ mapboard({
     enabled: false
   },
   addressAutocomplete: {
-    enabled: false
+    enabled: true
   },
   rootStyle: {
     position: 'absolute',
