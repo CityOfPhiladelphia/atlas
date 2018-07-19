@@ -125,7 +125,7 @@ export default {
           {
             label: 'ID',
             value: function (state, item) {
-              console.log('zoning doc', item);
+              // console.log('zoning doc', item);
 
               var appId = item.app_id;
 

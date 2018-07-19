@@ -5,7 +5,7 @@ export default {
   icon: 'book',
   label: 'Deeds',
   // TODO uncommenting this causes the no-content view to show up.
-  // dataSources: ['dorDocuments'],
+  dataSources: ['dorDocuments'],
   components: [
     {
       type: 'callout',
