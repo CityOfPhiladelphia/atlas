@@ -43,6 +43,7 @@ import zoningAppeals from './data-sources/zoning-appeals';
 import zoningBase from './data-sources/zoning-base';
 import zoningDocs from './data-sources/zoning-docs';
 import zoningOverlay from './data-sources/zoning-overlay';
+// import neighboringProperties from './data-sources/neighboring-properties';
 
 // Topics
 import property from './topics/property';
@@ -51,7 +52,7 @@ import deeds from './topics/deeds';
 import li from './topics/li';
 import zoning from './topics/zoning';
 // import polling from './topics/polling';
-// import rco from './topics/rco';
+// import rcoTopic from './topics/rco';
 import nearby from './topics/nearby';
 
 // styles
@@ -136,6 +137,7 @@ mapboard({
     zoningBase,
     zoningDocs,
     zoningOverlay,
+    // neighboringProperties,
   },
   topics: [
     property,
@@ -144,7 +146,7 @@ mapboard({
     li,
     zoning,
     // polling,
-    // rco,
+    // rcoTopic,
     nearby
   ],
 });
