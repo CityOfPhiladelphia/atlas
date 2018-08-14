@@ -88,8 +88,8 @@ mapboard({
   geolocation: {
     enabled: false
   },
-  addressAutocomplete: {
-    enabled: true
+  addressInput: {
+    autocompleteEnabled: true,
   },
   rootStyle: {
     position: 'absolute',
