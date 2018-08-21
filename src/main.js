@@ -156,4 +156,12 @@ mapboard({
     // rcoTopic,
     nearby
   ],
+  components: [
+    {
+      type: 'topic-set',
+      options: {
+        defaultTopic: 'property'
+      }
+    },
+  ],
 });
