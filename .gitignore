@@ -3,3 +3,4 @@ yarn-error.log
 public/*.js
 public/*.js.map
 .netlify
+src/config.js
