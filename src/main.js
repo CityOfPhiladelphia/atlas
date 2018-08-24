@@ -71,12 +71,7 @@ if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
   console.log = console.info = console.debug = console.error = function () {};
 }
 
-// console.log('data source', dataSources);
-
 var BASE_CONFIG_URL = 'https://cdn.rawgit.com/ajrothwell/mapboard-base-config/b4a9023cc4520625d0bce318cec9e64744aa0fc7/config.js';
-// import test from './config.js';
-// console.log('test:', test);
-// var BASE_CONFIG_URL = test.test();
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;
@@ -84,6 +79,7 @@ accounting.settings.currency.precision = 0;
 mapboard({
   // DEV
   // defaultAddress: '1234 MARKET ST',
+  // plugin: true,
   panels: [
     'topics',
     'map'
@@ -104,27 +100,11 @@ mapboard({
   rootStyle: {
     position: 'absolute',
     bottom: 0,
-    // top: '78px',
-    top: '118px',
     left: 0,
     right: 0,
   },
   gatekeeperKey: helpers.GATEKEEPER_KEY,
-  // map,
-  map: {
-    featureLayers: {
-      streetTrees: {
-        url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/Philadelphia_Street_Trees/FeatureServer/0',
-        markerType: 'circleMarker',
-        color: 'green',
-        fillColor: 'green',
-        fillOpacity: 0.5,
-        weight: 1,
-        radius: 6,
-        minZoom: 19,
-      },
-    },
-  },
+  map,
   baseConfig: BASE_CONFIG_URL,
   parcels,
   imageOverlayGroups,
