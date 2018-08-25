@@ -5,7 +5,6 @@ export default {
   dataSources: ['threeOneOneCarto', 'crimeIncidents', 'nearbyZoningAppeals'],
   // dataSources: ['311Carto', 'crimeIncidents', 'nearbyZoningAppeals', 'vacantIndicatorsPoints'],
   // dataSources: ['vacantLand', 'vacantBuilding', '311Carto', 'crimeIncidents', 'nearbyZoningAppeals'],
-  basemap: 'pwd',
   // featureLayers: [
   //   'vacantLand',
   //   'vacantBuilding'

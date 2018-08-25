@@ -399,7 +399,6 @@ export default {
       },
     },
   ],
-  basemap: 'pwd',
   dynamicMapLayers: [
     //'zoning'
   ],

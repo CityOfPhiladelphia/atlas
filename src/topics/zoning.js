@@ -380,7 +380,6 @@ export default {
       },
     },
   ],
-  basemap: 'dor',
   dynamicMapLayers: [
     'zoning'
   ],

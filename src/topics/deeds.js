@@ -400,11 +400,7 @@ export default {
     //   }
     // }
   ], // end deeds comps
-  basemap: 'dor',
   identifyFeature: 'dor-parcel',
-  // identifyFeature: 'address-marker',
-  // we might not need this anymore, now that we have identifyFeature
   parcels: 'dor',
-  // parcels: 'pwd'
   imageOverlayGroup: 'regmaps',
 }

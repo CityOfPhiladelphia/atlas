@@ -110,7 +110,6 @@ export default {
     //   }
     // }
   ],
-  basemap: 'pwd',
   identifyFeature: 'address-marker',
   // we might not need this anymore, now that we have identifyFeature
   parcels: 'pwd',
