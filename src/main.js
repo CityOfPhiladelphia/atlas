@@ -43,6 +43,7 @@ import zoningAppeals from './data-sources/zoning-appeals';
 import zoningBase from './data-sources/zoning-base';
 import zoningDocs from './data-sources/zoning-docs';
 import zoningOverlay from './data-sources/zoning-overlay';
+import charterSchools from './data-sources/charter-schools';
 // import neighboringProperties from './data-sources/neighboring-properties';
 
 // Topics
@@ -110,12 +111,12 @@ mapboard({
   imageOverlayGroups,
   legendControls,
   cyclomedia: {
-    enabled: true,
+    enabled: false,
     measurementAllowed: false,
     popoutAble: true,
   },
   pictometry: {
-    enabled: true,
+    enabled: false,
   },
   transforms,
   greeting,
@@ -140,6 +141,7 @@ mapboard({
     zoningBase,
     zoningDocs,
     zoningOverlay,
+    charterSchools,
     // neighboringProperties,
   },
   topics: [
