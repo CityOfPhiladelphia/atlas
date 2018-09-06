@@ -95,7 +95,7 @@ export default {
         // requiredSources: ['opa'],
         externalLink: {
           action: function(count) {
-            return 'See more';
+            return 'See more at ';
           },
           name: 'Property Search',
           href: function(state) {

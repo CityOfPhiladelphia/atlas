@@ -55,6 +55,7 @@ import policePSA from './data-sources/police-psa';
 import rco from './data-sources/rco';
 import regmaps from './data-sources/regmaps';
 import redevelopmentArea from './data-sources/redevelopment-area';
+import sanitationCenters from './data-sources/sanitation-centers';
 import specialVendingArea from './data-sources/vending-special';
 import tobacco from './data-sources/tobacco-free';
 import vacantIndicatorsPoints from './data-sources/vacant-indicator-points';
@@ -81,6 +82,7 @@ import schools from './topics/schools';
 import safety from './topics/publicsafety';
 // import politicalInfo from './topics/political';
 import trashDay from './topics/trash';
+import voting from './topics/voting';
 import environment from './topics/environment';
 import recreation from './topics/recreation';
 
@@ -155,7 +157,7 @@ mapboard({
     divisions,
     dorCondoList,
     dorDocuments,
-    // elections,
+    elections,
     fireStation,
     floodplain,
     friendsGroup,
@@ -176,6 +178,7 @@ mapboard({
     rco,
     redevelopmentArea,
     regmaps,
+    sanitationCenters,
     specialVendingArea,
     tobacco,
     vacantIndicatorsPoints,
@@ -201,6 +204,7 @@ mapboard({
     safety,
     trashDay,
     // politicalInfo,
+    voting,
     nearby
   ],
   components: [

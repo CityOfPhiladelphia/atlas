@@ -1,4 +1,13 @@
+const getNearest = function(state, field) {
+
+  let min = Math.min.apply(null, state.sources[field].data.map(function(item) {return item._distance;}));
+  let result  = state.sources[field].data.filter(function(item){return item._distance == min;} );
+  let nearest = result? result[0] : null;
+  return nearest
+};
+
 export default {
+
   key: 'recreation',
   icon: 'baseball-ball',
   label: 'Recreation',
@@ -23,17 +32,13 @@ export default {
       slots: {
         fields: [
           {
-            label: 'Nearby Library',
-            //REVIEW: add a fetch nearest function to http-client.js for reusability and separation instead of implementing the logic here 
+            label: 'Nearest Library',
+            //REVIEW: add a fetch nearest function to http-client.js for reusability and separation instead of implementing the logic here
             value: function(state) {
-              let min = Math.min.apply(null, state.sources.libraries.data.map(function(item) {return item._distance;}));
-              let result  = state.sources.libraries.data.filter(function(item){return item._distance == min;} );
-              let nearest = result? result[0] : null;
-
-              return nearest.properties.Branch + " Branch"
-                     + '<br>' + nearest.properties.Street_Address
+              return getNearest(state, 'libraries').properties.Branch + " Branch"
+                     + '<br>' + getNearest(state, 'libraries').properties.Street_Address
                      + '<br> (215) 555-5555'
-                     + '<br> Distance: ' + (min/5280).toFixed(1) + ' miles'
+                     + '<br> Distance: ' + (getNearest(state, 'libraries')._distance/5280).toFixed(1) + ' miles'
                      + '<br> <a href="https://know.freelibrary.org/MyResearch/register">Get a library card</a>';
             },
           },
@@ -133,4 +138,4 @@ export default {
   ],
   identifyFeature: 'address-marker',
   parcels: 'pwd'
-}
+};

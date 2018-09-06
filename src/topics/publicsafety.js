@@ -273,13 +273,13 @@ export default {
         },
         fields: [
           {
-            label: 'Station',
+            label: 'Dates',
             value: function (state, item) {
               return item.properties.Name
             }
           },
           {
-            label: 'Location',
+            label: 'Event Location',
             value: function(state, item) {
               function titleCase(str) {
                 str = str.toLowerCase().split(' ').map(function(word) {
@@ -291,15 +291,9 @@ export default {
             }
           },
           {
-            label: 'Contact',
+            label: 'Affected Streets',
             value: function (state, item) {
               return item.properties.Number
-            }
-          },
-          {
-            label: 'Hours',
-            value: function (state, item) {
-              return item.properties.Hours
             }
           },
           {
@@ -334,6 +328,26 @@ export default {
         },
       }, // end of slots
     },
+    {
+      type: 'horizontal-table',
+      options: {
+        fields: [],
+        externalLink: {
+          forceShow: true,
+          action: function() {
+            return 'See citywide traffic alerts from the Philadelphia Police Department';
+          },
+          name: '',
+          href: function(state) {
+            // var address = state.geocode.data.properties.street_address;
+            // var addressEncoded = encodeURIComponent(address);
+            return '//www.phila.gov/services/safety-emergency-preparedness';
+          }
+        }
+      },
+      slots: {
+      }
+    }, // end table
   ], // end comps
   basemap: 'pwd',
   dynamicMapLayers: [

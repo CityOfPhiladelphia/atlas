@@ -1,5 +1,12 @@
 import moment from 'moment';
 
+const titleCase = function(str) {
+  str = str.toLowerCase().split(' ').map(function(word) {
+    return (word.charAt(0).toUpperCase() + word.slice(1));
+  });
+  return str.join(' ');
+};
+
 export default {
   key: 'historic',
   icon: 'archway',
@@ -52,12 +59,6 @@ export default {
             label: 'Building Description',
             value: function(state) {
               if (state.sources.opa.data) {
-                function titleCase(str) {
-                  str = str.toLowerCase().split(' ').map(function(word) {
-                    return (word.charAt(0).toUpperCase() + word.slice(1));
-                  });
-                  return str.join(' ');
-                }
                 return  titleCase(state.sources.opa.data.building_code_description);
               } else {
                 return "No date available."
