@@ -170,51 +170,182 @@ export default {
         '
       }
     },
-
-
-
     {
       type: 'vertical-table',
       slots: {
         title: 'Ward Leadership',
         fields: [
           {
-            label: 'Ward',
+            label: 'Ward and Division',
             value: function(state) {
               if (state.sources.elections.data.features[0]) {
-                return state.sources.elections.data.features[0].attributes.ward;
+                return 'Ward ' + state.sources.elections.data.features[0].attributes.ward +
+                        ', Division ' + state.sources.elections.data.features[0].attributes.division;
               }
               // return state.geocode.data.properties.political_ward;
             }
           },
           {
-            label: 'Division',
+            label: 'Total Divisions',
             value: function(state) {
               if (state.sources.elections.data.features[0]) {
-                return state.sources.elections.data.features[0].attributes.division;
+                return "Total Divisions in Ward";
               }
               // return state.geocode.data.properties.political_division;
             }
           },
           {
-            label: 'Polling Location',
+            label: 'Democratic Ward Leader',
             value: function(state) {
               if (state.sources.elections.data.features[0]) {
-                return state.sources.elections.data.features[0].attributes.location;
+                return "Democratic Ward Leader <br>\
+                        123 Address St., ZipCode <br>\
+                        (215) 555-5555<br>\
+                        <a>emailaddress@email.com</a>";
               }
             }
           },
           {
-            label: 'Polling Address',
+            label: 'Republic Ward Leader',
             value: function(state) {
               if (state.sources.elections.data.features[0]) {
-                return state.sources.elections.data.features[0].attributes.display_address;
+                return "Republican Ward Leader <br>\
+                        123 Address St., ZipCode <br>\
+                        (215) 555-5555<br>\
+                        <a>emailaddress@email.com</a>";
               }
             }
-          }
+          },
+          {
+            label: 'Current Term',
+            value: function(state) {
+              return "2018 - 2018";
+            },
+          },
         ]
       }
-    }
+    },
+    {
+      type: 'vertical-table',
+      slots: {
+        title: 'Ward Leadership',
+        fields: [
+          {
+            label: 'Ward and Division',
+            value: function(state) {
+              if (state.sources.elections.data.features[0]) {
+                return 'Ward ' + state.sources.elections.data.features[0].attributes.ward +
+                        ', Division ' + state.sources.elections.data.features[0].attributes.division;
+              }
+              // return state.geocode.data.properties.political_ward;
+            }
+          },
+          {
+            label: 'Total Divisions',
+            value: function(state) {
+              if (state.sources.elections.data.features[0]) {
+                return "Total Divisions in Ward";
+              }
+              // return state.geocode.data.properties.political_division;
+            }
+          },
+          {
+            label: 'Democratic Ward Leader',
+            value: function(state) {
+              if (state.sources.elections.data.features[0]) {
+                return "Democratic Ward Leader <br>\
+                        123 Address St., ZipCode <br>\
+                        (215) 555-5555<br>\
+                        <a>emailaddress@email.com</a>";
+              }
+            }
+          },
+          {
+            label: 'Republic Ward Leader',
+            value: function(state) {
+              if (state.sources.elections.data.features[0]) {
+                return "Republican Ward Leader <br>\
+                        123 Address St., ZipCode <br>\
+                        (215) 555-5555<br>\
+                        <a>emailaddress@email.com</a>";
+              }
+            }
+          },
+          {
+            label: 'Current Term',
+            value: function(state) {
+              return "2018 - 2018";
+            },
+          },
+
+        ]
+      }
+    }, //end table
+    {
+      type: 'horizontal-table',
+      options: {
+        topicKey: 'committeepeople',
+        id: 'committeepeople',
+        // limit: 100,
+        sort: {
+          // this should return the val to sort on
+          getValue: function(item) {
+            return item.distance;
+          },
+          // asc or desc
+          order: 'asc'
+        },
+        fields: [
+          {
+            label: 'Party',
+            value: function (state, item) {
+              return item.properties.Name
+            }
+          },
+          {
+            label: 'Committeeperson',
+            value: function (state, item) {
+              return item.properties.Docks
+            }
+          },
+          {
+            label: 'Address',
+            value: function(state, item) {
+              return parseInt(item._distance) + ' ft';
+            }
+          },
+          {
+            label: 'Elected',
+            value: function(state, item) {
+              return parseInt(item._distance) + ' ft';
+            }
+          }
+        ],
+        externalLink: {
+          forceShow: true,
+          action: function() {
+            return 'View a complete map of ward leaders and committeepeople';
+          },
+          name: '',
+          href: function(state) {
+            return '//www.seventy.org/publications/ward-leaders-committeepeople';
+          }
+        }
+      },
+      slots: {
+        title: 'Division Committeepeople',
+        data: 'friendsGroup',
+        items: function(state) {
+          var data = state.sources['bikeshare'].data || [];
+          var rows = data.map(function(row){
+            var itemRow = row;
+            // var itemRow = Object.assign({}, row);
+            return itemRow;
+          });
+          return rows;
+        },
+      },
+    },
   ],
   zoomToShape: ['geojson', 'marker'],
   geojson: {

@@ -85,6 +85,7 @@ import trashDay from './topics/trash';
 import voting from './topics/voting';
 import environment from './topics/environment';
 import recreation from './topics/recreation';
+import assistance from './topics/assistance';
 
 // styles
 // TODO move all styles here (that have a npm package)
@@ -205,6 +206,7 @@ mapboard({
     trashDay,
     // politicalInfo,
     voting,
+    assistance,
     nearby
   ],
   components: [
