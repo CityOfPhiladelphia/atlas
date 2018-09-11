@@ -13,7 +13,7 @@
   },
   "dependencies": {
 
-    "@cityofphiladelphia/mapboard": "https://github.com/CityOfPhiladelphia/phila-vue-mapping#be613975a521339c1e19e15ae1ac5c56df6a0f0c",
+    "@cityofphiladelphia/mapboard": "https://github.com/CityOfPhiladelphia/mapboard#be613975a521339c1e19e15ae1ac5c56df6a0f0c",
 
 
     "accounting": "^0.4.1",
