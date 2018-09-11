@@ -79,13 +79,14 @@ import nearby from './topics/nearby';
 import historic from './topics/historic';
 import business from './topics/business';
 import schools from './topics/schools';
-import safety from './topics/publicsafety';
+import safety from './topics/public-safety';
 // import politicalInfo from './topics/political';
 import trashDay from './topics/trash';
 import voting from './topics/voting';
 import environment from './topics/environment';
 import recreation from './topics/recreation';
 import assistance from './topics/assistance';
+import blockActivity from './topics/block-activity';
 
 // styles
 // TODO move all styles here (that have a npm package)
@@ -207,6 +208,7 @@ mapboard({
     // politicalInfo,
     voting,
     assistance,
+    blockActivity,
     nearby
   ],
   components: [

@@ -42,7 +42,7 @@ export default {
               return (`<a target="_blank"><b>${getNearest(state, 'sanitationCenters', 'distance').name}</b></a> <br>
               ${getNearest(state, 'sanitationCenters', 'distance').address} <br>
               ${getNearest(state, 'sanitationCenters', 'distance').phone} <br>
-              Distance: ${(getNearest(state, 'sanitationCenters', 'distance').distance/5280).toFixed(1)} miles
+              ${(getNearest(state, 'sanitationCenters', 'distance').distance/5280).toFixed(1)} miles
               `);
             },
           },
@@ -80,7 +80,7 @@ export default {
               return (`<a target="_blank"><b>${getNearest(state, 'sanitationCenters', 'distance').name}</b> </a><br>
               ${getNearest(state, 'sanitationCenters', 'distance').address} <br>
               ${getNearest(state, 'sanitationCenters', 'distance').phone} <br>
-              Distance: ${(getNearest(state, 'sanitationCenters', 'distance').distance/5280).toFixed(1)} miles
+              ${(getNearest(state, 'sanitationCenters', 'distance').distance/5280).toFixed(1)} miles
               `);
             },
           },
@@ -119,14 +119,14 @@ export default {
               return (`<a><b>${getNearest(state, 'sanitationCenters', 'distance').name} </a></b><br>
               ${getNearest(state, 'sanitationCenters', 'distance').address} <br>
               ${getNearest(state, 'sanitationCenters', 'distance').phone} <br>
-              Distance: ${(getNearest(state, 'sanitationCenters', 'distance').distance/5280).toFixed(1)} miles
+              ${(getNearest(state, 'sanitationCenters', 'distance').distance/5280).toFixed(1)} miles
               `);
             },
           },
           {
             label: 'Description',
             value: function() {
-              return ('A "one-stop shop" for energy affordability, Trained\
+              return ('A "one-stop shop" for energy affordability. Trained\
                       counselors help with energy conservation, home repair,\
                       and paying utility bills.')
             },
@@ -134,9 +134,71 @@ export default {
         ]
       },
     }, // end table
-
-
-
+    {
+      type: 'horizontal-table',
+      options: {
+        noCount: true,
+        fields: [],
+        externalLink: {
+          forceShow: true,
+          action: function() {
+            return 'Find food resources including soup kitchens, food pantries,\
+                    and low-cost groceries.';
+          },
+          name: 'Free Meals',
+          href: function(state) {
+            // var address = state.geocode.data.properties.street_address;
+            // var addressEncoded = encodeURIComponent(address);
+            return '//philadelphiaofficeofhomelessservices.org/shared-public-spaces/free-meals/';
+          }
+        },
+      },
+      slots: {
+        title: 'Free Meals',
+      }
+    }, // end table
+    {
+      type: 'horizontal-table',
+      options: {
+        fields: [],
+        externalLink: {
+          forceShow: true,
+          action: function() {
+            return 'Download a printable list of free meals.';
+          },
+          name: 'Free Meals',
+          href: function(state) {
+            return '//philadelphiaofficeofhomelessservices.org/shared-public-spaces/free-meals/';
+          }
+        }
+      },
+      slots: {
+      }
+    }, // end table
+    {
+      type: 'horizontal-table',
+      options: {
+        noCount: true,
+        fields: [],
+        externalLink: {
+          forceShow: true,
+          action: function() {
+            return 'Find information about many other city services available to residents \
+                    of Philadelphia including tax and bill relief, assistance with property \
+                    and housing, and many more.';
+          },
+          name: 'Free Meals',
+          href: function(state) {
+            // var address = state.geocode.data.properties.street_address;
+            // var addressEncoded = encodeURIComponent(address);
+            return '//www.phila.gov/services/';
+          }
+        }
+      },
+      slots: {
+        title: 'Additional Services',
+      }
+    }, // end table
     {
       type: 'callout',
       slots: {
