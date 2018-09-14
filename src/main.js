@@ -94,7 +94,7 @@ mapboard({
   addressInput: {
     width: 415,
     position: 'right',
-    autocompleteEnabled: true,
+    autocompleteEnabled: false,
     autocompleteMax: 15,
     placeholder: 'Search the map',
   },
