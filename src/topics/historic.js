@@ -9,7 +9,7 @@ const titleCase = function(str) {
 
 export default {
   key: 'historic',
-  icon: 'archway',
+  icon: 'institution',
   label: 'Historic',
   dataSources: ['histDesignated', 'crimeIncidents', 'histDistrict'],
 

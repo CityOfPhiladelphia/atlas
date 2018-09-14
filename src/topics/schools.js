@@ -1,6 +1,6 @@
 export default {
   key: 'schools',
-  icon: 'school',
+  icon: 'graduation-cap',
   label: 'Schools',
   dataSources: ['charterSchools'],
 

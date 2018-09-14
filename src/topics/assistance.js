@@ -15,7 +15,7 @@ const getNearest = function(state, field, distName) {
 
 export default {
   key: 'assistance',
-  icon: 'handshake',
+  icon: 'comments-o',
   label: 'assistance',
   dataSources: ['sanitationCenters'],
   components: [

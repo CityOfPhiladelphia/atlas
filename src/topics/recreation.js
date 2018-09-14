@@ -9,7 +9,7 @@ const getNearest = function(state, field) {
 export default {
 
   key: 'recreation',
-  icon: 'baseball-ball',
+  icon: 'dribbble',
   label: 'Recreation',
   dataSources: ['libraries'],
 
