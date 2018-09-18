@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@cityofphiladelphia/mapboard@https://github.com/CityOfPhiladelphia/mapboard#462cad1cd011aeebb8fc280fda2600acf7c02c20":
+"@cityofphiladelphia/mapboard@https://github.com/CityOfPhiladelphia/mapboard#32bd2bebba905c0c7d530afd2a045dfe95831638":
   version "3.0.5"
-  resolved "https://github.com/CityOfPhiladelphia/mapboard#462cad1cd011aeebb8fc280fda2600acf7c02c20"
+  resolved "https://github.com/CityOfPhiladelphia/mapboard#32bd2bebba905c0c7d530afd2a045dfe95831638"
   dependencies:
     "@cityofphiladelphia/phila-vue-comps" "https://github.com/CityOfPhiladelphia/phila-vue-comps#e3ddd40eaf5a8fb7ff9996f79acd82bbf8e0834f"
     "@cityofphiladelphia/phila-vue-datafetch" "0.0.10"
