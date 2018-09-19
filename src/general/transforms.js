@@ -4,6 +4,34 @@ import moment from 'moment';
 accounting.settings.currency.precision = 0;
 
 export default {
+  dayofweek: {
+    // a list of global objects this transform depends on
+    transform: function (value) {
+      switch(value) {
+        case "FRI":
+          value = "Friday";
+          break;
+        case "SAT":
+          value = "Saturday";
+          break;
+        case "SUN":
+          value = "Sunday";
+          break;
+        case "MON":
+          value = "Monday";
+          break;
+        case "TUE":
+          value = "Tuesday";
+          break;
+        case "WED":
+          value = "Wednesday";
+          break;
+        case "THU":
+          value = "Thursday";
+      };
+      return value
+    }
+  },
   currency: {
     // a list of global objects this transform depends on
     globals: ['accounting'],
