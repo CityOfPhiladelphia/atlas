@@ -38,6 +38,7 @@ import nearbyZoningAppeals from './data-sources/nearby-zoning-appeals';
 import opa from './data-sources/opa';
 import rco from './data-sources/rco';
 import regmaps from './data-sources/regmaps';
+import sanitationCenters from './data-sources/sanitation-centers';
 import vacantIndicatorsPoints from './data-sources/vacant-indicator-points';
 import zoningAppeals from './data-sources/zoning-appeals';
 import zoningBase from './data-sources/zoning-base';
@@ -55,6 +56,7 @@ import zoning from './topics/zoning';
 // import polling from './topics/polling';
 // import rcoTopic from './topics/rco';
 import nearby from './topics/nearby';
+import trashDay from './topics/trash';
 
 // styles
 // TODO move all styles here (that have a npm package)
@@ -136,6 +138,7 @@ mapboard({
     opa,
     rco,
     regmaps,
+    sanitationCenters,
     vacantIndicatorsPoints,
     zoningAppeals,
     zoningBase,
@@ -152,7 +155,8 @@ mapboard({
     zoning,
     // polling,
     // rcoTopic,
-    nearby
+    nearby,
+    trashDay,
   ],
   components: [
     {
