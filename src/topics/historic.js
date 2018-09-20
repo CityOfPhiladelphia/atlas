@@ -22,6 +22,17 @@ export default {
     },
     {
       type: 'vertical-table',
+      options: {
+        nullValue: 'None',
+        externalLink: {
+          action: function() {
+            return 'Learn more about owning a property on the historic register.';
+          },
+          href: function(state) {
+            return '//www.phila.gov/historical/designation/Pages/FAQ.aspx';
+          }
+        }
+      },
       slots: {
         fields: [
           {
@@ -95,6 +106,21 @@ export default {
             }
           },
         ]
+      }
+    },
+    {
+      type: 'callout',
+      slots: {
+        text: 'Know a spot that seems historically important that isn\'t listed? Learn about the \
+        <a href="//www.phila.gov/historical/designation/Pages/criteria.aspx" target="_blank">criteria\
+        </a> for designating properties as historic and how to \
+        <a href="//www.phila.gov/historical/designation/Pages/process.aspx" target="_blank">nominated\
+        </a> a property for historic designation. The federal <a href="//www.nps.gov/nr/" target="_blank">\
+        National Registry</a> designates historic places worth of preservation independently from the \
+        Philadelphia Register and each confers diffferent protections. Finally, you can learn more \
+        about the Mayor\'s Historic Preservation\
+        <a href="http://phl.maps.arcgis.com/apps/Cascade/index.html?appid=925708a09f264efd94932dd9300921bd" \
+        target="_blank">Task Force</a> created in May 2017.'
       }
     },
   ],

@@ -9,11 +9,20 @@ export default {
       type: 'badge-custom',
       options: {
         titleBackground: '#58c04d',
+        externalLink: {
+          action: function() {
+            return 'Last updated 9/9/1999 at 11:11:00 AM';
+          },
+          href: function(state) {
+            return '//www.phila.gov';
+          }
+        },
         components: [
           {
             type: 'badge',
             options: {
               titleBackground: '#58c04d',
+              nullValue: 'None',
             },
             slots: {
               value: function() {
@@ -27,26 +36,6 @@ export default {
         title: 'Current Air Quality',
       }, // end slots
     }, // end of badge-custom
-    {
-      type: 'horizontal-table',
-      options: {
-        fields: [],
-        externalLink: {
-          forceShow: true,
-          action: function() {
-            return 'Last updated 9/9/1999 at 11:11:00 AM';
-          },
-          name: '',
-          href: function(state) {
-            // var address = state.geocode.data.properties.street_address;
-            // var addressEncoded = encodeURIComponent(address);
-            return '//www.phila.gov';
-          }
-        }
-      },
-      slots: {
-      }
-    }, // end table
     {
       type: 'vertical-table',
 
@@ -122,6 +111,18 @@ export default {
             }
           }
         ],
+        externalLink: {
+          forceShow: true,
+          action: function() {
+            return 'See a full list of Friends of Parks groups and how to start one at a local park.';
+          },
+          name: '',
+          href: function(state) {
+            // var address = state.geocode.data.properties.street_address;
+            // var addressEncoded = encodeURIComponent(address);
+            return '//loveyourpark.org/park-friends-network/';
+          }
+        }
       },
       slots: {
         title: 'Befriend a Nearby Park',
@@ -140,7 +141,38 @@ export default {
     {
       type: 'horizontal-table',
       options: {
-        fields: [],
+        fields: [
+          {
+            label: 'Location',
+            value: function (state, item) {
+              return item.friendsnam
+            }
+          },
+          {
+            label: 'Project Type',
+            value: function (state, item) {
+              return item.friendsnam
+            }
+          },
+          {
+            label: 'Contact',
+            value: function (state, item) {
+              return item.parkaddres
+            }
+          },
+          {
+            label: 'Year Completed',
+            value: function(state, item) {
+              return parseInt(item.distance);
+            }
+          },
+          {
+            label: 'Distance',
+            value: function(state, item) {
+              return parseInt(item.distance) + ' ft';
+            }
+          }
+        ],
         externalLink: {
           forceShow: true,
           action: function() {
@@ -155,8 +187,32 @@ export default {
         }
       },
       slots: {
-      }
+        title: 'Befriend a Nearby Park (Placeholder Data)',
+        data: 'friendsGroup',
+        items: function(state) {
+          var data = state.sources['friendsGroup'].data || [];
+          var rows = data.map(function(row){
+            var itemRow = row;
+            // var itemRow = Object.assign({}, row);
+            return itemRow;
+          });
+          return rows;
+        },
+      } // end of slots
     }, // end table
+    {
+      type: 'callout',
+      slots: {
+        text: '\
+        The historic erasing of Philadelphia\'s surface creeks and streams by converting them into sewers \
+        has <a href="http://www.phillywatersheds.org/your_watershed/history" target="_blank">transformed</a>\
+        hydrological conditions over time. Of the 283 linear miles of streams that once existed in Philadelphia \
+        to carry runoff to the Schuylkill and Delaware Rivers, only 118 miles remain today. These streams can \
+        also sometimes cause localized water damage. Historic streams are drawn on the map based on their \
+        previous course. Source: Office of Watersheds.\
+        '
+      }
+    },
   ],
   identifyFeature: 'address-marker',
   parcels: 'pwd',
