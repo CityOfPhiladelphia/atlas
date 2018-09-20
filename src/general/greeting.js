@@ -1,5 +1,6 @@
 export default {
   initialMessage: '\
+    <h3>This application is currently experiencing technical difficulties. We\'re working on the issue. Please try again later.</h3>\
     <h2>Atlas is your front door to the City of Philadelphia.</h2>\
     <p>Here are some things you can do with Atlas:</p>\
     <div class="callout">\
