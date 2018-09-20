@@ -24,6 +24,7 @@ import greeting from './general/greeting';
 
 // data sources
 import threeOneOneCarto from './data-sources/311-carto';
+import businessArea from './data-sources/business-area';
 import condoList from './data-sources/condo-list';
 import crimeIncidents from './data-sources/crime-incidents';
 import divisions from './data-sources/divisions';
@@ -35,9 +36,12 @@ import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
 import liViolations from './data-sources/li-violations';
 import nearbyZoningAppeals from './data-sources/nearby-zoning-appeals';
+import noVendingArea from './data-sources/vending-area';
 import opa from './data-sources/opa';
 import rco from './data-sources/rco';
 import regmaps from './data-sources/regmaps';
+import specialVendingArea from './data-sources/vending-special';
+import tobacco from './data-sources/tobacco-free';
 import vacantIndicatorsPoints from './data-sources/vacant-indicator-points';
 import zoningAppeals from './data-sources/zoning-appeals';
 import zoningBase from './data-sources/zoning-base';
@@ -55,6 +59,7 @@ import zoning from './topics/zoning';
 // import polling from './topics/polling';
 // import rcoTopic from './topics/rco';
 import nearby from './topics/nearby';
+import business from './topics/business';
 
 // styles
 // TODO move all styles here (that have a npm package)
@@ -122,6 +127,7 @@ mapboard({
   greeting,
   dataSources: {
     threeOneOneCarto,
+    businessArea,
     condoList,
     crimeIncidents,
     divisions,
@@ -133,9 +139,12 @@ mapboard({
     liPermits,
     liViolations,
     nearbyZoningAppeals,
+    noVendingArea,
     opa,
     rco,
     regmaps,
+    specialVendingArea,
+    tobacco,
     vacantIndicatorsPoints,
     zoningAppeals,
     zoningBase,
@@ -152,6 +161,7 @@ mapboard({
     zoning,
     // polling,
     // rcoTopic,
+    business,
     nearby
   ],
   components: [
