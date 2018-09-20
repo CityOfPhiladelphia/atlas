@@ -31,6 +31,7 @@ import divisions from './data-sources/divisions';
 import dorCondoList from './data-sources/dor-condo-list';
 import dorDocuments from './data-sources/dor-documents';
 import elections from './data-sources/elections';
+import keystoneZone from './data-sources/keystone-zone';
 import liBusinessLicenses from './data-sources/li-business-licenses';
 import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
@@ -40,6 +41,7 @@ import noVendingArea from './data-sources/vending-area';
 import opa from './data-sources/opa';
 import rco from './data-sources/rco';
 import regmaps from './data-sources/regmaps';
+import redevelopmentArea from './data-sources/redevelopment-area';
 import specialVendingArea from './data-sources/vending-special';
 import tobacco from './data-sources/tobacco-free';
 import vacantIndicatorsPoints from './data-sources/vacant-indicator-points';
@@ -134,6 +136,7 @@ mapboard({
     dorCondoList,
     dorDocuments,
     elections,
+    keystoneZone,
     liBusinessLicenses,
     liInspections,
     liPermits,
@@ -142,6 +145,7 @@ mapboard({
     noVendingArea,
     opa,
     rco,
+    redevelopmentArea,
     regmaps,
     specialVendingArea,
     tobacco,

@@ -3,17 +3,22 @@ export default {
   icon: 'briefcase',
   label: 'Business',
   dataSources: ['businessArea', 'redevelopmentArea', 'tobacco','noVendingArea',  'specialVendingArea',],
-
   components: [
     {
-      type: 'callout',
-      slots: {
-        text: 'Condominium units at your search address, as recorded for property assessment purposes. Click one of the addresses below to see information for that unit.  Use the back button to return to this list. Source: Office of Property Assessment'
-      }
-    },
-    {
       type: 'vertical-table',
+      options: {
+        nullValue: 'None',
+        externalLink: {
+          action: function() {
+            return 'Learn more about services and requirements for businesses';
+          },
+          href: function(state) {
+            return '//www.phila.gov/services/business-self-employment/';
+          }
+        }
+      },
       slots: {
+        title: 'Business Services',
         fields: [
           {
             label: 'Business Improvement District',
