@@ -72,7 +72,7 @@ if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
   console.log = console.info = console.debug = console.error = function () {};
 }
 
-var BASE_CONFIG_URL = 'https://cdn.rawgit.com/ajrothwell/mapboard-base-config/ede6913302cd65ef32d7d24d4e7793b1b28f7566/config.js';
+var BASE_CONFIG_URL = 'https://cdn.rawgit.com/ajrothwell/mapboard-base-config/2b849b365a9c4e986222996d0dcaaad114a3e98a/config.js';
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;
