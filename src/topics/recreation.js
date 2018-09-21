@@ -6,12 +6,19 @@ const getNearest = function(state, field) {
   return nearest
 };
 
+const titleCase = function(str) {
+  str = str.toLowerCase().split(' ').map(function(word) {
+    return (word.charAt(0).toUpperCase() + word.slice(1));
+  });
+  return str.join(' ');
+};
+
 export default {
 
   key: 'recreation',
   icon: 'dribbble',
   label: 'Recreation',
-  dataSources: ['libraries'],
+  dataSources: ['libraries', 'recCenters'],
 
   components: [
     {
@@ -103,7 +110,7 @@ export default {
       },
       slots: {
         title: 'Nearby Indigo Stations',
-        data: 'friendsGroup',
+        data: 'bikeshare',
         items: function(state) {
           var data = state.sources['bikeshare'].data || [];
           var rows = data.map(function(row){
@@ -118,7 +125,9 @@ export default {
     {
       type: 'horizontal-table',
       options: {
-        fields: [],
+        topicKey: 'bikeshare',
+        id: 'bikeshare',
+        // limit: 100,
         externalLink: {
           forceShow: true,
           action: function() {
@@ -130,11 +139,121 @@ export default {
             // var addressEncoded = encodeURIComponent(address);
             return '//www.phila.gov/parks-rec-finder/#/locations';
           }
+        },
+        sort: {
+          // this should return the val to sort on
+          getValue: function(item) {
+            return item._distance;
+          },
+          // asc or desc
+          order: 'asc'
+        },
+        fields: [
+          {
+            label: 'Facility Name',
+            value: function (state, item) {
+              return item.properties.SITE_NAME;
+            }
+          },
+          {
+            label: 'Location',
+            value: function (state, item) {
+              return titleCase(item.properties.ASSET_ADDR);
+            }
+          },
+          {
+            label: 'Type',
+            value: function(state, item) {
+              return item.properties.ASSET_SUBT1_DESC;
+            }
+          },
+          {
+            label: 'Distance',
+            value: function(state, item) {
+              return parseInt(item._distance) + ' ft';
+            }
+          }
+        ],
+      },
+      slots: {
+        title: 'Nearby Recreation Facilities',
+        data: 'recCenters',
+        items: function(state) {
+          var data = state.sources['recCenters'].data || [];
+          var rows = data.map(function(row){
+            var itemRow = row;
+            // var itemRow = Object.assign({}, row);
+            return itemRow;
+          });
+          return rows;
+        },
+      }, // end of slots
+    },
+    {
+      type: 'horizontal-table',
+      options: {
+        topicKey: 'bikeshare',
+        id: 'bikeshare',
+        // limit: 100,
+        sort: {
+          // this should return the val to sort on
+          getValue: function(item) {
+            return item.distance;
+          },
+          // asc or desc
+          order: 'asc'
+        },
+        fields: [
+          {
+            label: 'Trail',
+            value: function (state, item) {
+              return item.properties.Name
+            }
+          },
+          {
+            label: 'Entrance',
+            value: function (state, item) {
+              return item.properties.Name
+            }
+          },
+          {
+            label: 'Type',
+            value: function (state, item) {
+              return item.properties.Docks
+            }
+          },
+          {
+            label: 'Distance',
+            value: function(state, item) {
+              return parseInt(item._distance) + ' ft';
+            }
+          }
+        ],
+        externalLink: {
+          forceShow: true,
+          action: function() {
+            return 'View a map of all major walking and biking trails.';
+          },
+          name: '',
+          href: function(state) {
+            return '//phl.maps.arcgis.com/apps/webappviewer/index.html?id=2e70012008fc409e9f34810f18102f01';
+          }
         }
       },
       slots: {
-      }
-    }, // end table
+        title: 'Nearby Trail Access (Placeholder Data)',
+        data: 'bikeshare',
+        items: function(state) {
+          var data = state.sources['bikeshare'].data || [];
+          var rows = data.map(function(row){
+            var itemRow = row;
+            // var itemRow = Object.assign({}, row);
+            return itemRow;
+          });
+          return rows;
+        },
+      }, // end of slots
+    }
   ],
   identifyFeature: 'address-marker',
   parcels: 'pwd'

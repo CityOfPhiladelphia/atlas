@@ -53,6 +53,7 @@ import opa from './data-sources/opa';
 import policeDistr from './data-sources/police-distr';
 import policePSA from './data-sources/police-psa';
 import rco from './data-sources/rco';
+import recCenters from './data-sources/rec-centers';
 import regmaps from './data-sources/regmaps';
 import redevelopmentArea from './data-sources/redevelopment-area';
 import sanitationCenters from './data-sources/sanitation-centers';
@@ -179,6 +180,7 @@ mapboard({
     policeDistr,
     policePSA,
     rco,
+    recCenters,
     redevelopmentArea,
     regmaps,
     sanitationCenters,
