@@ -38,9 +38,9 @@ import fireStation from './data-sources/fire-station';
 import floodplain from './data-sources/floodplain';
 import friendsGroup from './data-sources/friends-group';
 import histDesignated from './data-sources/historic';
+import histDistrict from './data-sources/historic-distr';
 import historicNearby from './data-sources/historic-nearby';
 import keystoneZone from './data-sources/keystone-zone';
-import histDistrict from './data-sources/historic-distr';
 import liBusinessLicenses from './data-sources/li-business-licenses';
 import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
@@ -165,6 +165,7 @@ mapboard({
     friendsGroup,
     histDesignated,
     histDistrict,
+    historicNearby,
     keystoneZone,
     libraries,
     liBusinessLicenses,

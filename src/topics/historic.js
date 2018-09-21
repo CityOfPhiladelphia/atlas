@@ -11,7 +11,7 @@ export default {
   key: 'historic',
   icon: 'leanpub',
   label: 'Historic',
-  dataSources: ['histDesignated', 'crimeIncidents', 'histDistrict'],
+  dataSources: ['histDesignated', 'crimeIncidents', 'histDistrict', 'historicNearby'],
 
   components: [
     {
@@ -108,6 +108,64 @@ export default {
         ]
       }
     },
+    {
+      type: 'horizontal-table',
+      options: {
+        fields: [
+          {
+            label: 'Designated',
+            value: function (state, item) {
+              if(item.properties.DDESIGDATE != null){
+                return item.properties.DDESIGDATE
+              } else if(item.properties.IDESIGDATE1 != null){
+                return item.properties.IDESIGDATE1
+              } else if(item.properties.IDESIGDATE2 != null){
+                return item.properties.IDESIGDATE2
+              } else {
+                return "Not Available"
+              }
+            }
+          },
+          {
+            label: 'Address',
+            value: function (state, item) {
+              return item.properties.LOC
+            }
+          },
+          {
+            label: 'Distance',
+            value: function(state, item) {
+              return parseInt(item._distance) + ' ft';
+            }
+          }
+        ],
+        externalLink: {
+          forceShow: true,
+          action: function() {
+            return 'See a full map of all properties and districts from the Philadelphia Register of Historic Places.';
+          },
+          name: '',
+          href: function(state) {
+            // var address = state.geocode.data.properties.street_address;
+            // var addressEncoded = encodeURIComponent(address);
+            return '//phl.maps.arcgis.com/apps/View/index.html?appid=0a0b23447b6b4f7097d59c580b9045fe';
+          }
+        }
+      },
+      slots: {
+        title: 'Nearby Historic Places',
+        data: 'historicNearby',
+        items: function(state) {
+          var data = state.sources['historicNearby'].data || [];
+          var rows = data.map(function(row){
+            var itemRow = row;
+            // var itemRow = Object.assign({}, row);
+            return itemRow;
+          });
+          return rows;
+        },
+      } // end of slots
+    }, // end table
     {
       type: 'callout',
       slots: {
