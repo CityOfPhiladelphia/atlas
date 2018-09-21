@@ -18,7 +18,7 @@ export default {
   key: 'recreation',
   icon: 'dribbble',
   label: 'Recreation',
-  dataSources: ['libraries', 'recCenters'],
+  dataSources: ['libraries', 'recCenters', 'bikeshare'],
 
   components: [
     {
