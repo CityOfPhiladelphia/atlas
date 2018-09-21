@@ -45,7 +45,8 @@ export default {
           {
             label: 'Water at this address drains into:',
             value: function(state) {
-              return state.sources.watersheds.data[0].properties.WATERSHED_NAME
+              return '<a href="http://www.phillywatersheds.org/your_watershed/find_your_watershed" \
+              target ="_blank">'+ state.sources.watersheds.data[0].properties.WATERSHED_NAME +'</a>'
             }
           },
           {
@@ -187,7 +188,7 @@ export default {
         }
       },
       slots: {
-        title: 'Befriend a Nearby Park (Placeholder Data)',
+        title: 'Green Stewardship Projects Nearby (Placeholder Data)',
         data: 'friendsGroup',
         items: function(state) {
           var data = state.sources['friendsGroup'].data || [];
