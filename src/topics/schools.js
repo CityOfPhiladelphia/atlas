@@ -21,10 +21,10 @@ export default {
         nullValue: 'None',
       },
       slots: {
-        title: 'School Catchment',
+        title: 'Neighborhood Schools',
         fields: [
           {
-            label: 'Elementary School',
+            label: 'Elementary & Middle School',
             value: function(state) {
               return state.geocode.data.properties.elementary_school;
             },
@@ -128,16 +128,6 @@ export default {
           are public schools where a full-time coordinator \
           works with the entire school community to identify the community\'s \
           most pressing needs.\
-        '
-      }
-    },
-    {
-      type: 'callout',
-      slots: {
-        text: '\
-          <a href="https://www.phila.gov/historical/designation/Pages/criteria.aspx" target="_blank">Friends Groups</a> \
-          are formed as a means to help facilitate the involvement and support of community memembers living \
-          within and near neighborhood school catchments.\
         '
       }
     },
