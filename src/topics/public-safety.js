@@ -64,16 +64,6 @@ export default {
       }
     }, // end table
     {
-      type: 'callout',
-      slots: {
-        text: '\
-          School Catchment Areas, Political Divisions and Districts, Public Safety, Planning Districts, \
-          Census Geographies,  Streets and Sanitation information at your search address. \
-          Sources: \
-        '
-      }
-    },
-    {
       type: 'vertical-table',
       options: {
         nullValue: 'None',
