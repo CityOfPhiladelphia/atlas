@@ -29,6 +29,7 @@ import businessArea from './data-sources/business-area';
 import charterSchools from './data-sources/charter-schools';
 import condoList from './data-sources/condo-list';
 import coolWarmSta from './data-sources/cooling-sta';
+import childWelfare from './data-sources/child-welfare';
 import crimeIncidents from './data-sources/crime-incidents';
 import divisions from './data-sources/divisions';
 import dorCondoList from './data-sources/dor-condo-list';
@@ -154,6 +155,7 @@ mapboard({
     bikeshare,
     businessArea,
     charterSchools,
+    childWelfare,
     condoList,
     coolWarmSta,
     crimeIncidents,

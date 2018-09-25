@@ -1,8 +1,18 @@
+import transforms from '../general/transforms';
+
+const getNearest = function(state, field, distName) {
+
+  let min = Math.min.apply(null, state.sources[field].data.map(function(item) {return item[distName];}));
+  let result  = state.sources[field].data.filter(function(item){return item[distName] == min;} );
+  let nearest = result? result[0] : null;
+  return nearest
+};
+
 export default {
   key: 'safety',
   icon: 'star',
   label: 'Public Safety',
-  dataSources: ['policePSA', 'policeDistr', 'fireStation'],
+  dataSources: ['childWelfare','policePSA', 'policeDistr', 'fireStation'],
 
   components: [
     {
@@ -38,7 +48,7 @@ export default {
         towed. If your car is towed, call 215-686-SNOW for its location. Do NOT call 911. \
         View complete listing of \
         <a href="//www.philadelphiastreets.com/highways/snow/emergency-routes/"> priority \
-        streets.</a> Source: Streets Department.\
+        streets.</a> <br>Source: Streets Department.\
         '
       }
     },
@@ -69,28 +79,34 @@ export default {
         nullValue: 'None',
       },
       slots: {
-        title: 'Public Safety',
+        // title: 'Public Safety',
         fields: [
           {
             label: 'Police Jurisdiction',
             value: function(state) {
               let mail = 'police.co_'+state.geocode.data.properties.police_district+'@phila.gov'
               function nth(n){return n + ([,'st','nd','rd'][n%100>>3^1&&n%10]||'th')};
-              return (nth(state.geocode.data.properties.police_district) + ' District <br>'
+              return ('<a href="" target="_blank"><b>'
+                      + nth(state.geocode.data.properties.police_district)
+                      +' District </b></a><br>'
                       +'PSA '+ state.geocode.data.properties.police_service_area
-                      +'<br> <a target="_blank"> PSA Leader Email Link</a>'
-                      + '<br>(215) '+ state.sources.policeDistr.data[0].properties.PHONE
+                      +'<br><a target="_blank"> PSA Leader Email Link</a>'
                       + '<br>' + state.sources.policeDistr.data[0].properties.LOCATION
+                      + '<br>(215) '+ state.sources.policeDistr.data[0].properties.PHONE
                       + '<br> <a href="mailto:'+mail+'">'+mail+'</a>');
             },
           },
           {
             label: 'Child Welfare',
             value: function(state) {
-              return '<a target="_blank">Sample Name of Location</a>\
-                      <br>1234 Sample Address St, 19104\
-                      <br>(215) 555-5555\
-                      <br>To report child abuse or neglect call (215) 683-6100';
+
+              let closestWelfare = getNearest(state, "childWelfare", "_distance").properties
+              return '<a href="//www.'+ transforms.urlFormatter.transform(closestWelfare.WEB_SITE)+'" target="_blank"><b>' 
+                      + closestWelfare.CUA_NAME + '</b></a>\
+                      <br>1234 '+ closestWelfare.ADDRESS1 +', '+ closestWelfare.ZIP + '\
+                      <br>'+ transforms.phoneNumber.transform(closestWelfare.PHONE) +'\
+                      <br><a href="//www.phila.gov/services/crime-law-justice/report-a-crime-or-concern/report-child-abuse-or-neglect/"\
+                      target="_blank">To report child abuse or neglect call (215) 683-6100</a>';
             },
           },
         ]
