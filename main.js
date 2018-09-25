@@ -13,7 +13,7 @@
 //   console.log = console.info = console.debug = console.error = function () {};
 // }
 
-var BASE_CONFIG_URL = 'https://cdn.rawgit.com/ajrothwell/mapboard-base-config/252debf3c4089478419f78e4bdfe26486988d236/config.js';
+var BASE_CONFIG_URL = 'https://cdn.rawgit.com/ajrothwell/atlas_base_config/d95ed79d/config.js';
 var GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
 
 var ZONING_CODE_MAP = {
@@ -247,12 +247,12 @@ mapboard.default({
     }
   },
   cyclomedia: {
-    enabled: true,
+    enabled: false,
     measurementAllowed: false,
     popoutAble: true,
   },
   pictometry: {
-    enabled: true,
+    enabled: false,
   },
   greeting: {
     initialMessage: '\
