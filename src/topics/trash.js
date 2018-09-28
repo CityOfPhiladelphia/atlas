@@ -41,9 +41,9 @@ export default {
       type: 'callout',
       slots: {
         text: '\
-          School Catchment Areas, Political Divisions and Districts, Public Safety, Planning Districts, \
-          Census Geographies,  Streets and Sanitation information at your search address. \
-          Sources: \
+          The next <a href="https://www.philadelphiastreets.com/sanitation/residential/collection-schedules"\
+          target="_blank">city holiday</a> is <dayofweek>, <b>Month, #rd</b>. Trash and recycling collection\
+          will be one day behind schedule for the remainder of the week following a city-observed holiday.\
         '
       }
     },
@@ -51,6 +51,14 @@ export default {
       type: 'vertical-table',
       options: {
         nullValue: 'None',
+        externalLink: {
+          action: function() {
+            return 'Report missed trash collection, illegal dumping, or other issues.';
+          },
+          href: function(state) {
+            return '//www.philadelphiastreets.com/helpful-links/request-a-service';
+          }
+        }
       },
       slots: {
         title: 'Trash and Recycling',
