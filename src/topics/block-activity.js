@@ -1,14 +1,20 @@
+import moment from 'moment';
+
 export default {
   key: 'blockActivity',
   icon: 'map-signs',
   label: 'Block Activity',
-  dataSources: ['fireStation'],
+  dataSources: ['fireStation', 'streetClosures'],
 
   components: [
     {
       type: 'badge-custom',
       options: {
-        titleBackground: '#ff0000',
+        titleBackground: function(state) {
+          const color = state.geocode.data.properties.clean_philly_block_captain == "No" ? '#ff0000' :
+                        '#007F00';
+          return color;
+        },
         externalLink: {
           forceShow: true,
           action: function() {
@@ -23,11 +29,17 @@ export default {
           {
             type: 'badge',
             options: {
-              titleBackground: '#ff0000',
+              titleBackground: function(state) {
+                const color = state.geocode.data.properties.clean_philly_block_captain == "No" ? '#ff0000' :
+                              '#007F00';
+                return color;
+              },
             },
             slots: {
-              value: function() {
-                return "No block captain";
+              value: function(state) {
+                const captain = state.geocode.data.properties.clean_philly_block_captain == "No" ? 'No Block Captain' :
+                              'Block Captain Present';
+                return captain;
               },
             },
           }
@@ -85,6 +97,8 @@ export default {
         ]
       }
     }, // end police table
+
+
     {
       type: 'horizontal-table',
       options: {
@@ -111,51 +125,37 @@ export default {
           {
             label: 'Date',
             value: function (state, item) {
-              if (item.properties.ENG){
-                if(item.properties.LAD > 0) {
-                  return 'Engine '+ item.properties.ENG
-                         +' / Ladder '+ item.properties.LAD;
+
+              let endDate = function(){
+                if(item.attributes.EXPIRATIONDATE != null &&item.attributes.EXPIRATIONDATE != "") {
+                  return " to " + moment(item.attributes.EXPIRATIONDATE).format('l')
                 } else {
-                  return 'Engine '+ item.properties.ENG
-                }
-              } else {
-                if (item.properties.LAD > 0) {
-                  return 'Ladder '+ item.properties.LAD;
-                }
-              }
+                  const endDate = "<br>(No End Date Specified)";
+                  return endDate
+                };
+              };
+              return moment(item.attributes.EFFECTIVEDATE).format('l') + endDate() ;
             }
           },
           {
             label: 'Activity',
             value: function(state, item) {
-              function titleCase(str) {
-                str = str.toLowerCase().split(' ').map(function(word) {
-                  return (word.charAt(0).toUpperCase() + word.slice(1));
-                });
-                return str.join(' ');
-              }
-              return titleCase(item.properties.LOCATION);
+              return item.attributes.OCCUPANCYTYPE;
             }
           },
           {
             label: 'Organization',
             value: function(state, item) {
-              return (item._distance/5280).toFixed(1) + ' miles';
-            }
-          },
-          {
-            label: 'Contact',
-            value: function(state, item) {
-              return (item._distance/5280).toFixed(1) + ' miles';
+              return item.attributes.PURPOSE;
             }
           },
         ],
       },
       slots: {
         title: 'Scheduled Street Cleaning, Closures, and Repairs (Current and Upcoming)',
-        data: 'fireStation',
+        data: 'streetClosures',
         items: function(state) {
-          return state.sources['fireStation'].data || [];
+          return state.sources['streetClosures'].data || [];
           var rows = data.map(function(row){
             var itemRow = row;
             // var itemRow = Object.assign({}, row);
@@ -165,10 +165,12 @@ export default {
         },
       }, // end of slots
     },
+
+
+
     {
       type: 'horizontal-table',
       options: {
-        limit: 3,
         sort: {
           // this should return the val to sort on
           getValue: function(item) {
@@ -222,7 +224,8 @@ export default {
         ],
       },
       slots: {
-        title: 'Temporary No Parking Permits (Current and Upcoming)',
+        title: 'Temporary No Parking Permits (Current and Upcoming)\
+                ---Placeholder Data',
         data: 'fireStation',
         items: function(state) {
           return state.sources['fireStation'].data || [];
