@@ -59,6 +59,7 @@ import regmaps from './data-sources/regmaps';
 import redevelopmentArea from './data-sources/redevelopment-area';
 import sanitationCenters from './data-sources/sanitation-centers';
 import specialVendingArea from './data-sources/vending-special';
+import streetClosures from './data-sources/street-closures';
 import tobacco from './data-sources/tobacco-free';
 import vacantIndicatorsPoints from './data-sources/vacant-indicator-points';
 import watersheds from './data-sources/watersheds';
@@ -187,6 +188,7 @@ mapboard({
     regmaps,
     sanitationCenters,
     specialVendingArea,
+    streetClosures,
     tobacco,
     vacantIndicatorsPoints,
     watersheds,

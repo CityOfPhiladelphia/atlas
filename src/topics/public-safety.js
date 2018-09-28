@@ -1,4 +1,5 @@
 import transforms from '../general/transforms';
+import moment from 'moment';
 
 const getNearest = function(state, field, distName) {
 
@@ -8,11 +9,18 @@ const getNearest = function(state, field, distName) {
   return nearest
 };
 
+const titleCase = function(str) {
+  str = str.toLowerCase().split(' ').map(function(word) {
+    return (word.charAt(0).toUpperCase() + word.slice(1));
+  });
+  return str.join(' ');
+};
+
 export default {
   key: 'safety',
   icon: 'star',
   label: 'Public Safety',
-  dataSources: ['childWelfare','policePSA', 'policeDistr', 'fireStation'],
+  dataSources: ['childWelfare','policePSA', 'policeDistr', 'fireStation', 'streetClosures'],
 
   components: [
     {
@@ -27,7 +35,7 @@ export default {
             },
             slots: {
               value: function() {
-                return "Not on this block";
+                return "Placeholder";
               },
             },
           }
@@ -99,9 +107,8 @@ export default {
           {
             label: 'Child Welfare',
             value: function(state) {
-
               let closestWelfare = getNearest(state, "childWelfare", "_distance").properties
-              return '<a href="//www.'+ transforms.urlFormatter.transform(closestWelfare.WEB_SITE)+'" target="_blank"><b>' 
+              return '<a href="//www.'+ transforms.urlFormatter.transform(closestWelfare.WEB_SITE)+'" target="_blank"><b>'
                       + closestWelfare.CUA_NAME + '</b></a>\
                       <br>1234 '+ closestWelfare.ADDRESS1 +', '+ closestWelfare.ZIP + '\
                       <br>'+ transforms.phoneNumber.transform(closestWelfare.PHONE) +'\
@@ -281,31 +288,33 @@ export default {
           {
             label: 'Dates',
             value: function (state, item) {
-              return item.properties.Name
+              let endDate = function(){
+                if(item.attributes.EXPIRATIONDATE != null &&item.attributes.EXPIRATIONDATE != "") {
+                  return " to " + moment(item.attributes.EXPIRATIONDATE).format('l')
+                } else {
+                  const endDate = "<br>(No End Date Specified)";
+                  return endDate
+                };
+              };
+              return moment(item.attributes.EFFECTIVEDATE).format('l') + endDate() ;
             }
           },
           {
-            label: 'Event Location',
+            label: 'Affected Street',
             value: function(state, item) {
-              function titleCase(str) {
-                str = str.toLowerCase().split(' ').map(function(word) {
-                  return (word.charAt(0).toUpperCase() + word.slice(1));
-                });
-                return str.join(' ');
-              }
-              return titleCase(item.properties.Address);
+              return titleCase(item.attributes.ADDRESS);
             }
           },
           {
-            label: 'Affected Streets',
+            label: 'Purpose',
             value: function (state, item) {
-              return item.properties.Number
+              return titleCase(item.attributes.PURPOSE);
             }
           },
           {
-            label: 'Distance',
-            value: function(state, item) {
-              return (item._distance/5280).toFixed(1) + ' miles';
+            label: 'Type of Closure',
+            value: function (state, item) {
+              return item.attributes.OCCUPANCYTYPE;
             }
           },
         ],
@@ -321,16 +330,16 @@ export default {
         }
       },
       slots: {
-        title: 'Upcoming Traffic Detours',
-        data: 'fireStation',
+        title: 'Upcoming Traffic Detours (Placeholder: Same Street Only)',
+        data: 'streetClosures',
         items: function(state) {
-          var data = state.sources['coolWarmSta'].data || [];
+          return state.sources['streetClosures'].data || [];
           var rows = data.map(function(row){
             var itemRow = row;
             // var itemRow = Object.assign({}, row);
             return itemRow;
           });
-          return rows;
+           rows;
         },
       }, // end of slots
     },
