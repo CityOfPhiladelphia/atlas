@@ -15,6 +15,18 @@ export default {
       type: 'badge-custom',
       options: {
         titleBackground: '#C8C6C6',
+        externalLink: {
+          forceShow: true,
+          action: function() {
+            return 'Preview ballot';
+          },
+          name: '',
+          href: function(state) {
+            // var address = state.geocode.data.properties.street_address;
+            // var addressEncoded = encodeURIComponent(address);
+            return '//www.philadelphiavotes.com/index.php?option=com_voterapp&tmpl=component#ballots';
+          }
+        },
         components: [
           {
             type: 'badge',
@@ -34,31 +46,11 @@ export default {
       }, // end slots
     }, // end of badge-custom
     {
-      type: 'horizontal-table',
-      options: {
-        fields: [],
-        externalLink: {
-          forceShow: true,
-          action: function() {
-            return 'Preview ballot';
-          },
-          name: '',
-          href: function(state) {
-            // var address = state.geocode.data.properties.street_address;
-            // var addressEncoded = encodeURIComponent(address);
-            return '//www.philadelphiavotes.com/index.php?option=com_voterapp&tmpl=component#ballots';
-          }
-        }
-      },
-      slots: {
-      }
-    }, // end table
-    {
       type: 'callout',
       slots: {
         text: '\
           The deadline to register for the next election \
-          is ${Add date here}, 30 days prior to the election. \
+          is <b>${Add date here}</b>, 30 days prior to the election. \
           You can confirm your registration and learn about \
           registering to vote<a target="_blank" \
           href="https://www.philadelphiavotes.com/en/voters/polling-place-accessibility"> \
@@ -97,14 +89,24 @@ export default {
           {
             label: 'Accessibility',
             value: function(state) {
-              return '<a href="//www.philadelphiavotes.com/en/voters/polling-place-accessibility">\
-                    Handicap accessibility data needed</a>';
+              const answer = state.sources.elections.data.features[0].attributes.building == "F" ? 'Building Fully Accessible' :
+                             state.sources.elections.data.features[0].attributes.building == "B" ? 'Building Substantially Accessible' :
+                             state.sources.elections.data.features[0].attributes.building == "M" ? 'Building Accessibilty Modified' :
+                             state.sources.elections.data.features[0].attributes.building == "R" ? 'Building Accessible With Ramp' :
+                             state.sources.elections.data.features[0].attributes.building == "N" ? 'Building Not Accessible' :
+                            'Information not available';
+              return '<a href="//www.philadelphiavotes.com/en/voters/polling-place-accessibility"\
+                      target="_blank">'+answer+'</a>';
             },
           },
           {
             label: 'Parking',
             value: function(state) {
-              return state.geocode.data.properties.parking;
+              const parking = state.sources.elections.data.features[0].attributes.parking == "N" ? 'No Parking' :
+                              state.sources.elections.data.features[0].attributes.parking == "G" ? 'General Parking' :
+                              state.sources.elections.data.features[0].attributes.parking == "L" ? 'Lo' :
+                              'Information not available';
+              return parking;
             },
           },
         ]
@@ -131,7 +133,7 @@ export default {
           {
             label: 'District Council Member',
             value: function(state) {
-              return '<a>City Concil Name (P) - District # </a>';
+              return '<a>City Council Name (P) - District # </a>';
             },
           },
           {
