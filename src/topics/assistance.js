@@ -33,7 +33,7 @@ export default {
         }
       },
       slots: {
-        title: 'BenePhilly',
+        title: 'BenePhilly (Placeholder Data)',
         fields: [
           {
             label: 'Nearest Location',
@@ -71,7 +71,7 @@ export default {
         }
       },
       slots: {
-        title: 'Financial Empowerment Centers',
+        title: 'Financial Empowerment Centers (Placeholder Data)',
         fields: [
           {
             label: 'Nearest Location',
@@ -110,7 +110,7 @@ export default {
         }
       },
       slots: {
-        title: 'Neighborhood Energy Centers',
+        title: 'Neighborhood Energy Centers (Placeholder Data)',
         fields: [
           {
             label: 'Nearest Location',
