@@ -3,7 +3,9 @@ export default {
   icon: 'briefcase',
   label: 'Business',
   dataSources: ['businessArea', 'redevelopmentArea', 'tobacco','noVendingArea',  'specialVendingArea',],
+
   components: [
+
     {
       type: 'vertical-table',
       options: {
@@ -83,8 +85,9 @@ export default {
             value: function(state) {
               if(state.sources.tobacco.data != null) {
                 if(state.sources.tobacco.data.length > 0) {
-                  return "Tobacco-Free School Zone" } else {
-                  return "Eligible - Apply for a permit <a>here</a>"
+                  return 'Tobacco-Free School Zone' } else {
+                  return 'Eligible - Apply for a permit <a href="//business.phila.gov/tobacco-retailer-permit/"\
+                          target="_blank">here</a>'
                 }
               } else {
                 return "Eligible - Apply for a permit <a>here</a>"
@@ -100,9 +103,11 @@ export default {
                 } else {
                   if(state.sources.specialVendingArea.data != null) {
                     if(state.sources.specialVendingArea.data.length > 0) {
-                      return "Special District - <a>Click</a> for more info"
+                      return 'Special District - <a href="//business.phila.gov/neighborhood-vending-district-license/" \
+                              target="_blank">Click</a> for more info'
                     }else {
-                      return "Eligible - Apply for a permit <a>here</a>"
+                      return 'Eligible - Apply for a permit <a href="//business.phila.gov/vendor-licenses/" \
+                              target="_blank">here</a>'
                     }
                   }
                 }
