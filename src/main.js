@@ -24,20 +24,25 @@ import greeting from './general/greeting';
 
 // data sources
 import threeOneOneCarto from './data-sources/311-carto';
+import childWelfare from './data-sources/child-welfare';
 import condoList from './data-sources/condo-list';
 import crimeIncidents from './data-sources/crime-incidents';
 import divisions from './data-sources/divisions';
 import dorCondoList from './data-sources/dor-condo-list';
 import dorDocuments from './data-sources/dor-documents';
 import elections from './data-sources/elections';
+import fireStation from './data-sources/fire-station';
 import liBusinessLicenses from './data-sources/li-business-licenses';
 import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
 import liViolations from './data-sources/li-violations';
 import nearbyZoningAppeals from './data-sources/nearby-zoning-appeals';
 import opa from './data-sources/opa';
+import policeDistr from './data-sources/police-distr';
+import policePSA from './data-sources/police-psa';
 import rco from './data-sources/rco';
 import regmaps from './data-sources/regmaps';
+import streetClosures from './data-sources/street-closures';
 import vacantIndicatorsPoints from './data-sources/vacant-indicator-points';
 import zoningAppeals from './data-sources/zoning-appeals';
 import zoningBase from './data-sources/zoning-base';
@@ -55,6 +60,7 @@ import zoning from './topics/zoning';
 // import polling from './topics/polling';
 // import rcoTopic from './topics/rco';
 import nearby from './topics/nearby';
+import safety from './topics/public-safety';
 
 // styles
 // TODO move all styles here (that have a npm package)
@@ -122,20 +128,25 @@ mapboard({
   greeting,
   dataSources: {
     threeOneOneCarto,
+    childWelfare,
     condoList,
     crimeIncidents,
     divisions,
     dorCondoList,
     dorDocuments,
     elections,
+    fireStation,
     liBusinessLicenses,
     liInspections,
     liPermits,
     liViolations,
     nearbyZoningAppeals,
     opa,
+    policeDistr,
+    policePSA,
     rco,
     regmaps,
+    streetClosures,
     vacantIndicatorsPoints,
     zoningAppeals,
     zoningBase,
@@ -152,6 +163,7 @@ mapboard({
     zoning,
     // polling,
     // rcoTopic,
+    safety,
     nearby
   ],
   components: [
