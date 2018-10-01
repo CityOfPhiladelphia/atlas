@@ -8,38 +8,42 @@ const getNearest = function(state, field, distName) {
   return nearest
 };
 
-// let transform = this.$config.transforms["dayofweek"];
-// const fn = transform.transform;
-// let val = fn(val, globals);
-// fn(state.geocode.data.properties.rubbish_recycle_day);
-
 
 export default {
-
   key: 'trashDay',
   icon: 'trash-o',
   label: 'Trash & Recycling',
 
   components: [
     {
-      type: 'badge',
+      type: 'badge-custom',
       options: {
         titleBackground: '#58c04d',
+        components: [
+          {
+            type: 'badge',
+            options: {
+              titleBackground: '#58c04d',
+            },
+            slots: {
+              value: function(state) {
+                return transforms.dayofweek.transform(state.geocode.data.properties.rubbish_recycle_day);
+              },
+            },
+          }
+        ],
       },
       slots: {
         title: 'Your Trash Day Is',
-        value: function(state) {
-          return transforms.dayofweek.transform(state.geocode.data.properties.rubbish_recycle_day);
-        },
       }, // end slots
-    }, // end of badge
+    }, // end of badge-custom
     {
       type: 'callout',
       slots: {
         text: '\
-          School Catchment Areas, Political Divisions and Districts, Public Safety, Planning Districts, \
-          Census Geographies,  Streets and Sanitation information at your search address. \
-          Sources: \
+          The next <a href="https://www.philadelphiastreets.com/sanitation/residential/collection-schedules"\
+          target="_blank">city holiday</a> is <dayofweek>, <b>Month, #rd</b>. Trash and recycling collection\
+          will be one day behind schedule for the remainder of the week following a city-observed holiday.\
         '
       }
     },
@@ -47,6 +51,14 @@ export default {
       type: 'vertical-table',
       options: {
         nullValue: 'None',
+        externalLink: {
+          action: function() {
+            return 'Report missed trash collection, illegal dumping, or other issues.';
+          },
+          href: function(state) {
+            return '//www.philadelphiastreets.com/helpful-links/request-a-service';
+          }
+        }
       },
       slots: {
         title: 'Trash and Recycling',
