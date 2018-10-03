@@ -23,7 +23,7 @@ import greeting from './general/greeting';
 
 // data sources
 import threeOneOneCarto from './data-sources/311-carto';
-//import airquality from './data-sources/airquality';
+import airQuality from './data-sources/air-quality';
 import bikeshare from './data-sources/bikeshare';
 import businessArea from './data-sources/business-area';
 import charterSchools from './data-sources/charter-schools';
@@ -153,6 +153,7 @@ mapboard({
   greeting,
   dataSources: {
     threeOneOneCarto,
+    airQuality,
     bikeshare,
     businessArea,
     charterSchools,

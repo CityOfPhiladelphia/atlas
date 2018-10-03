@@ -1,3 +1,14 @@
+import moment from 'moment';
+
+const getNearest = function(state, field, distName) {
+
+  let min = Math.min.apply(null, state.sources[field].data.map(function(item) {return item[distName];}));
+  let result  = state.sources[field].data.filter(function(item){return item[distName] == min;} );
+  let nearest = result? result[0] : null;
+  return nearest
+};
+
+
 export default {
   key: 'environment',
   icon: 'leaf',
@@ -10,8 +21,10 @@ export default {
       options: {
         titleBackground: '#58c04d',
         externalLink: {
-          action: function() {
-            return 'Last updated 9/9/1999 at 11:11:00 AM';
+          action: function(state) {
+
+            console.log(getNearest(state, "airQuality", "_distance"));
+            return 'Last updated  at 11:11:00 AM';
           },
           href: function(state) {
             return '//www.phila.gov';
@@ -25,8 +38,21 @@ export default {
               nullValue: 'None',
             },
             slots: {
-              value: function() {
-                return "Good";
+              value: function(state) {
+                const nearest = getNearest(state, "airQuality", "_distance");
+                const aqi = (({ OZONEPM_AQI_SORT, OZONE_AQI_SORT, PM10_AQI_SORT, PM25_AQI_SORT, PM_AQI_SORT }) =>
+                               ({  OZONEPM_AQI_SORT, OZONE_AQI_SORT, PM10_AQI_SORT, PM25_AQI_SORT, PM_AQI_SORT }))(nearest.properties);
+                let arr = Object.values(aqi);
+                let max = Math.max(...arr);
+
+                const airQuality = max <= 50 && max > 0 ? 'Good' :
+                                   max <= 100 && max > 50 ? 'Moderate' :
+                                   max <= 150 && max > 100 ? 'Unhealthy for Sensitive Groups' :
+                                   max <= 200 && max > 150 ? 'Unhealthy' :
+                                   max <= 300 && max > 200 ? 'Very Unhealthy' :
+                                   max <= 500 && max > 300 ? 'Hazardous' :
+                                  'Not available';
+                return airQuality;
               },
             },
           }
