@@ -4,6 +4,16 @@ import moment from 'moment';
 accounting.settings.currency.precision = 0;
 
 export default {
+  bold: {
+    transform: function (value) {
+      return '<strong>' + value + '</strong>';
+    },
+  },
+  booleanToYesNo: {
+    transform: function(value) {
+      return value ? 'Yes' : 'No';
+    }
+  },
   currency: {
     // a list of global objects this transform depends on
     globals: ['accounting'],
@@ -20,12 +30,60 @@ export default {
       return moment(value).format('MM/DD/YYYY');
     },
   },
+  dayofweek: {
+    // a list of global objects this transform depends on
+    transform: function (value) {
+      switch(value) {
+        case "FRI":
+        value = "Friday";
+        break;
+        case "SAT":
+        value = "Saturday";
+        break;
+        case "SUN":
+        value = "Sunday";
+        break;
+        case "MON":
+        value = "Monday";
+        break;
+        case "TUE":
+        value = "Tuesday";
+        break;
+        case "WED":
+        value = "Wednesday";
+        break;
+        case "THU":
+        value = "Thursday";
+      };
+      return value
+    }
+  },
+  feet: {
+    transform: function (value) {
+      return value && value + ' ft';
+    },
+  },
+  integer: {
+    transform: function (value) {
+      return !isNaN(value) && parseInt(value);
+    },
+  },
+  nowrap: {
+    transform: function (value) {
+      return '<span style="white-space: nowrap;">' + value + '</span>';
+    },
+  },
   phoneNumber: {
     transform: function (value) {
       var s2 = (""+value).replace(/\D/g, '');
       var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
       return (!m) ? null : "(" + m[1] + ") " + m[2] + "-" + m[3];
     }
+  },
+  prettyNumber: {
+    transform: function (value) {
+      return !isNaN(value) && value.toLocaleString();
+    },
   },
   rcoPrimaryContact: {
     transform: function (value) {
@@ -45,39 +103,19 @@ export default {
       return valueStd;
     }
   },
-  booleanToYesNo: {
-    transform: function(value) {
-      return value ? 'Yes' : 'No';
-    }
-  },
-  integer: {
-    transform: function (value) {
-      return !isNaN(value) && parseInt(value);
-    },
-  },
-  prettyNumber: {
-    transform: function (value) {
-      return !isNaN(value) && value.toLocaleString();
-    },
-  },
-  feet: {
-    transform: function (value) {
-      return value && value + ' ft';
-    },
-  },
   squareFeet: {
     transform: function (value) {
       return value && value + ' sq ft';
     },
   },
-  nowrap: {
-    transform: function (value) {
-      return '<span style="white-space: nowrap;">' + value + '</span>';
-    },
-  },
-  bold: {
-    transform: function (value) {
-      return '<strong>' + value + '</strong>';
-    },
+  urlFormatter: {
+    transform: function(txt) {
+      var uselessWordsArray =
+        [
+          "http//", "http://", "https://", "www.", "//", "//:"
+        ];
+      var expStr = uselessWordsArray.join("|");
+      return txt.replace(new RegExp(expStr, 'gi'), '');
+    }
   },
 }
