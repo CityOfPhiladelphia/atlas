@@ -5,16 +5,7 @@ export default {
   dataSources: ['charterSchools'],
 
   components: [
-    {
-      type: 'callout',
-      slots: {
-        text: '\
-          School Catchment Areas, Political Divisions and Districts, Public Safety, Planning Districts, \
-          Census Geographies,  Streets and Sanitation information at your search address. \
-          Sources: \
-        '
-      }
-    },
+
     {
       type: 'vertical-table',
       options: {
@@ -44,93 +35,6 @@ export default {
         ]
       }
     }, // end schgools table
-
-    {
-      type: 'horizontal-table',
-      options: {
-        topicKey: 'schoolinfo',
-        id: 'charterSchools',
-        // limit: 100,
-        sort: {
-          // this should return the val to sort on
-          getValue: function(item) {
-            return item._distance;
-          },
-          // asc or desc
-          order: 'asc'
-        },
-        fields: [
-          {
-            label: 'School Name',
-            value: function (state, item) {
-              return item.properties.FACILNAME_LABEL
-            }
-          },
-          {
-            label: 'Address',
-            value: function (state, item) {
-              return item.properties.FACIL_ADDRESS
-            }
-          },
-          {
-            label: 'Grades',
-            value: function (state, item) {
-              return item.properties.GRADE_ORG
-            }
-          },
-          {
-            label: 'Distance',
-            value: function(state, item) {
-              return parseInt(item._distance) + ' ft';
-            }
-          }
-        ],
-      },
-      slots: {
-        title: 'Nearby Citywide, Special Admission & Charter Schools',
-        data: 'charterSchools',
-        items: function(state) {
-          var data = state.sources['charterSchools'].data || [];
-          var rows = data.map(function(row){
-            var itemRow = row;
-            // var itemRow = Object.assign({}, row);
-            return itemRow;
-          });
-          return rows;
-        },
-      } // end of slots
-    },
-    {
-      type: 'horizontal-table',
-      options: {
-        fields: [],
-        externalLink: {
-          forceShow: true,
-          action: function() {
-            return 'See a complete list from the Philadelphia School District';
-          },
-          name: '',
-          href: function(state) {
-            // var address = state.geocode.data.properties.street_address;
-            // var addressEncoded = encodeURIComponent(address);
-            return '//www.philasd.org/directory/school-directory/';
-          }
-        }
-      },
-      slots: {
-      }
-    }, // end table
-    {
-      type: 'callout',
-      slots: {
-        text: '\
-          <a href="https://www.phila.gov/historical/designation/Pages/criteria.aspx" target="_blank">Community schools</a> \
-          are public schools where a full-time coordinator \
-          works with the entire school community to identify the community\'s \
-          most pressing needs.\
-        '
-      }
-    },
     {
       type: 'horizontal-table',
       options: {
