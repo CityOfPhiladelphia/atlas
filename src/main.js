@@ -44,6 +44,7 @@ import policePSA from './data-sources/police-psa';
 import rco from './data-sources/rco';
 import regmaps from './data-sources/regmaps';
 import streetClosures from './data-sources/street-closures';
+import sanitationCenters from './data-sources/sanitation-centers';
 import vacantIndicatorsPoints from './data-sources/vacant-indicator-points';
 import zoningAppeals from './data-sources/zoning-appeals';
 import zoningBase from './data-sources/zoning-base';
@@ -64,6 +65,7 @@ import nearby from './topics/nearby';
 import voting from './topics/voting';
 import safety from './topics/public-safety';
 import schools from './topics/schools';
+import trashDay from './topics/trash';
 
 // styles
 // TODO move all styles here (that have a npm package)
@@ -151,6 +153,7 @@ mapboard({
     rco,
     regmaps,
     streetClosures,
+    sanitationCenters,
     vacantIndicatorsPoints,
     zoningAppeals,
     zoningBase,
@@ -171,7 +174,8 @@ mapboard({
     safety,
     nearby,
     // rco,
-    schools
+    schools,
+    trashDay,
   ],
   components: [
     {
