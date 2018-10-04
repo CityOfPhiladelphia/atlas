@@ -25,6 +25,7 @@ import greeting from './general/greeting';
 // data sources
 import threeOneOneCarto from './data-sources/311-carto';
 import childWelfare from './data-sources/child-welfare';
+import charterSchools from './data-sources/charter-schools';
 import condoList from './data-sources/condo-list';
 import crimeIncidents from './data-sources/crime-incidents';
 import divisions from './data-sources/divisions';
@@ -62,6 +63,7 @@ import zoning from './topics/zoning';
 import nearby from './topics/nearby';
 import voting from './topics/voting';
 import safety from './topics/public-safety';
+import schools from './topics/schools';
 
 // styles
 // TODO move all styles here (that have a npm package)
@@ -131,6 +133,7 @@ mapboard({
     threeOneOneCarto,
     childWelfare,
     condoList,
+    charterSchools,
     crimeIncidents,
     divisions,
     dorCondoList,
@@ -167,6 +170,9 @@ mapboard({
     voting,
     safety,
     nearby
+    // rco,
+    nearby,
+    schools
   ],
   components: [
     {
