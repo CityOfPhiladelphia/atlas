@@ -55,6 +55,7 @@ import zoning from './topics/zoning';
 // import polling from './topics/polling';
 // import rcoTopic from './topics/rco';
 import nearby from './topics/nearby';
+import voting from './topics/voting';
 
 // styles
 // TODO move all styles here (that have a npm package)
@@ -152,6 +153,7 @@ mapboard({
     zoning,
     // polling,
     // rcoTopic,
+    voting,
     nearby
   ],
   components: [
