@@ -169,9 +169,8 @@ mapboard({
     // rcoTopic,
     voting,
     safety,
-    nearby
-    // rco,
     nearby,
+    // rco,
     schools
   ],
   components: [
