@@ -38,16 +38,6 @@ export default {
       }, // end slots
     }, // end of badge-custom
     {
-      type: 'callout',
-      slots: {
-        text: '\
-          The next <a href="https://www.philadelphiastreets.com/sanitation/residential/collection-schedules"\
-          target="_blank">city holiday</a> is <dayofweek>, <b>Month, #rd</b>. Trash and recycling collection\
-          will be one day behind schedule for the remainder of the week following a city-observed holiday.\
-        '
-      }
-    },
-    {
       type: 'vertical-table',
       options: {
         nullValue: 'None',
@@ -81,27 +71,6 @@ export default {
             label: 'Leaf Collection',
             value: function(state) {
               return state.geocode.data.properties.leaf_collection_area;
-            },
-          },
-          {
-            label: 'Nearest Leaf Drop-off Location',
-            value: function(state) {
-              return '1234 Sample Address <br>\
-              All locations open Saturdays 9am-3pm\
-              during Collection season.<br>\
-              Collection season for 2017 is <b>over</b>.<br>\
-              <a href="//www.philadelphiastreets.com/leaves/">\
-              More details available from Streets Dept</a>';
-            },
-          },
-          {
-            label: 'Nearest Household Hazardous Waste Event',
-            value: function(state) {
-              return '<b>Someday, Date 20th, 2018 9am-3pm</b><br>\
-                1234 Sample Address <br>\
-                1234 Sample Address Line 2<br>\
-                <a href="//www.philadelphiastreets.com/events/household-hazardous-waste-events">\
-                More details available from Streets Dept</a>';
             },
           },
         ]
