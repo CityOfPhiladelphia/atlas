@@ -46,18 +46,6 @@ export default {
                       + '<br> <a href="mailto:'+mail+'">'+mail+'</a>');
             },
           },
-          {
-            label: 'Child Welfare',
-            value: function(state) {
-              let closestWelfare = getNearest(state, "childWelfare", "_distance").properties
-              return '<a href="//www.'+ transforms.urlFormatter.transform(closestWelfare.WEB_SITE)+'" target="_blank"><b>'
-                      + closestWelfare.CUA_NAME + '</b></a>\
-                      <br>1234 '+ closestWelfare.ADDRESS1 +', '+ closestWelfare.ZIP + '\
-                      <br>'+ transforms.phoneNumber.transform(closestWelfare.PHONE) +'\
-                      <br><a href="//www.phila.gov/services/crime-law-justice/report-a-crime-or-concern/report-child-abuse-or-neglect/"\
-                      target="_blank">To report child abuse or neglect call (215) 683-6100</a>';
-            },
-          },
         ]
       }
     }, // end police table

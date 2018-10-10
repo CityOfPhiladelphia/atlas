@@ -30,13 +30,14 @@ export default {
           {
             label: 'Location',
             value: function(state) {
-              return "<b>Ward " + state.sources.elections.data.features[0].attributes.ward +
-                    ", Division " + state.sources.elections.data.features[0].attributes.division + "</b><br>" +
-                    titleCase(state.sources.elections.data.features[0].attributes.location) + "<br>" +
-                    titleCase(state.sources.elections.data.features[0].attributes.display_address) + "<br>\
-                    All locations are open on Election Day <br>from 7am to 8pm."
-                    ;
-            },
+                   function nth(n){return n + ([,'st','nd','rd'][n%100>>3^1&&n%10]||'th')};
+                   return "<b>"+ nth(state.geocode.data.properties.council_district_2016) + " Council District\
+                   <br>Ward " + state.sources.elections.data.features[0].attributes.ward +
+                   ", Division " + state.sources.elections.data.features[0].attributes.division + "</b><br>" +
+                   titleCase(state.sources.elections.data.features[0].attributes.location) + "<br>" +
+                   titleCase(state.sources.elections.data.features[0].attributes.display_address) + "<br>\
+                   All locations are open on Election Day <br>from 7am to 8pm.";
+                  },
           },
           {
             label: 'Accessibility',
