@@ -30,31 +30,40 @@ export default {
           {
             label: 'Location',
             value: function(state) {
-                   function nth(n){return n + ([,'st','nd','rd'][n%100>>3^1&&n%10]||'th')};
-                   return "<b>"+ nth(state.geocode.data.properties.council_district_2016) + " Council District\
-                   <br>Ward " + state.sources.elections.data.features[0].attributes.ward +
-                   ", Division " + state.sources.elections.data.features[0].attributes.division + "</b><br>" +
-                   titleCase(state.sources.elections.data.features[0].attributes.location) + "<br>" +
-                   titleCase(state.sources.elections.data.features[0].attributes.display_address) + "<br>\
-                   All locations are open on Election Day <br>from 7am to 8pm.";
-                  },
+              return "<b>Ward " + state.sources.elections.data.features[0].attributes.ward +
+                    ", Division " + state.sources.elections.data.features[0].attributes.division + "</b><br>" +
+                    titleCase(state.sources.elections.data.features[0].attributes.location) + "<br>" +
+                    titleCase(state.sources.elections.data.features[0].attributes.display_address) + "<br>\
+                    All locations are open on Election Day <br>from 7am to 8pm."
+                    ;
+            },
           },
           {
             label: 'Accessibility',
             value: function(state) {
-              return '<a href="//www.philadelphiavotes.com/en/voters/polling-place-accessibility">\
-                    Handicap accessibility data needed</a>';
+              const answer = state.sources.elections.data.features[0].attributes.building == "F" ? 'Building Fully Accessible' :
+                             state.sources.elections.data.features[0].attributes.building == "B" ? 'Building Substantially Accessible' :
+                             state.sources.elections.data.features[0].attributes.building == "M" ? 'Building Accessibilty Modified' :
+                             state.sources.elections.data.features[0].attributes.building == "R" ? 'Building Accessible With Ramp' :
+                             state.sources.elections.data.features[0].attributes.building == "N" ? 'Building Not Accessible' :
+                            'Information not available';
+              return '<a href="//www.philadelphiavotes.com/en/voters/polling-place-accessibility"\
+                      target="_blank">'+answer+'</a>';
             },
           },
           {
             label: 'Parking',
             value: function(state) {
-              return state.geocode.data.properties.parking;
+              const parking = state.sources.elections.data.features[0].attributes.parking == "N" ? 'No Parking' :
+                              state.sources.elections.data.features[0].attributes.parking == "G" ? 'General Parking' :
+                              state.sources.elections.data.features[0].attributes.parking == "L" ? 'Lo' :
+                              'Information not available';
+              return parking;
             },
           },
         ]
       },
-    }, // end table
+    }
   ],
   zoomToShape: ['geojson', 'marker'],
   geojson: {
