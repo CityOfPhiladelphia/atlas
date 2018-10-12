@@ -184,6 +184,7 @@ export default {
   ],
 
   basemap: 'pwd',
+  imagery: 'historic1910',
   identifyFeature: 'address-marker',
   parcels: 'pwd'
 }
