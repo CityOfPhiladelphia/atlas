@@ -1,9 +1,13 @@
-const getNearest = function(state, field, distName) {
 
-  let min = Math.min.apply(null, state.sources[field].data.map(function(item) {return item[distName];}));
-  let result  = state.sources[field].data.filter(function(item){return item[distName] == min;} );
-  let nearest = result? result[0] : null;
-  return nearest
+const getNearest = function(state, field, distName) {
+  if(state) {
+    if(state.sources[field].data){
+      let min = Math.min.apply(null, state.sources[field].data.map(function(item) {return item[distName];}));
+      let result  = state.sources[field].data.filter(function(item){return item[distName] == min;} );
+      let nearest = result? result[0] : null;
+      return nearest
+    }
+  }
 };
 
 export default {
