@@ -1,3 +1,4 @@
+import moment from 'moment';
 
 const getNearest = function(state, field, distName) {
   if(state) {
@@ -22,11 +23,20 @@ export default {
       options: {
         titleBackground: '#58c04d',
         externalLink: {
-          action: function() {
-            return 'Last updated 9/9/1999 at 11:11:00 AM';
+          name: 'test',
+          nullValue: '',
+          action: function(state) {
+            // console.log('action, state:', state);
+            // return '//www.phila.gov';
+            let nearest = getNearest(state, "airQuality", "_distance");
+            if (nearest) {
+              return 'Last updated '+ moment(nearest.properties.ValidDate).format('l') +' at '+ moment(nearest.properties.ValidTime).format('LT') +'';
+            } else {
+              return;
+            }
           },
           href: function(state) {
-            return '//www.phila.gov';
+            return 'https://www.phila.gov/aqi/';
           }
         },
         components: [
@@ -39,19 +49,21 @@ export default {
             slots: {
               value: function(state) {
                 let nearest = getNearest(state, "airQuality", "_distance");
-                const aqi = (({ OZONEPM_AQI_SORT, OZONE_AQI_SORT, PM10_AQI_SORT, PM25_AQI_SORT, PM_AQI_SORT }) =>
-                               ({  OZONEPM_AQI_SORT, OZONE_AQI_SORT, PM10_AQI_SORT, PM25_AQI_SORT, PM_AQI_SORT }))(nearest.properties);
-                let arr = Object.values(aqi);
-                let max = Math.max(...arr);
+                if (nearest) {
+                  const aqi = (({ OZONEPM_AQI_SORT, OZONE_AQI_SORT, PM10_AQI_SORT, PM25_AQI_SORT, PM_AQI_SORT }) =>
+                  ({  OZONEPM_AQI_SORT, OZONE_AQI_SORT, PM10_AQI_SORT, PM25_AQI_SORT, PM_AQI_SORT }))(nearest.properties);
+                  let arr = Object.values(aqi);
+                  let max = Math.max(...arr);
 
-                const airQuality = max <= 50 && max > 0 ? 'Good' :
-                               max <= 100 && max > 50 ? 'Moderate' :
-                               max <= 150 && max > 100 ? 'Unhealthy for Sensitive Groups' :
-                               max <= 200 && max > 150 ? 'Unhealthy' :
-                               max <= 300 && max > 200 ? 'Very Unhealthy' :
-                               max <= 500 && max > 300 ? 'Hazardous' :
-                              'Not available';
-                return airQuality;
+                  const airQuality = max <= 50 && max > 0 ? 'Good' :
+                  max <= 100 && max > 50 ? 'Moderate' :
+                  max <= 150 && max > 100 ? 'Unhealthy for Sensitive Groups' :
+                  max <= 200 && max > 150 ? 'Unhealthy' :
+                  max <= 300 && max > 200 ? 'Very Unhealthy' :
+                  max <= 500 && max > 300 ? 'Hazardous' :
+                  'Not available';
+                  return airQuality;
+                }
               },
             },
           }
