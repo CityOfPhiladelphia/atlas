@@ -23,8 +23,6 @@ export default {
       options: {
         titleBackground: '#58c04d',
         externalLink: {
-          name: 'test',
-          nullValue: '',
           action: function(state) {
             // console.log('action, state:', state);
             // return '//www.phila.gov';
