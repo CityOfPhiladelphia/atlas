@@ -19,28 +19,17 @@ export default {
 
   components: [
     {
-      type: 'badge-custom',
+      type: 'badge',
       options: {
         titleBackground: '#58c04d',
-        components: [
-          {
-            type: 'badge',
-            options: {
-              titleBackground: '#58c04d',
-            },
-            slots: {
-              value: function(state) {
-                return transforms.dayofweek.transform(state.geocode.data.properties.rubbish_recycle_day);
-              },
-            },
-          }
-        ],
       },
       slots: {
         title: 'Your Trash Day Is',
-      }, // end slots
-    }, // end of badge-custom
-
+        value: function(state) {
+          return transforms.dayofweek.transform(state.geocode.data.properties.rubbish_recycle_day);
+        },
+      },  // end slots
+    }, // end of badge
     {
       type: 'vertical-table',
       options: {
@@ -60,7 +49,6 @@ export default {
           {
             label: 'Nearest Sanitation Convenience Center',
             value: function(state) {
-              // REVIEW getNearest function is called before property is ready, giving a null error
               return (`${getNearest(state, 'sanitationCenters', 'distance').name} <br>\
               ${getNearest(state, 'sanitationCenters', 'distance').address} <br>\
               ${getNearest(state, 'sanitationCenters', 'distance').phone} <br>
