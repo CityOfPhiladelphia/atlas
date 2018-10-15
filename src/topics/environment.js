@@ -19,7 +19,7 @@ export default {
 
   components: [
     {
-      type: 'badge-custom',
+      type: 'badge',
       options: {
         titleBackground: '#58c04d',
         externalLink: {
@@ -37,38 +37,28 @@ export default {
             return 'https://www.phila.gov/aqi/';
           }
         },
-        components: [
-          {
-            type: 'badge',
-            options: {
-              titleBackground: '#58c04d',
-              nullValue: 'None',
-            },
-            slots: {
-              value: function(state) {
-                let nearest = getNearest(state, "airQuality", "_distance");
-                if (nearest) {
-                  const aqi = (({ OZONEPM_AQI_SORT, OZONE_AQI_SORT, PM10_AQI_SORT, PM25_AQI_SORT, PM_AQI_SORT }) =>
-                  ({  OZONEPM_AQI_SORT, OZONE_AQI_SORT, PM10_AQI_SORT, PM25_AQI_SORT, PM_AQI_SORT }))(nearest.properties);
-                  let arr = Object.values(aqi);
-                  let max = Math.max(...arr);
-
-                  const airQuality = max <= 50 && max > 0 ? 'Good' :
-                  max <= 100 && max > 50 ? 'Moderate' :
-                  max <= 150 && max > 100 ? 'Unhealthy for Sensitive Groups' :
-                  max <= 200 && max > 150 ? 'Unhealthy' :
-                  max <= 300 && max > 200 ? 'Very Unhealthy' :
-                  max <= 500 && max > 300 ? 'Hazardous' :
-                  'Not available';
-                  return airQuality;
-                }
-              },
-            },
-          }
-        ],
+        nullValue: 'None',
       },
       slots: {
         title: 'Current Air Quality',
+        value: function(state) {
+          let nearest = getNearest(state, "airQuality", "_distance");
+          if (nearest) {
+            const aqi = (({ OZONEPM_AQI_SORT, OZONE_AQI_SORT, PM10_AQI_SORT, PM25_AQI_SORT, PM_AQI_SORT }) =>
+            ({  OZONEPM_AQI_SORT, OZONE_AQI_SORT, PM10_AQI_SORT, PM25_AQI_SORT, PM_AQI_SORT }))(nearest.properties);
+            let arr = Object.values(aqi);
+            let max = Math.max(...arr);
+
+            const airQuality = max <= 50 && max > 0 ? 'Good' :
+            max <= 100 && max > 50 ? 'Moderate' :
+            max <= 150 && max > 100 ? 'Unhealthy for Sensitive Groups' :
+            max <= 200 && max > 150 ? 'Unhealthy' :
+            max <= 300 && max > 200 ? 'Very Unhealthy' :
+            max <= 500 && max > 300 ? 'Hazardous' :
+            'Not available';
+            return airQuality;
+          }
+        },
       }, // end slots
     }, // end of badge-custom
     {

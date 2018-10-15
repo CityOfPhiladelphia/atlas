@@ -19,27 +19,17 @@ export default {
 
   components: [
     {
-      type: 'badge-custom',
+      type: 'badge',
       options: {
         titleBackground: '#58c04d',
-        components: [
-          {
-            type: 'badge',
-            options: {
-              titleBackground: '#58c04d',
-            },
-            slots: {
-              value: function(state) {
-                return transforms.dayofweek.transform(state.geocode.data.properties.rubbish_recycle_day);
-              },
-            },
-          }
-        ],
       },
       slots: {
         title: 'Your Trash Day Is',
-      }, // end slots
-    }, // end of badge-custom
+        value: function(state) {
+          return transforms.dayofweek.transform(state.geocode.data.properties.rubbish_recycle_day);
+        },
+      },
+    }, // end of badge
     {
       type: 'callout',
       slots: {

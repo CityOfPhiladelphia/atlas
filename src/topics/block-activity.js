@@ -8,7 +8,7 @@ export default {
 
   components: [
     {
-      type: 'badge-custom',
+      type: 'badge',
       options: {
         titleBackground: function(state) {
           const color = state.geocode.data.properties.clean_philly_block_captain == "No" ? '#ff0000' :
@@ -25,28 +25,14 @@ export default {
             return '//www.philadelphiastreets.com/pmbc/become-a-block-captain/';
           }
         },
-        components: [
-          {
-            type: 'badge',
-            options: {
-              titleBackground: function(state) {
-                const color = state.geocode.data.properties.clean_philly_block_captain == "No" ? '#ff0000' :
-                              '#007F00';
-                return color;
-              },
-            },
-            slots: {
-              value: function(state) {
-                const captain = state.geocode.data.properties.clean_philly_block_captain == "No" ? 'No Block Captain' :
-                              'Block Captain Present';
-                return captain;
-              },
-            },
-          }
-        ],
       },
       slots: {
         title: 'Do you have a block captain?',
+        value: function(state) {
+          const captain = state.geocode.data.properties.clean_philly_block_captain == "No" ? 'No Block Captain' :
+                        'Block Captain Present';
+          return captain;
+        },
       }, // end slots
     }, // end of badge-custom
     {

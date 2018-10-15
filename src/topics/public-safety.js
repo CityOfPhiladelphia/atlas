@@ -27,27 +27,17 @@ export default {
 
   components: [
     {
-      type: 'badge-custom',
+      type: 'badge',
       options: {
         titleBackground: '#58c04d',
-        components: [
-          {
-            type: 'badge',
-            options: {
-              titleBackground: '#58c04d',
-            },
-            slots: {
-              value: function() {
-                return "Placeholder";
-              },
-            },
-          }
-        ],
       },
       slots: {
         title: 'Snow Emergency Route',
-      }, // end slots
-    }, // end of badge-custom
+        value: function() {
+          return "Placeholder";
+        },
+      },// end slots
+    }, // end of badge
     {
       type: 'callout',
       slots: {

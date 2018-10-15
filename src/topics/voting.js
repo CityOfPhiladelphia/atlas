@@ -12,7 +12,7 @@ export default {
   dataSources: ['divisions', 'elections'],
   components: [
     {
-      type: 'badge-custom',
+      type: 'badge',
       options: {
         titleBackground: '#C8C6C6',
         externalLink: {
@@ -27,24 +27,14 @@ export default {
             return '//www.philadelphiavotes.com/index.php?option=com_voterapp&tmpl=component#ballots';
           }
         },
-        components: [
-          {
-            type: 'badge',
-            options: {
-              titleBackground: '#C8C6C6',
-            },
-            slots: {
-              value: function(state) {
-                return 'Month 6, 2018';
-              },
-            },
-          }
-        ],
       },
       slots: {
         title: 'Next Eligible Election Is',
+        value: function(state) {
+          return 'Month 6, 2018';
+        },
       }, // end slots
-    }, // end of badge-custom
+    }, // end of badge
     {
       type: 'callout',
       slots: {
