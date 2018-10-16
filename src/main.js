@@ -11,7 +11,6 @@ import accounting from 'accounting';
 import axios from 'axios';
 import moment from 'moment';
 import mapboard from '@cityofphiladelphia/mapboard';
-// import philaVueMapping from '@cityofphiladelphia/phila-vue-mapping';
 
 // General Config Modules
 import helpers from './util/helpers';
@@ -89,7 +88,7 @@ mapboard({
     enabled: true
   },
   geolocation: {
-    enabled: false
+    enabled: true
   },
   addressInput: {
     width: 415,

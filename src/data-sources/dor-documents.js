@@ -11,7 +11,8 @@ export default {
       return target.properties.OBJECTID;
     },
   },
-  url: '//gis.phila.gov/arcgis/rest/services/DOR/rtt_service/MapServer/0/query',
+  // url: '//gis.phila.gov/arcgis/rest/services/DOR/rtt_service/MapServer/0/query',
+  url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/RTT_SUMMARY/FeatureServer/0/query',
   options: {
     params: {
       where: function(feature, state) {
@@ -76,7 +77,8 @@ export default {
       outFields: "R_NUM, DISPLAY_DATE, DOCUMENT_TYPE, GRANTORS, GRANTEES",
       returnDistinctValues: 'true',
       returnGeometry: 'false',
-      f: 'json'
+      f: 'json',
+      sqlFormat: 'standard',
     },
     success: function(data) {
       return data.features;
