@@ -262,7 +262,7 @@ export default {
             slots: {
               text: 'You can access digital copies of the deeds \
                 below by purchasing a subscription to \
-                <a target="_blank" class="external" href="http://epay.phila-records.com/phillyepay/web/">PhilaDox</a>.\
+                <a target="_blank" href="http://epay.phila-records.com/phillyepay/web/">PhilaDox <i class="fa fa-external-link"></i></a></a>.\
                 Please note that the following list\
                 shows documents recorded from\
                 1974 forward, and may not be a complete history\
