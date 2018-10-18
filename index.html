@@ -84,8 +84,9 @@
     <script src="//unpkg.com/@fortawesome/fontawesome-free@5.4.1/js/fontawesome.js"></script>
     <script src="//unpkg.com/@fortawesome/fontawesome-svg-core@1.2.6/index.js"></script>
     <script src="//unpkg.com/@fortawesome/vue-fontawesome@0.1.1/index.js"></script>
-    <script>var vueFontAwesome = window['vue-fontawesome']</script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.core.min.js"></script>
+    <script>var vueFontAwesome = window['vue-fontawesome'];</script>
+    <script src='//unpkg.com/lodash@4.17.11/lodash.js'></script>
+    <script>var debounce = _.debounce;</script>
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="//unpkg.com/axios@0.16.2/dist/axios.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
@@ -113,10 +114,12 @@
 
     <!-- Mapboard -->
     <script src="//unpkg.com/@cityofphiladelphia/phila-vue-datafetch@0.0.11/dist/phila-vue-datafetch.js"></script>
-    <script src="//unpkg.com/@cityofphiladelphia/phila-vue-mapping@1.0.6/dist/phila-vue-mapping.js"></script>
-    <script src="//unpkg.com/@cityofphiladelphia/phila-vue-comps@1.0.8/dist/phila-vue-comps.js"></script>
+    <!-- <script src="//unpkg.com/@cityofphiladelphia/phila-vue-mapping@1.0.6/dist/phila-vue-mapping.js"></script> -->
+    <script src="//cdn.jsdelivr.net/gh/CityOfPhiladelphia/phila-vue-mapping@78a46f5871362400ec1dea9e78ed59312463bb5c/dist/phila-vue-mapping.js"></script>
+    <!-- <script src="//unpkg.com/@cityofphiladelphia/phila-vue-comps@1.0.8/dist/phila-vue-comps.js"></script> -->
+    <script src="//cdn.jsdelivr.net/gh/CityOfPhiladelphia/phila-vue-comps@5a03e938699dedfe9c5b079b7384b12c83da0170/dist/phila-vue-comps.js"></script>
     <!-- <script src="//unpkg.com/@cityofphiladelphia/mapboard@3.0.7/dist/mapboard.js"></script> -->
-    <script src="//cdn.jsdelivr.net/gh/CityOfPhiladelphia/mapboard@cbcf3de50c7242deb6fb788e890e1965d867a49b/dist/mapboard.js"></script>
+    <script src="//cdn.jsdelivr.net/gh/CityOfPhiladelphia/mapboard@59bc433cdd9101d2e900401d33cf503f187d5547/dist/mapboard.js"></script>
 
     <script src="main.js"></script>
   </body>
