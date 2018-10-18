@@ -13,7 +13,9 @@
 //   console.log = console.info = console.debug = console.error = function () {};
 // }
 
-var BASE_CONFIG_URL = 'https://cdn.rawgit.com/ajrothwell/atlas_base_config/d95ed79d/config.js';
+// var BASE_CONFIG_URL = 'https://cdn.rawgit.com/ajrothwell/atlas_base_config/d95ed79d/config.js';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@74cf4692237e16757681f6860b936efd734c27d8/config.js';
+
 var GATEKEEPER_KEY = '82fe014b6575b8c38b44235580bc8b11';
 
 var ZONING_CODE_MAP = {
@@ -157,9 +159,7 @@ mapboard.default({
     imagery: {
       enabled: true
     },
-    historicBasemaps: {
-      enabled: true
-    },
+    initialImagery: 'imagery2018',
   },
   addressInput: {
     width: 415,
