@@ -5,7 +5,5 @@ export default {
   imagery: {
     enabled: true
   },
-  historicBasemaps: {
-    enabled: true
-  },
+  initialImagery: 'imagery2018',
 }

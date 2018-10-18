@@ -5,7 +5,7 @@ export default {
   icon: 'book',
   label: 'Deeds',
   // TODO uncommenting this causes the no-content view to show up.
-  // dataSources: ['dorDocuments'],
+  dataSources: ['dorDocuments'],
   components: [
     {
       type: 'callout',
@@ -262,7 +262,7 @@ export default {
             slots: {
               text: 'You can access digital copies of the deeds \
                 below by purchasing a subscription to \
-                <a target="_blank" class="external" href="http://epay.phila-records.com/phillyepay/web/">PhilaDox</a>.\
+                <a target="_blank" href="http://epay.phila-records.com/phillyepay/web/">PhilaDox <i class="fa fa-external-link"></i></a></a>.\
                 Please note that the following list\
                 shows documents recorded from\
                 1974 forward, and may not be a complete history\
@@ -400,11 +400,7 @@ export default {
     //   }
     // }
   ], // end deeds comps
-  basemap: 'dor',
   identifyFeature: 'dor-parcel',
-  // identifyFeature: 'address-marker',
-  // we might not need this anymore, now that we have identifyFeature
   parcels: 'dor',
-  // parcels: 'pwd'
   imageOverlayGroup: 'regmaps',
 }

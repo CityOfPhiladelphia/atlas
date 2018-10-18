@@ -7,6 +7,5 @@ export default {
     dateMinNum: 1,
     dateMinType: 'year',
     dateField: 'requested_datetime',
-    params: {},
   }
 }

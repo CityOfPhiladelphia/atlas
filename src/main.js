@@ -42,6 +42,8 @@ import zoningAppeals from './data-sources/zoning-appeals';
 import zoningBase from './data-sources/zoning-base';
 import zoningDocs from './data-sources/zoning-docs';
 import zoningOverlay from './data-sources/zoning-overlay';
+// import charterSchools from './data-sources/charter-schools';
+// import neighboringProperties from './data-sources/neighboring-properties';
 
 // Topics
 import property from './topics/property';
@@ -50,7 +52,7 @@ import deeds from './topics/deeds';
 import li from './topics/li';
 import zoning from './topics/zoning';
 // import polling from './topics/polling';
-// import rco from './topics/rco';
+// import rcoTopic from './topics/rco';
 import nearby from './topics/nearby';
 
 // styles
@@ -69,9 +71,7 @@ if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
   console.log = console.info = console.debug = console.error = function () {};
 }
 
-// console.log('data source', dataSources);
-
-var BASE_CONFIG_URL = 'https://cdn.rawgit.com/rbrtmrtn/mapboard-base-config/ef2a0bfcca48e3cb9c8922f27996dd5d543dc2fe/config.js';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@74cf4692237e16757681f6860b936efd734c27d8/config.js';
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;
@@ -79,20 +79,27 @@ accounting.settings.currency.precision = 0;
 mapboard({
   // DEV
   // defaultAddress: '1234 MARKET ST',
+  // plugin: true,
+  panels: [
+    'topics',
+    'map'
+  ],
   router: {
     enabled: true
   },
   geolocation: {
-    enabled: false
+    enabled: true
   },
-  addressAutocomplete: {
-    enabled: false
+  addressInput: {
+    width: 415,
+    position: 'right',
+    autocompleteEnabled: false,
+    autocompleteMax: 15,
+    placeholder: 'Search the map',
   },
   rootStyle: {
     position: 'absolute',
     bottom: 0,
-    // top: '78px',
-    top: '118px',
     left: 0,
     right: 0,
   },
@@ -133,6 +140,8 @@ mapboard({
     zoningBase,
     zoningDocs,
     zoningOverlay,
+    // charterSchools,
+    // neighboringProperties,
   },
   topics: [
     property,
@@ -141,7 +150,15 @@ mapboard({
     li,
     zoning,
     // polling,
-    // rco,
+    // rcoTopic,
     nearby
+  ],
+  components: [
+    {
+      type: 'topic-set',
+      options: {
+        defaultTopic: 'property'
+      }
+    },
   ],
 });

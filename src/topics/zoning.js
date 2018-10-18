@@ -47,7 +47,6 @@ export default {
       },
       slots: {
         items: function(state) {
-          // return state.dorParcels.data;
           return state.parcels.dor.data;
         }
       }
@@ -130,7 +129,6 @@ export default {
             options: {
               topicKey: 'zoning',
               id: 'zoningOverlay',
-              // limit: 100,
               fields: [
                 {
                   label: 'Name',
@@ -149,7 +147,6 @@ export default {
             slots: {
               title: 'Overlays',
               items: function(state, item) {
-                // console.log('state.sources:', state.sources['zoningBase'].data.rows);
                 var id = item.properties.OBJECTID,
                     target = state.sources.zoningOverlay.targets[id] || {},
                     data = target.data || {};
@@ -383,7 +380,6 @@ export default {
       },
     },
   ],
-  basemap: 'dor',
   dynamicMapLayers: [
     'zoning'
   ],
