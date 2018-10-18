@@ -36,3 +36,10 @@ deploy:
     on:
       branch: develop2
     local_dir: public
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: 'atlas-dev3.phila.gov'
+    on:
+      branch: moveStore
+    local_dir: public
