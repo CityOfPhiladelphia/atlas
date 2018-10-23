@@ -28,13 +28,14 @@ import crimeIncidents from './data-sources/crime-incidents';
 import divisions from './data-sources/divisions';
 import dorCondoList from './data-sources/dor-condo-list';
 import dorDocuments from './data-sources/dor-documents';
-import elections from './data-sources/elections';
+import electedOfficials from './data-sources/elected-officials'
 import liBusinessLicenses from './data-sources/li-business-licenses';
 import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
 import liViolations from './data-sources/li-violations';
 import nearbyZoningAppeals from './data-sources/nearby-zoning-appeals';
 import opa from './data-sources/opa';
+import pollingPlaces from './data-sources/polling-places';
 import rco from './data-sources/rco';
 import regmaps from './data-sources/regmaps';
 import vacantIndicatorsPoints from './data-sources/vacant-indicator-points';
@@ -54,6 +55,7 @@ import zoning from './topics/zoning';
 // import polling from './topics/polling';
 // import rcoTopic from './topics/rco';
 import nearby from './topics/nearby';
+import voting from './topics/voting';
 
 // styles
 // TODO move all styles here (that have a npm package)
@@ -126,13 +128,14 @@ mapboard({
     divisions,
     dorCondoList,
     dorDocuments,
-    elections,
+    electedOfficials,
     liBusinessLicenses,
     liInspections,
     liPermits,
     liViolations,
     nearbyZoningAppeals,
     opa,
+    pollingPlaces,
     rco,
     regmaps,
     vacantIndicatorsPoints,
@@ -151,7 +154,8 @@ mapboard({
     zoning,
     // polling,
     // rcoTopic,
-    nearby
+    nearby,
+    voting
   ],
   components: [
     {
