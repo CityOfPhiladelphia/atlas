@@ -1,7 +1,6 @@
 import transforms from '../general/transforms';
 const phone = transforms.phoneNumber.transform;
 
-
 const titleCase = function(str) {
   str = str.toLowerCase().split(' ').map(function(word) {
     return (word.charAt(0).toUpperCase() + word.slice(1));
@@ -9,12 +8,28 @@ const titleCase = function(str) {
   return str.join(' ');
 };
 
+const nth = function(n) {return n + ([,'st','nd','rd'][n%100>>3^1&&n%10]||'th')};
+
+
 export default {
   key: 'voting',
   icon: 'gavel',
   label: 'Voting',
   dataSources: ['divisions', 'pollingPlaces', 'electedOfficials'],
   components: [
+    {
+      type: 'callout',
+      slots: {
+        text: '\
+          The deadline to register for the next election \
+          is 30 days prior to the election. \
+          You can confirm your registration and learn about \
+          registering to vote<a target="_blank" \
+          href="https://www.philadelphiavotes.com/en/voters/polling-place-accessibility"> \
+          here</a>.\
+        ',
+      }
+    },
     {
       type: 'vertical-table',
       options: {
@@ -35,14 +50,12 @@ export default {
             label: 'Location',
             value: function(state) {
               const pollingData = state.sources.pollingPlaces.data;
-              function nth(n){return n + ([,'st','nd','rd'][n%100>>3^1&&n%10]||'th')};
-              return "<b>"+ nth(state.geocode.data.properties.council_district_2016) + " Council District\
-              <br>Ward " + pollingData.WARD +
-              ", Division " + pollingData.DIVISION + "</b><br>" +
-              titleCase(pollingData.PLACENAME) + "<br>" +
-              titleCase(pollingData.STREET_ADDRESS) + "<br>\
-              All locations are open on Election Day from 7am to 8pm.";
-            },
+                   return "<b>Ward " + pollingData.WARD +
+                   ", Division " + pollingData.DIVISION + "</b><br>" +
+                   titleCase(pollingData.PLACENAME) + "<br>" +
+                   titleCase(pollingData.STREET_ADDRESS) + "<br>\
+                   All locations are open on Election Day <br>from 7am to 8pm.";
+                  },
           },
           {
             label: 'Accessibility',
@@ -51,6 +64,7 @@ export default {
               const answer = pollingData.ACCESSIBILITY_CODE== "F" ? 'Building Fully Accessible' :
                              pollingData.ACCESSIBILITY_CODE== "B" ? 'Building Substantially Accessible' :
                              pollingData.ACCESSIBILITY_CODE== "M" ? 'Building Accessibility Modified' :
+                             pollingData.ACCESSIBILITY_CODE== "A" ? 'Alternate Entrance' :
                              pollingData.ACCESSIBILITY_CODE== "R" ? 'Building Accessible With Ramp' :
                              pollingData.ACCESSIBILITY_CODE== "N" ? 'Building Not Accessible' :
                             'Information not available';
@@ -81,7 +95,7 @@ export default {
             return 'See all citywide, state, and federal representatives';
           },
           href: function(state) {
-            return '//www.philadelphiavotes.com/en/voters/elected-officials';
+            return '//www.philadelphiavotes.com/index.php?option=com_voterapp&tmpl=component#elected-officials';
           }
         }
       },
@@ -92,10 +106,9 @@ export default {
           {
             label: 'District Council Member',
             value: function(state) {
-              const council = state.sources.electedOfficials.data.rows.filter(function(item) {
-                return item.office_label == "City Council";
-              });
-              return council[0].first_name + " " + council[0].last_name;
+              const council = state.sources.electedOfficials.data.rows.filter( function(item) {return item.office_label == "City Council";});
+              return '<a href="' + council[0].website + '" target="_blank">' +
+                council[0].first_name +" " +council[0].last_name + " - " + nth(state.geocode.data.properties.council_district_2016) + " Council District </a>";
             },
           },
           {
