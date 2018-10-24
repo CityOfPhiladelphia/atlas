@@ -154,8 +154,8 @@ mapboard({
     zoning,
     // polling,
     // rcoTopic,
+    voting,
     nearby,
-    voting
   ],
   components: [
     {

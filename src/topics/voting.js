@@ -35,14 +35,14 @@ export default {
             label: 'Location',
             value: function(state) {
               const pollingData = state.sources.pollingPlaces.data;
-                   function nth(n){return n + ([,'st','nd','rd'][n%100>>3^1&&n%10]||'th')};
-                   return "<b>"+ nth(state.geocode.data.properties.council_district_2016) + " Council District\
-                   <br>Ward " + pollingData.WARD +
-                   ", Division " + pollingData.DIVISION + "</b><br>" +
-                   titleCase(pollingData.PLACENAME) + "<br>" +
-                   titleCase(pollingData.STREET_ADDRESS) + "<br>\
-                   All locations are open on Election Day <br>from 7am to 8pm.";
-                  },
+              function nth(n){return n + ([,'st','nd','rd'][n%100>>3^1&&n%10]||'th')};
+              return "<b>"+ nth(state.geocode.data.properties.council_district_2016) + " Council District\
+              <br>Ward " + pollingData.WARD +
+              ", Division " + pollingData.DIVISION + "</b><br>" +
+              titleCase(pollingData.PLACENAME) + "<br>" +
+              titleCase(pollingData.STREET_ADDRESS) + "<br>\
+              All locations are open on Election Day from 7am to 8pm.";
+            },
           },
           {
             label: 'Accessibility',
@@ -81,7 +81,7 @@ export default {
             return 'See all citywide, state, and federal representatives';
           },
           href: function(state) {
-            return '//www.philadelphiavotes.com/index.php?option=com_voterapp&tmpl=component#elected-officials';
+            return '//www.philadelphiavotes.com/en/voters/elected-officials';
           }
         }
       },
@@ -92,8 +92,10 @@ export default {
           {
             label: 'District Council Member',
             value: function(state) {
-              const council = state.sources.electedOfficials.data.rows.filter( function(item) {return item.office_label == "City Council";});
-              return council[0].first_name +" " +council[0].last_name;
+              const council = state.sources.electedOfficials.data.rows.filter(function(item) {
+                return item.office_label == "City Council";
+              });
+              return council[0].first_name + " " + council[0].last_name;
             },
           },
           {
