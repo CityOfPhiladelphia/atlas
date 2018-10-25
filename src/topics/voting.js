@@ -13,7 +13,7 @@ export default {
     {
       type: 'badge',
       options: {
-        titleBackground: '#C8C6C6',
+        titleBackground: '#2176d2',
         externalLink: {
           data: 'Preview ballot',
           // action: function(state){return 'Preview ballot'},
