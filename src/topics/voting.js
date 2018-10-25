@@ -39,7 +39,7 @@ export default {
           is 30 days prior to the election. \
           You can confirm your registration and learn about \
           registering to vote<a target="_blank" \
-          href="https://www.philadelphiavotes.com/en/voters/polling-place-accessibility"> \
+          href="//www.philadelphiavotes.com/en/voters/registering-to-vote"> \
           here</a>.\
         ',
       }
