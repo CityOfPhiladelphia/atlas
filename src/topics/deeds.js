@@ -265,7 +265,7 @@ export default {
                 <a target="_blank" href="http://epay.phila-records.com/phillyepay/web/">PhilaDox <i class="fa fa-external-link"></i></a></a>.\
                 Please note that the following list\
                 shows documents recorded from\
-                1974 forward, and may not be a complete history\
+                December 1999 forward, and may not be a complete history\
                 of title for the parcel.\
               '
             },
