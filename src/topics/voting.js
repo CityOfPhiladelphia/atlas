@@ -109,7 +109,7 @@ export default {
             return 'See all citywide, state, and federal representatives';
           },
           href: function(state) {
-            return '//www.philadelphiavotes.com/index.php?option=com_voterapp&tmpl=component#elected-officials';
+            return '//www.philadelphiavotes.com/en/voters/elected-officials';
           }
         }
       },
