@@ -282,7 +282,7 @@ export default {
                   value: function (state, item) {
                     // return "<a target='_blank' href='//pdx-app01/recorder/eagleweb/viewDoc.jsp?node=DOCC"+item.attributes.R_NUM+"'>"+item.attributes.R_NUM+"<i class='fa fa-external-link'></i></a>"
                     // return item.document_id;
-                    return item.attributes.R_NUM;
+                    return item.attributes.DOCUMENT_ID;
                   },
                 },
                 {

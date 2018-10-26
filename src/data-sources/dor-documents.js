@@ -70,11 +70,13 @@ export default {
           }
 
           where += ") or MATCHED_REGMAP = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
+          // where += ") or MATCHED_REGMAP like '%" + state.parcels.dor.data[0].properties.BASEREG + "%'";
+          where += " or REG_MAP_ID = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
         }
 
         return where;
       },
-      outFields: "R_NUM, DISPLAY_DATE, DOCUMENT_TYPE, GRANTORS, GRANTEES",
+      outFields: "DOCUMENT_ID, DISPLAY_DATE, DOCUMENT_TYPE, GRANTORS, GRANTEES",
       returnDistinctValues: 'true',
       returnGeometry: 'false',
       f: 'json',
