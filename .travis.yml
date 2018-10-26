@@ -33,6 +33,6 @@ deploy:
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: 'atlas-dev3.phila.gov'
     on:
-      branch: moveStore
+      branch: voting
     local_dir: public
     skip_cleanup: true
