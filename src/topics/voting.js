@@ -53,7 +53,7 @@ export default {
             return 'Learn about your voting options if you cannot vote in person on Election Day';
           },
           href: function(state) {
-            return '//www.philadelphiavotes.com/en/voters/absentee-and-alternative-ballots';
+            return 'https://www.philadelphiavotes.com/en/voters/absentee-and-alternative-ballots';
           }
         }
       },
