@@ -20,7 +20,7 @@ export default {
           href: function(state) {
             // var address = state.geocode.data.properties.street_address;
             // var addressEncoded = encodeURIComponent(address);
-            return 'https://www.philadelphiavotes.com/ballot_paper/' + state.sources.electedOfficials.data.rows[0].ballot_file_id + '.pdf';
+            return 'https://files.philadelphiavotes.com/ballot_paper/' + state.sources.electedOfficials.data.rows[0].ballot_file_id + '.pdf';
           },
         },
       },
