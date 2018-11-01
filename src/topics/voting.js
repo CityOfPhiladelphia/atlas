@@ -9,6 +9,9 @@ export default {
   icon: 'gavel',
   label: 'Voting',
   dataSources: ['divisions', 'pollingPlaces', 'electedOfficials', 'nextElectionAPI'],
+  errorMessage: function() {
+    return '';
+  },
   components: [
     {
       type: 'badge',

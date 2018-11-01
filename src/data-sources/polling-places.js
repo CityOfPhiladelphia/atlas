@@ -15,8 +15,12 @@ id: 'pollingPlaces',
      f: 'json'
    },
    success: function(data) {
-     console.log('seg.js success, data:', data);
-     return data.features[0].attributes;
-   }
+     // console.log('polling-places.js success, data:', data);
+     if (data.features[0]) {
+       return data.features[0].attributes;
+     } else {
+       return null;
+     }
+   },
  }
 }
