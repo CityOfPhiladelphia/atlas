@@ -10,7 +10,7 @@ export default {
   label: 'Voting',
   dataSources: ['divisions', 'pollingPlaces', 'electedOfficials', 'nextElectionAPI'],
   errorMessage: function() {
-    return '';
+    return ' ';
   },
   components: [
     {
