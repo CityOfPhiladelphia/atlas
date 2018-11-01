@@ -12,13 +12,14 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server"
   },
   "dependencies": {
-    "@cityofphiladelphia/mapboard": "3.0.14",
+    "@cityofphiladelphia/mapboard": "3.0.15",
     "accounting": "^0.4.1",
     "axios": "^0.18.0",
     "moment": "^2.21.0",
     "phila-standards": "^1.0.0"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-pro": "^5.4.2",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.7.0",
