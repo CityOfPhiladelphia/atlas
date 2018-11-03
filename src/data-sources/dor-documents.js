@@ -71,7 +71,7 @@ export default {
 
           where += ") or MATCHED_REGMAP = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
           // where += ") or MATCHED_REGMAP like '%" + state.parcels.dor.data[0].properties.BASEREG + "%'";
-          where += " or REG_MAP_ID = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
+          // where += " or REG_MAP_ID = '" + state.parcels.dor.data[0].properties.BASEREG + "'";
         }
 
         return where;
