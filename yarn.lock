@@ -117,6 +117,52 @@
   dependencies:
     any-observable "^0.3.0"
 
+"@sentry/browser@4.3.4":
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-4.3.4.tgz#5c17184781c4fb6ad8ab48f5c48e01630d4fc3dc"
+  dependencies:
+    "@sentry/core" "4.3.4"
+    "@sentry/types" "4.3.4"
+    "@sentry/utils" "4.3.4"
+    tslib "^1.9.3"
+
+"@sentry/core@4.3.4":
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-4.3.4.tgz#414e050b9e963ac7f839331ad33590e59d883988"
+  dependencies:
+    "@sentry/hub" "4.3.4"
+    "@sentry/minimal" "4.3.4"
+    "@sentry/types" "4.3.4"
+    "@sentry/utils" "4.3.4"
+    tslib "^1.9.3"
+
+"@sentry/hub@4.3.4":
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-4.3.4.tgz#48915f5867e8ef1d964c89394e8500d1d050719b"
+  dependencies:
+    "@sentry/types" "4.3.4"
+    "@sentry/utils" "4.3.4"
+    tslib "^1.9.3"
+
+"@sentry/minimal@4.3.4":
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-4.3.4.tgz#8375c3d040621dd30eeddaebf4ef1bf22be0f643"
+  dependencies:
+    "@sentry/hub" "4.3.4"
+    "@sentry/types" "4.3.4"
+    tslib "^1.9.3"
+
+"@sentry/types@4.3.4":
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-4.3.4.tgz#563f9def51da301cfd474ecf35ae4d97847aed61"
+
+"@sentry/utils@4.3.4":
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-4.3.4.tgz#4473d9f4d1b909e51b6aea7051ebe1bd838d56e9"
+  dependencies:
+    "@sentry/types" "4.3.4"
+    tslib "^1.9.3"
+
 "@sindresorhus/is@^0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
@@ -1180,9 +1226,9 @@
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/JSV/-/JSV-4.0.2.tgz#d077f6825571f82132f9dffaed587b4029feff57"
 
-"L-esri-WebMap@git+https://github.com/CityOfPhiladelphia/L.esri.WebMap.git#5849bfa6248a886d8675eeff98fa9dff4949f12a":
+"L-esri-WebMap@https://github.com/CityOfPhiladelphia/L.esri.WebMap#5849bfa6248a886d8675eeff98fa9dff4949f12a":
   version "0.4.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/L.esri.WebMap.git#5849bfa6248a886d8675eeff98fa9dff4949f12a"
+  resolved "https://github.com/CityOfPhiladelphia/L.esri.WebMap#5849bfa6248a886d8675eeff98fa9dff4949f12a"
   dependencies:
     arcgis-to-geojson-utils "^1.0.1"
     esri-leaflet "^2.0.0"
@@ -5000,9 +5046,9 @@ leaflet-easybutton@^2.2.2:
   dependencies:
     leaflet "^1.0.1"
 
-"leaflet-measure@git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6":
+"leaflet-measure@https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6":
   version "4.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6"
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
   dependencies:
     "@turf/area" "^5.1.5"
     "@turf/length" "^5.1.5"
@@ -5031,9 +5077,9 @@ leaflet-shape-markers@^1.0.4:
   dependencies:
     leaflet "^1.0.0"
 
-"leaflet-vector-icon@git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#74a56f048bceccef9c945f752bbd0379ae9dc77c":
+"leaflet-vector-icon@https://github.com/CityOfPhiladelphia/leaflet-vector-icon#74a56f048bceccef9c945f752bbd0379ae9dc77c":
   version "1.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#74a56f048bceccef9c945f752bbd0379ae9dc77c"
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-vector-icon#74a56f048bceccef9c945f752bbd0379ae9dc77c"
 
 leaflet-vectoricon@^0.1.0:
   version "0.1.0"
@@ -5311,9 +5357,9 @@ mapbox-gl-function@^1.0.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/mapbox-gl-function/-/mapbox-gl-function-1.3.0.tgz#cee3d95750c189d45e83ab41a0a57fc2a8a509bc"
 
-"mapbox-gl-leaflet@git+https://github.com/mapbox/mapbox-gl-leaflet.git#v0.0.3":
+"mapbox-gl-leaflet@git+https://github.com/mapbox/mapbox-gl-leaflet#v0.0.3":
   version "0.0.3"
-  resolved "git+https://github.com/mapbox/mapbox-gl-leaflet.git#b0bdc55e277ed23091a1d78b3c13aa82af615566"
+  resolved "git+https://github.com/mapbox/mapbox-gl-leaflet#b0bdc55e277ed23091a1d78b3c13aa82af615566"
 
 mapbox-gl-style-spec@^8.4.0:
   version "8.11.0"
@@ -7855,7 +7901,7 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
 
-tslib@^1.9.0:
+tslib@^1.9.0, tslib@^1.9.3:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.3.tgz#d7e4dd79245d85428c4d7e4822a79917954ca286"
 
