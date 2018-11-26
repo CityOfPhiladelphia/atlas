@@ -19,6 +19,7 @@
     "moment": "^2.21.0"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-pro": "^5.5.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.7.0",
