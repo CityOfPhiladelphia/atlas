@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@cityofphiladelphia/mapboard": "https://github.com/CityOfPhiladelphia/mapboard#50d7f68c99a8a7af576f2b7d2f5ef6e04dd3930c",
+    "@sentry/browser": "4.3.4",
     "accounting": "^0.4.1",
     "axios": "^0.18.0",
     "moment": "^2.21.0"

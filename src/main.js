@@ -7,6 +7,7 @@
         \/               \/     \/
 */
 
+import * as Sentry from '@sentry/browser';
 Sentry.init({ dsn: 'https://2b234344a8a443dbbe27e3b45a25f741@sentry.io/1321272' });
 
 import accounting from 'accounting';
