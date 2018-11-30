@@ -5,3 +5,4 @@ public/*.js.map
 .netlify
 src/config.js
 .npmrc
+statistics.html
