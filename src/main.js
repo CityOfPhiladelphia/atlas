@@ -11,6 +11,17 @@
 import * as Sentry from '@sentry/browser';
 Sentry.init({ dsn: 'https://276ef359f45543ff91b7db449d3035f8@sentry.io/1330874' });
 
+// Font Awesome Icons
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faHome } from '@fortawesome/pro-solid-svg-icons/faHome';
+import { faBook } from '@fortawesome/pro-solid-svg-icons/faBook';
+import { faWrench } from '@fortawesome/pro-solid-svg-icons/faWrench';
+import { faUniversity } from '@fortawesome/pro-solid-svg-icons/faUniversity';
+import { faGavel } from '@fortawesome/pro-solid-svg-icons/faGavel';
+import { faMapMarkerAlt } from '@fortawesome/pro-solid-svg-icons/faMapMarkerAlt';
+import { faLandmark } from '@fortawesome/pro-solid-svg-icons/faLandmark';
+library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark);
+
 import accounting from 'accounting';
 import axios from 'axios';
 import moment from 'moment';
@@ -99,6 +110,7 @@ mapboard({
   },
   addressInput: {
     width: 415,
+    mapWidth: 300,
     position: 'right',
     autocompleteEnabled: false,
     autocompleteMax: 15,
