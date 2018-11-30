@@ -81,6 +81,11 @@ export default {
       return '<span style="white-space: nowrap;">' + value + '</span>';
     },
   },
+  nth: {
+     transform: function(n) {
+       return n + ([,'st','nd','rd'][n%100>>3^1&&n%10]||'th')
+     }
+  },
   phoneNumber: {
     transform: function (value) {
       var s2 = (""+value).replace(/\D/g, '');
@@ -115,6 +120,14 @@ export default {
     transform: function (value) {
       return value && value + ' sq ft';
     },
+  },
+  titleCase: {
+    transform: function(str) {
+      str = str.toLowerCase().split(' ').map(function(word) {
+        return (word.charAt(0).toUpperCase() + word.slice(1));
+      });
+      return str.join(' ');
+    }
   },
   urlFormatter: {
     transform: function(txt) {

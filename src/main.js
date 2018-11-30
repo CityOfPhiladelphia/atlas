@@ -20,7 +20,10 @@ import { faUniversity } from '@fortawesome/pro-solid-svg-icons/faUniversity';
 import { faGavel } from '@fortawesome/pro-solid-svg-icons/faGavel';
 import { faMapMarkerAlt } from '@fortawesome/pro-solid-svg-icons/faMapMarkerAlt';
 import { faLandmark } from '@fortawesome/pro-solid-svg-icons/faLandmark';
-library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark);
+import { faTrash } from '@fortawesome/pro-solid-svg-icons/faTrash';
+import { faGraduationCap } from '@fortawesome/pro-solid-svg-icons/faGraduationCap';
+import { faStar } from '@fortawesome/pro-solid-svg-icons/faStar';
+library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faTrash, faGraduationCap, faStar);
 
 import accounting from 'accounting';
 import axios from 'axios';
@@ -45,7 +48,8 @@ import crimeIncidents from './data-sources/crime-incidents';
 import divisions from './data-sources/divisions';
 import dorCondoList from './data-sources/dor-condo-list';
 import dorDocuments from './data-sources/dor-documents';
-import electedOfficials from './data-sources/elected-officials'
+import electedOfficials from './data-sources/elected-officials';
+import fireStation from './data-sources/fire-station';
 import liBusinessLicenses from './data-sources/li-business-licenses';
 import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
@@ -53,6 +57,8 @@ import liViolations from './data-sources/li-violations';
 import nearbyZoningAppeals from './data-sources/nearby-zoning-appeals';
 import nextElectionAPI from './data-sources/election-next';
 import opa from './data-sources/opa';
+import policeDistr from './data-sources/police-distr';
+import policePSA from './data-sources/police-psa';
 import pollingPlaces from './data-sources/polling-places';
 import rco from './data-sources/rco';
 import regmaps from './data-sources/regmaps';
@@ -155,6 +161,7 @@ mapboard({
     dorCondoList,
     dorDocuments,
     electedOfficials,
+    fireStation,
     liBusinessLicenses,
     liInspections,
     liPermits,
@@ -162,6 +169,8 @@ mapboard({
     nearbyZoningAppeals,
     nextElectionAPI,
     opa,
+    policeDistr,
+    policePSA,
     pollingPlaces,
     rco,
     regmaps,
