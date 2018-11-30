@@ -4,6 +4,8 @@ const webpack = require('webpack');
 const env = process.env.NODE_ENV;
 const isDevelopment = env === 'development';
 
+const Visualizer = require('webpack-visualizer-plugin');
+
 module.exports = {
   entry: {
     app: './src/main.js',
@@ -14,8 +16,8 @@ module.exports = {
   devtool: isDevelopment ? 'inline-source-map' : 'source-map',
   devServer: {
     contentBase: './public',
-    // host: process.env.WEBPACK_DEV_HOST,
-    host: 'localhost',
+    host: process.env.WEBPACK_DEV_HOST,
+    // host: 'localhost',
     // port: process.env.WEBPACK_DEV_PORT
     port: 8080
   },
@@ -45,6 +47,7 @@ module.exports = {
   },
   plugins: [
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
+    new Visualizer({ filename: './statistics.html' })
   ],
   mode: env,
   optimization: {

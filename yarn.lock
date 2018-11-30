@@ -2,14 +2,17 @@
 # yarn lockfile v1
 
 
-"@cityofphiladelphia/mapboard@3.0.15":
-  version "3.0.15"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/mapboard/-/mapboard-3.0.15.tgz#c3d2970fcbe03941123765f431406f4d7d53cecb"
+"@cityofphiladelphia/mapboard@https://github.com/CityOfPhiladelphia/mapboard#cb28b7c8baa3bf188f790a1ba3dce7df4794d205":
+  version "3.0.16"
+  resolved "https://github.com/CityOfPhiladelphia/mapboard#cb28b7c8baa3bf188f790a1ba3dce7df4794d205"
   dependencies:
-    "@cityofphiladelphia/phila-vue-comps" "1.0.12"
-    "@cityofphiladelphia/phila-vue-datafetch" "0.0.12"
-    "@cityofphiladelphia/phila-vue-mapping" "1.0.11"
-    "@fortawesome/fontawesome-svg-core" "^1.2.5"
+    "@cityofphiladelphia/phila-vue-comps" "https://github.com/CityOfPhiladelphia/phila-vue-comps#245967e9d00e9bb74dcf45f210ade4959ce50485"
+    "@cityofphiladelphia/phila-vue-datafetch" "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#5d48f89b486fbe62495c5bac1217aa0300f58eb4"
+    "@cityofphiladelphia/phila-vue-mapping" "https://github.com/CityOfPhiladelphia/phila-vue-mapping#3e175aea42690bed6c338a4d8bc2b189547fef7a"
+    "@fortawesome/fontawesome-svg-core" "^1.2.8"
+    "@fortawesome/pro-light-svg-icons" "^5.5.0"
+    "@fortawesome/pro-regular-svg-icons" "^5.5.0"
+    "@fortawesome/pro-solid-svg-icons" "^5.5.0"
     "@fortawesome/vue-fontawesome" "^0.1.1"
     "@turf/turf" "^5.1.6"
     axios "^0.18.0"
@@ -29,11 +32,18 @@
     vue "^2.5.16"
     vuex "^3.0.1"
 
-"@cityofphiladelphia/phila-vue-comps@1.0.12":
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/phila-vue-comps/-/phila-vue-comps-1.0.12.tgz#f2bab7fbb9c780a4548ee350bd082dbaaf0d1560"
+"@cityofphiladelphia/phila-vue-comps@https://github.com/CityOfPhiladelphia/phila-vue-comps#245967e9d00e9bb74dcf45f210ade4959ce50485":
+  version "1.0.14"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-comps#245967e9d00e9bb74dcf45f210ade4959ce50485"
   dependencies:
+    "@fortawesome/fontawesome-svg-core" "^1.2.8"
+    "@fortawesome/pro-light-svg-icons" "^5.5.0"
+    "@fortawesome/pro-regular-svg-icons" "^5.5.0"
+    "@fortawesome/pro-solid-svg-icons" "^5.5.0"
+    "@fortawesome/vue-fontawesome" "^0.1.2"
     axios "^0.18.0"
+    babel-preset-env "^1.7.0"
+    babel-preset-stage-3 "^6.24.1"
     escape-html "^1.0.3"
     leaflet "^1.3.1"
     lodash.debounce "^4.0.8"
@@ -42,9 +52,9 @@
     vue "^2.5.16"
     vuex "^3.0.1"
 
-"@cityofphiladelphia/phila-vue-datafetch@0.0.12":
+"@cityofphiladelphia/phila-vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#5d48f89b486fbe62495c5bac1217aa0300f58eb4":
   version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/phila-vue-datafetch/-/phila-vue-datafetch-0.0.12.tgz#25af2a260c7badb4170a2cf7c8bffa3b43a880df"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#5d48f89b486fbe62495c5bac1217aa0300f58eb4"
   dependencies:
     "@turf/turf" "^5.1.6"
     axios "^0.18.0"
@@ -56,16 +66,24 @@
     vue "^2.5.16"
     vuex "^3.0.1"
 
-"@cityofphiladelphia/phila-vue-mapping@1.0.11":
+"@cityofphiladelphia/phila-vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#3e175aea42690bed6c338a4d8bc2b189547fef7a":
   version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/phila-vue-mapping/-/phila-vue-mapping-1.0.11.tgz#f9ae46e236d6ab325025fa20d8a52a008fcbf799"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#3e175aea42690bed6c338a4d8bc2b189547fef7a"
   dependencies:
+    "@fortawesome/fontawesome-svg-core" "^1.2.8"
+    "@fortawesome/pro-light-svg-icons" "^5.5.0"
+    "@fortawesome/pro-regular-svg-icons" "^5.5.0"
+    "@fortawesome/pro-solid-svg-icons" "^5.5.0"
+    "@fortawesome/vue-fontawesome" "^0.1.2"
     "@turf/turf" "^5.1.6"
     L-esri-WebMap "https://github.com/CityOfPhiladelphia/L.esri.WebMap#5849bfa6248a886d8675eeff98fa9dff4949f12a"
     Leaflet.vector-markers "^0.0.6"
     axios "^0.18.0"
+    babel-preset-env "^1.7.0"
+    babel-preset-stage-3 "^6.24.1"
     blueimp-md5 "^2.10.0"
     esri-leaflet "2.1.4"
+    jquery "^3.3.1"
     leaflet "^1.3.1"
     leaflet-easybutton "^2.2.2"
     leaflet-measure "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
@@ -90,13 +108,31 @@
   version "5.5.0"
   resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-pro/-/fontawesome-pro-5.5.0.tgz#ee612da62e482d05ab4e2f1a6a30eb88797eaeb4"
 
-"@fortawesome/fontawesome-svg-core@^1.2.5":
+"@fortawesome/fontawesome-svg-core@^1.2.8":
   version "1.2.8"
   resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.8.tgz#b802b7f3d5b9d9d92ae92c18e865df468dcdf561"
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.8"
 
-"@fortawesome/vue-fontawesome@^0.1.1":
+"@fortawesome/pro-light-svg-icons@^5.5.0":
+  version "5.5.0"
+  resolved "https://npm.fontawesome.com/@fortawesome/pro-light-svg-icons/-/pro-light-svg-icons-5.5.0.tgz#bbfafc6c315592bd93bd77d96b22ba5cc054f745"
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.8"
+
+"@fortawesome/pro-regular-svg-icons@^5.5.0":
+  version "5.5.0"
+  resolved "https://npm.fontawesome.com/@fortawesome/pro-regular-svg-icons/-/pro-regular-svg-icons-5.5.0.tgz#2533fb1ea44b6fefbe9eaf5c19104ec48ea60675"
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.8"
+
+"@fortawesome/pro-solid-svg-icons@^5.5.0":
+  version "5.5.0"
+  resolved "https://npm.fontawesome.com/@fortawesome/pro-solid-svg-icons/-/pro-solid-svg-icons-5.5.0.tgz#fccaba199394fa0a200b7a2617ea2b4b3b3c773d"
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.8"
+
+"@fortawesome/vue-fontawesome@^0.1.1", "@fortawesome/vue-fontawesome@^0.1.2":
   version "0.1.2"
   resolved "https://npm.fontawesome.com/@fortawesome/vue-fontawesome/-/vue-fontawesome-0.1.2.tgz#f993d7788bd6f031a1a20ff8f608ed0f36c83185"
 
@@ -1226,9 +1262,9 @@
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/JSV/-/JSV-4.0.2.tgz#d077f6825571f82132f9dffaed587b4029feff57"
 
-"L-esri-WebMap@git+https://github.com/CityOfPhiladelphia/L.esri.WebMap.git#5849bfa6248a886d8675eeff98fa9dff4949f12a":
+"L-esri-WebMap@https://github.com/CityOfPhiladelphia/L.esri.WebMap#5849bfa6248a886d8675eeff98fa9dff4949f12a":
   version "0.4.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/L.esri.WebMap.git#5849bfa6248a886d8675eeff98fa9dff4949f12a"
+  resolved "https://github.com/CityOfPhiladelphia/L.esri.WebMap#5849bfa6248a886d8675eeff98fa9dff4949f12a"
   dependencies:
     arcgis-to-geojson-utils "^1.0.1"
     esri-leaflet "^2.0.0"
@@ -1287,8 +1323,8 @@ ajv-keywords@^3.1.0:
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-3.2.0.tgz#e86b819c602cf8821ad637413698f1dec021847a"
 
 ajv@^6.1.0, ajv@^6.5.5:
-  version "6.5.5"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.5.5.tgz#cf97cdade71c6399a92c6d6c4177381291b781a1"
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.6.1.tgz#6360f5ed0d80f232cc2b294c362d5dc2e538dd61"
   dependencies:
     fast-deep-equal "^2.0.1"
     fast-json-stable-stringify "^2.0.0"
@@ -1428,6 +1464,10 @@ array-unique@^0.3.2:
 arrify@^1.0.0, arrify@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
+
+asap@~2.0.3:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
 
 asn1.js@^4.0.0:
   version "4.10.1"
@@ -2481,12 +2521,12 @@ caniuse-api@^1.5.2:
     lodash.uniq "^4.5.0"
 
 caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, caniuse-db@^1.0.30000639:
-  version "1.0.30000911"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000911.tgz#76262de497a6d914594201eccc10a4d6c5020f98"
+  version "1.0.30000912"
+  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000912.tgz#29c739d8c8fae006de61b51f547bdbf02f5d867e"
 
 caniuse-lite@^1.0.30000844:
-  version "1.0.30000911"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000911.tgz#5dfb8139ee479722da27000ca92dec47913b9605"
+  version "1.0.30000912"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000912.tgz#08e650d4090a9c0ab06bfd2b46b7d3ad6dcaea28"
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -2868,6 +2908,10 @@ copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
 
+core-js@^1.0.0:
+  version "1.2.7"
+  resolved "http://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
+
 core-js@^2.0.0, core-js@^2.4.0, core-js@^2.4.1, core-js@^2.5.0:
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.7.tgz#f972608ff0cead68b841a16a932d0b183791814e"
@@ -3079,7 +3123,7 @@ d3-voronoi@1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/d3-voronoi/-/d3-voronoi-1.1.2.tgz#1687667e8f13a2d158c80c1480c5a29cb0d8973c"
 
-d3@3:
+d3@3, d3@^3.5.6:
   version "3.5.17"
   resolved "https://registry.yarnpkg.com/d3/-/d3-3.5.17.tgz#bc46748004378b21a360c9fc7cf5231790762fb8"
 
@@ -3385,7 +3429,7 @@ enhanced-resolve@^4.0.0:
     memory-fs "^0.4.0"
     tapable "^1.0.0"
 
-envify@^3.4.0:
+envify@^3.0.0, envify@^3.4.0:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/envify/-/envify-3.4.1.tgz#d7122329e8df1688ba771b12501917c9ce5cbce8"
   dependencies:
@@ -3800,6 +3844,16 @@ faye-websocket@~0.11.1:
   dependencies:
     websocket-driver ">=0.5.1"
 
+fbjs@^0.6.1:
+  version "0.6.1"
+  resolved "http://registry.npmjs.org/fbjs/-/fbjs-0.6.1.tgz#9636b7705f5ba9684d44b72f78321254afc860f7"
+  dependencies:
+    core-js "^1.0.0"
+    loose-envify "^1.0.0"
+    promise "^7.0.3"
+    ua-parser-js "^0.7.9"
+    whatwg-fetch "^0.9.0"
+
 feature-filter@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/feature-filter/-/feature-filter-1.0.3.tgz#754f05e526abf36aedf338c2acb76673121192ac"
@@ -3890,8 +3944,8 @@ flatten@^1.0.2:
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
 
 flow-parser@^0.*:
-  version "0.86.0"
-  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.86.0.tgz#8e5116325b8c02326f2ab98446a27123a0cc7125"
+  version "0.87.0"
+  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.87.0.tgz#a6d0e0b70f2cebdc15febb4eaf149877edbf145d"
 
 flush-write-stream@^1.0.0:
   version "1.0.3"
@@ -4851,6 +4905,10 @@ isurl@^1.0.0-alpha5:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
 
+jquery@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
+
 js-base64@^2.1.9:
   version "2.4.9"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.9.tgz#748911fb04f48a60c4771b375cac45a80df11c03"
@@ -5032,9 +5090,9 @@ leaflet-easybutton@^2.2.2:
   dependencies:
     leaflet "^1.0.1"
 
-"leaflet-measure@git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6":
+"leaflet-measure@https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6":
   version "4.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6"
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
   dependencies:
     "@turf/area" "^5.1.5"
     "@turf/length" "^5.1.5"
@@ -5063,9 +5121,9 @@ leaflet-shape-markers@^1.0.4:
   dependencies:
     leaflet "^1.0.0"
 
-"leaflet-vector-icon@git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#74a56f048bceccef9c945f752bbd0379ae9dc77c":
+"leaflet-vector-icon@https://github.com/CityOfPhiladelphia/leaflet-vector-icon#74a56f048bceccef9c945f752bbd0379ae9dc77c":
   version "1.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#74a56f048bceccef9c945f752bbd0379ae9dc77c"
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-vector-icon#74a56f048bceccef9c945f752bbd0379ae9dc77c"
 
 leaflet-vectoricon@^0.1.0:
   version "0.1.0"
@@ -5306,11 +5364,11 @@ lowercase-keys@^1.0.0:
   resolved "https://registry.yarnpkg.com/lowercase-keys/-/lowercase-keys-1.0.1.tgz#6f9e30b47084d971a7c820ff15a6c5167b74c26f"
 
 lru-cache@^4.0.1, lru-cache@^4.1.1:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-4.1.4.tgz#51cc46e8e6d9530771c857e24ccc720ecdbcc031"
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-4.1.5.tgz#8bbe50ea85bed59bc9e33dcab8235ee9bcf443cd"
   dependencies:
     pseudomap "^1.0.2"
-    yallist "^3.0.2"
+    yallist "^2.1.2"
 
 magic-string@^0.22.4:
   version "0.22.5"
@@ -5344,9 +5402,9 @@ mapbox-gl-function@^1.0.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/mapbox-gl-function/-/mapbox-gl-function-1.3.0.tgz#cee3d95750c189d45e83ab41a0a57fc2a8a509bc"
 
-"mapbox-gl-leaflet@git+https://github.com/mapbox/mapbox-gl-leaflet.git#v0.0.3":
+"mapbox-gl-leaflet@git+https://github.com/mapbox/mapbox-gl-leaflet#v0.0.3":
   version "0.0.3"
-  resolved "git+https://github.com/mapbox/mapbox-gl-leaflet.git#b0bdc55e277ed23091a1d78b3c13aa82af615566"
+  resolved "git+https://github.com/mapbox/mapbox-gl-leaflet#b0bdc55e277ed23091a1d78b3c13aa82af615566"
 
 mapbox-gl-style-spec@^8.4.0:
   version "8.11.0"
@@ -6106,8 +6164,8 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.0.0.tgz#85080bb87c64688fa47996fe8f7dfbe8211760b1"
 
 pako@~1.0.5:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.6.tgz#0101211baa70c4bca4a0f63f2206e97b7dfaf258"
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.7.tgz#2473439021b57f1516c82f58be7275ad8ef1bb27"
 
 parallel-transform@^1.1.0:
   version "1.1.0"
@@ -6558,8 +6616,8 @@ preserve@^0.2.0:
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
 
 prettier@^1.12.1:
-  version "1.15.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.15.2.tgz#d31abe22afa4351efa14c7f8b94b58bb7452205e"
+  version "1.15.3"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.15.3.tgz#1feaac5bdd181237b54dbe65d874e02a1472786a"
 
 pretty-bytes@^4.0.2:
   version "4.0.2"
@@ -6591,6 +6649,12 @@ proj4@^2.4.4:
 promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
+
+promise@^7.0.3:
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/promise/-/promise-7.3.1.tgz#064b72602b18f90f29192b8b1bc418ffd1ebd3bf"
+  dependencies:
+    asap "~2.0.3"
 
 protocol-buffers-schema@^3.3.1:
   version "3.3.2"
@@ -6759,6 +6823,17 @@ rc@^1.2.7:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-dom@^0.14.0:
+  version "0.14.9"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-0.14.9.tgz#05064a3dcf0fb1880a3b2bfc9d58c55d8d9f6293"
+
+react@^0.14.0:
+  version "0.14.9"
+  resolved "https://registry.yarnpkg.com/react/-/react-0.14.9.tgz#9110a6497c49d44ba1c0edd317aec29c2e0d91d1"
+  dependencies:
+    envify "^3.0.0"
+    fbjs "^0.6.1"
 
 read-chunk@^2.1.0:
   version "2.1.0"
@@ -7619,15 +7694,21 @@ string-width@^1.0.1:
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^4.0.0"
 
-string_decoder@^1.0.0, string_decoder@~1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.1.1.tgz#9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
+string_decoder@^1.0.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.2.0.tgz#fe86e738b19544afe70469243b2a1ee9240eae8d"
   dependencies:
     safe-buffer "~5.1.0"
 
 string_decoder@~0.10.x:
   version "0.10.31"
-  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-0.10.31.tgz#62e203bc41766c6c28c9fc84301dab1c5310fa94"
+  resolved "http://registry.npmjs.org/string_decoder/-/string_decoder-0.10.31.tgz#62e203bc41766c6c28c9fc84301dab1c5310fa94"
+
+string_decoder@~1.1.1:
+  version "1.1.1"
+  resolved "http://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz#9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
+  dependencies:
+    safe-buffer "~5.1.0"
 
 strip-ansi@^3.0.0, strip-ansi@^3.0.1:
   version "3.0.1"
@@ -7927,6 +8008,10 @@ type-is@~1.6.16:
 typedarray@^0.0.6, typedarray@~0.0.5:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+ua-parser-js@^0.7.9:
+  version "0.7.19"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.19.tgz#94151be4c0a7fb1d001af7022fdaca4642659e4b"
 
 uglify-es@^3.3.4:
   version "3.3.9"
@@ -8296,6 +8381,15 @@ webpack-sources@^1.0.1, webpack-sources@^1.1.0:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
+webpack-visualizer-plugin@^0.1.11:
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/webpack-visualizer-plugin/-/webpack-visualizer-plugin-0.1.11.tgz#b8770ad86b4f652612c68b1b782253faf9f8a34e"
+  dependencies:
+    d3 "^3.5.6"
+    mkdirp "^0.5.1"
+    react "^0.14.0"
+    react-dom "^0.14.0"
+
 webpack@4.2.0:
   version "4.2.0"
   resolved "http://registry.npmjs.org/webpack/-/webpack-4.2.0.tgz#a4f80807651a0e611bb09609600dc266262efcc1"
@@ -8341,6 +8435,10 @@ wellknown@0.4.2:
   dependencies:
     concat-stream "~1.5.0"
     minimist "~1.1.2"
+
+whatwg-fetch@^0.9.0:
+  version "0.9.0"
+  resolved "http://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-0.9.0.tgz#0e3684c6cb9995b43efc9df03e4c365d95fd9cc0"
 
 whet.extend@~0.9.9:
   version "0.9.9"
@@ -8439,6 +8537,10 @@ y18n@^3.2.1:
 "y18n@^3.2.1 || ^4.0.0", y18n@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/y18n/-/y18n-4.0.0.tgz#95ef94f85ecc81d007c264e190a120f0a3c8566b"
+
+yallist@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/yallist/-/yallist-2.1.2.tgz#1c11f9218f076089a47dd512f93c6699a6a81d52"
 
 yallist@^3.0.0, yallist@^3.0.2:
   version "3.0.3"
