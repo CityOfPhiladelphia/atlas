@@ -133,11 +133,11 @@ export default {
                 appId = '0' + appId;
               }
 
-              return '<a target="_blank" class="external" href="//s3.amazonaws.com/lni-zoning-pdfs/'
+              return '<a target="_blank" href="//s3.amazonaws.com/lni-zoning-pdfs/'
                       + item.doc_id
                       + '.pdf">'
                       + item.doc_id
-                      // + '<i class='fa fa-external-link'></i></a>'
+                      + ' <i class="fa fa-external-link"></i></a>'
                       + '</a>'
               // return item.appid + '-' + item.docid
             }

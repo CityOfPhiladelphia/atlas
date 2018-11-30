@@ -4,6 +4,8 @@ const webpack = require('webpack');
 const env = process.env.NODE_ENV;
 const isDevelopment = env === 'development';
 
+const Visualizer = require('webpack-visualizer-plugin');
+
 module.exports = {
   entry: {
     app: './src/main.js',
@@ -45,6 +47,7 @@ module.exports = {
   },
   plugins: [
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
+    new Visualizer({ filename: './statistics.html' })
   ],
   mode: env,
   optimization: {

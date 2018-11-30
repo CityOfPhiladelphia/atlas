@@ -7,14 +7,25 @@
         \/               \/     \/
 */
 
+
 import * as Sentry from '@sentry/browser';
 Sentry.init({ dsn: 'https://2b234344a8a443dbbe27e3b45a25f741@sentry.io/1321272' });
+
+// Font Awesome Icons
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faHome } from '@fortawesome/pro-solid-svg-icons/faHome';
+import { faBook } from '@fortawesome/pro-solid-svg-icons/faBook';
+import { faWrench } from '@fortawesome/pro-solid-svg-icons/faWrench';
+import { faUniversity } from '@fortawesome/pro-solid-svg-icons/faUniversity';
+import { faGavel } from '@fortawesome/pro-solid-svg-icons/faGavel';
+import { faMapMarkerAlt } from '@fortawesome/pro-solid-svg-icons/faMapMarkerAlt';
+import { faLandmark } from '@fortawesome/pro-solid-svg-icons/faLandmark';
+library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark);
 
 import accounting from 'accounting';
 import axios from 'axios';
 import moment from 'moment';
 import mapboard from '@cityofphiladelphia/mapboard';
-// import philaVueMapping from '@cityofphiladelphia/phila-vue-mapping';
 
 // General Config Modules
 import helpers from './util/helpers';
@@ -34,16 +45,15 @@ import crimeIncidents from './data-sources/crime-incidents';
 import divisions from './data-sources/divisions';
 import dorCondoList from './data-sources/dor-condo-list';
 import dorDocuments from './data-sources/dor-documents';
-import elections from './data-sources/elections';
-import fireStation from './data-sources/fire-station';
+import electedOfficials from './data-sources/elected-officials'
 import liBusinessLicenses from './data-sources/li-business-licenses';
 import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
 import liViolations from './data-sources/li-violations';
 import nearbyZoningAppeals from './data-sources/nearby-zoning-appeals';
+import nextElectionAPI from './data-sources/election-next';
 import opa from './data-sources/opa';
-import policeDistr from './data-sources/police-distr';
-import policePSA from './data-sources/police-psa';
+import pollingPlaces from './data-sources/polling-places';
 import rco from './data-sources/rco';
 import regmaps from './data-sources/regmaps';
 import streetClosures from './data-sources/street-closures';
@@ -86,7 +96,7 @@ if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
   console.log = console.info = console.debug = console.error = function () {};
 }
 
-var BASE_CONFIG_URL = 'https://cdn.rawgit.com/ajrothwell/mapboard-base-config/2b849b365a9c4e986222996d0dcaaad114a3e98a/config.js';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@d18a86feb27b7e7c4496ed422ce30b5d80e64c1b/config.js';
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;
@@ -103,10 +113,11 @@ mapboard({
     enabled: true
   },
   geolocation: {
-    enabled: false
+    enabled: true
   },
   addressInput: {
     width: 415,
+    mapWidth: 300,
     position: 'right',
     autocompleteEnabled: false,
     autocompleteMax: 15,
@@ -143,16 +154,15 @@ mapboard({
     divisions,
     dorCondoList,
     dorDocuments,
-    elections,
-    fireStation,
+    electedOfficials,
     liBusinessLicenses,
     liInspections,
     liPermits,
     liViolations,
     nearbyZoningAppeals,
+    nextElectionAPI,
     opa,
-    policeDistr,
-    policePSA,
+    pollingPlaces,
     rco,
     regmaps,
     streetClosures,
