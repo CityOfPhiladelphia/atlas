@@ -20,7 +20,8 @@ import { faUniversity } from '@fortawesome/pro-solid-svg-icons/faUniversity';
 import { faGavel } from '@fortawesome/pro-solid-svg-icons/faGavel';
 import { faMapMarkerAlt } from '@fortawesome/pro-solid-svg-icons/faMapMarkerAlt';
 import { faLandmark } from '@fortawesome/pro-solid-svg-icons/faLandmark';
-library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark);
+import { faBuilding } from '@fortawesome/pro-solid-svg-icons/faBuilding';
+library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding);
 
 import accounting from 'accounting';
 import axios from 'axios';
@@ -104,6 +105,19 @@ mapboard({
   ],
   router: {
     enabled: true
+  },
+  defaultAddressTextPlaceholder: {
+    // text: "Search Address or 9-digit OPA Property Number",
+    wideStyle: {
+      'max-width': '100%',
+      'font-size': '24px',
+      'line-height': '28px'
+    },
+    narrowStyle: {
+      'max-width': '100%',
+      'font-size': '20px',
+      'line-height': '24px'
+    }
   },
   geolocation: {
     enabled: true
