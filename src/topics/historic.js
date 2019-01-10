@@ -183,7 +183,7 @@ export default {
         <a href="//www.phila.gov/historical/designation/Pages/process.aspx" target="_blank">nominated\
         </a> a property for historic designation. The federal <a href="//www.nps.gov/nr/" target="_blank">\
         National Registry</a> designates historic places worth of preservation independently from the \
-        Philadelphia Register and each confers diffferent protections. Finally, you can learn more \
+        Philadelphia Register and each confers different protections. Finally, you can learn more \
         about the Mayor\'s Historic Preservation\
         <a href="http://phl.maps.arcgis.com/apps/Cascade/index.html?appid=925708a09f264efd94932dd9300921bd" \
         target="_blank">Task Force</a> created in May 2017.'
