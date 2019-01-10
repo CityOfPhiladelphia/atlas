@@ -15,13 +15,14 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faHome } from '@fortawesome/pro-solid-svg-icons/faHome';
 import { faBook } from '@fortawesome/pro-solid-svg-icons/faBook';
+import { faScrollOld } from '@fortawesome/pro-solid-svg-icons/faScrollOld';
 import { faWrench } from '@fortawesome/pro-solid-svg-icons/faWrench';
 import { faUniversity } from '@fortawesome/pro-solid-svg-icons/faUniversity';
 import { faGavel } from '@fortawesome/pro-solid-svg-icons/faGavel';
 import { faMapMarkerAlt } from '@fortawesome/pro-solid-svg-icons/faMapMarkerAlt';
 import { faLandmark } from '@fortawesome/pro-solid-svg-icons/faLandmark';
 import { faBuilding } from '@fortawesome/pro-solid-svg-icons/faBuilding';
-library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding);
+library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding, faScrollOld);
 
 import accounting from 'accounting';
 import axios from 'axios';
@@ -45,11 +46,15 @@ import divisions from './data-sources/divisions';
 import dorCondoList from './data-sources/dor-condo-list';
 import dorDocuments from './data-sources/dor-documents';
 import electedOfficials from './data-sources/elected-officials'
+import histDesignated from './data-sources/historic';
+import histDistrict from './data-sources/historic-distr';
+import historicNearby from './data-sources/historic-nearby';
 import liBusinessLicenses from './data-sources/li-business-licenses';
 import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
 import liViolations from './data-sources/li-violations';
 import nearbyZoningAppeals from './data-sources/nearby-zoning-appeals';
+import neighConservation from './data-sources/neigh-conservation';
 import nextElectionAPI from './data-sources/election-next';
 import opa from './data-sources/opa';
 import pollingPlaces from './data-sources/polling-places';
@@ -72,6 +77,7 @@ import zoning from './topics/zoning';
 // import polling from './topics/polling';
 // import rcoTopic from './topics/rco';
 import nearby from './topics/nearby';
+import historic from './topics/historic';
 import voting from './topics/voting';
 
 // styles
@@ -161,10 +167,14 @@ mapboard({
     dorDocuments,
     electedOfficials,
     liBusinessLicenses,
+    histDesignated,
+    histDistrict,
+    historicNearby,
     liInspections,
     liPermits,
     liViolations,
     nearbyZoningAppeals,
+    neighConservation,
     nextElectionAPI,
     opa,
     pollingPlaces,
@@ -182,6 +192,7 @@ mapboard({
     property,
     condos,
     deeds,
+    historic,
     li,
     zoning,
     // polling,
