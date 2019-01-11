@@ -43,27 +43,64 @@ export default {
             value: function(state) {
               if (state.sources.histDesignated.data) {
                 if (state.sources.histDesignated.data.length > 0) {
-                  return "Designated: " + state.sources.histDesignated.data[0].properties.DDESIGDATE; } else {
-                  return "No date available."
+                      if( state.sources.histDesignated.data[0].properties.DDESIGDATE != null ) {
+                        return "Designated: " + state.sources.histDesignated.data[0].properties.DDESIGDATE
+                      } else if (state.sources.histDesignated.data[0].properties.IDESIGDATE1 != null) {
+                        return "Designated: " + state.sources.histDesignated.data[0].properties.IDESIGDATE1
+                      } else if (state.sources.histDesignated.data[0].properties.IDESIGDATE2 != null) {
+                        return "Designated: " + state.sources.histDesignated.data[0].properties.IDESIGDATE2
+                      } else {
+                        return "Not date available"
+                      }
+                } else {
+                return "Not designated as historic."
                 }
               } else {
-                return "No date available."
+                return "Not designated as historic."
               }
             }
+            // value: function (state) {
+            //   if( state.sources.histDesignated.data[0].properties.DDESIGDATE != null ) {
+            //     return "Designated: " + state.sources.histDesignated.data[0].properties.DDESIGDATE
+            //   } else if (state.sources.histDesignated.data[0].properties.IDESIGDATE1 != null) {
+            //     return "Designated: " + state.sources.histDesignated.data[0].properties.IDESIGDATE1
+            //   } else if (state.sources.histDesignated.data[0].properties.IDESIGDATE2 != null) {
+            //     return "Designated: " + state.sources.histDesignated.data[0].properties.IDESIGDATE2
+            //   } else {
+            //     return "Not date available"
+            //   }
+            // }
           },
           {
             label: 'Historic Street',
-            value: function() {
-              return ("Type of Street or No")
+            value: function(state) {
+              if (state.sources.historicStreets.data) {
+                return (titleCase(state.sources.historicStreets.data.ON_STREET)
+                + " - " + titleCase(state.sources.historicStreets.data.PRIMARYROA))
+              } else {
+                return "Street not designated as historic."
+              }
             }
           },
           {
             label: 'Building Age',
             value: function(state) {
               var estimated;
+              var date;
               if (state.sources.opa.data) {
-                if (state.sources.opa.data.year_built_estimate === "Y") {estimated = " (estimated)"} else {estimated = ""};
-                return state.sources.opa.data.year_built + estimated;
+                if (state.sources.opa.data.year_built_estimate === "Y") {
+                  estimated = " (estimated)"
+                } else {
+                  estimated = ""
+                };
+                if (state.sources.opa.data.year_built_estimate === "0000") {
+                  date = "No date available.";
+                 return date
+               } else {
+                 date = state.sources.opa.data.year_built;
+                 return date
+               }
+              return state.sources.opa.data.year_built + estimated;
               } else {
                 return "No date available.";
               }
@@ -75,7 +112,7 @@ export default {
               if (state.sources.opa.data) {
                 return  titleCase(state.sources.opa.data.building_code_description);
               } else {
-                return "No date available."
+                return "No description available."
               }
             }
           },
