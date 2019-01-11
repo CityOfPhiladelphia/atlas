@@ -3404,8 +3404,8 @@ ejs@^2.5.9:
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.6.1.tgz#498ec0d495655abc6f23cd61868d926464071aa0"
 
 electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.47:
-  version "1.3.100"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.100.tgz#899fb088def210aee6b838a47655bbb299190e13"
+  version "1.3.101"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.101.tgz#6dfdba9fd71db9adef904c1bb36e0b31c39f899d"
 
 elegant-spinner@^1.0.1:
   version "1.0.1"
@@ -3972,8 +3972,8 @@ flatten@^1.0.2:
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
 
 flow-parser@^0.*:
-  version "0.89.0"
-  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.89.0.tgz#c87bf45831644733dd576983ab12e75a3546573b"
+  version "0.90.0"
+  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.90.0.tgz#27f2f563dc4296bf0c555183bbf48cb6135b1b21"
 
 flush-write-stream@^1.0.0:
   version "1.0.3"
