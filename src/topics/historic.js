@@ -184,6 +184,14 @@ export default {
             }
           }
         ],
+        sort: {
+          // this should return the val to sort on
+          getValue: function(item) {
+            return item._distance;
+          },
+          // asc or desc
+          order: 'asc',
+        },
         externalLink: {
           forceShow: true,
           action: function() {
@@ -195,7 +203,7 @@ export default {
             // var addressEncoded = encodeURIComponent(address);
             return '//phl.maps.arcgis.com/apps/View/index.html?appid=0a0b23447b6b4f7097d59c580b9045fe';
           }
-        }
+        },
       },
       slots: {
         title: 'Nearby Historic Places',
