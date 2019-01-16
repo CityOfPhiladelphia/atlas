@@ -1,2 +1,4 @@
 node_modules/
 public/
+.npmrc
+statistics.html
