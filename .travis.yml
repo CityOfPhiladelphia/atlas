@@ -35,6 +35,6 @@ deploy:
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: 'atlas-dev3.phila.gov'
     on:
-      branch: voting
-    local_dir: public
+      branch: fix-condos
+    local_dir: dist
     skip_cleanup: true
