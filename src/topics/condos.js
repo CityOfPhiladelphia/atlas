@@ -3,7 +3,22 @@ export default {
   icon: 'building',
   label: 'Condominiums',
   dataSources: ['condoList'],
-  onlyShowTopicIfDataExists: {
+  // showTopicBasedOnOtherData takes precedence over showTopicOnlyIfDataExists
+  showTopicBasedOnOtherData: {
+    'otherData': {
+      'opa': {
+        data: undefined
+      }
+    },
+    'requiredData': {
+      'condoList': {
+        pathToDataArray: ['features'],
+        minDataLength: 1,
+      }
+    }
+  },
+  // showTopicOnlyIfDataExists can be overruled by showTopicBasedOnOtherData
+  showTopicOnlyIfDataExists: {
     'condoList': {
       pathToDataArray: ['features'],
       minDataLength: 2,
