@@ -545,13 +545,13 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@cityofphiladelphia/mapboard@^3.0.17":
-  version "3.0.17"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/mapboard/-/mapboard-3.0.17.tgz#cbc9503c5463fc60fc1dd3e66c1f23dae813bcfc"
+"@cityofphiladelphia/mapboard@^3.0.18":
+  version "3.0.18"
+  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/mapboard/-/mapboard-3.0.18.tgz#ffde5e273b48b5970324495e502da89bb0d56e3d"
   dependencies:
     "@cityofphiladelphia/phila-vue-comps" "^1.0.15"
     "@cityofphiladelphia/phila-vue-datafetch" "^0.0.13"
-    "@cityofphiladelphia/phila-vue-mapping" "1.0.12"
+    "@cityofphiladelphia/phila-vue-mapping" "1.0.13"
     "@fortawesome/fontawesome-svg-core" "^1.2.8"
     "@fortawesome/pro-light-svg-icons" "^5.5.0"
     "@fortawesome/pro-regular-svg-icons" "^5.5.0"
@@ -608,9 +608,9 @@
     vue "^2.5.22"
     vuex "^3.0.1"
 
-"@cityofphiladelphia/phila-vue-mapping@1.0.12":
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/phila-vue-mapping/-/phila-vue-mapping-1.0.12.tgz#8abe5554a3ecb8e3159448a0296f20871a106f74"
+"@cityofphiladelphia/phila-vue-mapping@1.0.13":
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/phila-vue-mapping/-/phila-vue-mapping-1.0.13.tgz#29411cc30450ef1502dbc740ff83c70a0c40a43d"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.8"
     "@fortawesome/pro-light-svg-icons" "^5.5.0"
