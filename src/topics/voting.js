@@ -124,7 +124,7 @@ export default {
             label: 'District Council Member',
             value: function(state) {
               const council = state.sources.electedOfficials.data.rows.filter( function(item) {return item.office_label == "City Council";});
-              return '<a href="' + council[0].website + '" target="_blank">' +
+              return '<a href="http://' + council[0].website + '" target="_blank">' +
                 council[0].first_name +" " +council[0].last_name + " - " + nth(state.geocode.data.properties.council_district_2016) + " Council District </a>";
             },
           },
