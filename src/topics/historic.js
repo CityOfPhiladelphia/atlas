@@ -17,10 +17,18 @@ export default {
     {
       type: 'callout',
       slots: {
+        text: 'Results indicate likely status of historic designation for this property. <br>\
+               Please contact the Historical Commision before taking any action. <br><br> \
+               Phone: (215) 686-7660 <br> Mon-Fri, 8:30 a.m. to 4:00 p.m.'
+      }
+    },
+    {
+      type: 'callout',
+      slots: {
         text: 'The Philadelphia Historical Commission identifies and designates historic resources, listing them on \
-                the Philadelphia Register of Historic Places, an inventory that currently includes more than 22,000\
-                properties and 15 historic districts. <br> \
-                Source: Philadelphia Historical Commission, Department of Planning, Streets Department.'
+               the Philadelphia Register of Historic Places, and inventory that currently includes more than 22,000\
+               properties and 15 historic districts. <br> \
+               Source: Philadelphia Historical Commission, Department of Planning, Streets Department.'
       }
     },
     {
