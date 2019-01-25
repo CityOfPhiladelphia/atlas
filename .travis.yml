@@ -30,12 +30,12 @@ deploy:
     on:
       branch: feature-historic
     local_dir: public
-    skip_cleanup: true
+    skip_cleanup: false
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: 'atlas-dev3.phila.gov'
     on:
-      branch: feature-historic
+      branch: voting
     local_dir: public
     skip_cleanup: true
