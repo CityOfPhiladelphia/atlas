@@ -49,6 +49,7 @@ import electedOfficials from './data-sources/elected-officials'
 import histDesignated from './data-sources/historic';
 import histDistrict from './data-sources/historic-distr';
 import historicNearby from './data-sources/historic-nearby';
+import histLegalCards from './data-sources/historic-legal-cards';
 import historicStreets from './data-sources/historic-streets';
 import liBusinessLicenses from './data-sources/li-business-licenses';
 import liInspections from './data-sources/li-inspections';
@@ -170,6 +171,7 @@ mapboard({
     liBusinessLicenses,
     histDesignated,
     histDistrict,
+    histLegalCards,
     historicNearby,
     historicStreets,
     liInspections,

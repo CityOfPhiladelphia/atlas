@@ -83,6 +83,16 @@ export default {
             }
           },
           {
+            label: 'Legal Card of City Street',
+            value: function(state) {
+              if (state.sources.histLegalCards.data) {
+                return "<a href='"+state.sources.histLegalCards.data.LINK + "' target='_blank'>\
+                View Image of Legal Card</a>" } else {
+                return "Legal card not available."
+              }
+            }
+          },
+          {
             label: 'Building Age',
             value: function(state) {
               var estimated;
