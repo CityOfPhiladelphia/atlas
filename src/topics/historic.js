@@ -59,38 +59,6 @@ export default {
                 return "Not designated as historic."
               }
             }
-            // value: function (state) {
-            //   if( state.sources.histDesignated.data[0].properties.DDESIGDATE != null ) {
-            //     return "Designated: " + state.sources.histDesignated.data[0].properties.DDESIGDATE
-            //   } else if (state.sources.histDesignated.data[0].properties.IDESIGDATE1 != null) {
-            //     return "Designated: " + state.sources.histDesignated.data[0].properties.IDESIGDATE1
-            //   } else if (state.sources.histDesignated.data[0].properties.IDESIGDATE2 != null) {
-            //     return "Designated: " + state.sources.histDesignated.data[0].properties.IDESIGDATE2
-            //   } else {
-            //     return "Not date available"
-            //   }
-            // }
-          },
-          {
-            label: 'Historic Street',
-            value: function(state) {
-              if (state.sources.historicStreets.data) {
-                return (titleCase(state.sources.historicStreets.data.ON_STREET)
-                + " - " + titleCase(state.sources.historicStreets.data.PRIMARYROA))
-              } else {
-                return "Street not designated as historic."
-              }
-            }
-          },
-          {
-            label: 'Legal Card of City Street',
-            value: function(state) {
-              if (state.sources.histLegalCards.data) {
-                return "<a href='"+state.sources.histLegalCards.data.LINK + "' target='_blank'>\
-                View Image of Legal Card</a>" } else {
-                return "Legal card not available."
-              }
-            }
           },
           {
             label: 'Building Age',
@@ -157,6 +125,44 @@ export default {
                 }
               } else {
                 return "This property is not within a conservation district."
+              }
+            }
+          },
+        ]
+      }
+    },
+    {
+      type: 'callout',
+      slots: {
+        text: 'Historic streets identify older streets with historical value and include information \
+               such as construction materials used. Legal cards are a collection of cards containing \
+               the official record of the legal description and drawings of city streets.\
+               <br>Source: Streets Department.'
+      }
+    },
+    {
+      type: 'vertical-table',
+      slots: {
+        title: 'Historic Street Details',
+        fields: [
+          {
+            label: 'Historic Street',
+            value: function(state) {
+              if (state.sources.historicStreets.data) {
+                return (titleCase(state.sources.historicStreets.data.ON_STREET)
+                + " - " + titleCase(state.sources.historicStreets.data.PRIMARYROA))
+              } else {
+                return "Street not designated as historic."
+              }
+            }
+          },
+          {
+            label: 'Legal Card of City Street',
+            value: function(state) {
+              if (state.sources.histLegalCards.data) {
+                return "<a href='"+state.sources.histLegalCards.data.LINK + "' target='_blank'>\
+                View Image of Legal Card</a>" } else {
+                return "Legal card not available."
               }
             }
           },
