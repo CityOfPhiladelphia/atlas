@@ -27,6 +27,7 @@ import accounting from 'accounting';
 import axios from 'axios';
 import moment from 'moment';
 import mapboard from '@cityofphiladelphia/mapboard';
+console.log('mapboard:', mapboard);
 
 // General Config Modules
 import helpers from './util/helpers';

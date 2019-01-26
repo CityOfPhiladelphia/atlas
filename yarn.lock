@@ -545,39 +545,20 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@cityofphiladelphia/mapboard@^3.0.18":
+"@cityofphiladelphia/mapboard@https://github.com/CityOfPhiladelphia/mapboard#94023febdf86e452f2ce704f5a92b43515a4b2c9":
   version "3.0.18"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/mapboard/-/mapboard-3.0.18.tgz#ffde5e273b48b5970324495e502da89bb0d56e3d"
+  resolved "https://github.com/CityOfPhiladelphia/mapboard#94023febdf86e452f2ce704f5a92b43515a4b2c9"
   dependencies:
-    "@cityofphiladelphia/phila-vue-comps" "^1.0.15"
-    "@cityofphiladelphia/phila-vue-datafetch" "^0.0.13"
-    "@cityofphiladelphia/phila-vue-mapping" "1.0.13"
-    "@fortawesome/fontawesome-svg-core" "^1.2.8"
-    "@fortawesome/pro-light-svg-icons" "^5.5.0"
-    "@fortawesome/pro-regular-svg-icons" "^5.5.0"
-    "@fortawesome/pro-solid-svg-icons" "^5.5.0"
-    "@fortawesome/vue-fontawesome" "^0.1.1"
-    "@turf/turf" "^5.1.6"
+    "@cityofphiladelphia/phila-vue-comps" "https://github.com/CityOfPhiladelphia/phila-vue-comps#27da86ffbda2b8e11669dd42ac883f66f1b18fa6"
+    "@cityofphiladelphia/phila-vue-datafetch" "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#9e383c7a983350ecc24cd244b4830720fc4862c4"
+    "@cityofphiladelphia/phila-vue-mapping" "https://github.com/CityOfPhiladelphia/phila-vue-mapping#ff0585fcbc2e27085a8600f9e03e1da7773cb874"
     axios "^0.18.0"
-    babel-preset-env "^1.7.0"
-    babel-preset-stage-3 "^6.24.1"
-    blueimp-md5 "^2.10.0"
-    esri-leaflet "^2.2.3"
-    leaflet "^1.4.0"
-    leaflet-easybutton "^2.2.2"
-    leaflet-measure "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
-    leaflet-rotatedmarker "^0.2.0"
-    leaflet-vector-icon "https://github.com/CityOfPhiladelphia/leaflet-vector-icon#74a56f048bceccef9c945f752bbd0379ae9dc77c"
-    lodash.debounce "^4.0.8"
-    moment "^2.21.0"
-    phila-standards "^1.0.2"
-    proj4 "^2.5.0"
     vue "^2.5.22"
     vuex "^3.0.1"
 
-"@cityofphiladelphia/phila-vue-comps@^1.0.15":
+"@cityofphiladelphia/phila-vue-comps@https://github.com/CityOfPhiladelphia/phila-vue-comps#27da86ffbda2b8e11669dd42ac883f66f1b18fa6":
   version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/phila-vue-comps/-/phila-vue-comps-1.0.15.tgz#cb5cfa30d10f928948e40b100db9c8c3ba78a3e5"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-comps#27da86ffbda2b8e11669dd42ac883f66f1b18fa6"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.8"
     "@fortawesome/pro-light-svg-icons" "^5.5.0"
@@ -589,40 +570,37 @@
     escape-html "^1.0.3"
     jspdf "^1.4.1"
     jspdf-autotable "^2.3.5"
-    lodash.debounce "^4.0.8"
+    lodash-es "^4.17.11"
     phila-standards "^1.0.2"
     vue "^2.5.22"
     vuex "^3.0.1"
 
-"@cityofphiladelphia/phila-vue-datafetch@^0.0.13":
+"@cityofphiladelphia/phila-vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#9e383c7a983350ecc24cd244b4830720fc4862c4":
   version "0.0.13"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/phila-vue-datafetch/-/phila-vue-datafetch-0.0.13.tgz#f791952ed6ebc2729e946d2cbf0d1b608aa69afa"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#9e383c7a983350ecc24cd244b4830720fc4862c4"
   dependencies:
     "@turf/turf" "^5.1.6"
     axios "^0.18.0"
     date-fns "^1.30.1"
     esri-leaflet "^2.2.3"
     leaflet "^1.4.0"
-    lodash.debounce "^4.0.8"
     proj4 "^2.5.0"
     vue "^2.5.22"
     vuex "^3.0.1"
 
-"@cityofphiladelphia/phila-vue-mapping@1.0.13":
+"@cityofphiladelphia/phila-vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#ff0585fcbc2e27085a8600f9e03e1da7773cb874":
   version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@cityofphiladelphia/phila-vue-mapping/-/phila-vue-mapping-1.0.13.tgz#29411cc30450ef1502dbc740ff83c70a0c40a43d"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#ff0585fcbc2e27085a8600f9e03e1da7773cb874"
   dependencies:
-    "@fortawesome/fontawesome-svg-core" "^1.2.8"
-    "@fortawesome/pro-light-svg-icons" "^5.5.0"
-    "@fortawesome/pro-regular-svg-icons" "^5.5.0"
-    "@fortawesome/pro-solid-svg-icons" "^5.5.0"
-    "@fortawesome/vue-fontawesome" "^0.1.2"
+    "@fortawesome/fontawesome-svg-core" "^1.2.12"
+    "@fortawesome/pro-light-svg-icons" "^5.6.3"
+    "@fortawesome/pro-regular-svg-icons" "^5.6.3"
+    "@fortawesome/pro-solid-svg-icons" "^5.6.3"
+    "@fortawesome/vue-fontawesome" "^0.1.5"
     "@turf/turf" "^5.1.6"
     L-esri-WebMap "https://github.com/CityOfPhiladelphia/L.esri.WebMap#5849bfa6248a886d8675eeff98fa9dff4949f12a"
     Leaflet.vector-markers "^0.0.6"
     axios "^0.18.0"
-    babel-preset-env "^1.7.0"
-    babel-preset-stage-3 "^6.24.1"
     blueimp-md5 "^2.10.0"
     esri-leaflet "^2.2.3"
     jquery "^3.3.1"
@@ -631,7 +609,7 @@
     leaflet-measure "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
     leaflet-rotatedmarker "^0.2.0"
     leaflet-vector-icon "https://github.com/CityOfPhiladelphia/leaflet-vector-icon#74a56f048bceccef9c945f752bbd0379ae9dc77c"
-    lodash.debounce "^4.0.8"
+    lodash-es "^4.17.11"
     phila-standards "^1.0.2"
     proj4 "^2.5.0"
     vue "^2.5.22"
@@ -645,31 +623,31 @@
   version "0.2.12"
   resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.12.tgz#42baa71f97ca06faeb0b6718fa5ed20c5eefdf07"
 
-"@fortawesome/fontawesome-svg-core@^1.2.8":
+"@fortawesome/fontawesome-svg-core@^1.2.12", "@fortawesome/fontawesome-svg-core@^1.2.8":
   version "1.2.12"
   resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.12.tgz#9732617b1e484435f6946645d7f9ad248f12c437"
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.12"
 
-"@fortawesome/pro-light-svg-icons@^5.5.0":
+"@fortawesome/pro-light-svg-icons@^5.5.0", "@fortawesome/pro-light-svg-icons@^5.6.3":
   version "5.6.3"
   resolved "https://npm.fontawesome.com/@fortawesome/pro-light-svg-icons/-/pro-light-svg-icons-5.6.3.tgz#0c39b10ab0dda7dc68db4ad04d01b84c2e526659"
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.12"
 
-"@fortawesome/pro-regular-svg-icons@^5.5.0":
+"@fortawesome/pro-regular-svg-icons@^5.5.0", "@fortawesome/pro-regular-svg-icons@^5.6.3":
   version "5.6.3"
   resolved "https://npm.fontawesome.com/@fortawesome/pro-regular-svg-icons/-/pro-regular-svg-icons-5.6.3.tgz#bc4a855f44d857d5bac181a6142390f6c3d9c4ba"
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.12"
 
-"@fortawesome/pro-solid-svg-icons@^5.5.0":
+"@fortawesome/pro-solid-svg-icons@^5.5.0", "@fortawesome/pro-solid-svg-icons@^5.6.3":
   version "5.6.3"
   resolved "https://npm.fontawesome.com/@fortawesome/pro-solid-svg-icons/-/pro-solid-svg-icons-5.6.3.tgz#4ab7152119adf890ac4781ec48d968304fee91a6"
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.12"
 
-"@fortawesome/vue-fontawesome@^0.1.1", "@fortawesome/vue-fontawesome@^0.1.2":
+"@fortawesome/vue-fontawesome@^0.1.2", "@fortawesome/vue-fontawesome@^0.1.5":
   version "0.1.5"
   resolved "https://npm.fontawesome.com/@fortawesome/vue-fontawesome/-/vue-fontawesome-0.1.5.tgz#ea70a4d4ad0d6d617048a5b2a2ff33e21fe47d61"
 
@@ -2358,7 +2336,7 @@ babel-plugin-transform-async-generator-functions@^6.24.1:
     babel-plugin-syntax-async-generators "^6.5.0"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-async-to-generator@^6.22.0, babel-plugin-transform-async-to-generator@^6.24.1:
+babel-plugin-transform-async-to-generator@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-async-to-generator/-/babel-plugin-transform-async-to-generator-6.24.1.tgz#6536e378aff6cb1d5517ac0e40eb3e9fc8d08761"
   dependencies:
@@ -2405,7 +2383,7 @@ babel-plugin-transform-es2015-block-scoped-functions@^6.22.0:
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-es2015-block-scoping@^6.23.0, babel-plugin-transform-es2015-block-scoping@^6.24.1:
+babel-plugin-transform-es2015-block-scoping@^6.24.1:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-block-scoping/-/babel-plugin-transform-es2015-block-scoping-6.26.0.tgz#d70f5299c1308d05c12f463813b0a09e73b1895f"
   dependencies:
@@ -2415,7 +2393,7 @@ babel-plugin-transform-es2015-block-scoping@^6.23.0, babel-plugin-transform-es20
     babel-types "^6.26.0"
     lodash "^4.17.4"
 
-babel-plugin-transform-es2015-classes@^6.23.0, babel-plugin-transform-es2015-classes@^6.24.1:
+babel-plugin-transform-es2015-classes@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-classes/-/babel-plugin-transform-es2015-classes-6.24.1.tgz#5a4c58a50c9c9461e564b4b2a3bfabc97a2584db"
   dependencies:
@@ -2429,33 +2407,33 @@ babel-plugin-transform-es2015-classes@^6.23.0, babel-plugin-transform-es2015-cla
     babel-traverse "^6.24.1"
     babel-types "^6.24.1"
 
-babel-plugin-transform-es2015-computed-properties@^6.22.0, babel-plugin-transform-es2015-computed-properties@^6.24.1:
+babel-plugin-transform-es2015-computed-properties@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-computed-properties/-/babel-plugin-transform-es2015-computed-properties-6.24.1.tgz#6fe2a8d16895d5634f4cd999b6d3480a308159b3"
   dependencies:
     babel-runtime "^6.22.0"
     babel-template "^6.24.1"
 
-babel-plugin-transform-es2015-destructuring@^6.22.0, babel-plugin-transform-es2015-destructuring@^6.23.0:
+babel-plugin-transform-es2015-destructuring@^6.22.0:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-destructuring/-/babel-plugin-transform-es2015-destructuring-6.23.0.tgz#997bb1f1ab967f682d2b0876fe358d60e765c56d"
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-es2015-duplicate-keys@^6.22.0, babel-plugin-transform-es2015-duplicate-keys@^6.24.1:
+babel-plugin-transform-es2015-duplicate-keys@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-duplicate-keys/-/babel-plugin-transform-es2015-duplicate-keys-6.24.1.tgz#73eb3d310ca969e3ef9ec91c53741a6f1576423e"
   dependencies:
     babel-runtime "^6.22.0"
     babel-types "^6.24.1"
 
-babel-plugin-transform-es2015-for-of@^6.22.0, babel-plugin-transform-es2015-for-of@^6.23.0:
+babel-plugin-transform-es2015-for-of@^6.22.0:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-for-of/-/babel-plugin-transform-es2015-for-of-6.23.0.tgz#f47c95b2b613df1d3ecc2fdb7573623c75248691"
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-es2015-function-name@^6.22.0, babel-plugin-transform-es2015-function-name@^6.24.1:
+babel-plugin-transform-es2015-function-name@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-function-name/-/babel-plugin-transform-es2015-function-name-6.24.1.tgz#834c89853bc36b1af0f3a4c5dbaa94fd8eacaa8b"
   dependencies:
@@ -2469,7 +2447,7 @@ babel-plugin-transform-es2015-literals@^6.22.0:
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-es2015-modules-amd@^6.22.0, babel-plugin-transform-es2015-modules-amd@^6.24.1:
+babel-plugin-transform-es2015-modules-amd@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-amd/-/babel-plugin-transform-es2015-modules-amd-6.24.1.tgz#3b3e54017239842d6d19c3011c4bd2f00a00d154"
   dependencies:
@@ -2477,7 +2455,7 @@ babel-plugin-transform-es2015-modules-amd@^6.22.0, babel-plugin-transform-es2015
     babel-runtime "^6.22.0"
     babel-template "^6.24.1"
 
-babel-plugin-transform-es2015-modules-commonjs@^6.23.0, babel-plugin-transform-es2015-modules-commonjs@^6.24.1:
+babel-plugin-transform-es2015-modules-commonjs@^6.24.1:
   version "6.26.2"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-commonjs/-/babel-plugin-transform-es2015-modules-commonjs-6.26.2.tgz#58a793863a9e7ca870bdc5a881117ffac27db6f3"
   dependencies:
@@ -2486,7 +2464,7 @@ babel-plugin-transform-es2015-modules-commonjs@^6.23.0, babel-plugin-transform-e
     babel-template "^6.26.0"
     babel-types "^6.26.0"
 
-babel-plugin-transform-es2015-modules-systemjs@^6.23.0, babel-plugin-transform-es2015-modules-systemjs@^6.24.1:
+babel-plugin-transform-es2015-modules-systemjs@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-systemjs/-/babel-plugin-transform-es2015-modules-systemjs-6.24.1.tgz#ff89a142b9119a906195f5f106ecf305d9407d23"
   dependencies:
@@ -2494,7 +2472,7 @@ babel-plugin-transform-es2015-modules-systemjs@^6.23.0, babel-plugin-transform-e
     babel-runtime "^6.22.0"
     babel-template "^6.24.1"
 
-babel-plugin-transform-es2015-modules-umd@^6.23.0, babel-plugin-transform-es2015-modules-umd@^6.24.1:
+babel-plugin-transform-es2015-modules-umd@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-umd/-/babel-plugin-transform-es2015-modules-umd-6.24.1.tgz#ac997e6285cd18ed6176adb607d602344ad38468"
   dependencies:
@@ -2502,14 +2480,14 @@ babel-plugin-transform-es2015-modules-umd@^6.23.0, babel-plugin-transform-es2015
     babel-runtime "^6.22.0"
     babel-template "^6.24.1"
 
-babel-plugin-transform-es2015-object-super@^6.22.0, babel-plugin-transform-es2015-object-super@^6.24.1:
+babel-plugin-transform-es2015-object-super@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-object-super/-/babel-plugin-transform-es2015-object-super-6.24.1.tgz#24cef69ae21cb83a7f8603dad021f572eb278f8d"
   dependencies:
     babel-helper-replace-supers "^6.24.1"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-es2015-parameters@^6.23.0, babel-plugin-transform-es2015-parameters@^6.24.1:
+babel-plugin-transform-es2015-parameters@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-parameters/-/babel-plugin-transform-es2015-parameters-6.24.1.tgz#57ac351ab49caf14a97cd13b09f66fdf0a625f2b"
   dependencies:
@@ -2520,7 +2498,7 @@ babel-plugin-transform-es2015-parameters@^6.23.0, babel-plugin-transform-es2015-
     babel-traverse "^6.24.1"
     babel-types "^6.24.1"
 
-babel-plugin-transform-es2015-shorthand-properties@^6.22.0, babel-plugin-transform-es2015-shorthand-properties@^6.24.1:
+babel-plugin-transform-es2015-shorthand-properties@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-shorthand-properties/-/babel-plugin-transform-es2015-shorthand-properties-6.24.1.tgz#24f875d6721c87661bbd99a4622e51f14de38aa0"
   dependencies:
@@ -2533,7 +2511,7 @@ babel-plugin-transform-es2015-spread@^6.22.0:
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-es2015-sticky-regex@^6.22.0, babel-plugin-transform-es2015-sticky-regex@^6.24.1:
+babel-plugin-transform-es2015-sticky-regex@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-sticky-regex/-/babel-plugin-transform-es2015-sticky-regex-6.24.1.tgz#00c1cdb1aca71112cdf0cf6126c2ed6b457ccdbc"
   dependencies:
@@ -2547,13 +2525,13 @@ babel-plugin-transform-es2015-template-literals@^6.22.0:
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-es2015-typeof-symbol@^6.22.0, babel-plugin-transform-es2015-typeof-symbol@^6.23.0:
+babel-plugin-transform-es2015-typeof-symbol@^6.22.0:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-typeof-symbol/-/babel-plugin-transform-es2015-typeof-symbol-6.23.0.tgz#dec09f1cddff94b52ac73d505c84df59dcceb372"
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-es2015-unicode-regex@^6.22.0, babel-plugin-transform-es2015-unicode-regex@^6.24.1:
+babel-plugin-transform-es2015-unicode-regex@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-unicode-regex/-/babel-plugin-transform-es2015-unicode-regex-6.24.1.tgz#d38b12f42ea7323f729387f18a7c5ae1faeb35e9"
   dependencies:
@@ -2561,7 +2539,7 @@ babel-plugin-transform-es2015-unicode-regex@^6.22.0, babel-plugin-transform-es20
     babel-runtime "^6.22.0"
     regexpu-core "^2.0.0"
 
-babel-plugin-transform-exponentiation-operator@^6.22.0, babel-plugin-transform-exponentiation-operator@^6.24.1:
+babel-plugin-transform-exponentiation-operator@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-exponentiation-operator/-/babel-plugin-transform-exponentiation-operator-6.24.1.tgz#2ab0c9c7f3098fa48907772bb813fe41e8de3a0e"
   dependencies:
@@ -2590,7 +2568,7 @@ babel-plugin-transform-object-rest-spread@^6.22.0:
     babel-plugin-syntax-object-rest-spread "^6.8.0"
     babel-runtime "^6.26.0"
 
-babel-plugin-transform-regenerator@^6.22.0, babel-plugin-transform-regenerator@^6.24.1:
+babel-plugin-transform-regenerator@^6.24.1:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-regenerator/-/babel-plugin-transform-regenerator-6.26.0.tgz#e0703696fbde27f0a3efcacf8b4dca2f7b3a8f2f"
   dependencies:
@@ -2602,41 +2580,6 @@ babel-plugin-transform-strict-mode@^6.24.1:
   dependencies:
     babel-runtime "^6.22.0"
     babel-types "^6.24.1"
-
-babel-preset-env@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/babel-preset-env/-/babel-preset-env-1.7.0.tgz#dea79fa4ebeb883cd35dab07e260c1c9c04df77a"
-  dependencies:
-    babel-plugin-check-es2015-constants "^6.22.0"
-    babel-plugin-syntax-trailing-function-commas "^6.22.0"
-    babel-plugin-transform-async-to-generator "^6.22.0"
-    babel-plugin-transform-es2015-arrow-functions "^6.22.0"
-    babel-plugin-transform-es2015-block-scoped-functions "^6.22.0"
-    babel-plugin-transform-es2015-block-scoping "^6.23.0"
-    babel-plugin-transform-es2015-classes "^6.23.0"
-    babel-plugin-transform-es2015-computed-properties "^6.22.0"
-    babel-plugin-transform-es2015-destructuring "^6.23.0"
-    babel-plugin-transform-es2015-duplicate-keys "^6.22.0"
-    babel-plugin-transform-es2015-for-of "^6.23.0"
-    babel-plugin-transform-es2015-function-name "^6.22.0"
-    babel-plugin-transform-es2015-literals "^6.22.0"
-    babel-plugin-transform-es2015-modules-amd "^6.22.0"
-    babel-plugin-transform-es2015-modules-commonjs "^6.23.0"
-    babel-plugin-transform-es2015-modules-systemjs "^6.23.0"
-    babel-plugin-transform-es2015-modules-umd "^6.23.0"
-    babel-plugin-transform-es2015-object-super "^6.22.0"
-    babel-plugin-transform-es2015-parameters "^6.23.0"
-    babel-plugin-transform-es2015-shorthand-properties "^6.22.0"
-    babel-plugin-transform-es2015-spread "^6.22.0"
-    babel-plugin-transform-es2015-sticky-regex "^6.22.0"
-    babel-plugin-transform-es2015-template-literals "^6.22.0"
-    babel-plugin-transform-es2015-typeof-symbol "^6.23.0"
-    babel-plugin-transform-es2015-unicode-regex "^6.22.0"
-    babel-plugin-transform-exponentiation-operator "^6.22.0"
-    babel-plugin-transform-regenerator "^6.22.0"
-    browserslist "^3.2.6"
-    invariant "^2.2.2"
-    semver "^5.3.0"
 
 babel-preset-es2015@^6.9.0:
   version "6.24.1"
@@ -2962,13 +2905,6 @@ browserslist@^1.3.6, browserslist@^1.5.2, browserslist@^1.7.6:
     caniuse-db "^1.0.30000639"
     electron-to-chromium "^1.2.7"
 
-browserslist@^3.2.6:
-  version "3.2.8"
-  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-3.2.8.tgz#b0005361d6471f0f5952797a76fc985f1f978fc6"
-  dependencies:
-    caniuse-lite "^1.0.30000844"
-    electron-to-chromium "^1.3.47"
-
 browserslist@^4.3.4:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.4.0.tgz#7050d1412cbfc5274aba609ed5e50359ca1a5fdf"
@@ -3106,7 +3042,7 @@ caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, caniuse-db@^1.0.30000639:
   version "1.0.30000929"
   resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000929.tgz#f18c557b9cbf33e2787134c915b82e3ed3331b87"
 
-caniuse-lite@^1.0.30000844, caniuse-lite@^1.0.30000928:
+caniuse-lite@^1.0.30000928:
   version "1.0.30000929"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000929.tgz#7b391b781a9c3097ecc39ea053301aea8ea16317"
 
@@ -4008,7 +3944,7 @@ ejs@^2.5.9:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.6.1.tgz#498ec0d495655abc6f23cd61868d926464071aa0"
 
-electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.100, electron-to-chromium@^1.3.47:
+electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.100:
   version "1.3.103"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.103.tgz#a695777efdbc419cad6cbb0e58458251302cd52f"
 
@@ -5847,15 +5783,6 @@ leaflet-easybutton@^2.2.2:
   dependencies:
     leaflet "^1.0.1"
 
-"leaflet-measure@git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6":
-  version "4.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6"
-  dependencies:
-    "@turf/area" "^5.1.5"
-    "@turf/length" "^5.1.5"
-    leaflet "^1.3.1"
-    lodash "^4.17.5"
-
 "leaflet-measure@https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6":
   version "4.0.0"
   resolved "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
@@ -5886,10 +5813,6 @@ leaflet-shape-markers@^1.0.4:
   resolved "https://registry.yarnpkg.com/leaflet-shape-markers/-/leaflet-shape-markers-1.0.6.tgz#d54056a4e533828120107a71a237b1efc1a07649"
   dependencies:
     leaflet "^1.0.0"
-
-"leaflet-vector-icon@git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#74a56f048bceccef9c945f752bbd0379ae9dc77c":
-  version "1.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#74a56f048bceccef9c945f752bbd0379ae9dc77c"
 
 "leaflet-vector-icon@https://github.com/CityOfPhiladelphia/leaflet-vector-icon#74a56f048bceccef9c945f752bbd0379ae9dc77c":
   version "1.0.0"
@@ -6011,6 +5934,10 @@ locate-path@^3.0.0:
   dependencies:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
+
+lodash-es@^4.17.11:
+  version "4.17.11"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.11.tgz#145ab4a7ac5c5e52a3531fb4f310255a152b4be0"
 
 lodash._baseisequal@^3.0.0:
   version "3.0.7"
