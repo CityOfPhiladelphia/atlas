@@ -18,7 +18,8 @@ export default {
       type: 'callout',
       slots: {
         text: 'Results indicate likely status of historic designation for this property. <br>\
-               Please contact the Historical Commision before taking any action. <br><br> \
+               Please contact the Historical Commission to verify this result before taking \
+               actions on alterations or other property issues.<br><br> \
                Phone: (215) 686-7660 <br> Mon-Fri, 8:30 a.m. to 4:00 p.m.'
       }
     },
