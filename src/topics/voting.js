@@ -43,7 +43,7 @@ export default {
           You can confirm your registration and learn about \
           registering to vote<a target="_blank" \
           href="//www.philadelphiavotes.com/en/voters/registering-to-vote"> \
-          here</a>.\
+          here <i class="fa fa-external-link"></i></a>.\
         ',
       }
     },
@@ -86,7 +86,7 @@ export default {
                              pollingData.ACCESSIBILITY_CODE== "N" ? 'Building Not Accessible' :
                             'Information not available';
               return '<a href="//www.philadelphiavotes.com/en/voters/polling-place-accessibility"\
-                      target="_blank">'+answer+'</a>';
+                      target="_blank">'+answer+' <i class="fa fa-external-link"></i></a>';
             },
           },
           {
@@ -125,7 +125,8 @@ export default {
             value: function(state) {
               const council = state.sources.electedOfficials.data.rows.filter( function(item) {return item.office_label == "City Council";});
               return '<a href="' + council[0].website + '" target="_blank">' +
-                council[0].first_name +" " +council[0].last_name + " - " + nth(state.geocode.data.properties.council_district_2016) + " Council District </a>";
+                council[0].first_name +" " +council[0].last_name + " - " + nth(state.geocode.data.properties.council_district_2016) + " Council District \
+                <i class='fa fa-external-link'></i></a>";
             },
           },
           {

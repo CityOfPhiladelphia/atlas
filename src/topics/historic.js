@@ -17,9 +17,9 @@ export default {
     {
       type: 'callout',
       slots: {
-        text: 'Results indicate likely status of historic designation for this property. <br>\
+        text: 'Results indicate likely status of historic designation for this property. \
                Please contact the Historical Commission to verify this result before taking \
-               actions on alterations or other property issues.<br><br> \
+               actions on alterations or other property issues.<br> \
                Phone: (215) 686-7660 <br> Mon-Fri, 8:30 a.m. to 4:00 p.m.'
       }
     },
@@ -111,16 +111,17 @@ export default {
                   return state.sources.histDistrict.data[0].properties.NAME
                         +"<br>Designated - " + moment(state.sources.histDistrict.data[0].properties.DESIGNATED1).format("MMM Do, YYYY")
                         +"<br><b><a href='https://www.phila.gov/historical/register/Pages/districts.aspx' target='_blank'>\
-                        View a complete inventory of historic districts.</a></b>";
+                        View a complete inventory of historic districts. <i class='fa fa-external-link'>\
+                        </i></a></b>";
                   } else {
                   return "This property is not within a historic district.\
                   <br><b><a href='https://www.phila.gov/historical/register/Pages/districts.aspx' target='_blank'>\
-                  View a complete inventory of historic districts.</a></b>"
+                  View a complete inventory of historic districts. <i class='fa fa-external-link'></i></a></b>"
                 }
               } else {
                 return "This property is not within a historic district.\
                 <br><b><a href='https://www.phila.gov/historical/register/Pages/districts.aspx' target='_blank'>\
-                View a complete inventory of historic districts.</a></b>"
+                View a complete inventory of historic districts. <i class='fa fa-external-link'></i></a></b>"
               }
             }
           },
@@ -129,8 +130,8 @@ export default {
             value: function(state) {
               if (state.sources.neighConservation.data) {
                 if (state.sources.neighConservation.data.length > 0) {
-                  return ('<a href='+state.sources.neighConservation.data[0].properties.CODE_SECTION_LINK +' target="_blank">Yes - Click for more Info</a>'); } else {
-                  return "<a href='https://www.phila.gov/CityPlanning/resources/Publications/Conservation%20districts%20fact%20sheet.pdf' target='_blank'>This property is not within a conservation district.</a>"
+                  return ('<a href='+state.sources.neighConservation.data[0].properties.CODE_SECTION_LINK +' target="_blank">Yes - Click for more Info <i class="fa fa-external-link"></i></a>'); } else {
+                  return "<a href='https://www.phila.gov/CityPlanning/resources/Publications/Conservation%20districts%20fact%20sheet.pdf' target='_blank'>This property is not within a conservation district. <i class='fa fa-external-link'></i></a>"
                 }
               } else {
                 return "This property is not within a conservation district."
@@ -170,7 +171,7 @@ export default {
             value: function(state) {
               if (state.sources.histLegalCards.data) {
                 return "<a href='"+state.sources.histLegalCards.data.LINK + "' target='_blank'>\
-                View Image of Legal Card</a>" } else {
+                View Image of legal card <i class='fa fa-external-link'></i></a>" } else {
                 return "Legal card not available."
               }
             }
@@ -247,16 +248,9 @@ export default {
     {
       type: 'callout',
       slots: {
-        text: 'Know a spot that seems historically important that isn\'t listed? Learn about the \
-        <a href="//www.phila.gov/historical/designation/Pages/criteria.aspx" target="_blank">criteria\
-        </a> for designating properties as historic and how to \
-        <a href="//www.phila.gov/historical/designation/Pages/process.aspx" target="_blank">nominate\
-        </a> a property for historic designation. The federal <a href="//www.nps.gov/nr/" target="_blank">\
-        National Registry</a> designates historic places worthy of preservation independently from the \
-        Philadelphia Register and each confers different protections. Finally, you can learn more \
-        about the Mayor\'s Historic Preservation\
-        <a href="http://phl.maps.arcgis.com/apps/Cascade/index.html?appid=925708a09f264efd94932dd9300921bd" \
-        target="_blank">Task Force</a> created in May 2017.'
+        text: 'For more information about historic buildings and the nomination process \
+               please visit <a href="https://www.phila.gov/historical/pages/default.aspx" \
+               target="_blank">Philadelphia\'s Historical Commission.<i class="fa fa-external-link"></i></a>'
       }
     },
   ],
