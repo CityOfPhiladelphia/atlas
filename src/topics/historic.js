@@ -250,7 +250,7 @@ export default {
       slots: {
         text: 'For more information about historic buildings and the nomination process \
                please visit <a href="https://www.phila.gov/historical/pages/default.aspx" \
-               target="_blank">Philadelphia\'s Historical Commission.<i class="fa fa-external-link"></i></a>'
+               target="_blank">The Philadelphia Historical Commission.<i class="fa fa-external-link"></i></a>'
       }
     },
   ],
