@@ -84,6 +84,7 @@ import voting from './topics/voting';
 
 // styles
 // TODO move all styles here (that have a npm package)
+// import './styles.css';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-easybutton/src/easy-button.css';
 import 'leaflet-measure/dist/leaflet-measure.css';
