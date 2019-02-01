@@ -182,25 +182,26 @@ export default {
     {
       type: 'horizontal-table',
       options: {
-        // mapOverlay: {
-        //   marker: 'circle',
-        //   style: {
-        //     radius: 6,
-        //     fillColor: '#ff3f3f',
-        //     color: '#ff0000',
-        //     weight: 1,
-        //     opacity: 1,
-        //     fillOpacity: 1.0
-        //   },
-        //   hoverStyle: {
-        //     radius: 6,
-        //     fillColor: 'yellow',
-        //     color: '#ff0000',
-        //     weight: 1,
-        //     opacity: 1,
-        //     fillOpacity: 1.0
-        //   }
-        // },
+        mapOverlay: {
+          marker: 'geojson',
+          style: {
+            // radius: 6,
+            fillColor: 'red',
+            // fillColor: '#ff3f3f',
+            color: 'red',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.3
+          },
+          hoverStyle: {
+            // radius: 6,
+            fillColor: 'yellow',
+            color: 'yellow',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.3
+          }
+        },
         fields: [
           {
             label: 'Designated',
