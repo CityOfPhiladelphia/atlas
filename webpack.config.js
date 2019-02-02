@@ -7,6 +7,9 @@ const isDevelopment = env === 'development';
 const Visualizer = require('webpack-visualizer-plugin');
 
 module.exports = {
+  // mode: 'development',
+  mode: 'production',
+  // mode: env,
   entry: {
     app: ['./public/index.html', './public/styles.css', './src/main.js'],
   },
@@ -19,7 +22,7 @@ module.exports = {
     // host: process.env.WEBPACK_DEV_HOST,
     host: 'localhost',
     // port: process.env.WEBPACK_DEV_PORT
-    port: 8080
+    port: 8084
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -58,8 +61,9 @@ module.exports = {
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
     new Visualizer({ filename: './statistics.html' })
   ],
-  mode: env,
   optimization: {
+    usedExports: true,
+    sideEffects: false,
     // splitChunks: {
     //   cacheGroups: {
     //     vendor: {

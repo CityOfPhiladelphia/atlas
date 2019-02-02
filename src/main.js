@@ -23,11 +23,15 @@ import { faLandmark } from '@fortawesome/pro-solid-svg-icons/faLandmark';
 import { faBuilding } from '@fortawesome/pro-solid-svg-icons/faBuilding';
 library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding);
 
+console.log('atlas main.js before importing mapboard');
+
 import accounting from 'accounting';
 import axios from 'axios';
 import moment from 'moment';
-import mapboard from '@cityofphiladelphia/mapboard';
-console.log('mapboard:', mapboard);
+import * as mapboard from '@cityofphiladelphia/mapboard';
+// import { initMapboard } from '@cityofphiladelphia/mapboard';
+console.log('mapboard:', mapboard, 'mapboard.constructor:', mapboard.constructor);
+// console.log('initMapboard:', initMapboard);
 
 // General Config Modules
 import helpers from './util/helpers';
@@ -77,24 +81,26 @@ import voting from './topics/voting';
 
 // styles
 // TODO move all styles here (that have a npm package)
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-easybutton/src/easy-button.css';
-import 'leaflet-measure/dist/leaflet-measure.css';
+// import 'leaflet/dist/leaflet.css';
+// import 'leaflet-easybutton/src/easy-button.css';
+// import 'leaflet-measure/dist/leaflet-measure.css';
 // REVIEW not sure why the hard path is necessary for vector icon
 // REVIEW the vector icons seem to be working without this - why?
 // import '../node_modules/@cityofphiladelphia/mapboard/node_modules/leaflet-vector-icon/dist/leaflet-vector-icon.css';
 
 // turn off console logging in production
 // TODO come up with better way of doing this with webpack + env vars
-const { hostname='' } = location;
-if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
-  console.log = console.info = console.debug = console.error = function () {};
-}
+// const { hostname='' } = location;
+// if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
+//   console.log = console.info = console.debug = console.error = function () {};
+// }
 
 var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@d18a86feb27b7e7c4496ed422ce30b5d80e64c1b/config.js';
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;
+
+console.log('calling mapboard');
 
 mapboard({
   // DEV
