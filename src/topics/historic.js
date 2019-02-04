@@ -186,9 +186,9 @@ export default {
           marker: 'geojson',
           style: {
             // radius: 6,
-            fillColor: 'red',
+            fillColor: '#2176d2',
             // fillColor: '#ff3f3f',
-            color: 'red',
+            color: '#2176d2',
             weight: 2,
             opacity: 1,
             fillOpacity: 0.3
