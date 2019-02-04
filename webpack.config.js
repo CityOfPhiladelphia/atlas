@@ -7,8 +7,8 @@ const isDevelopment = env === 'development';
 const Visualizer = require('webpack-visualizer-plugin');
 
 module.exports = {
-  // mode: 'development',
-  mode: 'production',
+  mode: 'development',
+  // mode: 'production',
   // mode: env,
   entry: {
     app: ['./public/index.html', './public/styles.css', './src/main.js'],
@@ -31,15 +31,15 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: [
-          {
-            loader: 'babel-loader'
-          }
-        ]
-      },
+      // {
+      //   test: /\.js$/,
+      //   exclude: /(node_modules|bower_components)/,
+      //   use: [
+      //     {
+      //       loader: 'babel-loader'
+      //     }
+      //   ]
+      // },
       {
         test: /\.html/,
         loader: 'file-loader?name=[name].[ext]',
@@ -62,8 +62,8 @@ module.exports = {
     new Visualizer({ filename: './statistics.html' })
   ],
   optimization: {
-    usedExports: true,
-    sideEffects: false,
+    // usedExports: true,
+    // sideEffects: false,
     // splitChunks: {
     //   cacheGroups: {
     //     vendor: {
