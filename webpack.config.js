@@ -7,8 +7,8 @@ const isDevelopment = env === 'development';
 const Visualizer = require('webpack-visualizer-plugin');
 
 module.exports = {
-  mode: 'development',
-  // mode: 'production',
+  // mode: 'development',
+  mode: 'production',
   // mode: env,
   entry: {
     app: ['./public/index.html', './public/styles.css', './src/main.js'],
