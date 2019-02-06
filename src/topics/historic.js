@@ -202,6 +202,7 @@ export default {
             fillOpacity: 0.3
           }
         },
+        highlightOnMapMouseover: false,
         fields: [
           {
             label: 'Designated',
@@ -250,7 +251,6 @@ export default {
             return '//phl.maps.arcgis.com/apps/View/index.html?appid=0a0b23447b6b4f7097d59c580b9045fe';
           }
         },
-        mapHover: false
       },
       slots: {
         title: 'Nearby Historic Places',
