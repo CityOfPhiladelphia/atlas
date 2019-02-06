@@ -29,7 +29,7 @@ deploy:
     bucket: 'atlas-dev2.phila.gov'
     on:
       branch: feature-historic
-    local_dir: public
+    local_dir: dist
     skip_cleanup: true
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
