@@ -52,12 +52,13 @@ export default {
             value: function(state) {
               if (state.sources.histDesignated.data) {
                 if (state.sources.histDesignated.data.length > 0) {
-                      if( state.sources.histDesignated.data[0].properties.DDESIGDATE != null ) {
-                        return "Designated: " + state.sources.histDesignated.data[0].properties.DDESIGDATE
-                      } else if (state.sources.histDesignated.data[0].properties.IDESIGDATE1 != null) {
-                        return "Designated: " + state.sources.histDesignated.data[0].properties.IDESIGDATE1
-                      } else if (state.sources.histDesignated.data[0].properties.IDESIGDATE2 != null) {
-                        return "Designated: " + state.sources.histDesignated.data[0].properties.IDESIGDATE2
+                      let desigDate = state.sources.histDesignated.data[0].properties ;
+                      if( desigDate.DDESIGDATE != null && desigDate.DDESIGDATE != "1/1/3000" ) {
+                        return "Designated: " + desigDate.DDESIGDATE
+                      } else if (desigDate.IDESIGDATE1 != null && desigDate.IDESIGDATE1 != "1/1/3000" ) {
+                        return "Designated: " + desigDate.IDESIGDATE1
+                      } else if (desigDate.IDESIGDATE2 != null && desigDate.IDESIGDATE2 != "1/1/3000" ) {
+                        return "Designated: " + desigDate.IDESIGDATE2
                       } else {
                         return "Not date available"
                       }
@@ -107,13 +108,25 @@ export default {
             label: 'Historic District',
             value: function(state) {
               if (state.sources.histDistrict.data ) {
+                console.log("There is data")
                 if (state.sources.histDistrict.data.length > 0) {
-                  return state.sources.histDistrict.data[0].properties.NAME
-                        +"<br>Designated - " + moment(state.sources.histDistrict.data[0].properties.DESIGNATED1).format("MMM Do, YYYY")
-                        +"<br><b><a href='https://www.phila.gov/historical/register/Pages/districts.aspx' target='_blank'>\
-                        View a complete inventory of historic districts. <i class='fa fa-external-link'>\
-                        </i></a></b>";
+                  console.log("Data is longer than zero")
+                  if(state.sources.histDistrict.data[0].properties.DESIGNATED1 != "1/1/3000"){
+                    console.log("Year is not 3000")
+                    return state.sources.histDistrict.data[0].properties.NAME +"<br>Designated - " + moment(state.sources.histDistrict.data[0].properties.DESIGNATED1).format("MMM Do, YYYY")
+                    +"<br><b><a href='https://www.phila.gov/historical/register/Pages/districts.aspx' target='_blank'>\
+                    View a complete inventory of historic districts. <i class='fa fa-external-link'>\
+                    </i></a></b>";
                   } else {
+                    console.log("Year is 3000")
+                    return state.sources.histDistrict.data[0].properties.NAME +
+                    "<br>(Date not available.)<i><br>\
+                    <b><a href='https://www.phila.gov/historical/register/Pages/districts.aspx' target='_blank'>\
+                    View a complete inventory of historic districts. <i class='fa fa-external-link'>\
+                    </i></a></b>"
+                  }
+                } else {
+                  console.log("Data length is zero")
                   return "This property is not within a historic district.\
                   <br><b><a href='https://www.phila.gov/historical/register/Pages/districts.aspx' target='_blank'>\
                   View a complete inventory of historic districts. <i class='fa fa-external-link'></i></a></b>"
