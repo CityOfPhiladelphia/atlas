@@ -60,7 +60,7 @@ export default {
                       } else if (desigDate.IDESIGDATE2 != null && desigDate.IDESIGDATE2 != "1/1/3000" ) {
                         return "Designated: " + desigDate.IDESIGDATE2
                       } else {
-                        return "Not date available"
+                        return "No date available"
                       }
                 } else {
                 return "Not designated as historic."
