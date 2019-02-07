@@ -184,7 +184,7 @@ export default {
             value: function(state) {
               if (state.sources.histLegalCards.data) {
                 return "<a href='"+state.sources.histLegalCards.data.LINK + "' target='_blank'>\
-                View Image of legal card <i class='fa fa-external-link'></i></a>" } else {
+                View image of legal card <i class='fa fa-external-link'></i></a>" } else {
                 return "Legal card not available."
               }
             }
