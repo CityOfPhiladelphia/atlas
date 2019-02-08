@@ -37,7 +37,8 @@ import moment from 'moment';
 // console.log('mapboard:', mapboard, 'mapboard.constructor:', mapboard.constructor);
 // console.log('initMapboard:', initMapboard);
 
-import mapboard from '@cityofphiladelphia/mapboard';
+// import mapboard from '@cityofphiladelphia/mapboard';
+import mapboard from '@cityofphiladelphia/mapboard/src/main.js';
 console.log('mapboard:', mapboard);
 
 // General Config Modules
