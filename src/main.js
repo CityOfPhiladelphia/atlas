@@ -7,6 +7,7 @@
         \/               \/     \/
 */
 
+// import '@babel/polyfill';
 
 // import * as Sentry from '@sentry/browser';
 // Sentry.init({ dsn: 'https://276ef359f45543ff91b7db449d3035f8@sentry.io/1330874' });
