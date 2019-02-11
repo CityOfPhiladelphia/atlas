@@ -105,7 +105,7 @@ mapboard({
       return '//api.phila.gov/ais_dev/v1/search/' + inputEncoded;
     },
     params: {
-      gatekeeperKey: opts.gatekeeperKey,
+      gatekeeperKey: helpers.GATEKEEPER_KEY,
       include_units: true,
     },
   },
