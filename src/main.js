@@ -99,6 +99,16 @@ mapboard({
   // DEV
   // defaultAddress: '1234 MARKET ST',
   // plugin: true,
+  geocoder: {
+    url: function (input) {
+      var inputEncoded = encodeURIComponent(input);
+      return '//api.phila.gov/ais_dev/v1/search/' + inputEncoded;
+    },
+    params: {
+      gatekeeperKey: opts.gatekeeperKey,
+      include_units: true,
+    },
+  },
   panels: [
     'topics',
     'map'
