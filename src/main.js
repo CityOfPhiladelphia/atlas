@@ -21,7 +21,8 @@ import { faGavel } from '@fortawesome/pro-solid-svg-icons/faGavel';
 import { faMapMarkerAlt } from '@fortawesome/pro-solid-svg-icons/faMapMarkerAlt';
 import { faLandmark } from '@fortawesome/pro-solid-svg-icons/faLandmark';
 import { faBuilding } from '@fortawesome/pro-solid-svg-icons/faBuilding';
-library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding);
+import { faDotCircle } from '@fortawesome/pro-regular-svg-icons/faDotCircle';
+library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding, faDotCircle);
 
 import accounting from 'accounting';
 import axios from 'axios';
@@ -120,7 +121,8 @@ mapboard({
     }
   },
   geolocation: {
-    enabled: true
+    enabled: true,
+    icon: ['far', 'dot-circle']
   },
   addressInput: {
     width: 415,
