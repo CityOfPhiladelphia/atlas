@@ -13,6 +13,10 @@
 //   console.log = console.info = console.debug = console.error = function () {};
 // }
 
+var faHome = window['free-solid-svg-icons'].faHome;
+var faBuilding = window['free-solid-svg-icons'].faBuilding;
+FontAwesome.library.add(faHome, faBuilding);
+
 // var BASE_CONFIG_URL = 'https://cdn.rawgit.com/ajrothwell/atlas_base_config/d95ed79d/config.js';
 var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@74cf4692237e16757681f6860b936efd734c27d8/config.js';
 
@@ -138,6 +142,19 @@ mapboard.default({
   router: {
     enabled: true
   },
+  defaultAddressTextPlaceholder: {
+    // text: "Search Address or 9-digit OPA Property Number",
+    wideStyle: {
+      'max-width': '100%',
+      'font-size': '24px',
+      'line-height': '28px'
+    },
+    narrowStyle: {
+      'max-width': '100%',
+      'font-size': '20px',
+      'line-height': '24px'
+    }
+  },
   geolocation: {
     enabled: false
   },
@@ -163,8 +180,9 @@ mapboard.default({
   },
   addressInput: {
     width: 415,
+    mapWidth: 300,
     position: 'right',
-    autocompleteEnabled: true,
+    autocompleteEnabled: false,
     autocompleteMax: 15,
     placeholder: 'Search the map',
   },
@@ -255,7 +273,7 @@ mapboard.default({
     enabled: false,
   },
   greeting: {
-    initialMessage: '\
+    message: '\
       <h2>Atlas is your front door to the City of Philadelphia.</h2>\
       <p>Here are some things you can do with Atlas:</p>\
       <div class="callout">\
@@ -955,7 +973,22 @@ mapboard.default({
       icon: 'building',
       label: 'Condominiums',
       dataSources: ['condoList'],
-      onlyShowTopicIfDataExists: {
+      // showTopicBasedOnOtherData takes precedence over showTopicOnlyIfDataExists
+      showTopicBasedOnOtherData: {
+        'otherData': {
+          'opa': {
+            data: undefined
+          }
+        },
+        'requiredData': {
+          'condoList': {
+            pathToDataArray: ['features'],
+            minDataLength: 1,
+          }
+        }
+      },
+      // showTopicOnlyIfDataExists can be overruled by showTopicBasedOnOtherData
+      showTopicOnlyIfDataExists: {
         'condoList': {
           pathToDataArray: ['features'],
           minDataLength: 2,
