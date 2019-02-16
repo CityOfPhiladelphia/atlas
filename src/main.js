@@ -27,7 +27,7 @@ library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faL
 import accounting from 'accounting';
 import axios from 'axios';
 import moment from 'moment';
-import mapboard from '@cityofphiladelphia/mapboard';
+import mapboard from '@philly/mapboard';
 
 // General Config Modules
 import helpers from './util/helpers';
@@ -82,7 +82,6 @@ import 'leaflet-easybutton/src/easy-button.css';
 import 'leaflet-measure/dist/leaflet-measure.css';
 // REVIEW not sure why the hard path is necessary for vector icon
 // REVIEW the vector icons seem to be working without this - why?
-// import '../node_modules/@cityofphiladelphia/mapboard/node_modules/leaflet-vector-icon/dist/leaflet-vector-icon.css';
 
 // turn off console logging in production
 // TODO come up with better way of doing this with webpack + env vars
