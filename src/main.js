@@ -7,8 +7,6 @@
         \/               \/     \/
 */
 
-// import '@babel/polyfill';
-
 // import * as Sentry from '@sentry/browser';
 // Sentry.init({ dsn: 'https://276ef359f45543ff91b7db449d3035f8@sentry.io/1330874' });
 
@@ -29,14 +27,6 @@ console.log('atlas main.js before importing mapboard');
 import accounting from 'accounting';
 import axios from 'axios';
 import moment from 'moment';
-
-// import test2 from '@cityofphiladelphia/mapboard';
-// console.log('test2:', test2);
-// import * as test from '@cityofphiladelphia/mapboard';
-// console.log('test:', test);
-// import { initMapboard } from '@cityofphiladelphia/mapboard';
-// console.log('mapboard:', mapboard, 'mapboard.constructor:', mapboard.constructor);
-// console.log('initMapboard:', initMapboard);
 
 // import mapboard from '@cityofphiladelphia/mapboard';
 import mapboard from '@cityofphiladelphia/mapboard/src/main.js';
@@ -136,7 +126,8 @@ mapboard({
     }
   },
   geolocation: {
-    enabled: true
+    enabled: true,
+    icon: ['far', 'dot-circle']
   },
   addressInput: {
     width: 415,
