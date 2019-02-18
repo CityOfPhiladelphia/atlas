@@ -13,20 +13,21 @@
 
 // Font Awesome Icons
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faHome } from '@fortawesome/pro-solid-svg-icons/faHome';
-import { faBook } from '@fortawesome/pro-solid-svg-icons/faBook';
-import { faWrench } from '@fortawesome/pro-solid-svg-icons/faWrench';
-import { faUniversity } from '@fortawesome/pro-solid-svg-icons/faUniversity';
-import { faGavel } from '@fortawesome/pro-solid-svg-icons/faGavel';
-import { faMapMarkerAlt } from '@fortawesome/pro-solid-svg-icons/faMapMarkerAlt';
-import { faLandmark } from '@fortawesome/pro-solid-svg-icons/faLandmark';
-import { faBuilding } from '@fortawesome/pro-solid-svg-icons/faBuilding';
-library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding);
+import { faDotCircle} from '@fortawesome/free-regular-svg-icons/faDotCircle';
+import { faHome } from '@fortawesome/free-solid-svg-icons/faHome';
+import { faBook } from '@fortawesome/free-solid-svg-icons/faBook';
+import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
+import { faUniversity } from '@fortawesome/free-solid-svg-icons/faUniversity';
+import { faGavel } from '@fortawesome/free-solid-svg-icons/faGavel';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons/faMapMarkerAlt';
+import { faLandmark } from '@fortawesome/free-solid-svg-icons/faLandmark';
+import { faBuilding } from '@fortawesome/free-solid-svg-icons/faBuilding';
+library.add(faDotCircle, faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding);
 
 import accounting from 'accounting';
 import axios from 'axios';
 import moment from 'moment';
-import mapboard from '@cityofphiladelphia/mapboard';
+import mapboard from '@philly/mapboard';
 
 // General Config Modules
 import helpers from './util/helpers';
@@ -120,7 +121,8 @@ mapboard({
     }
   },
   geolocation: {
-    enabled: true
+    enabled: true,
+    icon: ['far', 'dot-circle']
   },
   addressInput: {
     width: 415,
