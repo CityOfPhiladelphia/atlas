@@ -82,7 +82,6 @@ import 'leaflet-easybutton/src/easy-button.css';
 import 'leaflet-measure/dist/leaflet-measure.css';
 // REVIEW not sure why the hard path is necessary for vector icon
 // REVIEW the vector icons seem to be working without this - why?
-// import '../node_modules/@cityofphiladelphia/mapboard/node_modules/leaflet-vector-icon/dist/leaflet-vector-icon.css';
 
 // turn off console logging in production
 // TODO come up with better way of doing this with webpack + env vars
