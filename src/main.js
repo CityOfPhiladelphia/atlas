@@ -30,7 +30,7 @@ import axios from 'axios';
 import moment from 'moment';
 
 // import mapboard from '@cityofphiladelphia/mapboard';
-import mapboard from '@cityofphiladelphia/mapboard/src/main.js';
+import mapboard from '@philly/mapboard/src/main.js';
 console.log('mapboard:', mapboard);
 
 // General Config Modules
@@ -95,7 +95,7 @@ import 'leaflet-measure/dist/leaflet-measure.css';
 //   console.log = console.info = console.debug = console.error = function () {};
 // }
 
-var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@d18a86feb27b7e7c4496ed422ce30b5d80e64c1b/config.js';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@b57a58c5f89c88d70b4249dcb2261af18c669a16/config.js';
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;

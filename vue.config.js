@@ -18,7 +18,7 @@ module.exports = {
     '@cityofphiladelphia/mapboard',
     '@cityofphiladelphia/phila-vue-comps',
     '@cityofphiladelphia/phila-vue-mapping',
-    '@cityofphiladelphia/phila-vue-datafetch',
+    // '@cityofphsiladelphia/phila-vue-datafetch',
     // /other-dep/
   ]
 }
