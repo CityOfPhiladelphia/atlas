@@ -95,7 +95,7 @@ import 'leaflet-measure/dist/leaflet-measure.css';
 //   console.log = console.info = console.debug = console.error = function () {};
 // }
 
-var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@b57a58c5f89c88d70b4249dcb2261af18c669a16/config.js';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@f1802a4bef28265e2add0e94ce823852a5341ad6/config.js';
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;
