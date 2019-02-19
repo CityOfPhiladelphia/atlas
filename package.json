@@ -13,10 +13,6 @@
     "dev-build": "vue-cli-service build --mode development"
   },
   "dependencies": {
-    "@fortawesome/free-regular-svg-icons": "^5.7.2",
-    "@fortawesome/free-solid-svg-icons": "^5.7.2",
-    "@fortawesome/pro-regular-svg-icons": "^5.7.2",
-    "@fortawesome/pro-solid-svg-icons": "^5.7.2",
     "@philly/mapboard": "https://github.com/CityOfPhiladelphia/mapboard#7003a67818c9e4e7a417cea818887b75e9353a63",
     "@sentry/browser": "4.3.4",
     "accounting": "^0.4.1",

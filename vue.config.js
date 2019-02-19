@@ -15,10 +15,10 @@ module.exports = {
   },
   transpileDependencies: [
     // can be string or regex
-    '@cityofphiladelphia/mapboard',
-    '@cityofphiladelphia/phila-vue-comps',
-    '@cityofphiladelphia/phila-vue-mapping',
-    // '@cityofphsiladelphia/phila-vue-datafetch',
+    '@philly/mapboard',
+    '@philly/vue-comps',
+    '@philly/vue-mapping',
+    '@philly/vue-datafetch',
     // /other-dep/
   ]
 }
