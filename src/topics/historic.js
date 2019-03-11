@@ -11,7 +11,7 @@ export default {
   key: 'historic',
   icon: 'scroll-old',
   label: 'Historic',
-  dataSources: ['histDesignated', 'crimeIncidents', 'histDistrict', 'historicNearby'],
+  dataSources: ['histDistrict', 'histLegalCards', 'histDesignated', 'historicNearby'  ],
 
   components: [
     {
