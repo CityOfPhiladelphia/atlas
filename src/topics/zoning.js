@@ -139,7 +139,7 @@ export default {
                 {
                   label: 'Code Section',
                   value: function (state, item) {
-                    return "<a target='_blank' href='"+item.code_section_link+"'>"+item.code_section+" <i class='fa fa-external-link'></i></a>"
+                    return "<a target='_blank' href='"+item.code_section_link+"'>"+item.code_section+" <i class='fa fa-external-link-alt'></i></a>"
                   }
                 },
               ],
@@ -180,7 +180,7 @@ export default {
                 {
                   label: 'Pending Bill',
                   value: function (state, item) {
-                    return `<a target="_blank" href="${item.pendingbillurl}">${item.pendingbill} <i class="fa fa-external-link"></i></a>`;
+                    return `<a target="_blank" href="${item.pendingbillurl}">${item.pendingbill} <i class="fa fa-external-link-alt"></i></a>`;
                   }
                 },
               ], // end fields
@@ -252,9 +252,7 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
-              //return item.appeal_key
-              // return "<a target='_blank' href='//li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link'></i></a>"
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=appeals&eid="+item.appeal_key+"&key="+item.addresskey+"&address="+item.address+"'>"+item.appealno+"<i class='fa fa-external-link'></i></a>"
+              return "<a target='_blank' href='http://li.phila.gov/#details?entity=appeals&eid="+item.appeal_key+"&key="+item.addresskey+"&address="+item.address+"'>"+item.appealno+"<i class='fa fa-external-link-alt'></i></a>"
             }
           },
           {

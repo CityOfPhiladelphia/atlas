@@ -15,6 +15,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faHome } from '@fortawesome/pro-solid-svg-icons/faHome';
 import { faBook } from '@fortawesome/pro-solid-svg-icons/faBook';
+import { faExternalLinkAlt } from '@fortawesome/pro-solid-svg-icons/faExternalLinkAlt';
 import { faScrollOld } from '@fortawesome/pro-solid-svg-icons/faScrollOld';
 import { faWrench } from '@fortawesome/pro-solid-svg-icons/faWrench';
 import { faUniversity } from '@fortawesome/pro-solid-svg-icons/faUniversity';
@@ -22,7 +23,7 @@ import { faGavel } from '@fortawesome/pro-solid-svg-icons/faGavel';
 import { faMapMarkerAlt } from '@fortawesome/pro-solid-svg-icons/faMapMarkerAlt';
 import { faLandmark } from '@fortawesome/pro-solid-svg-icons/faLandmark';
 import { faBuilding } from '@fortawesome/pro-solid-svg-icons/faBuilding';
-library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding, faScrollOld);
+library.add(faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding, faScrollOld, faExternalLinkAlt);
 
 import accounting from 'accounting';
 import axios from 'axios';

@@ -108,33 +108,28 @@ export default {
             label: 'Historic District',
             value: function(state) {
               if (state.sources.histDistrict.data ) {
-                console.log("There is data")
                 if (state.sources.histDistrict.data.length > 0) {
-                  console.log("Data is longer than zero")
                   if(state.sources.histDistrict.data[0].properties.DESIGNATED1 != "1/1/3000"){
-                    console.log("Year is not 3000")
                     return state.sources.histDistrict.data[0].properties.NAME +"<br>Designated - " + moment(state.sources.histDistrict.data[0].properties.DESIGNATED1).format("MMM Do, YYYY")
                     +"<br><b><a href='https://www.phila.gov/historical/register/Pages/districts.aspx' target='_blank'>\
-                    View a complete inventory of historic districts. <i class='fa fa-external-link'>\
+                    View a complete inventory of historic districts. <i class='fa fa-external-link-alt'>\
                     </i></a></b>";
                   } else {
-                    console.log("Year is 3000")
                     return state.sources.histDistrict.data[0].properties.NAME +
                     "<br>(Date not available.)<i><br>\
                     <b><a href='https://www.phila.gov/historical/register/Pages/districts.aspx' target='_blank'>\
-                    View a complete inventory of historic districts. <i class='fa fa-external-link'>\
+                    View a complete inventory of historic districts. <i class='fa fa-external-link-alt'>\
                     </i></a></b>"
                   }
                 } else {
-                  console.log("Data length is zero")
                   return "This property is not within a historic district.\
                   <br><b><a href='https://www.phila.gov/historical/register/Pages/districts.aspx' target='_blank'>\
-                  View a complete inventory of historic districts. <i class='fa fa-external-link'></i></a></b>"
+                  View a complete inventory of historic districts. <i class='fa fa-external-link-alt'></i></a></b>"
                 }
               } else {
                 return "This property is not within a historic district.\
                 <br><b><a href='https://www.phila.gov/historical/register/Pages/districts.aspx' target='_blank'>\
-                View a complete inventory of historic districts. <i class='fa fa-external-link'></i></a></b>"
+                View a complete inventory of historic districts. <i class='fa fa-external-link-alt'></i></a></b>"
               }
             }
           },
@@ -143,8 +138,8 @@ export default {
             value: function(state) {
               if (state.sources.neighConservation.data) {
                 if (state.sources.neighConservation.data.length > 0) {
-                  return ('<a href='+state.sources.neighConservation.data[0].properties.CODE_SECTION_LINK +' target="_blank">Yes - Click for more Info <i class="fa fa-external-link"></i></a>'); } else {
-                  return "<a href='https://www.phila.gov/CityPlanning/resources/Publications/Conservation%20districts%20fact%20sheet.pdf' target='_blank'>This property is not within a conservation district. <i class='fa fa-external-link'></i></a>"
+                  return ('<a href='+state.sources.neighConservation.data[0].properties.CODE_SECTION_LINK +' target="_blank">Yes - Click for more Info <i class="fa fa-external-link-alt"></i></a>'); } else {
+                  return "<a href='https://www.phila.gov/CityPlanning/resources/Publications/Conservation%20districts%20fact%20sheet.pdf' target='_blank'>This property is not within a conservation district. <i class='fa fa-external-link-alt'></i></a>"
                 }
               } else {
                 return "This property is not within a conservation district."
@@ -184,7 +179,7 @@ export default {
             value: function(state) {
               if (state.sources.histLegalCards.data) {
                 return "<a href='"+state.sources.histLegalCards.data.LINK + "' target='_blank'>\
-                View image of legal card <i class='fa fa-external-link'></i></a>" } else {
+                View image of legal card <i class='fa fa-external-link-alt'></i></a>" } else {
                 return "Legal card not available."
               }
             }
@@ -284,7 +279,7 @@ export default {
       slots: {
         text: 'For more information about historic buildings and the nomination process \
                please visit <a href="https://www.phila.gov/historical/pages/default.aspx" \
-               target="_blank">The Philadelphia Historical Commission.<i class="fa fa-external-link"></i></a>'
+               target="_blank">The Philadelphia Historical Commission.<i class="fa fa-external-link-alt"></i></a>'
       }
     },
   ],
