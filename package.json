@@ -13,18 +13,18 @@
     "dev-build": "vue-cli-service build --mode development"
   },
   "dependencies": {
-    "@philly/mapboard": "https://github.com/CityOfPhiladelphia/mapboard#c60ea7b3c9c95f93c8cc80e2c0eed334f2239899",
+    "@philly/mapboard": "https://github.com/CityOfPhiladelphia/mapboard#155983ebd10c2e4f0fe2057f0c67e37d263e2d60",
     "@sentry/browser": "4.3.4",
     "accounting": "^0.4.1",
     "axios": "^0.18.0",
     "moment": "^2.21.0",
     "phila-standards": "^1.0.2",
-    "vue": "^2.6.8"
+    "vue": "^2.6.9"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.0",
     "@vue/cli-service": "^3.4.0",
-    "vue-template-compiler": "^2.6.8",
+    "vue-template-compiler": "^2.6.9",
     "webpack-visualizer-plugin": "^0.1.11"
   },
   "postcss": {
