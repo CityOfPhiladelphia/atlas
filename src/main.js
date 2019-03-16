@@ -7,13 +7,12 @@
         \/               \/     \/
 */
 
-
 // import * as Sentry from '@sentry/browser';
 // Sentry.init({ dsn: 'https://276ef359f45543ff91b7db449d3035f8@sentry.io/1330874' });
 
 // Font Awesome Icons
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faDotCircle} from '@fortawesome/free-regular-svg-icons/faDotCircle';
+import { faDotCircle } from '@fortawesome/free-regular-svg-icons/faDotCircle';
 import { faHome } from '@fortawesome/free-solid-svg-icons/faHome';
 import { faBook } from '@fortawesome/free-solid-svg-icons/faBook';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
@@ -24,10 +23,15 @@ import { faLandmark } from '@fortawesome/free-solid-svg-icons/faLandmark';
 import { faBuilding } from '@fortawesome/free-solid-svg-icons/faBuilding';
 library.add(faDotCircle, faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding);
 
+console.log('atlas main.js before importing mapboard');
+
 import accounting from 'accounting';
 import axios from 'axios';
 import moment from 'moment';
-import mapboard from '@philly/mapboard';
+
+// import mapboard from '@cityofphiladelphia/mapboard';
+import mapboard from '@philly/mapboard/src/main.js';
+console.log('mapboard:', mapboard);
 
 // General Config Modules
 import helpers from './util/helpers';
@@ -94,6 +98,8 @@ var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-conf
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;
+
+console.log('calling mapboard');
 
 mapboard({
   // DEV

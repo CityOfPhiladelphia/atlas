@@ -85,7 +85,7 @@ export default {
                       {
                         label: 'Code',
                         value: function (state, item) {
-                          return item;
+                          return item.code;
                         },
                         transforms: [
                           'nowrap',
@@ -95,7 +95,7 @@ export default {
                       {
                         label: 'Description',
                         value: function (state, item) {
-                          return helpers.ZONING_CODE_MAP[item];
+                          return helpers.ZONING_CODE_MAP[item.code];
                         },
                       },
                     ], // end fields
@@ -112,10 +112,13 @@ export default {
                       // get unique zoning codes
                       const longCodes = rows.map(row => row.long_code);
                       const longCodesUniqueSet = new Set(longCodes);
-                      const longCodesUnique = Array.from(longCodesUniqueSet);
-                      console.log('longCodesUnique:', longCodesUnique);
-                      // const longCodesUniqueObj = {'code': long}
-
+                      let longCodesUnique = []
+                      // const longCodesUnique = Array.from(longCodesUniqueSet);
+                      for (let code of longCodesUniqueSet) {
+                        longCodesUnique.push(
+                          { 'code': code }
+                        )
+                      }
                       return longCodesUnique;
                     },
                   }, // end slots
@@ -254,6 +257,8 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
+              //return item.appeal_key
+              // return "<a target='_blank' href='//li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>"
               return "<a target='_blank' href='http://li.phila.gov/#details?entity=appeals&eid="+item.appeal_key+"&key="+item.addresskey+"&address="+item.address+"'>"+item.appealno+"<i class='fa fa-external-link-alt'></i></a>"
             }
           },
