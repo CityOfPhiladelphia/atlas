@@ -23,7 +23,7 @@ import { faLandmark } from '@fortawesome/free-solid-svg-icons/faLandmark';
 import { faBuilding } from '@fortawesome/free-solid-svg-icons/faBuilding';
 library.add(faDotCircle, faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding);
 
-console.log('atlas main.js before importing mapboard');
+// console.log('atlas main.js before importing mapboard');
 
 import accounting from 'accounting';
 import axios from 'axios';
@@ -31,7 +31,7 @@ import moment from 'moment';
 
 // import mapboard from '@cityofphiladelphia/mapboard';
 import mapboard from '@philly/mapboard/src/main.js';
-console.log('mapboard:', mapboard);
+// console.log('mapboard:', mapboard);
 
 // General Config Modules
 import helpers from './util/helpers';
