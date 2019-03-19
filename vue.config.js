@@ -1,7 +1,7 @@
 const Visualizer = require('webpack-visualizer-plugin');
 
 module.exports = {
-  publicPath: '/atlas/',
+  publicPath: '/',
   configureWebpack: {
     plugins: [
       new Visualizer({ filename: './statistics.html' })
