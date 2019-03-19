@@ -30,7 +30,7 @@ export default {
       slots: {
         title: 'Next Eligible Election Is',
         value: function(state) {
-          return format(state.sources.nextElectionAPI.data.election_date, 'dddd, MMMM D, YYYY')
+          return format(state.sources.nextElectionAPI.data.election_date, 'dddd, MMMM D, YYYY');
         },
       }, // end slots
     }, // end of badge
