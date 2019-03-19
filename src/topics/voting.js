@@ -1,5 +1,5 @@
 import transforms from '../general/transforms';
-import moment from 'moment';
+import { format } from 'date-fns';
 const phone = transforms.phoneNumber.transform;
 const titleCase = transforms.titleCase.transform;
 const nth = transforms.nth.transform;
@@ -30,7 +30,7 @@ export default {
       slots: {
         title: 'Next Eligible Election Is',
         value: function(state) {
-          return moment(state.sources.nextElectionAPI.data.election_date).format('dddd, LL');
+          return format(state.sources.nextElectionAPI.data.election_date, 'dddd, MMMM D, YYYY')
         },
       }, // end slots
     }, // end of badge

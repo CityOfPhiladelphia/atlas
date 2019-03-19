@@ -1,5 +1,5 @@
 import accounting from 'accounting';
-import moment from 'moment';
+import { format } from 'date-fns';
 
 accounting.settings.currency.precision = 0;
 
@@ -31,10 +31,8 @@ export default {
     }
   },
   date: {
-    globals: ['moment'],
-    transform: function (value, globals) {
-      // var moment = globals.moment;
-      return moment(value).format('MM/DD/YYYY');
+    transform: function (value) {
+      return format(value, 'MM/DD/YYYY');
     },
   },
   dayofweek: {
