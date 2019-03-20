@@ -11,7 +11,7 @@
 // Sentry.init({ dsn: 'https://276ef359f45543ff91b7db449d3035f8@sentry.io/1330874' });
 
 // Font Awesome Icons
-import { library } from '@fortawesome/fontawesome-svg-core'
+import { library } from '@fortawesome/fontawesome-svg-core';
 import { faDotCircle } from '@fortawesome/free-regular-svg-icons/faDotCircle';
 import { faHome } from '@fortawesome/free-solid-svg-icons/faHome';
 import { faBook } from '@fortawesome/free-solid-svg-icons/faBook';
@@ -23,11 +23,7 @@ import { faLandmark } from '@fortawesome/free-solid-svg-icons/faLandmark';
 import { faBuilding } from '@fortawesome/free-solid-svg-icons/faBuilding';
 library.add(faDotCircle, faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding);
 
-// console.log('atlas main.js before importing mapboard');
-
 import accounting from 'accounting';
-import axios from 'axios';
-
 import mapboard from '@philly/mapboard/src/main.js';
 
 // General Config Modules
@@ -76,16 +72,7 @@ import zoning from './topics/zoning';
 import nearby from './topics/nearby';
 import voting from './topics/voting';
 
-// styles
-// TODO move all styles here (that have a npm package)
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-easybutton/src/easy-button.css';
-import 'leaflet-measure/dist/leaflet-measure.css';
-// REVIEW not sure why the hard path is necessary for vector icon
-// REVIEW the vector icons seem to be working without this - why?
-
 // turn off console logging in production
-// TODO come up with better way of doing this with webpack + env vars
 const { hostname='' } = location;
 if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
   console.log = console.info = console.debug = console.error = function () {};
