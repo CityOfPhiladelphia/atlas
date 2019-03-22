@@ -72,6 +72,9 @@ import zoning from './topics/zoning';
 import nearby from './topics/nearby';
 import voting from './topics/voting';
 
+// import 'phila-standards/dist/css/phila-app.min.css';
+// import './styles.css';
+
 // turn off console logging in production
 const { hostname='' } = location;
 if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
@@ -83,10 +86,7 @@ var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-conf
 // configure accounting.js
 accounting.settings.currency.precision = 0;
 
-console.log('calling mapboard');
-
 mapboard({
-  // DEV
   // defaultAddress: '1234 MARKET ST',
   // plugin: true,
   panels: [
