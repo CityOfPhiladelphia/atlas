@@ -10,6 +10,12 @@
 // import * as Sentry from '@sentry/browser';
 // Sentry.init({ dsn: 'https://276ef359f45543ff91b7db449d3035f8@sentry.io/1330874' });
 
+// turn off console logging in production
+const { hostname='' } = location;
+if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
+  console.log = console.info = console.debug = console.error = function () {};
+}
+
 // Font Awesome Icons
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faDotCircle } from '@fortawesome/free-regular-svg-icons/faDotCircle';
@@ -75,16 +81,20 @@ import voting from './topics/voting';
 // import 'phila-standards/dist/css/phila-app.min.css';
 // import './styles.css';
 
-// turn off console logging in production
-const { hostname='' } = location;
-if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
-  console.log = console.info = console.debug = console.error = function () {};
-}
-
-var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/ajrothwell/mapboard-base-config@f1802a4bef28265e2add0e94ce823852a5341ad6/config.js';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/mapboard-default-base-config@d3ad38f050cf55b4ab0dc2ff68e6f18025690246/config.js';
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;
+
+let pictApiKey, pictSecretKey;
+const host = window.location.hostname;
+if (host === 'cityatlas-dev.phila.gov') {
+  pictApiKey = process.env.VUE_APP_DEV_PICTOMETRY_API_KEY;
+  pictSecretKey = process.env.VUE_APP_DEV_PICTOMETRY_SECRET_KEY;
+} else {
+  pictApiKey = process.env.VUE_APP_PICTOMETRY_API_KEY;
+  pictSecretKey = process.env.VUE_APP_PICTOMETRY_SECRET_KEY;
+}
 
 mapboard({
   // defaultAddress: '1234 MARKET ST',
@@ -137,9 +147,16 @@ mapboard({
     enabled: true,
     measurementAllowed: false,
     popoutAble: true,
+    recordingsUrl: 'https://atlas.cyclomedia.com/Recordings/wfs',
+    username: process.env.VUE_APP_CYCLOMEDIA_USERNAME,
+    password: process.env.VUE_APP_CYCLOMEDIA_PASSWORD,
+    apiKey: process.env.VUE_APP_CYCLOMEDIA_API_KEY,
   },
   pictometry: {
     enabled: true,
+    iframeId: 'pictometry-ipa',
+    apiKey: pictApiKey,
+    secretKey: pictSecretKey,
   },
   transforms,
   greeting,
