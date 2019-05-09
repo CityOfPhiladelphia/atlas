@@ -66,38 +66,45 @@ export default {
           {
             label: 'Location',
             value: function(state) {
-              const pollingData = state.sources.pollingPlaces.data;
-                   return "<b>Ward " + pollingData.WARD +
-                   ", Division " + pollingData.DIVISION + "</b><br>" +
-                   titleCase(pollingData.PLACENAME) + "<br>" +
-                   titleCase(pollingData.STREET_ADDRESS) + "<br>\
-                   All locations are open on Election Day <br>from 7am to 8pm.";
-                  },
+              if (state.sources.pollingPlaces.data) {
+
+                const pollingData = state.sources.pollingPlaces.data.rows[0];
+                return "<b>Ward " + pollingData.ward +
+                ", Division " + pollingData.division + "</b><br>" +
+                titleCase(pollingData.placename) + "<br>" +
+                titleCase(pollingData.street_address) + "<br>\
+                All locations are open on Election Day <br>from 7am to 8pm.";
+              }
+            },
           },
           {
             label: 'Accessibility',
             value: function(state) {
-              const pollingData = state.sources.pollingPlaces.data;
-              const answer = pollingData.ACCESSIBILITY_CODE== "F" ? 'Building Fully Accessible' :
-                             pollingData.ACCESSIBILITY_CODE== "B" ? 'Building Substantially Accessible' :
-                             pollingData.ACCESSIBILITY_CODE== "M" ? 'Building Accessibility Modified' :
-                             pollingData.ACCESSIBILITY_CODE== "A" ? 'Alternate Entrance' :
-                             pollingData.ACCESSIBILITY_CODE== "R" ? 'Building Accessible With Ramp' :
-                             pollingData.ACCESSIBILITY_CODE== "N" ? 'Building Not Accessible' :
-                            'Information not available';
-              return '<a href="//www.philadelphiavotes.com/en/voters/polling-place-accessibility"\
-                      target="_blank">'+answer+'</a>';
+              if (state.sources.pollingPlaces.data) {
+                const pollingData = state.sources.pollingPlaces.data.rows[0];
+                const answer = pollingData.accessibility_code== "F" ? 'Building Fully Accessible' :
+                               pollingData.accessibility_code== "B" ? 'Building Substantially Accessible' :
+                               pollingData.accessibility_code== "M" ? 'Building Accessibility Modified' :
+                               pollingData.accessibility_code== "A" ? 'Alternate Entrance' :
+                               pollingData.accessibility_code== "R" ? 'Building Accessible With Ramp' :
+                               pollingData.accessibility_code== "N" ? 'Building Not Accessible' :
+                              'Information not available';
+                return '<a href="//www.philadelphiavotes.com/en/voters/polling-place-accessibility"\
+                        target="_blank">'+answer+'</a>';
+              }
             },
           },
           {
             label: 'Parking',
             value: function(state) {
-              const pollingData = state.sources.pollingPlaces.data;
-              const parking = pollingData.PARKING_CODE == "N" ? 'No Parking' :
-                              pollingData.PARKING_CODE == "G" ? 'General Parking' :
-                              pollingData.PARKING_CODE == "L" ? 'Loading Zone' :
-                              'Information not available';
-              return parking;
+              if (state.sources.pollingPlaces.data) {
+                const pollingData = state.sources.pollingPlaces.data;
+                const parking = pollingData.parking_code == "N" ? 'No Parking' :
+                                pollingData.parking_code == "G" ? 'General Parking' :
+                                pollingData.parking_code == "L" ? 'Loading Zone' :
+                                'Information not available';
+                return parking;
+              }
             },
           },
         ]
@@ -165,10 +172,14 @@ export default {
   },
   markersForTopic: {
     data: function(state) {
-      return state.sources.pollingPlaces.data
+      if (state.sources.pollingPlaces.data) {
+        return state.sources.pollingPlaces.data.rows[0];
+      } else {
+        return null;
+      }
     },
-    lat: 'LAT',
-    lng: 'LON',
+    lat: 'lat',
+    lng: 'lng',
     key: 'STREET_ADDRESS',
     color: '#54278f',
     icon: {
