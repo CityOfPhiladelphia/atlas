@@ -50,7 +50,6 @@ export default {
       },
       slots: {
         items: function(state) {
-          // return state.dorParcels.data;
           return state.parcels.dor.data;
         }
       }
@@ -68,23 +67,11 @@ export default {
           var address = helpers.concatDorAddress(item);
           return address;
         },
+        activeItem: function(state) {
+          return state.parcels.dor.activeParcel;
+        },
         // components for the content pane. this essentially a topic body.
         components: [
-        //   {
-        //     type: 'table-group',
-        //     options: {
-        //       showBoth: {
-        //         mainTable: {
-        //           dataSource: null,
-        //           id:'dorData',
-        //         },
-        //         dependentTable: {
-        //           dataSource: 'condoList',
-        //           id: 'condoList_dor',
-        //         }
-        //       },
-        //       components: [
-
           {
             type: 'vertical-table',
             options: {
@@ -344,27 +331,11 @@ export default {
               },
             } // end slots
 
-            // slots: {
-            //   title: 'Condominiums',
-            //   highestPageRetrieved: function(state) { return state.sources['condoList'].data.page },
-            //   pageCount: function(state) { return state.sources['condoList'].data.page_count },
-            //   totalSize: function(state) { return state.sources['condoList'].data.total_size },
-            //   items: function(state) {
-            //     var data = state.sources['condoList'].data.features;
-            //     var rows = data.map(function(row){
-            //       var itemRow = row;
-            //       return itemRow;
-            //     });
-            //     return rows;
-            //   },
-            // } // end slots
-
           }, // end docs table
         ] // end parcel tab content comps
       }, // end parcel tab options
       slots: {
         items: function (state) {
-          // return state.dorParcels.data;
           return state.parcels.dor.data;
         }
       },
