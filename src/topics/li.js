@@ -357,7 +357,7 @@ export default {
         sort: {
           // this should return the val to sort on
           getValue: function(item) {
-            return item.caseaddeddate;
+            return item.initialissuedate;
           },
           // asc or desc
           order: 'desc'
