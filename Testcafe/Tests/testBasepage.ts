@@ -2,7 +2,7 @@ import Basepage from '../pages/Basepage';
 
 require('dotenv');
 
-fixture`Search Function Tests`.page(`${process.env.TEST_URL}`);
+fixture`Search Function Tests`.page(`https://atlas.phila.gov`);
 
 let basepage = new Basepage();
 
