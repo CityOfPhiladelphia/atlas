@@ -1,0 +1,27 @@
+
+    
+       {
+        
+            "compilerOptions": {
+              "target": "es2015",
+              "module": "commonjs",
+              "strict": true,
+              "moduleResolution": "node",
+              "resolveJsonModule": true
+
+            },
+        
+        "browsers": [ "chrome" ],
+        "src": "H:/Atlas Testcafe/atlas/Testcafe/Tests",
+        "port1": "1337",
+        "port2":  "1338" ,
+        "reporter": 
+          {
+            "name": "spec"
+          }
+        ,
+        "screenshotPath": "H:/Atlas Testcafe/atlas/Testcafe/screenshots",
+        "takeScreenshotsOnFails": true,
+        "screenshotPathPattern": "${DATE}_${TIME}/${TEST}/${USERAGENT}/${FILE_INDEX}.png"
+      }
+    
