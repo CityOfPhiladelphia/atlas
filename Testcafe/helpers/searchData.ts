@@ -11,7 +11,7 @@ class searchData{
     }
 }
     // enter the search data.
-    export const validUser: searchData = {
+    export const validData: searchData = {
         address: '1234Market',
           };
 

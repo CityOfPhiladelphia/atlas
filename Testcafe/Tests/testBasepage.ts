@@ -1,12 +1,12 @@
 import Basepage from '../pages/Basepage';
 
-require('dotenv');
+require('dotenv').config();
 
-fixture`Search Function Tests`.page(`https://atlas.phila.gov`);
+fixture`page landing verification`.page(`${process.env.TEST_URL}`);
 
 let basepage = new Basepage();
 
-test('search results contain search string', async (t: TestController) => {
+test('page landing verification', async (t: TestController) => {
    
 let basepage = new Basepage();
     await basepage.verifypageFunctionality(t);
