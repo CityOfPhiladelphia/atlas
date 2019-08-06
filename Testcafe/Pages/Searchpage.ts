@@ -2,8 +2,8 @@ import { Selector } from 'testcafe';
 import { validData } from '../helpers/searchData';
 
 export default class SearchPage{
-Searchbar: Selector = Selector('#id-rg6i7');
-SearchcontrolButton: Selector = Selector('.pvm-search-control-button');
+Searchbar: Selector = Selector("input[placeholder='Search the map']");
+SearchcontrolButton: Selector = Selector("button[class='pvm-search-control-button pvm-button-non-mobile']");
 Propertyassesment: Selector = Selector('div:nth-child(1) > .topic-header');
 OpaAddress: Selector = Selector('tr:nth-child(2) > td');
 Deeds: Selector = Selector('div:nth-child(2) > .topic-header');
@@ -17,9 +17,9 @@ Nearby: Selector = Selector('div:nth-child(6) > .topic-header');
 verifySearchFunctionality = async (
     t: TestController,
 ) => {
-    await t.click(await this.SearchcontrolButton);
     await t.typeText(await this.Searchbar, validData.address);
     await t.click(await this.SearchcontrolButton);
+    { timeout: 10000 }
     await t.expect(await this.Propertyassesment.visible).ok();
     await t.expect(await this.OpaAddress.visible).ok();
     await t.expect(await this.Deeds.visible).ok();

@@ -1,8 +1,7 @@
 import Basepage from '../pages/Basepage';
 
-require('dotenv').config();
 
-fixture`page landing verification`.page(`${process.env.TEST_URL}`);
+fixture`page landing verification`.page `https://atlas.phila.gov/`;
 
 let basepage = new Basepage();
 

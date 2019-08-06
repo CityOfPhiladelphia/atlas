@@ -11,6 +11,7 @@
         "name": "spec"
       }
     ,
+    "skipJsErrors": true,
     "screenshotPath": "screenshots",
     "takeScreenshotsOnFails": true,
     "screenshotPathPattern": "${DATE}_${TIME}/${TEST}/${USERAGENT}/${FILE_INDEX}.png",

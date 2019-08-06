@@ -1,8 +1,7 @@
 import Searchpage from '../pages/Searchpage';
 
-require('dotenv').config();
 
-fixture`search page verification`.page(`${process.env.TEST_URL}`);
+fixture`search page verification`.page `https://atlas.phila.gov/`;
 
 let searchpage = new Searchpage();
 

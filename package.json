@@ -17,6 +17,7 @@
     "@sentry/browser": "4.3.4",
     "accounting": "^0.4.1",
     "dotenv": "^8.0.0",
+    "testcafe-reporter-html": "^1.4.4",
     "testcafe-vue-selectors": "^3.1.0",
     "vue": "^2.6.9"
   },
