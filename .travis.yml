@@ -28,7 +28,7 @@ deploy:
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: 'atlas-dev2.phila.gov'
     on:
-      branch: buffer-dev
+      branch: buffer
     local_dir: dist
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
