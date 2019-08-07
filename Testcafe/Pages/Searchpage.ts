@@ -3,7 +3,7 @@ import { validData } from '../helpers/searchData';
 
 export default class SearchPage{
 Searchbar: Selector = Selector("input[placeholder='Search the map']");
-SearchcontrolButton: Selector = Selector("button[class='pvm-search-control-button pvm-button-non-mobile']");
+SearchcontrolButton: Selector = Selector("button[name='pvm-search-control-button']");
 Propertyassesment: Selector = Selector('div:nth-child(1) > .topic-header');
 OpaAddress: Selector = Selector('tr:nth-child(2) > td');
 Deeds: Selector = Selector('div:nth-child(2) > .topic-header');

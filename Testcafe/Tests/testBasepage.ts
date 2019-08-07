@@ -1,4 +1,4 @@
-import Basepage from '../pages/Basepage';
+import Basepage from '../Pages/Basepage';
 
 
 fixture`page landing verification`.page `https://atlas.phila.gov/`;

@@ -1,0 +1,43 @@
+{
+  "startTime": "2019-08-07T14:47:55.665Z",
+  "endTime": "2019-08-07T14:48:15.608Z",
+  "userAgents": [
+    "Chrome 73.0.3683 / Linux 0.0.0"
+  ],
+  "passed": 2,
+  "total": 2,
+  "skipped": 0,
+  "fixtures": [
+    {
+      "name": "page landing verification",
+      "path": "/tests/Tests/testBasepage.ts",
+      "meta": {},
+      "tests": [
+        {
+          "name": "page landing verification",
+          "meta": {},
+          "errs": [],
+          "durationMs": 8229,
+          "screenshotPath": null,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "name": "search page verification",
+      "path": "/tests/Tests/testSearchpage.ts",
+      "meta": {},
+      "tests": [
+        {
+          "name": "search page verification",
+          "meta": {},
+          "errs": [],
+          "durationMs": 11681,
+          "screenshotPath": null,
+          "skipped": false
+        }
+      ]
+    }
+  ],
+  "warnings": []
+}
