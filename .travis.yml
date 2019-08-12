@@ -20,7 +20,7 @@ deploy:
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: 'atlas-dev.phila.gov'
     on:
-      branch: develop
+      branch: dor-docs
     local_dir: dist
     skip_cleanup: true
   - provider: s3
