@@ -324,7 +324,11 @@ export default {
               items: function(state, item) {
                 var id = item.properties.OBJECTID;
                 if (state.sources.dorDocuments.targets[id]) {
-                  return state.sources.dorDocuments.targets[id].data;
+                  if (state.sources.dorDocuments.targets[id].data) {
+                    return state.sources.dorDocuments.targets[id].data.rows;
+                  } else {
+                    return [];
+                  }
                 } else {
                   return [];
                 }
