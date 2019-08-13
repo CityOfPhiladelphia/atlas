@@ -26,4 +26,5 @@ statistics.html
 
 polling-places_arc.js
 
-screenshots/
+/Test/screenshots/*
+/Test/reports/*
