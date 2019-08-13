@@ -1,4 +1,4 @@
-import Searchpage from "../Pages/Searchpage";
+import Searchpage from "../Pages/SearchPage";
 
 fixture`search page verification`.page`https://atlas.phila.gov/`;
 
