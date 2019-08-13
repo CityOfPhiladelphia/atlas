@@ -10,8 +10,10 @@ services:
       - SCREEN_HEIGHT=1080
     volumes:
     - ./node_modules/dotenv:/node_modules/dotenv
-    - ./Test:/.env
-    - ./Test:/tests
+    - ./.env:/.env
+    - ./Tests:/tests
+    - ./Pages:/Pages
+    - ./helpers:/helpers
     - ./screenshots:/screenshots
     - ./reports:/reports
-    entrypoint: ["/opt/testcafe/docker/testcafe-docker.sh", "${BROWSER}", "/tests/Tests/*.ts", "-S", "-s", "screenshots", "-r", "json:reports/report.json", "-e","--dev"]
+    entrypoint: ["/opt/testcafe/docker/testcafe-docker.sh", "${BROWSER}", "/tests/*.ts", "-S", "-s", "screenshots", "-r", "json:reports/report.json", "-e","--dev"]

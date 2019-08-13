@@ -1,0 +1,14 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "Atlas Test Service",
+  "dependencies": {
+    "dotenv": "^8.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "docker-test": "npm install && docker-compose up --force-recreate"
+  },
+  "author": "",
+  "license": "ISC"
+}
