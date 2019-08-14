@@ -3,7 +3,7 @@
 {        
     "browsers": [ "chrome" ],
   
-    "src": ["Tests/*.ts"],
+    "src": ["tests/*.ts"],
     "port1": "1337",
     "port2":  "1338" ,
     "reporter": 

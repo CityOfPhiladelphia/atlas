@@ -12,10 +12,6 @@ export default class BasePage {
   cycloMediaImageButton: Selector = Selector(
     ".cyclomedia-button .button-image"
   );
-  searchBar: Selector = Selector("input[placeholder='Search the map']");
-  searchControlButton: Selector = Selector(
-    "button[name='pvm-search-control-button']"
-  );
 
   //Verify page landing
   verifyPageFunctionality = async (t: TestController) => {
@@ -25,13 +21,5 @@ export default class BasePage {
     await t.expect(this.stateImageButton.visible).ok();
     await t.expect(this.leafLetImageButton.visible).ok();
     await t.expect(this.cycloMediaImageButton.visible).ok();
-  };
-  verifyBuildingSearchFunctionality = async (t: TestController) => {
-    await t.typeText(await this.searchBar, buildingAddressData.address);
-    await t.click(await this.searchControlButton);
-  };
-  verifyCondoSearchFunctionality = async (t: TestController) => {
-    await t.typeText(await this.searchBar, condoAddressData.address);
-    await t.click(await this.searchControlButton);
   };
 }

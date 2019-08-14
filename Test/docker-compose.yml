@@ -11,9 +11,9 @@ services:
     volumes:
     - ./node_modules/dotenv:/node_modules/dotenv
     - ./.env:/.env
-    - ./Tests:/tests
-    - ./Pages:/Pages
+    - ./tests:/tests
+    - ./pages:/pages
     - ./helpers:/helpers
     - ./screenshots:/screenshots
     - ./reports:/reports
-    entrypoint: ["/opt/testcafe/docker/testcafe-docker.sh", "${BROWSER}", "/tests/*.ts", "-S", "-s", "screenshots", "-r", "json:reports/report.json", "-e","--dev"]
+    entrypoint: ["/opt/testcafe/docker/testcafe-docker.sh", "${BROWSER}", "/tests/*.ts", "-S", "-s", "screenshots", "-r", "json:reports/report.json", "-e"]

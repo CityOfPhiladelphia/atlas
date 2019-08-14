@@ -2,9 +2,15 @@ import { Selector } from "testcafe";
 import { condoAddressData } from "../helpers/searchData";
 
 export default class CondominiumsPage {
-  condominiums: Selector = Selector('div:nth-child(2) > .topic-header');
+  searchBar: Selector = Selector("input[placeholder='Search the map']");
+  searchControlButton: Selector = Selector(
+    "button[name='pvm-search-control-button']"
+  );
+  condominiums: Selector = Selector("div:nth-child(2) > .topic-header");
   table: Selector = Selector("#condoList").with({ visibilityCheck: true });
   verifyTopicCondominiums = async (t: TestController) => {
+    await t.typeText(await this.searchBar, condoAddressData.address);
+    await t.click(await this.searchControlButton);
     await t.click(await this.condominiums);
     const tableSelected = await Selector("table");
     await t

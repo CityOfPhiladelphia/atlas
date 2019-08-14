@@ -23,6 +23,7 @@ export default class SearchPage {
   zoning: Selector = Selector("div:nth-child(4) > .topic-header");
   voting: Selector = Selector("div:nth-child(5) > .topic-header");
   nearby: Selector = Selector("div:nth-child(6) > .topic-header");
+  table: Selector = Selector("table").with({ visibilityCheck: true });
 
   //Verify search functionality
   verifySearchFunctionality = async (t: TestController) => {
@@ -38,17 +39,27 @@ export default class SearchPage {
   };
 
   verifyTopicPropertyAssesment = async (t: TestController) => {
-    const tableString = getTopicData();
-    await t.expect(tableString).contains("OPA Account #");
-    await t.expect(tableString).contains("883309050");
-    await t.expect(tableString).contains("OPA Address");
-    await t.expect(tableString).contains("1234 MARKET ST");
+    const tableSelected = await this.table;
+    await t
+      .expect(tableSelected.textContent)
+      .contains(buildingAddressData.opaAccount);
+    await t
+      .expect(tableSelected.textContent)
+      .contains(buildingAddressData.opaAccountValue);
+    await t
+      .expect(tableSelected.textContent)
+      .contains(buildingAddressData.opaAddress);
+    await t
+      .expect(tableSelected.textContent)
+      .contains(buildingAddressData.opaAddressValue);
   };
 
   verifyTopicDeeds = async (t: TestController) => {
-    const parcelstring = getTopicData();
+    const tableSelected = await this.table;
     await t.click(await this.deeds);
-    await t.expect(parcelstring).contains("001S070144");
+    await t
+      .expect(tableSelected.textContent)
+      .contains(buildingAddressData.parcelId);
   };
 
   verifyTopicLicensesAndInspection = async (t: TestController) => {
@@ -59,23 +70,21 @@ export default class SearchPage {
 
   verifyTopicZoning = async (t: TestController) => {
     await t.click(await this.zoning);
-    const parcelstring = await getTopicData();
+    const tableSelected = await Selector("table");
     await t
-      .expect(parcelstring)
-      .eql(
-        "CMX-5CMX-5Center City Core Commercial Mixed-UseCenter City Core Commercial Mixed-Use"
-      );
+      .expect(tableSelected.textContent)
+      .eql(buildingAddressData.parcelDescription);
   };
 
   verifyTopicVoting = async (t: TestController) => {
     await t.click(await this.voting);
-    const votingstringtables = await getTopicsTablesData();
-    await t.expect(votingstringtables.length).eql(2);
+    const votingTables = await getTopicsTablesData();
+    await t.expect(votingTables.length).eql(2);
   };
-
+  
   verifyTopicNearby = async (t: TestController) => {
     await t.click(await this.nearby);
-    const votingstringtables = await getTopicsTablesData();
-    await t.expect(votingstringtables.length).eql(4);
+    const nearbyTables = await getTopicsTablesData();
+    await t.expect(nearbyTables.length).eql(4);
   };
 }
