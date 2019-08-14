@@ -1,4 +1,4 @@
-import CondominiumSearchPage from "../Pages/CondominiumSearchPage";
+import CondominiumSearchPage from "../pages/CondominiumSearchPage";
 
 require("dotenv").config();
 

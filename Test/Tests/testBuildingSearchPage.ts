@@ -1,4 +1,4 @@
-import BuildingSearchPage from "../Pages/BuildingSearchPage";
+import BuildingSearchPage from "../pages/BuildingSearchPage";
 
 require("dotenv").config();
 

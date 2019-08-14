@@ -1,4 +1,4 @@
-import BasePage from "../Pages/BasePage";
+import BasePage from "../pages/BasePage";
 
 require("dotenv").config();
 
