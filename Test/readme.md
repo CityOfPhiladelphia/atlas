@@ -13,5 +13,4 @@
 **Running Tests using Docker** 
 - For this project you can run the tests using awscloud9 account
 - docker-compose.yml has the docker testcafe image and using .env file providing environment details to docker-compose.yml
-- Make sure you are in the Test root directory then tpye "docker-compose up --force-recreate" (--force-recreate :parameter used to kill the previous containers and start the newone)
- 
+- Make sure you are in the Test root directory then tpye "npm run docker-test" 
