@@ -5,11 +5,26 @@ const getTopicData = ClientFunction(() => {
   return document.querySelector("table").textContent;
 });
 
-const getTopicsTablesData = ClientFunction(() => {
-  return Array.from(document.querySelectorAll("table")).map(
-    table => table.textContent
-  );
+// const getTopicsTablesData = ClientFunction(() => {
+//   return Array.from(document.querySelectorAll("table")).map(
+//     table => table.textContent
+//   );
+// });
+
+const getTopicsTablesData = ClientFunction(async () => {
+  var topicsTablePromise: Selector = Selector('table').with({ visibilityCheck: true });
+  var topicsTableCount = await topicsTablePromise.count;
+
+  let tablesContent = [];
+
+  for (let i = 0; i < topicsTableCount; i++) {
+    const elementSelector = topicsTablePromise.nth(i);
+    const element = await elementSelector();
+    tablesContent.push(element.textContent);
+  }
+  return tablesContent;
 });
+
 
 export default class SearchPage {
   searchBar: Selector = Selector("input[placeholder='Search the map']");
