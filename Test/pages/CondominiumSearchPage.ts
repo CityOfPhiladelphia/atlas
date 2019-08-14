@@ -1,7 +1,14 @@
-import { Selector } from "testcafe";
+import { Selector, ClientFunction } from "testcafe";
 import { condoAddressData } from "../helpers/searchData";
 
+
+const getTopicsTablesData = ClientFunction(() => {
+  return Array.from(document.querySelectorAll("table")).map(
+    table => table.textContent
+  );
+});
 export default class CondominiumsPage {
+
   searchBar: Selector = Selector("input[placeholder='Search the map']");
   searchControlButton: Selector = Selector(
     "button[name='pvm-search-control-button']"
@@ -66,4 +73,4 @@ export default class CondominiumsPage {
   };
 }
 
-}
+

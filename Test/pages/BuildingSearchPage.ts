@@ -30,7 +30,6 @@ export default class SearchPage {
     await t.click(await this.searchControlButton);
     await t.expect(await this.propertyAssessment.visible).ok();
     await t.expect(await this.deeds.visible).ok();
-    await t.expect(await this.parcelAddress.visible).ok();
     await t.expect(await this.licensesInspections.visible).ok();
     await t.expect(await this.zoning.visible).ok();
     await t.expect(await this.voting.visible).ok();
