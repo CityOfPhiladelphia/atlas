@@ -5,25 +5,28 @@ const getTopicData = ClientFunction(() => {
   return document.querySelector("table").textContent;
 });
 
+//code might be useful in the future
+
 // const getTopicsTablesData = ClientFunction(() => {
 //   return Array.from(document.querySelectorAll("table")).map(
 //     table => table.textContent
 //   );
 // });
 
-const getTopicsTablesData = ClientFunction(async () => {
-  var topicsTablePromise: Selector = Selector('table').with({ visibilityCheck: true });
-  var topicsTableCount = await topicsTablePromise.count;
+// const getTopicsTablesData = async () => {
+//   var topicsTablePromise: Selector = Selector("table").with({ visibilityCheck: true });
+//   var topicsTableCount = await topicsTablePromise.count;
 
-  let tablesContent = [];
+//   let tablesContent = [];
 
-  for (let i = 0; i < topicsTableCount; i++) {
-    const elementSelector = topicsTablePromise.nth(i);
-    const element = await elementSelector();
-    tablesContent.push(element.textContent);
-  }
-  return tablesContent;
-});
+//   for (let i = 0; i < topicsTableCount; i++) {
+//     const elementSelector = topicsTablePromise.nth(i);
+//     const element = await elementSelector();
+//     console.log(element);
+//     tablesContent.push(element.textContent);
+//   }
+//   return tablesContent;
+// };
 
 
 export default class SearchPage {
@@ -31,12 +34,13 @@ export default class SearchPage {
   searchControlButton: Selector = Selector(
     "button[name='pvm-search-control-button']"
   );
-  propertyAssessment: Selector = Selector("div:nth-child(1) > .topic-header");
-  deeds: Selector = Selector("div:nth-child(2) > .topic-header");
-  licensesInspections: Selector = Selector("div:nth-child(3) > .topic-header");
-  zoning: Selector = Selector("div:nth-child(4) > .topic-header");
-  voting: Selector = Selector("div:nth-child(5) > .topic-header");
-  nearby: Selector = Selector("div:nth-child(6) > .topic-header");
+  propertyAssessment: Selector = Selector('a[data-topic-key="property"]')
+  deeds: Selector = Selector('a[data-topic-key="deeds"]')
+  licensesInspections: Selector = Selector('a[data-topic-key="li"]')
+  zoning: Selector = Selector('a[data-topic-key="zoning"]')
+  voting: Selector = Selector('a[data-topic-key="voting"]')
+  nearby: Selector = Selector('a[data-topic-key="nearby"]')
+  condominiums: Selector = Selector('a[data-topic-key="condos"]')
   table: Selector = Selector("table").with({ visibilityCheck: true });
 
   //Verify search functionality
@@ -68,8 +72,8 @@ export default class SearchPage {
   };
 
   verifyTopicDeeds = async (t: TestController) => {
-    const tableSelected = await this.table;
     await t.click(await this.deeds);
+    const tableSelected = await this.table;
     await t
       .expect(tableSelected.textContent)
       .contains(buildingAddressData.parcelId);
@@ -77,13 +81,13 @@ export default class SearchPage {
 
   verifyTopicLicensesAndInspection = async (t: TestController) => {
     await t.click(await this.licensesInspections);
-    const tables = await getTopicsTablesData();
-    await t.expect(tables.length).eql(5);
+    const tables = await this.table.count;
+    await t.expect(tables).eql(5);
   };
 
   verifyTopicZoning = async (t: TestController) => {
     await t.click(await this.zoning);
-    const tableSelected = await Selector("table");
+    const tableSelected = await this.table;
     await t
       .expect(tableSelected.textContent)
       .eql(buildingAddressData.parcelDescription);
@@ -91,13 +95,13 @@ export default class SearchPage {
 
   verifyTopicVoting = async (t: TestController) => {
     await t.click(await this.voting);
-    const votingTables = await getTopicsTablesData();
-    await t.expect(votingTables.length).eql(2);
+    const votingTables = await this.table.count;
+    await t.expect(votingTables).eql(2);
   };
   
   verifyTopicNearby = async (t: TestController) => {
     await t.click(await this.nearby);
-    const nearbyTables = await getTopicsTablesData();
-    await t.expect(nearbyTables.length).eql(4);
+    const nearbyTables = await this.table.count;
+    await t.expect(nearbyTables).eql(4);
   };
 }
