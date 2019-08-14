@@ -7,7 +7,7 @@ export default class DeedsPage {
   table: Selector = Selector("table").with({ visibilityCheck: true });
 
   verifyTopicDeeds = async (t: TestController) => {
-    const tableSelected = await Selector("table");
+    const tableSelected = await this.table;
     await t.click(await this.deeds);
     await t.expect(tableSelected.textContent).contains(buildingAddressData.parcelId);
   };
