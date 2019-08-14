@@ -18,7 +18,6 @@ export default class SearchPage {
   );
   propertyAssessment: Selector = Selector("div:nth-child(1) > .topic-header");
   deeds: Selector = Selector("div:nth-child(2) > .topic-header");
-  parcelAddress: Selector = Selector("tr:nth-child(2) > th");
   licensesInspections: Selector = Selector("div:nth-child(3) > .topic-header");
   zoning: Selector = Selector("div:nth-child(4) > .topic-header");
   voting: Selector = Selector("div:nth-child(5) > .topic-header");
