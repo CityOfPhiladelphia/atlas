@@ -1,5 +1,5 @@
 import { Selector, ClientFunction } from "testcafe";
-import { condoAddressData } from "../helpers/searchData";
+import { dorAddressData } from "../helpers/searchData";
 
 export default class CondominiumsPage {
 
@@ -12,35 +12,29 @@ export default class CondominiumsPage {
   zoning: Selector = Selector('a[data-topic-key="zoning"]')
   voting: Selector = Selector('a[data-topic-key="voting"]')
   nearby: Selector = Selector('a[data-topic-key="nearby"]')
-  condominiums: Selector = Selector('a[data-topic-key="condos"]')
   table: Selector = Selector("table").with({ visibilityCheck: true });
-  verifyTopicCondominiums = async (t: TestController) => {
-    await t.typeText(await this.searchBar, condoAddressData.address);
-    await t.click(await this.searchControlButton);
-    await t.click(await this.condominiums);
-    const tableSelected = await this.table;
-    await t
-      .expect(tableSelected.textContent)
-      .contains(condoAddressData.opaAccount);
-    await t
-      .expect(tableSelected.textContent)
-      .contains(condoAddressData.opaAccountValue);
-    await t
-      .expect(tableSelected.textContent)
-      .contains(condoAddressData.opaAddress);
-    await t
-      .expect(tableSelected.textContent)
-      .contains(condoAddressData.opaAddressValue);
-  };
   verifyTopicDeeds = async (t: TestController) => {
+    await t.typeText(await this.searchBar, dorAddressData.address);
+    await t.click(await this.searchControlButton);
     await t.click(await this.deeds);
-    await t.expect(this.table.exists).ok();
     const tableSelected = await this.table;
     await t
       .expect(tableSelected.textContent)
-      .contains(condoAddressData.parcelId);
+      .contains(dorAddressData.opaAccount);
+    await t
+      .expect(tableSelected.textContent)
+      .contains(dorAddressData.opaAccountValue);
+    await t
+      .expect(tableSelected.textContent)
+      .contains(dorAddressData.opaAddress);
+    await t
+      .expect(tableSelected.textContent)
+      .contains(dorAddressData.opaAddressValue);
+      await t
+      .expect(tableSelected.textContent)
+      .contains(dorAddressData.parcelId);
   };
-
+ 
   verifyTopicLicensesAndInspection = async (t: TestController) => {
     await t.click(await this.licensesInspections);
     await t.expect(this.table.exists).ok();
@@ -54,7 +48,7 @@ export default class CondominiumsPage {
     const tableSelected = await this.table;
     await t
       .expect(tableSelected.textContent)
-      .eql(condoAddressData.parcelDescription);
+      .eql(dorAddressData.parcelDescription);
   };
 
   verifyTopicVoting = async (t: TestController) => {
@@ -71,5 +65,4 @@ export default class CondominiumsPage {
     await t.expect(nearbyTables).eql(4);
   };
 }
-
 

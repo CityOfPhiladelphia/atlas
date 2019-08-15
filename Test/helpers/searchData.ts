@@ -40,7 +40,7 @@ export const buildingAddressData: SearchData ={
     "CMX-5CMX-5Center City Core Commercial Mixed-UseCenter City Core Commercial Mixed-Use"
 };
 
-// enter the search data of Market Address.
+// enter the search data of condominium Address.
 export const condoAddressData: SearchData = {
   address: "220 W WASHINGTON SQ",
   opaAddress: "Address",
@@ -50,4 +50,28 @@ export const condoAddressData: SearchData = {
   parcelId: "002S100096",
   parcelDescription:
     "CMX-4CMX-4Center City Commercial Mixed-UseCenter City Commercial Mixed-Use"
+};
+
+// enter the search data of PwdNoDor Address.
+export const pwdAddressData: SearchData = {
+  address: "5036 HAWTHORNE ST",
+  opaAddress: "Address",
+  opaAccount: "OPA Account #",
+  opaAccountValue: "622250305",
+  opaAddressValue: "5032-36 HAWTHORNE ST",
+  parcelId: "089N040106",
+  parcelDescription:
+    "Residential Single Family Attached-5"
+};
+
+// enter the search data of DorNoPwd Address.
+export const dorAddressData: SearchData = {
+  address: "5669 chestnut st",
+  opaAddress: "Parcel Address",
+  opaAccount: "Map Registry #",
+  opaAccountValue: "018S030074",
+  opaAddressValue: "5627-99 CHESTNUT ST",
+  parcelId: "018S030074",
+  parcelDescription:
+    "Auto-Oriented Commercial-2"
 };
