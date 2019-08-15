@@ -10,8 +10,8 @@ test("Condominiums search page verification", async (t: TestController) => {
   await condominiumSearchPage.verifyTopicCondominiums(t);
   await condominiumSearchPage.verifyTopicDeeds(t);
   await condominiumSearchPage.verifyTopicLicensesAndInspection(t);
-  await condominiumSearchPage.verifyTopicVoting(t);
   await condominiumSearchPage.verifyTopicZoning(t);
   await condominiumSearchPage.verifyTopicVoting(t);
+  await condominiumSearchPage.verifyTopicNearby(t);
 
 });
