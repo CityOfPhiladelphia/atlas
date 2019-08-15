@@ -47,7 +47,7 @@ export const condoAddressData: SearchData = {
   opaAccount: "OPA Account #",
   opaAccountValue: "888057400",
   opaAddressValue: "220 W WASHINGTON SQ APT 100220 W WASHINGTON SQ APT 100",
-  parcelId: "",
+  parcelId: "002S100096",
   parcelDescription:
-    ""
+    "CMX-4CMX-4Center City Commercial Mixed-UseCenter City Commercial Mixed-Use"
 };
