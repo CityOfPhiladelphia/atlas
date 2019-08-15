@@ -61,7 +61,7 @@ export const pwdAddressData: SearchData = {
   opaAddressValue: "5032-36 HAWTHORNE ST",
   parcelId: "089N040106",
   parcelDescription:
-    "Residential Single Family Attached-5"
+    "RSA-5RSA-5Residential Single Family Attached-5Residential Single Family Attached-5"
 };
 
 // enter the search data of DorNoPwd Address.
