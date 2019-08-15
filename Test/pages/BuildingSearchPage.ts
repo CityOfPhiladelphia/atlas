@@ -73,6 +73,7 @@ export default class SearchPage {
 
   verifyTopicDeeds = async (t: TestController) => {
     await t.click(await this.deeds);
+    await t.expect(this.table.exists).ok();
     const tableSelected = await this.table;
     await t
       .expect(tableSelected.textContent)
@@ -81,12 +82,14 @@ export default class SearchPage {
 
   verifyTopicLicensesAndInspection = async (t: TestController) => {
     await t.click(await this.licensesInspections);
+    await t.expect(this.table.exists).ok();
     const tables = await this.table.count;
     await t.expect(tables).eql(5);
   };
 
   verifyTopicZoning = async (t: TestController) => {
     await t.click(await this.zoning);
+    await t.expect(this.table.exists).ok();
     const tableSelected = await this.table;
     await t
       .expect(tableSelected.textContent)
@@ -95,12 +98,14 @@ export default class SearchPage {
 
   verifyTopicVoting = async (t: TestController) => {
     await t.click(await this.voting);
+    await t.expect(this.table.exists).ok();
     const votingTables = await this.table.count;
     await t.expect(votingTables).eql(2);
   };
   
   verifyTopicNearby = async (t: TestController) => {
     await t.click(await this.nearby);
+    await t.expect(this.table.exists).ok();
     const nearbyTables = await this.table.count;
     await t.expect(nearbyTables).eql(4);
   };
