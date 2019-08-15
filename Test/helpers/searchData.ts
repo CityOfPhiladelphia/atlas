@@ -73,5 +73,5 @@ export const dorAddressData: SearchData = {
   opaAddressValue: "5627-99 CHESTNUT ST",
   parcelId: "018S030074",
   parcelDescription:
-    "Auto-Oriented Commercial-2"
+    "CA-2CA-2Auto-Oriented Commercial-2Auto-Oriented Commercial-2"
 };

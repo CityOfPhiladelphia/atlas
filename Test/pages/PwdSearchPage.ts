@@ -52,7 +52,8 @@ export default class SearchPage {
 
   verifyTopicLicensesAndInspection = async (t: TestController) => {
     await t.click(await this.licensesInspections);
-    await t.expect(this.table.exists).ok();
+    await t.click(await this.licensesInspections);
+    await t.click(await this.licensesInspections);
     const tables = await this.table.count;
     await t.expect(tables).eql(5);
   };
