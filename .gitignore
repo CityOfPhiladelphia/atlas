@@ -25,3 +25,6 @@ yarn-error.log*
 statistics.html
 
 polling-places_arc.js
+
+/Test/screenshots/*
+/Test/reports/*
