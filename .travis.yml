@@ -3,7 +3,11 @@ node_js:
   - "8"
 before_install:
   - printf "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${FA_AUTH_TOKEN}" >> ~/.npmrc
-script: npm run build
+script: 
+  - npm run serve-production &
+  - wait-on http://localhost:8080
+  - docker-compose up --force-recreate
+  - npm run build
 before_deploy:
   - rm -rf node_modules
 deploy:
