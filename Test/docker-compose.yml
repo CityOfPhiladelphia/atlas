@@ -2,7 +2,7 @@ version: '3'
 
 services:
   testcafe:
-    container_name: testcafe_${BROWSER}
+    container_name: testcafe_firefox
     image: testcafe/testcafe
     environment:
       - NODE_PATH=./node_modules/testcafe/node_modules:/opt
@@ -14,4 +14,4 @@ services:
     - ./tests:/tests
     - ./pages:/pages
     - ./helpers:/helpers
-    entrypoint: ["/opt/testcafe/docker/testcafe-docker.sh", "${BROWSER}", "/tests/*.ts", "-e"]
+    entrypoint: ["/opt/testcafe/docker/testcafe-docker.sh", "firefox", "/tests/*.ts", "-e"]
