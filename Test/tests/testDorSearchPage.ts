@@ -1,6 +1,6 @@
 import DorSearchPage from "../pages/DorSearchPage";
 
-//require("dotenv").config();
+require("dotenv").config();
 
 fixture`DorNoPwd  search page verification`.page(`http://localhost:8080`);
 

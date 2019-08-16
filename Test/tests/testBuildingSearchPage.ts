@@ -1,6 +1,6 @@
 import BuildingSearchPage from "../pages/BuildingSearchPage";
 
-//require("dotenv").config();
+require("dotenv").config();
 
 fixture`Building search page verification`.page(`http://localhost:8080`);
 
