@@ -1,6 +1,6 @@
 import BasePage from "../pages/BasePage";
 
-require("dotenv").config();
+//require("dotenv").config();
 
 fixture`page landing verification`.page(`http://localhost:8080`);
 
