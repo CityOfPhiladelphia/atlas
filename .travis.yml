@@ -5,7 +5,7 @@ before_install:
   - printf "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${FA_AUTH_TOKEN}" >> ~/.npmrc
 script: 
   - npm run serve-production &
-  - docker-compose -f Test/docker.compose.yml up --force-recreate
+  - docker-compose -f Test/docker-compose.yml up --force-recreate
   - npm run build
 before_deploy:
   - rm -rf node_modules
