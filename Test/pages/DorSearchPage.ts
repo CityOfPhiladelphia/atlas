@@ -55,6 +55,8 @@ export default class CondominiumsPage {
 
   verifyTopicVoting = async (t: TestController) => {
     await t.click(await this.voting);
+    await t.click(await this.voting);
+    await t.click(await this.voting);
     await t.expect(this.table.exists).ok();
     const votingTables = await this.table.count;
     await t.expect(votingTables).eql(2);

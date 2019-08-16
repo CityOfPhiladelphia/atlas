@@ -73,7 +73,6 @@ export default class SearchPage {
 
   verifyTopicDeeds = async (t: TestController) => {
     await t.click(await this.deeds);
-    await t.expect(this.table.exists).ok();
     const tableSelected = await this.table;
     await t
       .expect(tableSelected.textContent)
@@ -81,6 +80,8 @@ export default class SearchPage {
   };
 
   verifyTopicLicensesAndInspection = async (t: TestController) => {
+    await t.click(await this.licensesInspections);
+    await t.click(await this.licensesInspections);
     await t.click(await this.licensesInspections);
     await t.expect(this.table.exists).ok();
     const tables = await this.table.count;
