@@ -4,7 +4,7 @@ services:
   testcafe:
     container_name: testcafe_firefox
     image: testcafe/testcafe
-    network_mode: "host"
+    network_mode: host
    ports:
      - '8080:8080'
     environment:
