@@ -5,7 +5,7 @@ services:
     container_name: testcafe_firefox
     image: testcafe/testcafe
     network_mode: host
-   ports:
+    ports:
      - '8080:8080'
     environment:
       - NODE_PATH=./node_modules/testcafe/node_modules:/opt
