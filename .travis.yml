@@ -7,7 +7,7 @@ script:
   - npm run serve-production &
   - cd Test
   - npm install
-  - mkdir reports && chmod 777 reports && touch reports/report.json
+  - mkdir reports && touch reports/report.json && chmod 777 reports/report.json
   - docker-compose up --force-recreate
 before_deploy:
   - cd ..
