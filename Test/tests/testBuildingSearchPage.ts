@@ -1,8 +1,8 @@
 import BuildingSearchPage from "../pages/BuildingSearchPage";
 
-//require("dotenv").config();
+require("dotenv").config();
 
-fixture`Building search page verification`.page(`http://127.0.0.1:8080`);
+fixture`Building search page verification`.page(`${process.env.TEST_URL}`);
 
 test("Building search page verification", async (t: TestController) => {
   let buildingSearchPage = new BuildingSearchPage();

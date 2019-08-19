@@ -1,8 +1,8 @@
 import DorSearchPage from "../pages/DorSearchPage";
 
-//require("dotenv").config();
+require("dotenv").config();
 
-fixture`DorNoPwd  search page verification`.page(`http://127.0.0.1:8080`);
+fixture`DorNoPwd  search page verification`.page(`${process.env.TEST_URL}`);
 
 test("DorNoPwd search page verification", async (t: TestController) => {
   let dorSearchPage = new DorSearchPage();

@@ -2,7 +2,7 @@ version: '3'
 
 services:
   testcafe:
-    container_name: testcafe_firefox
+    container_name: testcafe
     image: testcafe/testcafe
     network_mode: host
     ports:
@@ -11,10 +11,13 @@ services:
       - NODE_PATH=./node_modules/testcafe/node_modules:/opt
       - SCREEN_WIDTH=1920
       - SCREEN_HEIGHT=1080
+      - BROWSER=${BROWSER}
+      - TEST_URL=${TEST_URL}
+
     volumes:
     - ./node_modules/dotenv:/node_modules/dotenv
     - ./.env:/.env
     - ./tests:/tests
     - ./pages:/pages
     - ./helpers:/helpers
-    entrypoint: ["/opt/testcafe/docker/testcafe-docker.sh", "firefox", "/tests/*.ts", "-e"]
+    entrypoint: ["/opt/testcafe/docker/testcafe-docker.sh", "/tests/*.ts", "-e"]
