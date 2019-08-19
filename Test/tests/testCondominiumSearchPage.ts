@@ -2,7 +2,7 @@ import CondominiumSearchPage from "../pages/CondominiumSearchPage";
 
 require("dotenv").config();
 
-fixture`Condominiums search page verification`.page(`http://localhost:8080`);
+fixture`Condominiums search page verification`.page(`http://127.0.0.1:8080`);
 
 test("Condominiums search page verification", async (t: TestController) => {
   let condominiumSearchPage = new CondominiumSearchPage();
