@@ -21,4 +21,4 @@ services:
     - ./tests:/tests
     - ./pages:/pages
     - ./helpers:/helpers
-    entrypoint: ["/opt/testcafe/docker/testcafe-docker.sh", $BROWSER, "/tests/*.ts", "-e"]
+    entrypoint: ["/opt/testcafe/docker/testcafe-docker.sh", $BROWSER, "/tests/*.ts", "-S", "-s", "screenshots", "-r", "json:reports/report.json", "-e"]
