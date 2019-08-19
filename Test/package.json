@@ -5,7 +5,9 @@
   "dependencies": {
     "dotenv": "^8.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "testcafe": "^1.4.1"
+  },
   "scripts": {
     "docker-test": "npm install && docker-compose up --force-recreate"
   },
