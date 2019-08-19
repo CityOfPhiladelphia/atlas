@@ -11,11 +11,8 @@ addons:
      - google-chrome-stable fluxbox
 before_install:
   - printf "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${FA_AUTH_TOKEN}" >> ~/.npmrc
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3
-  - fluxbox >/dev/null 2>&1 &
+services:
+  - xvfb
 script:
   - npm run serve-production &
   - cd Test
