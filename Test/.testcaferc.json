@@ -14,7 +14,7 @@
     "skipJsErrors": true,
     "screenshotPath": "screenshots",
     "takeScreenshotsOnFails": true,
-    "screenshotPathPattern": "${DATE}_${TIME}/${TEST}/${USERAGENT}/${FILE_INDEX}.png",
+    "screenshotPathPattern": "${DATE}_${TIME}/${TEST}/${USERAGENT}/${FILE_INDEX}.png"
    
 }
     

@@ -17,7 +17,7 @@ script:
   - npm run serve-production &
   - cd Test
   - npm install
-  - testcafe chrome tests/*.ts
+  - testcafe chrome,firefox tests/*.ts
 before_deploy:
   - cd ..
   - npm run build
