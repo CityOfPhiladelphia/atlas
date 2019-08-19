@@ -2,7 +2,7 @@ import BuildingSearchPage from "../pages/BuildingSearchPage";
 
 require("dotenv").config();
 
-fixture`Building search page verification`.page(`${process.env.TEST_URL}`);
+fixture`Building search page verification`.page(`http://localhost:8080`);
 
 test("Building search page verification", async (t: TestController) => {
   let buildingSearchPage = new BuildingSearchPage();

@@ -15,12 +15,12 @@ services:
   - xvfb
 script:
   - npm run serve-production &
+  - npm run build
   - cd Test
   - npm install
   - testcafe chrome,firefox tests/*.ts
 before_deploy:
   - cd ..
-  - npm run build
   - rm -rf node_modules
 deploy:
   - provider: s3
