@@ -18,6 +18,9 @@ script:
   - cd Test
   - npm install
   - testcafe chrome,firefox tests/*.ts
+after_script:
+  - echo PRINT THE REPORT JSON FILE
+  - cat reports/report.json
 before_deploy:
   - cd ..
   - npm run build
