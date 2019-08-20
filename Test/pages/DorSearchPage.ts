@@ -57,6 +57,7 @@ export default class CondominiumsPage {
 
   verifyTopicNearby = async (t: TestController) => {
     await t.click(await this.nearby);
+    await t.click(await this.tableText);
     const nearbyTables = await this.table.count;
     await t.expect(nearbyTables).eql(4);
   };
