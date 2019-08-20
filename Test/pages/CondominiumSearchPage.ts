@@ -6,6 +6,7 @@ export default class CondominiumsPage {
   searchControlButton: Selector = Selector(
     "button[name='pvm-search-control-button']"
   );
+  propertyAssessment: Selector = Selector('a[data-topic-key="property"]');
   deeds: Selector = Selector('a[data-topic-key="deeds"]');
   licensesInspections: Selector = Selector('a[data-topic-key="li"]');
   zoning: Selector = Selector('a[data-topic-key="zoning"]');
@@ -17,6 +18,7 @@ export default class CondominiumsPage {
   verifyTopicCondominiums = async (t: TestController) => {
     await t.typeText(await this.searchBar, condoAddressData.address);
     await t.click(await this.searchControlButton);
+    await t.expect(await this.propertyAssessment.visible).ok();
     await t.click(await this.condominiums);
     const tableSelected = await this.table;
     await t
