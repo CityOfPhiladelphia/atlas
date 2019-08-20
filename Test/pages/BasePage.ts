@@ -12,13 +12,17 @@ export default class BasePage {
   cycloMediaImageButton: Selector = Selector(
     ".cyclomedia-button .button-image"
   );
+  yearSelect: Selector = Selector("#year-select");
+  picoMetry: Selector = Selector("#pictometry-ipa");
+  timeTravelToggle: Selector = Selector(".timetravelToggle");
 
   //Verify page landing
   verifyPageFunctionality = async (t: TestController) => {
     await t.expect(this.pageTitle.visible).ok();
     await t.expect(this.feedbackButton.visible).ok();
     await t.expect(this.pageGreetings.visible).ok();
-    await t.expect(this.stateImageButton.visible).ok();
+    await t.click(this.stateImageButton);
+    await t.expect(this.yearSelect.visible).ok();
     await t.expect(this.leafLetImageButton.visible).ok();
     await t.expect(this.cycloMediaImageButton.visible).ok();
   };

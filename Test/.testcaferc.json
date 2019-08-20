@@ -1,20 +1,15 @@
+{
+  "browsers": ["chrome"],
 
-    
-{        
-    "browsers": [ "chrome" ],
-  
-    "src": ["tests/*.ts"],
-    "port1": "1337",
-    "port2":  "1338" ,
-    "reporter": 
-      {
-        "name": "spec"
-      }
-    ,
-    "skipJsErrors": true,
-    "screenshotPath": "screenshots",
-    "takeScreenshotsOnFails": true,
-    "screenshotPathPattern": "${DATE}_${TIME}/${TEST}/${USERAGENT}/${FILE_INDEX}.png"
-   
+  "src": ["tests/*.ts"],
+  "port1": "1337",
+  "port2": "1338",
+  "reporter": {
+    "name": "json",
+    "output": "reports/report.json"
+  },
+  "skipJsErrors": true,
+  "screenshotPath": "screenshots",
+  "takeScreenshotsOnFails": true,
+  "screenshotPathPattern": "${DATE}_${TIME}/${TEST}/${USERAGENT}/${FILE_INDEX}.png"
 }
-    
