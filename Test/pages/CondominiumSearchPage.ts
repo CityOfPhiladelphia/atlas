@@ -1,21 +1,21 @@
-import { Selector, ClientFunction } from "testcafe";
+import { ClientFunction, Selector } from "testcafe";
 import { condoAddressData } from "../helpers/searchData";
 
 export default class CondominiumsPage {
-  searchBar: Selector = Selector("input[placeholder='Search the map']");
-  searchControlButton: Selector = Selector(
-    "button[name='pvm-search-control-button']"
+  public searchBar: Selector = Selector("input[placeholder='Search the map']");
+  public searchControlButton: Selector = Selector(
+    "button[name='pvm-search-control-button']",
   );
-  propertyAssessment: Selector = Selector('a[data-topic-key="property"]');
-  deeds: Selector = Selector('a[data-topic-key="deeds"]');
-  licensesInspections: Selector = Selector('a[data-topic-key="li"]');
-  zoning: Selector = Selector('a[data-topic-key="zoning"]');
-  voting: Selector = Selector('a[data-topic-key="voting"]');
-  nearby: Selector = Selector('a[data-topic-key="nearby"]');
-  condominiums: Selector = Selector('a[data-topic-key="condos"]');
-  table: Selector = Selector("table").with({ visibilityCheck: true });
-  tableText: Selector = Selector("p:nth-child(1)");
-  verifyTopicCondominiums = async (t: TestController) => {
+  public propertyAssessment: Selector = Selector('a[data-topic-key="property"]');
+  public deeds: Selector = Selector('a[data-topic-key="deeds"]');
+  public licensesInspections: Selector = Selector('a[data-topic-key="li"]');
+  public zoning: Selector = Selector('a[data-topic-key="zoning"]');
+  public voting: Selector = Selector('a[data-topic-key="voting"]');
+  public nearby: Selector = Selector('a[data-topic-key="nearby"]');
+  public condominiums: Selector = Selector('a[data-topic-key="condos"]');
+  public table: Selector = Selector("table").with({ visibilityCheck: true });
+  public tableText: Selector = Selector("p:nth-child(1)");
+  public verifyTopicCondominiums = async (t: TestController) => {
     await t.typeText(await this.searchBar, condoAddressData.address);
     await t.click(await this.searchControlButton);
     await t.expect(await this.propertyAssessment.visible).ok();
@@ -33,40 +33,40 @@ export default class CondominiumsPage {
     await t
       .expect(tableSelected.textContent)
       .contains(condoAddressData.opaAddressValue);
-  };
-  verifyTopicDeeds = async (t: TestController) => {
+  }
+  public verifyTopicDeeds = async (t: TestController) => {
     await t.click(await this.deeds);
     const tableSelected = await this.table;
     await t
       .expect(tableSelected.textContent)
       .contains(condoAddressData.parcelId);
-  };
+  }
 
-  verifyTopicLicensesAndInspection = async (t: TestController) => {
+  public verifyTopicLicensesAndInspection = async (t: TestController) => {
     await t.click(await this.licensesInspections);
     await t.click(await this.tableText);
     const tables = await this.table.count;
     await t.expect(tables).eql(5);
-  };
+  }
 
-  verifyTopicZoning = async (t: TestController) => {
+  public verifyTopicZoning = async (t: TestController) => {
     await t.click(await this.zoning);
     const tableSelected = await this.table;
     await t
       .expect(tableSelected.textContent)
       .eql(condoAddressData.parcelDescription);
-  };
+  }
 
-  verifyTopicVoting = async (t: TestController) => {
+  public verifyTopicVoting = async (t: TestController) => {
     await t.click(await this.voting);
     await t.click(await this.tableText);
     const votingTables = await this.table.count;
     await t.expect(votingTables).eql(2);
-  };
+  }
 
-  verifyTopicNearby = async (t: TestController) => {
+  public verifyTopicNearby = async (t: TestController) => {
     await t.click(await this.nearby);
     const nearbyTables = await this.table.count;
     await t.expect(nearbyTables).eql(4);
-  };
+  }
 }
