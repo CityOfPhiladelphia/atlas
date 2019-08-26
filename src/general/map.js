@@ -5,5 +5,5 @@ export default {
   imagery: {
     enabled: true
   },
-  initialImagery: 'imagery2018',
+  initialImagery: 'imagery2019',
 }
