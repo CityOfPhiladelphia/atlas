@@ -7,7 +7,7 @@ test("Condominiums search page verification", async (t: TestController) => {
   const condominiumSearchPage = new CondominiumSearchPage();
 
   await condominiumSearchPage.verifyTopicCondominiums(t);
-  await condominiumSearchPage.verifyTopicDeeds(t);
+  //await condominiumSearchPage.verifyTopicDeeds(t);
   await condominiumSearchPage.verifyTopicLicensesAndInspection(t);
   await condominiumSearchPage.verifyTopicZoning(t);
   await condominiumSearchPage.verifyTopicVoting(t);

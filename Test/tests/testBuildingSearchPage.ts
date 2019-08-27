@@ -8,7 +8,7 @@ test("Building search page verification", async (t: TestController) => {
 
   await buildingSearchPage.verifySearchFunctionality(t);
   await buildingSearchPage.verifyTopicPropertyAssesment(t);
-  await buildingSearchPage.verifyTopicDeeds(t);
+  //await buildingSearchPage.verifyTopicDeeds(t);
   await buildingSearchPage.verifyTopicLicensesAndInspection(t);
   await buildingSearchPage.verifyTopicZoning(t);
   await buildingSearchPage.verifyTopicVoting(t);

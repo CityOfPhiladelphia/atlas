@@ -31,9 +31,9 @@ const getTopicData = ClientFunction(() => {
 export default class SearchPage {
   public searchBar: Selector = Selector("input[placeholder='Search the map']");
   public searchControlButton: Selector = Selector(
-    "button[name='pvm-search-control-button']",
-  );
-  public propertyAssessment: Selector = Selector('a[data-topic-key="property"]');
+    "button[name='pvm-search-control-button']" );
+  public propertyAssessment: Selector = Selector(
+    'a[data-topic-key="property"]');
   public deeds: Selector = Selector('a[data-topic-key="deeds"]');
   public licensesInspections: Selector = Selector('a[data-topic-key="li"]');
   public zoning: Selector = Selector('a[data-topic-key="zoning"]');

@@ -8,7 +8,7 @@ test("PwdNoDor search page verification", async (t: TestController) => {
 
   await pwdSearchPage.verifySearchFunctionality(t);
   await pwdSearchPage.verifyTopicPropertyAssesment(t);
-  await pwdSearchPage.verifyTopicDeeds(t);
+ // await pwdSearchPage.verifyTopicDeeds(t);
   await pwdSearchPage.verifyTopicLicensesAndInspection(t);
   await pwdSearchPage.verifyTopicZoning(t);
   await pwdSearchPage.verifyTopicVoting(t);
