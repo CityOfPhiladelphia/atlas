@@ -268,16 +268,16 @@ export default {
                   label: 'ID',
                   value: function (state, item) {
                     // return "<a target='_blank' href='//pdx-app01/recorder/eagleweb/viewDoc.jsp?node=DOCC"+item.attributes.R_NUM+"'>"+item.attributes.R_NUM+"<i class='fa fa-external-link-alt'></i></a>"
-                    // return item.document_id;
-                    return item.attributes.DOCUMENT_ID;
+                    return item.document_id;
+                    // return item.attributes.DOCUMENT_ID;
                   },
                 },
                 {
                   label: 'Date',
                   value: function(state, item) {
                     // return item.attributes.RECORDING_DATE;
-                    // return item.display_date;
-                    return item.attributes.DISPLAY_DATE;
+                    return item.display_date;
+                    // return item.attributes.DISPLAY_DATE;
                   },
                   nullValue: 'no date available',
                   transforms: [
@@ -287,22 +287,22 @@ export default {
                 {
                   label: 'Type',
                   value: function(state, item) {
-                    // return item.document_type;
-                    return item.attributes.DOCUMENT_TYPE;
+                    return item.document_type;
+                    // return item.attributes.DOCUMENT_TYPE;
                   },
                 },
                 {
                   label: 'Grantor',
                   value: function(state, item) {
-                    // return item.grantors;
-                    return item.attributes.GRANTORS;
+                    return item.grantors;
+                    // return item.attributes.GRANTORS;
                   },
                 },
                 {
                   label: 'Grantee',
                   value: function(state, item) {
-                    // return item.grantees;
-                    return item.attributes.GRANTEES;
+                    return item.grantees;
+                    // return item.attributes.GRANTEES;
                   },
                 },
               ], // end fields
@@ -311,8 +311,8 @@ export default {
                 getValue: function(item) {
                   // return item.attributes.RECORDING_DATE;
                   // console.log('dor docs sort function running, display_date:', Date.parse(item.display_date));
-                  return item.attributes.DISPLAY_DATE;
-                  // return Date.parse(item.display_date);
+                  // return item.attributes.DISPLAY_DATE;
+                  return Date.parse(item.display_date);
                 },
                 // asc or desc
                 order: 'desc'
