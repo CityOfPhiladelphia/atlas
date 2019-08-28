@@ -4,13 +4,16 @@ import { pwdAddressData } from "../helpers/searchData";
 export default class SearchPage {
   public searchBar: Selector = Selector("input[placeholder='Search the map']");
   public searchControlButton: Selector = Selector(
-    "button[name='pvm-search-control-button']",
+    "button[name='pvm-search-control-button']"
   );
   public propertyAssessment: Selector = Selector(
-    'a[data-topic-key="property"]');
+    'a[data-topic-key="property"]'
+  );
   public deeds: Selector = Selector('a[data-topic-key="deeds"]');
-  public licensesInspections: Selector = Selector('a[data-topic-key="li"]').with({
-    visibilityCheck: true,
+  public licensesInspections: Selector = Selector(
+    'a[data-topic-key="li"]'
+  ).with({
+    visibilityCheck: true
   });
   public zoning: Selector = Selector('a[data-topic-key="zoning"]');
   public voting: Selector = Selector('a[data-topic-key="voting"]');
@@ -23,12 +26,6 @@ export default class SearchPage {
   public verifySearchFunctionality = async (t: TestController) => {
     await t.typeText(await this.searchBar, pwdAddressData.address);
     await t.click(await this.searchControlButton);
-    await t.expect(await this.propertyAssessment.visible).ok();
-    await t.expect(await this.deeds.visible).ok();
-    await t.expect(await this.licensesInspections.visible).ok();
-    await t.expect(await this.zoning.visible).ok();
-    await t.expect(await this.voting.visible).ok();
-    await t.expect(await this.nearby.visible).ok();
   }
 
   public verifyTopicPropertyAssesment = async (t: TestController) => {

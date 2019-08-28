@@ -15,6 +15,7 @@ export default class CondominiumsPage {
   public condominiums: Selector = Selector('a[data-topic-key="condos"]');
   public table: Selector = Selector("table").with({ visibilityCheck: true });
   public tableText: Selector = Selector("p:nth-child(1)");
+
   public verifyTopicCondominiums = async (t: TestController) => {
     await t.typeText(await this.searchBar, condoAddressData.address);
     await t.click(await this.searchControlButton);

@@ -1,5 +1,5 @@
 {
-  "browsers": ["chrome"],
+  "browsers": ["firefox"],
 
   "src": ["tests/*.ts"],
   "port1": "1337",
