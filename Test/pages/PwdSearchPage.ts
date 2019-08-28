@@ -6,7 +6,8 @@ export default class SearchPage {
   public searchControlButton: Selector = Selector(
     "button[name='pvm-search-control-button']",
   );
-  public propertyAssessment: Selector = Selector('a[data-topic-key="property"]');
+  public propertyAssessment: Selector = Selector(
+    'a[data-topic-key="property"]');
   public deeds: Selector = Selector('a[data-topic-key="deeds"]');
   public licensesInspections: Selector = Selector('a[data-topic-key="li"]').with({
     visibilityCheck: true,
