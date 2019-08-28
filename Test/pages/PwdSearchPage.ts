@@ -23,7 +23,7 @@ export default class SearchPage {
   public verifySearchFunctionality = async (t: TestController) => {
     await t.typeText(await this.searchBar, pwdAddressData.address);
     await t.click(await this.searchControlButton);
-    await t.expect(await this.propertyAssessment.visible).ok();
+   // await t.expect(await this.propertyAssessment.visible).ok();
     await t.expect(await this.deeds.visible).ok();
     await t.expect(await this.licensesInspections.visible).ok();
     await t.expect(await this.zoning.visible).ok();
