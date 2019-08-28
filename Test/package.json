@@ -5,9 +5,12 @@
   "dependencies": {
     "dotenv": "^8.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "testcafe": "^1.4.1"
+  },
   "scripts": {
-    "docker-test": "npm install && docker-compose up --force-recreate"
+    "docker-test": "npm install && docker-compose up --force-recreate",
+    "test-local": "testcafe --proxy proxy.phila.gov:8080 --proxy-bypass 127.0.0.1:8080"
   },
   "author": "",
   "license": "ISC"

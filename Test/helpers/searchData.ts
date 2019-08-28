@@ -1,21 +1,21 @@
 class SearchData {
-  address: string;
-  opaAddress: string;
-  opaAccount: string;
-  opaAddressValue: string;
-  opaAccountValue: string;
-  parcelId: string;
-  parcelDescription: string;
+  public address: string;
+  public opaAddress: string;
+  public opaAccount: string;
+  public opaAddressValue: string;
+  public opaAccountValue: string;
+  public parcelId: string;
+  public parcelDescription: string;
 
   constructor(parameters: SearchData = {} as SearchData) {
-    let {
+    const {
       address,
       opaAddress,
       opaAccount,
       opaAccountValue,
       opaAddressValue,
       parcelId,
-      parcelDescription
+      parcelDescription,
     } = parameters;
 
     this.address = address as string;
@@ -29,7 +29,7 @@ class SearchData {
 }
 
 // enter the search data of Market Address.
-export const buildingAddressData: SearchData ={
+export const buildingAddressData: SearchData = {
   address: "1234Market",
   opaAddress: "OPA Address",
   opaAccount: "OPA Account #",
@@ -37,7 +37,7 @@ export const buildingAddressData: SearchData ={
   opaAddressValue: "1234 MARKET ST",
   parcelId: "001S070144",
   parcelDescription:
-    "CMX-5CMX-5Center City Core Commercial Mixed-UseCenter City Core Commercial Mixed-Use"
+    "CMX-5CMX-5Center City Core Commercial Mixed-UseCenter City Core Commercial Mixed-Use",
 };
 
 // enter the search data of condominium Address.
@@ -49,7 +49,7 @@ export const condoAddressData: SearchData = {
   opaAddressValue: "220 W WASHINGTON SQ APT 100220 W WASHINGTON SQ APT 100",
   parcelId: "002S100096",
   parcelDescription:
-    "CMX-4CMX-4Center City Commercial Mixed-UseCenter City Commercial Mixed-Use"
+    "CMX-4CMX-4Center City Commercial Mixed-UseCenter City Commercial Mixed-Use",
 };
 
 // enter the search data of PwdNoDor Address.
@@ -61,7 +61,7 @@ export const pwdAddressData: SearchData = {
   opaAddressValue: "5032-36 HAWTHORNE ST",
   parcelId: "089N040106",
   parcelDescription:
-    "RSA-5RSA-5Residential Single Family Attached-5Residential Single Family Attached-5"
+    "RSA-5RSA-5Residential Single Family Attached-5Residential Single Family Attached-5",
 };
 
 // enter the search data of DorNoPwd Address.
@@ -73,5 +73,5 @@ export const dorAddressData: SearchData = {
   opaAddressValue: "5627-99 CHESTNUT ST",
   parcelId: "018S030074",
   parcelDescription:
-    "CA-2CA-2Auto-Oriented Commercial-2Auto-Oriented Commercial-2"
+    "CA-2CA-2Auto-Oriented Commercial-2Auto-Oriented Commercial-2",
 };

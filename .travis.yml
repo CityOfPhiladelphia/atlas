@@ -1,16 +1,35 @@
 language: node_js
 node_js:
   - "8"
+sudo: required
+addons:
+  firefox: latest
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable fluxbox
 before_install:
   - printf "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${FA_AUTH_TOKEN}" >> ~/.npmrc
-script: npm run build
+services:
+  - xvfb
+script:
+  - npm run serve-production &
+  - cd Test
+  - npm install
+  - testcafe chrome,firefox tests/*.ts
+after_script:
+  - echo PRINT THE REPORT JSON FILE
+  - cat reports/report.json
 before_deploy:
+  - cd ..
+  - npm run build
   - rm -rf node_modules
 deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
-    bucket: 'atlas.phila.gov'
+    bucket: "atlas.phila.gov"
     on:
       branch: master
     local_dir: dist
@@ -18,7 +37,7 @@ deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
-    bucket: 'atlas-dev.phila.gov'
+    bucket: "atlas-dev.phila.gov"
     on:
       branch: develop
     local_dir: dist
@@ -26,14 +45,14 @@ deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
-    bucket: 'atlas-dev2.phila.gov'
+    bucket: "atlas-dev2.phila.gov"
     on:
       branch: develop2
     local_dir: public
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
-    bucket: 'atlas-dev3.phila.gov'
+    bucket: "atlas-dev3.phila.gov"
     on:
       branch: fix-condos
     local_dir: dist
@@ -41,7 +60,7 @@ deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
-    bucket: 'atlas-cleanup'
+    bucket: "atlas-cleanup"
     on:
       branch: cleanup
     local_dir: dist
