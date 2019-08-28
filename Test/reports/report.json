@@ -1,10 +1,10 @@
 {
-  "startTime": "2019-08-26T14:45:02.025Z",
-  "endTime": "2019-08-26T14:46:42.540Z",
+  "startTime": "2019-08-28T19:45:56.968Z",
+  "endTime": "2019-08-28T19:47:04.475Z",
   "userAgents": [
     "Chrome 76.0.3809 / Windows 10.0.0"
   ],
-  "passed": 1,
+  "passed": 5,
   "total": 5,
   "skipped": 0,
   "fixtures": [
@@ -17,7 +17,7 @@
           "name": "page landing verification",
           "meta": {},
           "errs": [],
-          "durationMs": 10744,
+          "durationMs": 10520,
           "screenshotPath": null,
           "skipped": false
         }
@@ -31,11 +31,9 @@
         {
           "name": "Building search page verification",
           "meta": {},
-          "errs": [
-            "Cannot obtain information about the node because the specified selector does not match any node in the DOM tree.\n\n > | Selector('table')\n   |   .with({ visibilityCheck: true })\n   |   .with({ visibilityCheck: true })\n\nBrowser: Chrome 76.0.3809 / Windows 10.0.0\nScreenshot: C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\screenshots\\2019-08-26_10-45-01\\Building search page verification\\Chrome_76.0.3809_Windows_10.0.0\\errors\\1.png\n\n   74 |  public verifyTopicDeeds = async (t: TestController) => {\n   75 |    await t.click(await this.deeds);\n   76 |    const tableSelected = await this.table;\n   77 |    await t\n   78 |      .expect(tableSelected.textContent)\n > 79 |      .contains(buildingAddressData.parcelId);\n   80 |  }\n   81 |\n   82 |  public verifyTopicLicensesAndInspection = async (t: TestController) => {\n   83 |    await t.click(await this.licensesInspections);\n   84 |    await t.click(await this.tableText);\n\n   at SearchPage.<anonymous> (C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\pages\\BuildingSearchPage.ts:79:8)\n   at fulfilled (C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\pages\\BuildingSearchPage.ts:4:58)"
-          ],
-          "durationMs": 20795,
-          "screenshotPath": "C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\screenshots\\2019-08-26_10-45-01\\Building search page verification\\Chrome_76.0.3809_Windows_10.0.0\\errors\\1.png",
+          "errs": [],
+          "durationMs": 13685,
+          "screenshotPath": null,
           "skipped": false
         }
       ]
@@ -48,11 +46,9 @@
         {
           "name": "Condominiums search page verification",
           "meta": {},
-          "errs": [
-            "Cannot obtain information about the node because the specified selector does not match any node in the DOM tree.\n\n > | Selector('table')\n   |   .with({ visibilityCheck: true })\n\nBrowser: Chrome 76.0.3809 / Windows 10.0.0\nScreenshot: C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\screenshots\\2019-08-26_10-45-01\\Condominiums search page verification\\Chrome_76.0.3809_Windows_10.0.0\\errors\\1.png\n\n   37 |  public verifyTopicDeeds = async (t: TestController) => {\n   38 |    await t.click(await this.deeds);\n   39 |    const tableSelected = await this.table;\n   40 |    await t\n   41 |      .expect(tableSelected.textContent)\n > 42 |      .contains(condoAddressData.parcelId);\n   43 |  }\n   44 |\n   45 |  public verifyTopicLicensesAndInspection = async (t: TestController) => {\n   46 |    await t.click(await this.licensesInspections);\n   47 |    await t.click(await this.tableText);\n\n   at CondominiumsPage.<anonymous> (C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\pages\\CondominiumSearchPage.ts:42:8)\n   at fulfilled (C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\pages\\CondominiumSearchPage.ts:4:58)"
-          ],
-          "durationMs": 22113,
-          "screenshotPath": "C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\screenshots\\2019-08-26_10-45-01\\Condominiums search page verification\\Chrome_76.0.3809_Windows_10.0.0\\errors\\1.png",
+          "errs": [],
+          "durationMs": 13332,
+          "screenshotPath": null,
           "skipped": false
         }
       ]
@@ -65,11 +61,9 @@
         {
           "name": "DorNoPwd search page verification",
           "meta": {},
-          "errs": [
-            "Cannot obtain information about the node because the specified selector does not match any node in the DOM tree.\n\n > | Selector('table')\n   |   .with({ visibilityCheck: true })\n\nBrowser: Chrome 76.0.3809 / Windows 10.0.0\nScreenshot: C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\screenshots\\2019-08-26_10-45-01\\DorNoPwd search page verification\\Chrome_76.0.3809_Windows_10.0.0\\errors\\1.png\n\n   18 |    await t.click(await this.searchControlButton);\n   19 |    await t.click(await this.deeds);\n   20 |    const tableSelected = await this.table;\n   21 |    await t\n   22 |      .expect(tableSelected.textContent)\n > 23 |      .contains(dorAddressData.opaAccount);\n   24 |    await t\n   25 |      .expect(tableSelected.textContent)\n   26 |      .contains(dorAddressData.opaAccountValue);\n   27 |    await t\n   28 |      .expect(tableSelected.textContent)\n\n   at CondominiumsPage.<anonymous> (C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\pages\\DorSearchPage.ts:23:8)\n   at fulfilled (C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\pages\\DorSearchPage.ts:4:58)"
-          ],
-          "durationMs": 22360,
-          "screenshotPath": "C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\screenshots\\2019-08-26_10-45-01\\DorNoPwd search page verification\\Chrome_76.0.3809_Windows_10.0.0\\errors\\1.png",
+          "errs": [],
+          "durationMs": 14105,
+          "screenshotPath": null,
           "skipped": false
         }
       ]
@@ -82,11 +76,9 @@
         {
           "name": "PwdNoDor search page verification",
           "meta": {},
-          "errs": [
-            "Cannot obtain information about the node because the specified selector does not match any node in the DOM tree.\n\n > | Selector('table')\n   |   .with({ visibilityCheck: true })\n\nBrowser: Chrome 76.0.3809 / Windows 10.0.0\nScreenshot: C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\screenshots\\2019-08-26_10-45-01\\PwdNoDor search page verification\\Chrome_76.0.3809_Windows_10.0.0\\errors\\1.png\n\n   47 |  }\n   48 |\n   49 |  public verifyTopicDeeds = async (t: TestController) => {\n   50 |    await t.click(await this.deeds);\n   51 |    const tableSelected = await this.table;\n > 52 |    await t.expect(tableSelected.textContent).contains(pwdAddressData.parcelId);\n   53 |  }\n   54 |\n   55 |  public verifyTopicLicensesAndInspection = async (t: TestController) => {\n   56 |    await t.click(await this.licensesInspections);\n   57 |    await t.click(await this.tableText);\n\n   at SearchPage.<anonymous> (C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\pages\\PwdSearchPage.ts:52:47)\n   at fulfilled (C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\pages\\PwdSearchPage.ts:4:58)"
-          ],
-          "durationMs": 24381,
-          "screenshotPath": "C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\screenshots\\2019-08-26_10-45-01\\PwdNoDor search page verification\\Chrome_76.0.3809_Windows_10.0.0\\errors\\1.png",
+          "errs": [],
+          "durationMs": 15764,
+          "screenshotPath": null,
           "skipped": false
         }
       ]

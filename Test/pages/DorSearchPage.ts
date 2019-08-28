@@ -34,6 +34,8 @@ export default class CondominiumsPage {
   }
 
   public verifyTopicLicensesAndInspection = async (t: TestController) => {
+    await t.typeText(await this.searchBar, dorAddressData.address);
+    await t.click(await this.searchControlButton)
     await t.click(await this.licensesInspections);
     await t.click(await this.tableText);
     const tables = await this.table.count;
