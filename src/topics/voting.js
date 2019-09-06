@@ -16,7 +16,6 @@ export default {
     {
       type: 'badge',
       options: {
-        titleBackground: '#2176d2',
         externalLink: {
           data: 'Preview ballot',
           // action: function(state){return 'Preview ballot'},
@@ -29,6 +28,7 @@ export default {
       },
       slots: {
         title: 'Next Eligible Election Is',
+        titleBackground: '#2176d2',
         value: function(state) {
           return format(state.sources.nextElectionAPI.data.election_date, 'dddd, MMMM D, YYYY');
         },
