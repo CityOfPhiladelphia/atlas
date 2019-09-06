@@ -14,7 +14,7 @@
     "dev-build": "vue-cli-service build --mode development"
   },
   "dependencies": {
-    "@philly/mapboard": "^3.0.38",
+    "@philly/mapboard": "https://github.com/CityOfPhiladelphia/mapboard#3804c51a54769b46a3c39d6341cd0f88a48d54ba",
     "@sentry/browser": "4.3.4",
     "accounting": "^0.4.1",
     "vue": "^2.6.9"
