@@ -11,7 +11,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "serve-production": "vue-cli-service serve --production",
-    "dev-build": "vue-cli-service build --mode development"
+    "dev-build": "vue-cli-service build --mode development",
+    "test": "jest"
   },
   "dependencies": {
     "@philly/mapboard": "https://github.com/CityOfPhiladelphia/mapboard#302e135569b48fd8d06479222901c8bab81b5054",
@@ -22,10 +23,16 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.0",
     "@vue/cli-service": "^3.4.0",
+    "@vue/test-utils": "^1.0.0-beta.29",
+    "babel-jest": "^24.9.0",
     "dotenv": "^8.0.0",
+    "jest": "^24.9.0",
+    "jest-serializer-vue": "^2.0.2",
+    "jest-transform-stub": "^2.0.0",
     "testcafe": "^1.3.3",
     "testcafe-reporter-html": "^1.4.4",
     "testcafe-vue-selectors": "^3.1.0",
+    "vue-jest": "^3.0.5",
     "vue-template-compiler": "^2.6.9",
     "webpack-visualizer-plugin": "^0.1.11"
   },
