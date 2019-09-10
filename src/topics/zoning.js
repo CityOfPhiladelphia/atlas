@@ -368,7 +368,8 @@ export default {
           href: function(state) {
             // var address = state.geocode.data.properties.street_address;
             // var addressEncoded = encodeURIComponent(address);
-            return '//www.phila.gov/CityPlanning/projectreviews/RCO%20Related/List_of_RCOs.pdf';
+            // return '//www.phila.gov/CityPlanning/projectreviews/RCO%20Related/List_of_RCOs.pdf';
+            return '//www.phila.gov/documents/registered-community-organization-rco-materials/';
           }
         }
       },
