@@ -14,7 +14,7 @@ before_install:
 services:
   - xvfb
 script:
-  - npm run serve-production &
+  # - npm run serve-production &
   # - cd Test
   #- npm install
   # - testcafe chrome,firefox tests/*.ts
