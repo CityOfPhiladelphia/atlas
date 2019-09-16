@@ -15,7 +15,7 @@ services:
   - xvfb
 script:
   - npm run serve-production &
-  - cd Test
+  # - cd Test
   - npm install
   # - testcafe chrome,firefox tests/*.ts
 after_script:
