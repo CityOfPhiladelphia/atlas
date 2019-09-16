@@ -16,7 +16,7 @@ services:
 script:
   - npm run serve-production &
   # - cd Test
-  - npm install
+  #- npm install
   # - testcafe chrome,firefox tests/*.ts
 after_script:
   - echo PRINT THE REPORT JSON FILE
