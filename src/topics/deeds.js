@@ -57,6 +57,9 @@ export default {
     {
       type: 'tab-group',
       options: {
+        map: function(state) {
+          return state.map;
+        },
         getKey: function(item) {
           return item.properties.OBJECTID;
         },
