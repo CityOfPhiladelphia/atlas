@@ -819,14 +819,14 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
-"@philly/mapboard@^3.0.41":
-  version "3.0.41"
-  resolved "https://registry.yarnpkg.com/@philly/mapboard/-/mapboard-3.0.41.tgz#33a03e37fd4a946103dbf57021e989d910ebcac0"
-  integrity sha512-w6Yc9HTzWUcjTfCtSf2OyP6X8C/sPTiqMlQF09FarI0nOss3SCQH/Q2kQD3pUxlfNbFKbZZNHhSKaKCcB/lKSQ==
+"@philly/mapboard@^3.0.42":
+  version "3.0.42"
+  resolved "https://registry.yarnpkg.com/@philly/mapboard/-/mapboard-3.0.42.tgz#069b808a43ad04f8efaf2b26300a202d72fa760d"
+  integrity sha512-SFrUKCwRUs6iaWkzn/JVtT29ReN1VhncfW7Q2XhUwlntLPmDe4RqBqfIX+YUvl3xpiLaqeLVDmK3NwtlaYrWjA==
   dependencies:
     "@philly/vue-comps" "^1.0.38"
     "@philly/vue-datafetch" "^0.0.25"
-    "@philly/vue-mapping" "^1.0.39"
+    "@philly/vue-mapping" "^1.0.40"
     vue "^2.6.9"
     vuex "^3.0.1"
 
@@ -863,10 +863,10 @@
     vue "^2.6.9"
     vuex "^3.0.1"
 
-"@philly/vue-mapping@^1.0.39":
-  version "1.0.39"
-  resolved "https://registry.yarnpkg.com/@philly/vue-mapping/-/vue-mapping-1.0.39.tgz#5fe6b767af49b1ad01cc4be36b32b64a46cdab48"
-  integrity sha512-9Nlyxh0k4cLSxwrHz4rqKLnj7938I/523hz1L1oNH+KG+nitl73qK81989gpPaSVy2s8xptPh/7qP+vPh8W0qQ==
+"@philly/vue-mapping@^1.0.40":
+  version "1.0.40"
+  resolved "https://registry.yarnpkg.com/@philly/vue-mapping/-/vue-mapping-1.0.40.tgz#cea6da4ec4f1235b2444a83eaec56fa997d5499f"
+  integrity sha512-dCVCJ1vW9tZ+P7aVrJdWPup5aD+a0HymlhHXksqlVvKpykYfy5Udn5dDlcXcFPMxa61UOvX/5QuTC1Y7rRwUzQ==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"
