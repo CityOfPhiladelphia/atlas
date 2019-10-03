@@ -7,7 +7,7 @@ export default {
   options: {
     relationship: 'intersects',
     targetGeometry: function (state, Leaflet) {
-      console.log('running regmaps.js')
+      // console.log('running regmaps.js')
       // get combined extent of dor parcels
       // var parcels = state.dorParcels.data;
       var parcels = state.parcels.dor.data;
@@ -74,7 +74,7 @@ export default {
         [yMax, xMax]
       ]);
 
-      console.log('ending regmaps.js, bounds:', bounds)
+      // console.log('ending regmaps.js, bounds:', bounds)
       return bounds;
     }
   },

@@ -15,7 +15,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@philly/mapboard": "https://github.com/CityOfPhiladelphia/mapboard#1d24adf130b843c49b5a4681f44eb93f7d1cc242",
+    "@philly/mapboard": "https://github.com/CityOfPhiladelphia/mapboard#605801df714dc7cf145d2dde806140700f58f2bd",
     "@sentry/browser": "4.3.4",
     "accounting": "^0.4.1",
     "vue": "^2.6.9"
