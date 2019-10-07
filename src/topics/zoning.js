@@ -7,8 +7,8 @@ export default {
   dataSources: [
     'zoningOverlay',
     'zoningBase',
-    'zoningAppeals',
-    'rco',
+    // 'zoningAppeals',
+    // 'rco',
   ],
   components: [
     {
