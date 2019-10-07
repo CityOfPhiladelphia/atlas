@@ -15,10 +15,10 @@
     "test": "jest"
   },
   "dependencies": {
-    "@philly/mapboard": "https://github.com/CityOfPhiladelphia/mapboard#605801df714dc7cf145d2dde806140700f58f2bd",
+    "@philly/mapboard": "^3.0.43",
     "@sentry/browser": "4.3.4",
     "accounting": "^0.4.1",
-    "vue": "^2.6.9"
+    "vue": "^2.6.10"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.0",
