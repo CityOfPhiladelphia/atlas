@@ -2,7 +2,7 @@ export default {
   key: 'rco',
   icon: 'map-marker',
   label: 'RCO Notification',
-  dataSources: ['neighboringProperties'],
+  dataSources: [ 'neighboringProperties' ],
   components: [
     {
       type: 'callout',
@@ -11,7 +11,7 @@ export default {
           These are your neighbors that you have to inform\
           if you are going to try to change your zoning...\
         ',
-      }
+      },
     },
     {
       type: 'horizontal-table',
@@ -90,7 +90,7 @@ export default {
             color: 'red',
             weight: 2,
             opacity: 1,
-            fillOpacity: 0.3
+            fillOpacity: 0.3,
           },
           hoverStyle: {
             // radius: 6,
@@ -98,8 +98,8 @@ export default {
             color: '#ff0000',
             weight: 2,
             opacity: 1,
-            fillOpacity: 0.3
-          }
+            fillOpacity: 0.3,
+          },
         },
         fields: [
           {
@@ -118,9 +118,9 @@ export default {
             label: 'Distance',
             value: function(state, item) {
               return parseInt(item._distance) + ' ft';
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       slots: {
         title: 'Neighboring Properties',
@@ -134,7 +134,7 @@ export default {
           });
           return rows;
         },
-      }
+      },
     },
   ],
   // geojson: {
@@ -144,5 +144,5 @@ export default {
   // },
   basemap: 'pwd',
   identifyFeature: 'address-marker',
-  parcels: 'pwd'
-}
+  parcels: 'pwd',
+};

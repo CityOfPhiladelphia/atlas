@@ -1,8 +1,8 @@
 export default {
   water: {
     options: {
-      topics: ['water'],
-      showWithBaseMapOnly: false
+      topics: [ 'water' ],
+      showWithBaseMapOnly: false,
     },
     // TODO give these an id instead of using the label as a key
     data: {
@@ -11,13 +11,13 @@ export default {
       },
       'Other Impervious Surface': {
         'background-color': '#F2DCFF',
-      }
-    }
+      },
+    },
   },
   deeds: {
     options: {
-      topics: ['deeds', 'zoning'],
-      showWithBaseMapOnly: true
+      topics: [ 'deeds', 'zoning' ],
+      showWithBaseMapOnly: true,
     },
     data: {
       // TODO give these an id instead of using the label as a key
@@ -44,7 +44,7 @@ export default {
         'width': '12px',
         'height': '12px',
         'font-size': '10px',
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};

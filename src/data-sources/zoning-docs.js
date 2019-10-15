@@ -20,7 +20,7 @@ export default {
         //   stmt += " or addrkey = " + feature.properties.li_address_key;
         // }
         return stmt;
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};

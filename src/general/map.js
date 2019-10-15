@@ -3,7 +3,7 @@ export default {
   defaultBasemap: 'pwd',
   defaultIdentifyFeature: 'address-marker',
   imagery: {
-    enabled: true
+    enabled: true,
   },
   initialImagery: 'imagery2019',
-}
+};

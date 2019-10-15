@@ -15,6 +15,6 @@ export default {
                            OR eo.office = 'us_house' AND eo.district = s.federal_house \
                 ";
       },// + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'",
-    }
-  }
-}
+    },
+  },
+};

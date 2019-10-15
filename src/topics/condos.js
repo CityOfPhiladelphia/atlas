@@ -2,34 +2,34 @@ export default {
   key: 'condos',
   icon: 'building',
   label: 'Condominiums',
-  dataSources: ['condoList'],
+  dataSources: [ 'condoList' ],
   // showTopicBasedOnOtherData takes precedence over showTopicOnlyIfDataExists
   showTopicBasedOnOtherData: {
     'otherData': {
       'opa': {
-        data: undefined
-      }
+        data: undefined,
+      },
     },
     'requiredData': {
       'condoList': {
-        pathToDataArray: ['features'],
+        pathToDataArray: [ 'features' ],
         minDataLength: 1,
-      }
-    }
+      },
+    },
   },
   // showTopicOnlyIfDataExists can be overruled by showTopicBasedOnOtherData
   showTopicOnlyIfDataExists: {
     'condoList': {
-      pathToDataArray: ['features'],
+      pathToDataArray: [ 'features' ],
       minDataLength: 2,
-    }
+    },
   },
   components: [
     {
       type: 'callout',
       slots: {
-        text: 'Condominium units at your search address, as recorded for property assessment purposes. Click one of the addresses below to see information for that unit.  Use the back button to return to this list. Source: Office of Property Assessment'
-      }
+        text: 'Condominium units at your search address, as recorded for property assessment purposes. Click one of the addresses below to see information for that unit.  Use the back button to return to this list. Source: Office of Property Assessment',
+      },
     },
     {
       type: 'horizontal-table',
@@ -64,9 +64,15 @@ export default {
       },
       slots: {
         title: 'Condominiums',
-        highestPageRetrieved: function(state) { return state.sources['condoList'].data.page },
-        pageCount: function(state) { return state.sources['condoList'].data.page_count },
-        totalSize: function(state) { return state.sources['condoList'].data.total_size },
+        highestPageRetrieved: function(state) {
+          return state.sources['condoList'].data.page; 
+        },
+        pageCount: function(state) {
+          return state.sources['condoList'].data.page_count; 
+        },
+        totalSize: function(state) {
+          return state.sources['condoList'].data.total_size; 
+        },
         items: function(state) {
           var data = state.sources['condoList'].data.features;
           var rows = data.map(function(row){
@@ -75,10 +81,10 @@ export default {
           });
           return rows;
         },
-      } // end slots
+      }, // end slots
     },
   ],
   identifyFeature: 'address-marker',
   // we might not need this anymore, now that we have identifyFeature
-  parcels: 'pwd'
-}
+  parcels: 'pwd',
+};
