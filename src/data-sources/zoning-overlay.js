@@ -22,7 +22,7 @@ export default {
         //          + "total as (select zp.*, st_area(st_intersection(zp.the_geom, parcel.the_geom)) / st_area(parcel.the_geom) as overlap_area from zp, parcel)"
         //          + "select * from total where overlap_area >= 0.01"
         var mapreg = feature.properties.MAPREG,
-            stmt = "\
+          stmt = "\
             WITH all_zoning AS \
               ( \
                 SELECT * \
@@ -61,7 +61,7 @@ export default {
             WHERE overlap_area >= 0.01 \
           ";
         return stmt;
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};

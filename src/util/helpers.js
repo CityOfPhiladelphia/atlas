@@ -52,7 +52,7 @@ export default {
     // }
 
     // return empty for zeros and null
-    if ([null, '0'].indexOf(cleanAttr) > -1) {
+    if ([ null, '0' ].indexOf(cleanAttr) > -1) {
       return '';
     }
 
@@ -63,7 +63,7 @@ export default {
   // TODO put this in base config transforms
   concatDorAddress(parcel, includeUnit) {
     includeUnit = !!includeUnit;
-    var STREET_FIELDS = ['STDIR', 'STNAM', 'STDES', 'STDESSUF'];
+    var STREET_FIELDS = [ 'STDIR', 'STNAM', 'STDES', 'STDESSUF' ];
     var props = parcel.properties;
 
     // handle house num
@@ -77,26 +77,30 @@ export default {
 
     // handle unit
     var unit = this.cleanDorAttribute(props.UNIT);
-    if (unit) unit = '# ' + unit;
+    if (unit) {
+      unit = '# ' + unit;
+    }
 
     // clean up attributes
     var comps = STREET_FIELDS.map(function(streetField) {
       return props[streetField];
     });
     comps = comps.map(this.cleanDorAttribute);
-        // TODO handle individual address comps (like mapping stex=2 => 1/2)
-        // addressLow = comps.HOUSE,
-        // addressHigh = comps.STEX,
-        // streetPredir = comps.STDIR,
-        // streetName = comps.STNAM,
-        // streetSuffix = comps.STDES,
-        // streetPostdir = comps.STDESSUF,
+    // TODO handle individual address comps (like mapping stex=2 => 1/2)
+    // addressLow = comps.HOUSE,
+    // addressHigh = comps.STEX,
+    // streetPredir = comps.STDIR,
+    // streetName = comps.STNAM,
+    // streetSuffix = comps.STDES,
+    // streetPostdir = comps.STDESSUF,
 
     // add address to front
-    comps = [address].concat(comps);
+    comps = [ address ].concat(comps);
 
     // add unit to end
-    if (includeUnit) comps = comps.concat([unit]);
+    if (includeUnit) {
+      comps = comps.concat([ unit ]);
+    }
 
     // remove nulls and concat
     address = comps.filter(Boolean).join(' ');
@@ -109,14 +113,14 @@ export default {
   },
 
   getVacancyText(state) {
-    var land = state.sources.vacantLand.data
-    var building = state.sources.vacantBuilding.data
+    var land = state.sources.vacantLand.data;
+    var building = state.sources.vacantBuilding.data;
     if (land.length === 0 && building.length === 0) {
-      return 'Not Likely Vacant'
+      return 'Not Likely Vacant';
     } else if (land.length > 0) {
-      return 'Likely Vacant Land'
+      return 'Likely Vacant Land';
     } else if (building.length > 0) {
-      return 'Likely Vacant Building'
+      return 'Likely Vacant Building';
     }
-  }
-}
+  },
+};

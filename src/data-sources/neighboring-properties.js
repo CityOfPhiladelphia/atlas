@@ -6,5 +6,5 @@ export default {
     geometryServerUrl: '//gis-utils.databridge.phila.gov/arcgis/rest/services/Utilities/Geometry/GeometryServer/',
     calculateDistance: true,
     distances: 320,
-  }
-}
+  },
+};

@@ -48,7 +48,7 @@ import crimeIncidents from './data-sources/crime-incidents';
 import divisions from './data-sources/divisions';
 import dorCondoList from './data-sources/dor-condo-list';
 import dorDocuments from './data-sources/dor-documents';
-import electedOfficials from './data-sources/elected-officials'
+import electedOfficials from './data-sources/elected-officials';
 import liBusinessLicenses from './data-sources/li-business-licenses';
 import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
@@ -101,27 +101,27 @@ mapboard({
   // plugin: true,
   panels: [
     'topics',
-    'map'
+    'map',
   ],
   router: {
-    enabled: true
+    enabled: true,
   },
   defaultAddressTextPlaceholder: {
     // text: "Search Address or 9-digit OPA Property Number",
     wideStyle: {
       'max-width': '100%',
       'font-size': '24px',
-      'line-height': '28px'
+      'line-height': '28px',
     },
     narrowStyle: {
       'max-width': '100%',
       'font-size': '20px',
-      'line-height': '24px'
-    }
+      'line-height': '24px',
+    },
   },
   geolocation: {
     enabled: true,
-    icon: ['far', 'dot-circle']
+    icon: [ 'far', 'dot-circle' ],
   },
   addressInput: {
     width: 415,
@@ -201,8 +201,8 @@ mapboard({
     {
       type: 'topic-set',
       options: {
-        defaultTopic: 'property'
-      }
+        defaultTopic: 'property',
+      },
     },
   ],
 });

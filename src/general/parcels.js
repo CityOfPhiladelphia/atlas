@@ -5,7 +5,7 @@ export default {
     wipeOutOtherParcelsOnReverseGeocodeOnly: true,
     geocodeField: 'PARCELID',
     parcelIdInGeocoder: 'pwd_parcel_id',
-    getByLatLngIfIdFails: false
+    getByLatLngIfIdFails: false,
   },
   dor: {
     multipleAllowed: true,
@@ -13,6 +13,6 @@ export default {
     wipeOutOtherParcelsOnReverseGeocodeOnly: false,
     geocodeField: 'MAPREG',
     parcelIdInGeocoder: 'dor_parcel_id',
-    getByLatLngIfIdFails: true
-  }
-}
+    getByLatLngIfIdFails: true,
+  },
+};
