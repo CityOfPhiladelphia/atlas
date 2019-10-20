@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@philly/mapboard": "^3.0.43",
-    "@sentry/browser": "4.3.4",
+    "@sentry/browser": "5.7.1",
     "accounting": "^0.4.1",
     "vue": "^2.6.10"
   },

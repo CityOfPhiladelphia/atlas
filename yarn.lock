@@ -1046,56 +1046,56 @@
     vue "^2.6.10"
     vuex "^3.1.1"
 
-"@sentry/browser@4.3.4":
-  version "4.3.4"
-  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-4.3.4.tgz#5c17184781c4fb6ad8ab48f5c48e01630d4fc3dc"
-  integrity sha512-odRXxnhcSYzyR4YvTolNEyrz3fdDVw308l+9RBRJA9yOFVlezaz1mXH6Gv00F7cIj9yE/JtezDyhP339WsWy3w==
+"@sentry/browser@5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-5.7.1.tgz#1f8435e2a325d7a09f830065ebce40a2b3c708a4"
+  integrity sha512-K0x1XhsHS8PPdtlVOLrKZyYvi5Vexs9WApdd214bO6KaGF296gJvH1mG8XOY0+7aA5i2A7T3ttcaJNDYS49lzw==
   dependencies:
-    "@sentry/core" "4.3.4"
-    "@sentry/types" "4.3.4"
-    "@sentry/utils" "4.3.4"
+    "@sentry/core" "5.7.1"
+    "@sentry/types" "5.7.1"
+    "@sentry/utils" "5.7.1"
     tslib "^1.9.3"
 
-"@sentry/core@4.3.4":
-  version "4.3.4"
-  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-4.3.4.tgz#414e050b9e963ac7f839331ad33590e59d883988"
-  integrity sha512-KwolQmAnXiFMeXBuxPUM8fW+2bOICdHfpjdf83qD7WSeuKqGvXhxXyApWNSLE+l2DPO6/8UKnIGmR8bEn0G7QA==
+"@sentry/core@5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-5.7.1.tgz#3eb2b7662cac68245931ee939ec809bf7a639d0e"
+  integrity sha512-AOn3k3uVWh2VyajcHbV9Ta4ieDIeLckfo7UMLM+CTk2kt7C89SayDGayJMSsIrsZlL4qxBoLB9QY4W2FgAGJrg==
   dependencies:
-    "@sentry/hub" "4.3.4"
-    "@sentry/minimal" "4.3.4"
-    "@sentry/types" "4.3.4"
-    "@sentry/utils" "4.3.4"
+    "@sentry/hub" "5.7.1"
+    "@sentry/minimal" "5.7.1"
+    "@sentry/types" "5.7.1"
+    "@sentry/utils" "5.7.1"
     tslib "^1.9.3"
 
-"@sentry/hub@4.3.4":
-  version "4.3.4"
-  resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-4.3.4.tgz#48915f5867e8ef1d964c89394e8500d1d050719b"
-  integrity sha512-vaBGCnhinLB8N4aQLMiPPhnlTkIUwU/dxWzw/xsuKY3MYWrmfMUyWgMZF60Mz3B4F0lW1lsg5jnJz9xPnjZowg==
+"@sentry/hub@5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-5.7.1.tgz#a52acd9fead7f3779d96e9965c6978aecc8b9cad"
+  integrity sha512-evGh323WR073WSBCg/RkhlUmCQyzU0xzBzCZPscvcoy5hd4SsLE6t9Zin+WACHB9JFsRQIDwNDn+D+pj3yKsig==
   dependencies:
-    "@sentry/types" "4.3.4"
-    "@sentry/utils" "4.3.4"
+    "@sentry/types" "5.7.1"
+    "@sentry/utils" "5.7.1"
     tslib "^1.9.3"
 
-"@sentry/minimal@4.3.4":
-  version "4.3.4"
-  resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-4.3.4.tgz#8375c3d040621dd30eeddaebf4ef1bf22be0f643"
-  integrity sha512-EBmQgdAQgxkhWFsBO4TmsP3cg5yTzg48HmPe3Dyt7PtF5Umw3DFW6qboAqnN1+KF+pHNuxkqevvgBTFp7b4Saw==
+"@sentry/minimal@5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-5.7.1.tgz#56afc537737586929e25349765e37a367958c1e1"
+  integrity sha512-nS/Dg+jWAZtcxQW8wKbkkw4dYvF6uyY/vDiz/jFCaux0LX0uhgXAC9gMOJmgJ/tYBLJ64l0ca5LzpZa7BMJQ0g==
   dependencies:
-    "@sentry/hub" "4.3.4"
-    "@sentry/types" "4.3.4"
+    "@sentry/hub" "5.7.1"
+    "@sentry/types" "5.7.1"
     tslib "^1.9.3"
 
-"@sentry/types@4.3.4":
-  version "4.3.4"
-  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-4.3.4.tgz#563f9def51da301cfd474ecf35ae4d97847aed61"
-  integrity sha512-qsqrcyNilpbzYjqef+km0Grh5BckSFD4MUdJDNkUE5XU/ImniYddj18bMDlQxluJlTPDjUFQ37FXtEmxLeOwkQ==
+"@sentry/types@5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-5.7.1.tgz#4c4c1d4d891b6b8c2c3c7b367d306a8b1350f090"
+  integrity sha512-tbUnTYlSliXvnou5D4C8Zr+7/wJrHLbpYX1YkLXuIJRU0NSi81bHMroAuHWILcQKWhVjaV/HZzr7Y/hhWtbXVQ==
 
-"@sentry/utils@4.3.4":
-  version "4.3.4"
-  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-4.3.4.tgz#4473d9f4d1b909e51b6aea7051ebe1bd838d56e9"
-  integrity sha512-CMGMdIv5RHUCKRF4aWPZ/gFRTfBQpLVVJEGCeFGZLXHBdpgQac0lf3jlu8sND0KZ0S3C5x3tGS/eEqmOZRQ/pw==
+"@sentry/utils@5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-5.7.1.tgz#cf37ad55f78e317665cd8680f202d307fa77f1d0"
+  integrity sha512-nhirUKj/qFLsR1i9kJ5BRvNyzdx/E2vorIsukuDrbo8e3iZ11JMgCOVrmC8Eq9YkHBqgwX4UnrPumjFyvGMZ2Q==
   dependencies:
-    "@sentry/types" "4.3.4"
+    "@sentry/types" "5.7.1"
     tslib "^1.9.3"
 
 "@soda/friendly-errors-webpack-plugin@^1.7.1":
@@ -2791,9 +2791,10 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"L-esri-WebMap@git+https://github.com/CityOfPhiladelphia/L.esri.WebMap.git#1d4ee074f60f2bba8bfe596d150ea23556c8a94f":
+"L-esri-WebMap@https://github.com/CityOfPhiladelphia/L.esri.WebMap#1d4ee074f60f2bba8bfe596d150ea23556c8a94f":
   version "0.4.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/L.esri.WebMap.git#1d4ee074f60f2bba8bfe596d150ea23556c8a94f"
+  uid "1d4ee074f60f2bba8bfe596d150ea23556c8a94f"
+  resolved "https://github.com/CityOfPhiladelphia/L.esri.WebMap#1d4ee074f60f2bba8bfe596d150ea23556c8a94f"
   dependencies:
     arcgis-to-geojson-utils "^1.0.1"
     date-fns "^1.30.1"
@@ -2806,9 +2807,10 @@
     leaflet-vectoricon "^0.1.0"
     leaflet.heat "^0.1.3"
 
-"Leaflet-PointInPolygon@git+https://github.com/CityOfPhiladelphia/Leaflet.PointInPolygon.git#a0d410f69aacf5f9165c4d01ccffeed824ccaed8":
+"Leaflet-PointInPolygon@https://github.com/CityOfPhiladelphia/Leaflet.PointInPolygon#a0d410f69aacf5f9165c4d01ccffeed824ccaed8":
   version "1.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/Leaflet.PointInPolygon.git#a0d410f69aacf5f9165c4d01ccffeed824ccaed8"
+  uid a0d410f69aacf5f9165c4d01ccffeed824ccaed8
+  resolved "https://github.com/CityOfPhiladelphia/Leaflet.PointInPolygon#a0d410f69aacf5f9165c4d01ccffeed824ccaed8"
 
 abab@^1.0.0:
   version "1.0.4"
@@ -6557,9 +6559,10 @@ esri-leaflet-heatmap-feature-layer@^2.0.0-beta.1:
     leaflet "^1.0.0-beta.1"
     leaflet.heat "^0.1.3"
 
-"esri-leaflet-legend@git+https://github.com/CityOfPhiladelphia/esri-leaflet-legend.git#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f":
+"esri-leaflet-legend@https://github.com/CityOfPhiladelphia/esri-leaflet-legend#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f":
   version "2.0.1"
-  resolved "git+https://github.com/CityOfPhiladelphia/esri-leaflet-legend.git#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f"
+  uid "8d42cbc1ed71c630fd8f9c6795877b5f7498b49f"
+  resolved "https://github.com/CityOfPhiladelphia/esri-leaflet-legend#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f"
   dependencies:
     esri-leaflet "^2.2.3"
     leaflet "^1.4.0"
@@ -6971,8 +6974,9 @@ file-loader@^3.0.1:
     loader-utils "^1.0.2"
     schema-utils "^1.0.0"
 
-"file-saver@github:eligrey/FileSaver.js#1.3.8":
+file-saver@eligrey/FileSaver.js#1.3.8:
   version "1.3.8"
+  uid e865e37af9f9947ddcced76b549e27dc45c1cb2e
   resolved "https://codeload.github.com/eligrey/FileSaver.js/tar.gz/e865e37af9f9947ddcced76b549e27dc45c1cb2e"
 
 filesize@^3.6.1:
@@ -9401,9 +9405,10 @@ leaflet-easybutton@^2.3.0:
   dependencies:
     leaflet "^1.0.1"
 
-"leaflet-measure@git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6":
+"leaflet-measure@https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6":
   version "4.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6"
+  uid b70886af342f19597dc2937d79d64bad6bab07c6
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
   dependencies:
     "@turf/area" "^5.1.5"
     "@turf/length" "^5.1.5"
@@ -9434,9 +9439,10 @@ leaflet-shape-markers@^1.0.4:
   dependencies:
     leaflet "^1.0.0"
 
-"leaflet-vector-icon@git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#c37571e92c66ce0003f22058f2d246b31d3941a5":
+"leaflet-vector-icon@https://github.com/CityOfPhiladelphia/leaflet-vector-icon#c37571e92c66ce0003f22058f2d246b31d3941a5":
   version "1.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#c37571e92c66ce0003f22058f2d246b31d3941a5"
+  uid c37571e92c66ce0003f22058f2d246b31d3941a5
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-vector-icon#c37571e92c66ce0003f22058f2d246b31d3941a5"
 
 leaflet-vectoricon@^0.1.0:
   version "0.1.0"
