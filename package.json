@@ -18,18 +18,18 @@
   },
   "dependencies": {
     "@philly/mapboard": "^3.0.43",
-    "@sentry/browser": "4.3.4",
+    "@sentry/browser": "5.7.1",
     "accounting": "^0.4.1",
     "vue": "^2.6.10"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.4.0",
+    "@vue/cli-plugin-babel": "^4.0.4",
     "@vue/cli-plugin-eslint": "^4.0.4",
     "@vue/cli-service": "^3.4.0",
     "@vue/test-utils": "^1.0.0-beta.29",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
-    "dotenv": "^8.0.0",
+    "dotenv": "^8.2.0",
     "eslint": "^6.5.1",
     "eslint-plugin-vue": "^5.2.3",
     "jest": "^24.9.0",
