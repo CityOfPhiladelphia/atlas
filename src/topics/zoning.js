@@ -140,37 +140,6 @@ export default {
             type: 'horizontal-table',
             options: {
               topicKey: 'zoning',
-              id: 'zoningOverlay',
-              fields: [
-                {
-                  label: 'Name',
-                  value: function (state, item) {
-                    return item.overlay_name;
-                  },
-                },
-                {
-                  label: 'Code Section',
-                  value: function (state, item) {
-                    return "<a target='_blank' href='"+item.code_section_link+"'>"+item.code_section+" <i class='fa fa-external-link-alt'></i></a>";
-                  },
-                },
-              ],
-            },
-            slots: {
-              title: 'Overlays',
-              items: function(state, item) {
-                var id = item.properties.OBJECTID,
-                  target = state.sources.zoningOverlay.targets[id] || {},
-                  data = target.data || {};
-                // console.log('zoningbase target:', target);
-                return data.rows || [];
-              },
-            },
-          },
-          {
-            type: 'horizontal-table',
-            options: {
-              topicKey: 'zoning',
               // shouldShowFilters: false,
               id: 'baseZoning',
               // defaultIncrement: 10,
@@ -202,8 +171,8 @@ export default {
               items: function(state, item) {
                 // console.log('state.sources:', state.sources['zoningBase'].data.rows);
                 var id = item.properties.OBJECTID,
-                  target = state.sources.zoningBase.targets[id] || {},
-                  data = target.data || {};
+                target = state.sources.zoningBase.targets[id] || {},
+                data = target.data || {};
 
                 // include only rows where pending is true
                 const { rows=[]} = data;
@@ -238,6 +207,37 @@ export default {
               },
             }, // end slots
           }, // end table
+          {
+            type: 'horizontal-table',
+            options: {
+              topicKey: 'zoning',
+              id: 'zoningOverlay',
+              fields: [
+                {
+                  label: 'Name',
+                  value: function (state, item) {
+                    return item.overlay_name;
+                  },
+                },
+                {
+                  label: 'Code Section',
+                  value: function (state, item) {
+                    return "<a target='_blank' href='"+item.code_section_link+"'>"+item.code_section+" <i class='fa fa-external-link-alt'></i></a>";
+                  },
+                },
+              ],
+            },
+            slots: {
+              title: 'Overlays',
+              items: function(state, item) {
+                var id = item.properties.OBJECTID,
+                  target = state.sources.zoningOverlay.targets[id] || {},
+                  data = target.data || {};
+                // console.log('zoningbase target:', target);
+                return data.rows || [];
+              },
+            },
+          },
         ], // end of tab-group components
       },
       slots: {
