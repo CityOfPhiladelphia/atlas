@@ -171,8 +171,8 @@ export default {
               items: function(state, item) {
                 // console.log('state.sources:', state.sources['zoningBase'].data.rows);
                 var id = item.properties.OBJECTID,
-                target = state.sources.zoningBase.targets[id] || {},
-                data = target.data || {};
+                  target = state.sources.zoningBase.targets[id] || {},
+                  data = target.data || {};
 
                 // include only rows where pending is true
                 const { rows=[]} = data;
