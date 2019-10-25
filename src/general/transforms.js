@@ -32,7 +32,14 @@ export default {
   },
   date: {
     transform: function (value) {
-      return format(parseISO(value), 'MM/dd/yyyy');
+      let valueTransformed;
+      // console.log('date transform running, value:', value, 'typeof value:', typeof value);
+      if (typeof value === 'string') {
+        valueTransformed = format(parseISO(value), 'MM/dd/yyyy');
+      } else {
+        valueTransformed = format(value, 'MM/dd/yyyy');
+      }
+      return valueTransformed;
     },
   },
   dayofweek: {
