@@ -1,5 +1,5 @@
 import transforms from '../general/transforms';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 const phone = transforms.phoneNumber.transform;
 const titleCase = transforms.titleCase.transform;
 const nth = transforms.nth.transform;
@@ -30,7 +30,7 @@ export default {
         title: 'Next Eligible Election Is',
         titleBackground: '#2176d2',
         value: function(state) {
-          return format(state.sources.nextElectionAPI.data.election_date, 'dddd, MMMM D, YYYY');
+          return format(parseISO(state.sources.nextElectionAPI.data.election_date), 'MMMM d, yyyy');
         },
       }, // end slots
     }, // end of badge
@@ -180,9 +180,9 @@ export default {
     data: function(state) {
       if (state.sources.pollingPlaces.data) {
         return state.sources.pollingPlaces.data.rows[0];
-      } 
+      }
       return null;
-      
+
     },
     lat: 'lat',
     lng: 'lng',
