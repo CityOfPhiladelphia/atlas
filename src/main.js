@@ -137,7 +137,7 @@ mapboard({
     left: 0,
     right: 0,
   },
-  gatekeeperKey: helpers.GATEKEEPER_KEY,
+  gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
   map,
   baseConfig: BASE_CONFIG_URL,
   parcels,

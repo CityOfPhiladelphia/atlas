@@ -41,6 +41,8 @@ module.exports = {
     // "vue/require-prop-types": "off",
     // "vue/no-use-v-if-with-v-for": "off",
     "no-useless-escape": "off",
+    "require-atomic-updates": "off",
+    "no-func-assign": "off",
   },
   parserOptions: {
     parser: "babel-eslint",
