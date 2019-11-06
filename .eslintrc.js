@@ -43,6 +43,7 @@ module.exports = {
     "no-useless-escape": "off",
     "require-atomic-updates": "off",
     "no-func-assign": "off",
+    "no-undef": "off",
   },
   parserOptions: {
     parser: "babel-eslint",
