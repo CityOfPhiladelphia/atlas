@@ -59,8 +59,8 @@ export default {
       // make sure all coords are defined. no NaNs allowed.
       var coordsAreDefined = [ xMin, xMax, yMin, yMax ].every(
         function (coord) {
-          return coord; 
-        }
+          return coord;
+        },
       );
 
       // if they aren't
