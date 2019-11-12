@@ -985,13 +985,13 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@philly/mapboard@^3.0.48":
-  version "3.0.48"
-  resolved "https://registry.yarnpkg.com/@philly/mapboard/-/mapboard-3.0.48.tgz#ba20b9102df24c65aa3bb7bc09ee185e5ffc505a"
-  integrity sha512-a/Ugvoefx8HIRO+YVaB7A0irezjr/sfHG0g98Ns4DcKxwliei5jTrneh4iKOTmmzkgixqy5elYaiGPb0BHMZAg==
+"@philly/mapboard@^3.0.49":
+  version "3.0.49"
+  resolved "https://registry.yarnpkg.com/@philly/mapboard/-/mapboard-3.0.49.tgz#12f4267dfee9ecfe3a458958bb5e194c6286acb1"
+  integrity sha512-JNfWQCDvbMxFbX70NR0aIX6X3hmFpCsrQRKG5l36ZJliKFN1xwsZsICAARyZXiTOpFLhWbV5l7HrpRMrNrY/4A==
   dependencies:
     "@philly/vue-comps" "^1.0.46"
-    "@philly/vue-datafetch" "^0.0.30"
+    "@philly/vue-datafetch" "^0.0.31"
     "@philly/vue-mapping" "^1.0.47"
     vue "^2.6.10"
     vuex "^3.1.1"
@@ -1015,10 +1015,10 @@
     vue "^2.6.10"
     vuex "^3.1.1"
 
-"@philly/vue-datafetch@^0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@philly/vue-datafetch/-/vue-datafetch-0.0.30.tgz#fa8d436fce32fd5e83fb8894579f4e310b152438"
-  integrity sha512-qdhS4fE6RPhNh55l80QDQF0JKJn8S7xNn1mvPPGpVJRhMRP4ZKlksnkk5n++FZAvT2RNCfv7hpF/eRxtszM46g==
+"@philly/vue-datafetch@^0.0.31":
+  version "0.0.31"
+  resolved "https://registry.yarnpkg.com/@philly/vue-datafetch/-/vue-datafetch-0.0.31.tgz#c1b4174d60ba63210a6e1da51aa5f5959caab195"
+  integrity sha512-NXAQvlqYzBFbliRyXB/naydZ4SOxNZtkz/snA3EwL8L5PO74rO+Fj323iO42Meu/G94Hztp9vFdeTrB7fPczUQ==
   dependencies:
     "@turf/turf" "^5.1.6"
     axios "^0.19.0"
@@ -2821,9 +2821,9 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"Leaflet-PointInPolygon@git+https://github.com/CityOfPhiladelphia/Leaflet.PointInPolygon.git#a0d410f69aacf5f9165c4d01ccffeed824ccaed8":
+"Leaflet-PointInPolygon@https://github.com/CityOfPhiladelphia/Leaflet.PointInPolygon#a0d410f69aacf5f9165c4d01ccffeed824ccaed8":
   version "1.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/Leaflet.PointInPolygon.git#a0d410f69aacf5f9165c4d01ccffeed824ccaed8"
+  resolved "https://github.com/CityOfPhiladelphia/Leaflet.PointInPolygon#a0d410f69aacf5f9165c4d01ccffeed824ccaed8"
 
 abab@^1.0.0:
   version "1.0.4"
@@ -6511,9 +6511,9 @@ esrecurse@^4.1.0:
   dependencies:
     estraverse "^4.1.0"
 
-"esri-leaflet-legend@git+https://github.com/CityOfPhiladelphia/esri-leaflet-legend.git#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f":
+"esri-leaflet-legend@https://github.com/CityOfPhiladelphia/esri-leaflet-legend#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f":
   version "2.0.1"
-  resolved "git+https://github.com/CityOfPhiladelphia/esri-leaflet-legend.git#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f"
+  resolved "https://github.com/CityOfPhiladelphia/esri-leaflet-legend#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f"
   dependencies:
     esri-leaflet "^2.2.3"
     leaflet "^1.4.0"
@@ -6922,7 +6922,7 @@ file-loader@^4.2.0:
     loader-utils "^1.2.3"
     schema-utils "^2.0.0"
 
-"file-saver@github:eligrey/FileSaver.js#1.3.8":
+file-saver@eligrey/FileSaver.js#1.3.8:
   version "1.3.8"
   resolved "https://codeload.github.com/eligrey/FileSaver.js/tar.gz/e865e37af9f9947ddcced76b549e27dc45c1cb2e"
 
@@ -9382,18 +9382,18 @@ leaflet-easybutton@^2.3.0:
   dependencies:
     leaflet "^1.0.1"
 
-"leaflet-measure@git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6":
+"leaflet-measure@https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6":
   version "4.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6"
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
   dependencies:
     "@turf/area" "^5.1.5"
     "@turf/length" "^5.1.5"
     leaflet "^1.3.1"
     lodash "^4.17.5"
 
-"leaflet-omnivore@git+https://github.com/CityOfPhiladelphia/leaflet-omnivore.git#f072195b03f7930690d9cbccb9375f0eda50fd41":
+"leaflet-omnivore@https://github.com/CityOfPhiladelphia/leaflet-omnivore#f072195b03f7930690d9cbccb9375f0eda50fd41":
   version "0.3.4"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-omnivore.git#f072195b03f7930690d9cbccb9375f0eda50fd41"
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-omnivore#f072195b03f7930690d9cbccb9375f0eda50fd41"
   dependencies:
     brfs "2.0.2"
     corslite "0.0.7"
@@ -9415,9 +9415,9 @@ leaflet-shape-markers@^1.0.4:
   dependencies:
     leaflet "^1.0.0"
 
-"leaflet-vector-icon@git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#c37571e92c66ce0003f22058f2d246b31d3941a5":
+"leaflet-vector-icon@https://github.com/CityOfPhiladelphia/leaflet-vector-icon#c37571e92c66ce0003f22058f2d246b31d3941a5":
   version "1.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#c37571e92c66ce0003f22058f2d246b31d3941a5"
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-vector-icon#c37571e92c66ce0003f22058f2d246b31d3941a5"
 
 leaflet-virtual-grid@^1.0.7:
   version "1.0.7"

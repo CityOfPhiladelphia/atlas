@@ -23,6 +23,8 @@ export default {
           dataFeatures.push(feature);
         }
       }
+
+
       if (!dataFeatures.length) {
         // return;
       } else {
