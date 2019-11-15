@@ -123,7 +123,7 @@ export default {
                       // const longCodesUnique = Array.from(longCodesUniqueSet);
                       for (let code of longCodesUniqueSet) {
                         longCodesUnique.push(
-                          { 'code': code }
+                          { 'code': code },
                         );
                       }
                       return longCodesUnique;
