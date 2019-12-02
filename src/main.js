@@ -145,6 +145,7 @@ mapboard({
   legendControls,
   cyclomedia: {
     enabled: true,
+    orientation: 'horizontal',
     measurementAllowed: false,
     popoutAble: true,
     recordingsUrl: 'https://atlas.cyclomedia.com/Recordings/wfs',
@@ -154,6 +155,7 @@ mapboard({
   },
   pictometry: {
     enabled: true,
+    orientation: 'horizontal',
     iframeId: 'pictometry-ipa',
     apiKey: pictApiKey,
     secretKey: pictSecretKey,
