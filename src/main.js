@@ -105,6 +105,7 @@ mapboard({
   ],
   router: {
     enabled: true,
+    type: 'custom',
   },
   defaultAddressTextPlaceholder: {
     // text: "Search Address or 9-digit OPA Property Number",

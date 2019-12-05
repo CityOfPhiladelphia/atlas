@@ -985,21 +985,19 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@philly/mapboard@^3.0.49":
+"@philly/mapboard@https://github.com/CityOfPhiladelphia/mapboard#a22ceca9751f28510793ea4d48b92de77489f09d":
   version "3.0.49"
-  resolved "https://registry.yarnpkg.com/@philly/mapboard/-/mapboard-3.0.49.tgz#12f4267dfee9ecfe3a458958bb5e194c6286acb1"
-  integrity sha512-JNfWQCDvbMxFbX70NR0aIX6X3hmFpCsrQRKG5l36ZJliKFN1xwsZsICAARyZXiTOpFLhWbV5l7HrpRMrNrY/4A==
+  resolved "https://github.com/CityOfPhiladelphia/mapboard#a22ceca9751f28510793ea4d48b92de77489f09d"
   dependencies:
-    "@philly/vue-comps" "^1.0.46"
-    "@philly/vue-datafetch" "^0.0.31"
-    "@philly/vue-mapping" "^1.0.47"
+    "@philly/vue-comps" "https://github.com/CityOfPhiladelphia/phila-vue-comps#72d998090cefd632676310f6ef5062c2ba61e308"
+    "@philly/vue-datafetch" "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#64b1e2fdeabdf074fb3c9bb9abdca70d0b492e68"
+    "@philly/vue-mapping" "https://github.com/CityOfPhiladelphia/phila-vue-mapping#b5b75c9a1f480fe5268617f387e25b136104971c"
     vue "^2.6.10"
     vuex "^3.1.1"
 
-"@philly/vue-comps@^1.0.46":
-  version "1.0.47"
-  resolved "https://registry.yarnpkg.com/@philly/vue-comps/-/vue-comps-1.0.47.tgz#4f461f7d3c87599a18ff9867d10b280ad844e9d7"
-  integrity sha512-030Fk3wES8PkdqvEF220T/5Cs6mrB6FFQXMT31kSzt442eJLWG/kIfnJYaLOQ+xeec6FH0E8WeQxEeBiJPIw6A==
+"@philly/vue-comps@https://github.com/CityOfPhiladelphia/phila-vue-comps#72d998090cefd632676310f6ef5062c2ba61e308":
+  version "1.0.46"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-comps#72d998090cefd632676310f6ef5062c2ba61e308"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"
@@ -1015,25 +1013,23 @@
     vue "^2.6.10"
     vuex "^3.1.1"
 
-"@philly/vue-datafetch@^0.0.31":
+"@philly/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#64b1e2fdeabdf074fb3c9bb9abdca70d0b492e68":
   version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@philly/vue-datafetch/-/vue-datafetch-0.0.31.tgz#c1b4174d60ba63210a6e1da51aa5f5959caab195"
-  integrity sha512-NXAQvlqYzBFbliRyXB/naydZ4SOxNZtkz/snA3EwL8L5PO74rO+Fj323iO42Meu/G94Hztp9vFdeTrB7fPczUQ==
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#64b1e2fdeabdf074fb3c9bb9abdca70d0b492e68"
   dependencies:
     "@turf/turf" "^5.1.6"
     axios "^0.19.0"
-    date-fns "^2.5.1"
-    esri-leaflet "^2.2.3"
+    date-fns "^2.6.0"
+    esri-leaflet "^2.3.1"
     https-proxy-agent "^3.0.0"
-    leaflet "^1.4.0"
+    leaflet "^1.5.1"
     proj4 "^2.5.0"
     vue "^2.6.10"
     vuex "^3.1.1"
 
-"@philly/vue-mapping@^1.0.47":
+"@philly/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#b5b75c9a1f480fe5268617f387e25b136104971c":
   version "1.0.47"
-  resolved "https://registry.yarnpkg.com/@philly/vue-mapping/-/vue-mapping-1.0.47.tgz#6f09e33b4c3dc808b01783552959ded068c6d071"
-  integrity sha512-8aVIrno5++cQQVHqBtCSYN9WTLgdgd0WcWGUl0QUqhzkPbBtk+hzsKy8+Zs2x0cHaSy1foL4zCfgH+meOH0Q5g==
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#b5b75c9a1f480fe5268617f387e25b136104971c"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"
@@ -1057,6 +1053,7 @@
     lodash-es "^4.17.14"
     phila-standards "^1.0.2"
     proj4 "^2.5.0"
+    sdleafletdraw "https://github.com/CityOfPhiladelphia/SDLeafletDraw#a0e54633bc22c342ab89668e4ca4288c8d2dc68f"
     vue "^2.6.10"
     vuex "^3.1.1"
 
@@ -5583,7 +5580,7 @@ data-urls@^1.0.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
-date-fns@^2.5.1, date-fns@^2.6.0:
+date-fns@^2.6.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.7.0.tgz#8271d943cc4636a1f27698f1b8d6a9f1ceb74026"
   integrity sha512-wxYp2PGoUDN5ZEACc61aOtYFvSsJUylIvCjpjDOqM1UDaKIIuMJ9fAnMYFHV3TQaDpfTVxhwNK/GiCaHKuemTA==
@@ -12583,6 +12580,12 @@ scope-analyzer@^2.0.1:
     es6-symbol "^3.1.1"
     estree-is-function "^1.0.0"
     get-assigned-identifiers "^1.1.0"
+
+"sdleafletdraw@https://github.com/CityOfPhiladelphia/SDLeafletDraw#a0e54633bc22c342ab89668e4ca4288c8d2dc68f":
+  version "1.3.0"
+  resolved "https://github.com/CityOfPhiladelphia/SDLeafletDraw#a0e54633bc22c342ab89668e4ca4288c8d2dc68f"
+  dependencies:
+    leaflet "^1.5.1"
 
 select-hose@^2.0.0:
   version "2.0.0"
