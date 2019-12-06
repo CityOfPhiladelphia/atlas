@@ -96,7 +96,7 @@ if (host === 'cityatlas-dev.phila.gov') {
   pictSecretKey = process.env.VUE_APP_PICTOMETRY_SECRET_KEY;
 }
 
-console.log('atlas main.js about to call mapboard');
+// console.log('atlas main.js about to call mapboard');
 
 mapboard({
   // defaultAddress: '1234 MARKET ST',
