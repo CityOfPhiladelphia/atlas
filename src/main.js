@@ -10,8 +10,6 @@
 // import * as Sentry from '@sentry/browser';
 // Sentry.init({ dsn: 'https://276ef359f45543ff91b7db449d3035f8@sentry.io/1330874' });
 
-console.log('atlas at top of main.js');
-
 // turn off console logging in production
 const { hostname='' } = location;
 if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
