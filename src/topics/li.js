@@ -39,7 +39,7 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
+              return "<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addresskey+"&address="+encodeURIComponent(item.address)+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
           },
           {
@@ -191,7 +191,7 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
+              return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
           },
           {
@@ -262,7 +262,7 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
+              return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
           },
           {
@@ -331,7 +331,7 @@ export default {
           {
             label: 'License Number',
             value: function(state, item){
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=licenses&eid="+item.licensenum+"&key="+item.street_address+"&address="+item.street_address+"'>"+item.licensenum+" <i class='fa fa-external-link-alt'></i></a>";
+              return "<a target='_blank' href='http://li.phila.gov/#details?entity=licenses&eid="+item.licensenum+"&key="+encodeURIComponent(item.street_address)+"&address="+encodeURIComponent(item.street_address)+"'>"+item.licensenum+" <i class='fa fa-external-link-alt'></i></a>";
               // return item.licensenum;
             },
           },
