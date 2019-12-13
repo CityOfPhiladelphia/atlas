@@ -63,6 +63,7 @@ import vacantIndicatorsPoints from './data-sources/vacant-indicator-points';
 import zoningAppeals from './data-sources/zoning-appeals';
 import zoningBase from './data-sources/zoning-base';
 import zoningDocs from './data-sources/zoning-docs';
+import liZoningDocs from './data-sources/li-zoning-docs';
 import zoningOverlay from './data-sources/zoning-overlay';
 // import charterSchools from './data-sources/charter-schools';
 // import neighboringProperties from './data-sources/neighboring-properties';
@@ -181,6 +182,7 @@ mapboard({
     vacantIndicatorsPoints,
     zoningAppeals,
     zoningBase,
+    liZoningDocs,
     zoningDocs,
     zoningOverlay,
     // charterSchools,
