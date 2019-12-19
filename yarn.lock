@@ -1098,9 +1098,10 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@philly/mapboard@https://github.com/CityOfPhiladelphia/mapboard#f5b1c887e2a3b7c9fb3c715a7b88e99311a619de":
-  version "3.0.50"
-  resolved "https://github.com/CityOfPhiladelphia/mapboard#f5b1c887e2a3b7c9fb3c715a7b88e99311a619de"
+"@philly/mapboard@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@philly/mapboard/-/mapboard-4.0.0.tgz#999f5c7c364668f93c4623a38cf2a6b346a0d16b"
+  integrity sha512-m33kllJqvw72/6VBQV+GIvSDW7Phi/6IGYGMwIINxF+UHhy1ibGLP/6pZzxHykvhXUav/Z1Z6d7m/V51skkw/Q==
   dependencies:
     "@philly/vue-comps" "^2.0.0"
     "@philly/vue-datafetch" "^1.0.0"
@@ -2936,9 +2937,9 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"Leaflet-PointInPolygon@git+https://github.com/CityOfPhiladelphia/Leaflet.PointInPolygon.git#a0d410f69aacf5f9165c4d01ccffeed824ccaed8":
+"Leaflet-PointInPolygon@https://github.com/CityOfPhiladelphia/Leaflet.PointInPolygon#a0d410f69aacf5f9165c4d01ccffeed824ccaed8":
   version "1.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/Leaflet.PointInPolygon.git#a0d410f69aacf5f9165c4d01ccffeed824ccaed8"
+  resolved "https://github.com/CityOfPhiladelphia/Leaflet.PointInPolygon#a0d410f69aacf5f9165c4d01ccffeed824ccaed8"
 
 abab@^1.0.0:
   version "1.0.4"
@@ -6630,9 +6631,9 @@ esrecurse@^4.1.0:
   dependencies:
     estraverse "^4.1.0"
 
-"esri-leaflet-legend@git+https://github.com/CityOfPhiladelphia/esri-leaflet-legend.git#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f":
+"esri-leaflet-legend@https://github.com/CityOfPhiladelphia/esri-leaflet-legend#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f":
   version "2.0.1"
-  resolved "git+https://github.com/CityOfPhiladelphia/esri-leaflet-legend.git#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f"
+  resolved "https://github.com/CityOfPhiladelphia/esri-leaflet-legend#8d42cbc1ed71c630fd8f9c6795877b5f7498b49f"
   dependencies:
     esri-leaflet "^2.2.3"
     leaflet "^1.4.0"
@@ -9501,18 +9502,18 @@ leaflet-easybutton@^2.3.0:
   dependencies:
     leaflet "^1.0.1"
 
-"leaflet-measure@git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6":
+"leaflet-measure@https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6":
   version "4.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-measure.git#b70886af342f19597dc2937d79d64bad6bab07c6"
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-measure#b70886af342f19597dc2937d79d64bad6bab07c6"
   dependencies:
     "@turf/area" "^5.1.5"
     "@turf/length" "^5.1.5"
     leaflet "^1.3.1"
     lodash "^4.17.5"
 
-"leaflet-omnivore@git+https://github.com/CityOfPhiladelphia/leaflet-omnivore.git#f072195b03f7930690d9cbccb9375f0eda50fd41":
+"leaflet-omnivore@https://github.com/CityOfPhiladelphia/leaflet-omnivore#f072195b03f7930690d9cbccb9375f0eda50fd41":
   version "0.3.4"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-omnivore.git#f072195b03f7930690d9cbccb9375f0eda50fd41"
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-omnivore#f072195b03f7930690d9cbccb9375f0eda50fd41"
   dependencies:
     brfs "2.0.2"
     corslite "0.0.7"
@@ -9534,9 +9535,9 @@ leaflet-shape-markers@^1.0.4:
   dependencies:
     leaflet "^1.0.0"
 
-"leaflet-vector-icon@git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#c37571e92c66ce0003f22058f2d246b31d3941a5":
+"leaflet-vector-icon@https://github.com/CityOfPhiladelphia/leaflet-vector-icon#c37571e92c66ce0003f22058f2d246b31d3941a5":
   version "1.0.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/leaflet-vector-icon.git#c37571e92c66ce0003f22058f2d246b31d3941a5"
+  resolved "https://github.com/CityOfPhiladelphia/leaflet-vector-icon#c37571e92c66ce0003f22058f2d246b31d3941a5"
 
 leaflet-virtual-grid@^1.0.7:
   version "1.0.7"
@@ -12700,9 +12701,9 @@ scope-analyzer@^2.0.1:
     estree-is-function "^1.0.0"
     get-assigned-identifiers "^1.1.0"
 
-"sdleafletdraw@git+https://github.com/CityOfPhiladelphia/SDLeafletDraw.git#a0e54633bc22c342ab89668e4ca4288c8d2dc68f":
+"sdleafletdraw@https://github.com/CityOfPhiladelphia/SDLeafletDraw#a0e54633bc22c342ab89668e4ca4288c8d2dc68f":
   version "1.3.0"
-  resolved "git+https://github.com/CityOfPhiladelphia/SDLeafletDraw.git#a0e54633bc22c342ab89668e4ca4288c8d2dc68f"
+  resolved "https://github.com/CityOfPhiladelphia/SDLeafletDraw#a0e54633bc22c342ab89668e4ca4288c8d2dc68f"
   dependencies:
     leaflet "^1.5.1"
 
