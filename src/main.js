@@ -96,6 +96,8 @@ if (host === 'cityatlas-dev.phila.gov') {
   pictSecretKey = process.env.VUE_APP_PICTOMETRY_SECRET_KEY;
 }
 
+// console.log('atlas main.js about to call mapboard');
+
 mapboard({
   // defaultAddress: '1234 MARKET ST',
   // plugin: true,
@@ -105,6 +107,7 @@ mapboard({
   ],
   router: {
     enabled: true,
+    type: 'custom',
   },
   defaultAddressTextPlaceholder: {
     // text: "Search Address or 9-digit OPA Property Number",
@@ -137,7 +140,7 @@ mapboard({
     left: 0,
     right: 0,
   },
-  gatekeeperKey: helpers.GATEKEEPER_KEY,
+  gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
   map,
   baseConfig: BASE_CONFIG_URL,
   parcels,
@@ -145,6 +148,7 @@ mapboard({
   legendControls,
   cyclomedia: {
     enabled: true,
+    orientation: 'horizontal',
     measurementAllowed: false,
     popoutAble: true,
     recordingsUrl: 'https://atlas.cyclomedia.com/Recordings/wfs',
@@ -154,6 +158,7 @@ mapboard({
   },
   pictometry: {
     enabled: true,
+    orientation: 'horizontal',
     iframeId: 'pictometry-ipa',
     apiKey: pictApiKey,
     secretKey: pictSecretKey,

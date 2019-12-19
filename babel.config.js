@@ -5,6 +5,6 @@ module.exports = {
       { useBuiltIns: "entry" },
     ],
   ],
-  ignore: [ /[\/\\]core-js/, /@babel[\/\\]runtime/ ],
+  // ignore: [ /[\/\\]core-js/, /@babel[\/\\]runtime/ ],
   // ignore: [/\/core-js/, /@babel\/runtime/]
 };
