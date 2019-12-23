@@ -133,7 +133,7 @@ export default {
               //   appId = '0' + appId;
               // }
 
-              return '<a target="_blank" href="//s3.amazonaws.com/lni-zoning-pdfs/'
+              return '<a target="_blank" href="//eclipse-docs-pdfs.s3.amazonaws.com/'
                       + item.externalfilenum
                       + '.pdf">'
                       + item.externalfilenum
