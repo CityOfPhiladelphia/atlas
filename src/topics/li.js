@@ -97,7 +97,7 @@ export default {
           {
             label: 'Date',
             value: function(state, item){
-              return item.scan_date;
+              return item.issuedate;
             },
             nullValue: 'no date available',
             transforms: [
@@ -107,7 +107,7 @@ export default {
           {
             label: 'Permit Number',
             value: function(state, item){
-              return item.permit_number;
+              return item.permitnumber;
             },
           },
           // {
@@ -119,7 +119,7 @@ export default {
           {
             label: '# Pages',
             value: function(state, item){
-              return item.num_pages;
+              return item.pagesscanned;
             },
           },
           {
@@ -127,16 +127,16 @@ export default {
             value: function (state, item) {
               // console.log('zoning doc', item);
 
-              var appId = item.app_id;
-
-              if (appId.length < 3) {
-                appId = '0' + appId;
-              }
+              // var appId = item.app_id;
+              //
+              // if (appId.length < 3) {
+              //   appId = '0' + appId;
+              // }
 
               return '<a target="_blank" href="//s3.amazonaws.com/lni-zoning-pdfs/'
-                      + item.doc_id
+                      + item.externalfilenum
                       + '.pdf">'
-                      + item.doc_id
+                      + item.externalfilenum
                       + ' <i class="fa fa-external-link-alt"></i></a>'
                       + '</a>';
               // return item.appid + '-' + item.docid
