@@ -7,8 +7,8 @@ export default {
       q: function(feature) {
         // var stmt = "select * from zoning_documents_20170420 where address_std = '" + feature.properties.street_address + "'";
 
-        var stmt = "select * from li_zoning_docs where addressobjectid = ANY('{" + feature.properties.eclipse_location_id + "}')";
-        // var stmt = "select * from li_zoning_docs where addressobjectid = ANY('{" + feature.properties.eclipse_location_id + "}'::text[])";
+        // var stmt = "select * from li_zoning_docs where addressobjectid = ANY('{" + feature.properties.eclipse_location_id + "}')";
+        var stmt = "select * from li_zoning_docs where CAST(addressobjectid as varchar) = ANY('{" + feature.properties.eclipse_location_id + "}'::text[])";
         console.log('in zoning-docs.js, stmt:', stmt);
 
         // var stmt = "select * from ais_zoning_documents where doc_id in '"
