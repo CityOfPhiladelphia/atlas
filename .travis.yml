@@ -7,6 +7,8 @@ addons:
   apt:
     sources:
       - google-chrome
+    command:
+      -$ wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
     packages:
       - google-chrome-stable fluxbox
 before_install:
@@ -14,10 +16,10 @@ before_install:
 services:
   - xvfb
 script:
-  # - npm run serve-production &
-  # - cd Test
-  #- npm install
-  # - testcafe chrome,firefox tests/*.ts
+  - npm run serve-production &
+  - cd Test
+  - npm install
+  - testcafe chrome,firefox tests/*.ts
 after_script:
   - echo PRINT THE REPORT JSON FILE
   - cat reports/report.json
@@ -47,8 +49,9 @@ deploy:
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: "atlas-dev2.phila.gov"
     on:
-      branch: develop2
-    local_dir: public
+      branch: pvd-merge
+    local_dir: dist
+    skip_cleanup: true
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
