@@ -4,9 +4,11 @@ node_js:
 sudo: required
 addons:
   firefox: latest
-  apt:
+  apt-get:
     sources:
       - google-chrome
+    command:
+      -$ wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
     packages:
       - google-chrome-stable fluxbox
 before_install:
