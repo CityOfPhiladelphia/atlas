@@ -2,7 +2,7 @@ export default {
   key: 'nearby',
   icon: 'map-marker-alt',
   label: 'Nearby',
-  dataSources: ['threeOneOneCarto', 'crimeIncidents', 'nearbyZoningAppeals'],
+  dataSources: [ 'threeOneOneCarto', 'crimeIncidents', 'nearbyZoningAppeals' ],
   // dataSources: ['311Carto', 'crimeIncidents', 'nearbyZoningAppeals', 'vacantIndicatorsPoints'],
   // dataSources: ['vacantLand', 'vacantBuilding', '311Carto', 'crimeIncidents', 'nearbyZoningAppeals'],
   // featureLayers: [
@@ -33,8 +33,8 @@ export default {
           See recent activity near your search address including 311 \
           service requests, crimes, zoning appeals, and more. Hover over a\
           record below to highlight it on the map.\
-        '
-      }
+        ',
+      },
     },
     // {
     //   type: 'badge',
@@ -87,8 +87,8 @@ export default {
               {
                 label: 'Vacant Properties',
                 value: 'vacantIndicatorsPoints',
-              }
-            ]
+              },
+            ],
           },
         ],
         // components for the content pane.
@@ -120,7 +120,7 @@ export default {
                     val = 'asc';
                   }
                   return val;
-                }
+                },
               },
               filters: [
                 {
@@ -147,16 +147,16 @@ export default {
                       value: '1',
                       unit: 'years',
                       direction: 'subtract',
-                    }
-                  ]
-                }
+                    },
+                  ],
+                },
               ],
               filterByText: {
                 label: 'Filter by text',
                 fields: [
                   'service_name',
-                  'address'
-                ]
+                  'address',
+                ],
               },
               mapOverlay: {
                 marker: 'circle',
@@ -166,7 +166,7 @@ export default {
                   color: '#ff0000',
                   weight: 1,
                   opacity: 1,
-                  fillOpacity: 1.0
+                  fillOpacity: 1.0,
                 },
                 hoverStyle: {
                   radius: 6,
@@ -174,8 +174,8 @@ export default {
                   color: '#ff0000',
                   weight: 1,
                   opacity: 1,
-                  fillOpacity: 1.0
-                }
+                  fillOpacity: 1.0,
+                },
               },
               fields: [
                 {
@@ -185,32 +185,32 @@ export default {
                   },
                   nullValue: 'no date available',
                   transforms: [
-                    'date'
-                  ]
+                    'date',
+                  ],
                 },
                 {
                   label: 'Address',
                   value: function(state, item) {
                     return item.address;
-                  }
+                  },
                 },
                 {
                   label: 'Subject',
                   value: function(state, item) {
                     if (item.media_url) {
                       return '<a target="_blank" href='+item.media_url+'>'+item.service_name+'</a>';
-                    } else {
-                      return item.service_name;
-                    }
-                  }
+                    } 
+                    return item.service_name;
+                    
+                  },
                 },
                 {
                   label: 'Distance',
                   value: function(state, item) {
                     return parseInt(item.distance) + ' ft';
-                  }
-                }
-              ]
+                  },
+                },
+              ],
             },
             slots: {
               title: 'Nearby Service Requests',
@@ -224,7 +224,7 @@ export default {
                 });
                 return rows;
               },
-            }
+            },
           },
           {
             type: 'horizontal-table',
@@ -275,14 +275,14 @@ export default {
                       unit: 'days',
                       direction: 'subtract',
                     },
-                  ]
-                }
+                  ],
+                },
               ],
               filterByText: {
                 label: 'Filter by',
                 fields: [
                   'text_general_code',
-                ]
+                ],
               },
               mapOverlay: {
                 marker: 'circle',
@@ -292,7 +292,7 @@ export default {
                   color: '#6674df',
                   weight: 1,
                   opacity: 1,
-                  fillOpacity: 1.0
+                  fillOpacity: 1.0,
                 },
                 hoverStyle: {
                   radius: 6,
@@ -300,8 +300,8 @@ export default {
                   color: '#6674df',
                   weight: 1,
                   opacity: 1,
-                  fillOpacity: 1.0
-                }
+                  fillOpacity: 1.0,
+                },
               },
               fields: [
                 {
@@ -311,28 +311,28 @@ export default {
                   },
                   nullValue: 'no date available',
                   transforms: [
-                    'date'
-                  ]
+                    'date',
+                  ],
                 },
                 {
                   label: 'Location',
                   value: function(state, item) {
                     return item.location_block;
-                  }
+                  },
                 },
                 {
                   label: 'Description',
                   value: function(state, item) {
                     return item.text_general_code;
-                  }
+                  },
                 },
                 {
                   label: 'Distance',
                   value: function(state, item) {
                     return parseInt(item.distance) + ' ft';
-                  }
-                }
-              ]
+                  },
+                },
+              ],
             },
             slots: {
               title: 'Crime Incidents',
@@ -346,7 +346,7 @@ export default {
                 });
                 return rows;
               },
-            } // end of slots
+            }, // end of slots
           }, // end of horizontal-table
           {
             type: 'horizontal-table',
@@ -380,8 +380,8 @@ export default {
               filterByText: {
                 label: 'Filter by',
                 fields: [
-                  'appealgrounds'
-                ]
+                  'appealgrounds',
+                ],
               },
               mapOverlay: {
                 marker: 'circle',
@@ -391,7 +391,7 @@ export default {
                   color: '#009900',
                   weight: 1,
                   opacity: 1,
-                  fillOpacity: 1.0
+                  fillOpacity: 1.0,
                 },
                 hoverStyle: {
                   radius: 6,
@@ -399,8 +399,8 @@ export default {
                   color: '#009900',
                   weight: 1,
                   opacity: 1,
-                  fillOpacity: 1.0
-                }
+                  fillOpacity: 1.0,
+                },
               },
               fields: [
                 {
@@ -410,28 +410,28 @@ export default {
                   },
                   nullValue: 'no date available',
                   transforms: [
-                    'date'
-                  ]
+                    'date',
+                  ],
                 },
                 {
                   label: 'Location',
                   value: function(state, item) {
                     return item.address;
-                  }
+                  },
                 },
                 {
                   label: 'Description',
                   value: function(state, item) {
                     return item.appealgrounds;
-                  }
+                  },
                 },
                 {
                   label: 'Distance',
                   value: function(state, item) {
                     return parseInt(item.distance) + ' ft';
-                  }
-                }
-              ]
+                  },
+                },
+              ],
             },
             slots: {
               title: 'Zoning Appeals',
@@ -445,7 +445,7 @@ export default {
                 });
                 return rows;
               },
-            } // end of slots
+            }, // end of slots
           }, // end of horizontal-table
           {
             type: 'horizontal-table',
@@ -465,14 +465,14 @@ export default {
                     val = item._distance;
                   }
                   return val;
-                }
+                },
               },
               filterByText: {
                 label: 'Filter by',
                 fields: [
                   'ADDRESS',
-                  'VACANT_FLAG'
-                ]
+                  'VACANT_FLAG',
+                ],
               },
               mapOverlay: {
                 marker: 'circle',
@@ -482,7 +482,7 @@ export default {
                   color: '#9400c6',
                   weight: 1,
                   opacity: 1,
-                  fillOpacity: 1.0
+                  fillOpacity: 1.0,
                 },
                 hoverStyle: {
                   radius: 6,
@@ -490,27 +490,27 @@ export default {
                   color: '#009900',
                   weight: 1,
                   opacity: 1,
-                  fillOpacity: 1.0
-                }
+                  fillOpacity: 1.0,
+                },
               },
               fields: [
                 {
                   label: 'Address',
                   value: function(state, item) {
                     return item.properties.ADDRESS;
-                  }
+                  },
                 },
                 {
                   label: 'Property Type',
                   value: function(state, item) {
                     return item.properties.VACANT_FLAG;
-                  }
+                  },
                 },
                 {
                   label: 'Distance',
                   value: function(state, item) {
                     return item._distance + ' ft';
-                  }
+                  },
                 },
               ],
               externalLink: {
@@ -523,8 +523,8 @@ export default {
                   // var address = state.geocode.data.properties.street_address;
                   // var addressEncoded = encodeURIComponent(address);
                   return '//phl.maps.arcgis.com/apps/webappviewer/index.html?id=64ac160773d04952bc17ad895cc00680';
-                }
-              }
+                },
+              },
             },
             slots: {
               title: 'Likely Vacant Properties',
@@ -538,7 +538,7 @@ export default {
                 });
                 return rows;
               },
-            } // end of slots
+            }, // end of slots
           }, // end of horizontal-table
         ], // end comps
       }, // end options
@@ -547,9 +547,9 @@ export default {
         // reactive.
         items: function(state) {
           // return state.pwdParcel;
-          return state.parcel.pwd
-        }
+          return state.parcel.pwd;
+        },
       },
-    }
-  ]
-}
+    },
+  ],
+};

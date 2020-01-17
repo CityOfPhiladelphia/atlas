@@ -1,5 +1,5 @@
 import accounting from 'accounting';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 accounting.settings.currency.precision = 0;
 
@@ -12,56 +12,63 @@ export default {
   booleanToYesNo: {
     transform: function(value) {
       return value ? 'Yes' : 'No';
-    }
+    },
   },
   thousandsPlace: {
     transform: function(value) {
       var number = String(value).match(/\d+/)[0].replace(/(.)(?=(\d{3})+$)/g,'$1,');
       var label = String(value).replace(/[0-9]/g, '') || '';
       return number + ' ' + label;
-    }
+    },
   },
   currency: {
     // a list of global objects this transform depends on
-    globals: ['accounting'],
+    globals: [ 'accounting' ],
     // this is the function that gets called to perform the transform
     transform: function (value, globals) {
       // var accounting = globals.accounting;
       return accounting.formatMoney(value);
-    }
+    },
   },
   date: {
     transform: function (value) {
-      return format(value, 'MM/DD/YYYY');
+      let valueTransformed;
+      // console.log('date transform running, value:', value, 'typeof value:', typeof value);
+      if (typeof value === 'string') {
+        valueTransformed = format(parseISO(value), 'MM/dd/yyyy');
+      } else {
+        valueTransformed = format(value, 'MM/dd/yyyy');
+      }
+      return valueTransformed;
     },
   },
   dayofweek: {
     // a list of global objects this transform depends on
     transform: function (value) {
       switch(value) {
-        case "FRI":
+      case "FRI":
         value = "Friday";
         break;
-        case "SAT":
+      case "SAT":
         value = "Saturday";
         break;
-        case "SUN":
+      case "SUN":
         value = "Sunday";
         break;
-        case "MON":
+      case "MON":
         value = "Monday";
         break;
-        case "TUE":
+      case "TUE":
         value = "Tuesday";
         break;
-        case "WED":
+      case "WED":
         value = "Wednesday";
         break;
-        case "THU":
+      case "THU":
         value = "Thursday";
-      };
-      return value
-    }
+      }
+      return value;
+    },
   },
   feet: {
     transform: function (value) {
@@ -70,11 +77,15 @@ export default {
   },
   getNearest: {
     transform: function(state, field, distName) {
-      let min = Math.min.apply(null, state.sources[field].data.map(function(item) {return item[distName];}));
-      let result  = state.sources[field].data.filter(function(item){return item[distName] == min;} );
+      let min = Math.min.apply(null, state.sources[field].data.map(function(item) {
+        return item[distName];
+      }));
+      let result  = state.sources[field].data.filter(function(item){
+        return item[distName] == min;
+      } );
       let nearest = result? result[0] : null;
-      return nearest
-    }
+      return nearest;
+    },
   },
   integer: {
     transform: function (value) {
@@ -87,16 +98,16 @@ export default {
     },
   },
   nth: {
-     transform: function(n) {
-       return n + ([,'st','nd','rd'][n%100>>3^1&&n%10]||'th')
-     }
+    transform: function(n) {
+      return n + ([ 'st','nd','rd' ][n%100>>3^1&&n%10]||'th');
+    },
   },
   phoneNumber: {
     transform: function (value) {
       var s2 = (""+value).replace(/\D/g, '');
       var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
       return (!m) ? null : "(" + m[1] + ") " + m[2] + "-" + m[3];
-    }
+    },
   },
   prettyNumber: {
     transform: function (value) {
@@ -114,12 +125,12 @@ export default {
       }
 
       // standardize phone number
-      var std = ['(', m[1], ') ', m[3], '-', m[5]].join('');
-      var orig = m[0]
+      var std = [ '(', m[1], ') ', m[3], '-', m[5] ].join('');
+      var orig = m[0];
       var valueStd = value.replace(orig, std);
 
       return valueStd;
-    }
+    },
   },
   squareFeet: {
     transform: function (value) {
@@ -132,16 +143,16 @@ export default {
         return (word.charAt(0).toUpperCase() + word.slice(1));
       });
       return str.join(' ');
-    }
+    },
   },
   urlFormatter: {
     transform: function(txt) {
       var uselessWordsArray =
         [
-          "http//", "http://", "https://", "www.", "//", "//:"
+          "http//", "http://", "https://", "www.", "//", "//:",
         ];
       var expStr = uselessWordsArray.join("|");
       return txt.replace(new RegExp(expStr, 'gi'), '');
-    }
+    },
   },
-}
+};

@@ -2,7 +2,7 @@
   "startTime": "2019-09-16T14:29:21.747Z",
   "endTime": "2019-09-16T14:30:35.525Z",
   "userAgents": [
-    "Firefox 68.0.0 / Windows 10.0.0"
+    "Firefox 71.0.0 / Windows 10.0.0"
   ],
   "passed": 5,
   "total": 5,
@@ -10,7 +10,7 @@
   "fixtures": [
     {
       "name": "page landing verification",
-      "path": "C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\tests\\testBasePage.ts",
+      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testBasePage.ts",
       "meta": {},
       "tests": [
         {
@@ -25,7 +25,7 @@
     },
     {
       "name": "Building search page verification",
-      "path": "C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\tests\\testBuildingSearchPage.ts",
+      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testBuildingSearchPage.ts",
       "meta": {},
       "tests": [
         {
@@ -40,7 +40,7 @@
     },
     {
       "name": "Condominiums search page verification",
-      "path": "C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\tests\\testCondominiumSearchPage.ts",
+      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testCondominiumSearchPage.ts",
       "meta": {},
       "tests": [
         {
@@ -55,7 +55,7 @@
     },
     {
       "name": "DorNoPwd  search page verification",
-      "path": "C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\tests\\testDorSearchPage.ts",
+      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testDorSearchPage.ts",
       "meta": {},
       "tests": [
         {
@@ -70,7 +70,7 @@
     },
     {
       "name": "PwdNoDor search page verification",
-      "path": "C:\\Users\\Anusha.Errabelli\\Documents\\GitHub\\atlas\\Test\\tests\\testPwdSearchPage.ts",
+      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testPwdSearchPage.ts",
       "meta": {},
       "tests": [
         {

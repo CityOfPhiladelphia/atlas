@@ -1,5 +1,5 @@
 import transforms from '../general/transforms';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 const phone = transforms.phoneNumber.transform;
 const titleCase = transforms.titleCase.transform;
 const nth = transforms.nth.transform;
@@ -8,7 +8,7 @@ export default {
   key: 'voting',
   icon: 'gavel',
   label: 'Voting',
-  dataSources: ['divisions', 'pollingPlaces', 'electedOfficials', 'nextElectionAPI'],
+  dataSources: [ 'divisions', 'pollingPlaces', 'electedOfficials', 'nextElectionAPI' ],
   errorMessage: function() {
     return ' ';
   },
@@ -16,7 +16,6 @@ export default {
     {
       type: 'badge',
       options: {
-        titleBackground: '#2176d2',
         externalLink: {
           data: 'Preview ballot',
           // action: function(state){return 'Preview ballot'},
@@ -29,8 +28,9 @@ export default {
       },
       slots: {
         title: 'Next Eligible Election Is',
+        titleBackground: '#2176d2',
         value: function(state) {
-          return format(state.sources.nextElectionAPI.data.election_date, 'dddd, MMMM D, YYYY');
+          return format(parseISO(state.sources.nextElectionAPI.data.election_date), 'MMMM d, yyyy');
         },
       }, // end slots
     }, // end of badge
@@ -45,7 +45,7 @@ export default {
           href="//www.philadelphiavotes.com/en/voters/registering-to-vote"> \
           here</a>.\
         ',
-      }
+      },
     },
     {
       type: 'vertical-table',
@@ -57,8 +57,8 @@ export default {
           },
           href: function(state) {
             return 'https://www.philadelphiavotes.com/en/voters/absentee-and-alternative-ballots';
-          }
-        }
+          },
+        },
       },
       slots: {
         title: 'Polling Place',
@@ -83,12 +83,12 @@ export default {
               if (state.sources.pollingPlaces.data) {
                 const pollingData = state.sources.pollingPlaces.data.rows[0];
                 const answer = pollingData.accessibility_code== "F" ? 'Building Fully Accessible' :
-                               pollingData.accessibility_code== "B" ? 'Building Substantially Accessible' :
-                               pollingData.accessibility_code== "M" ? 'Building Accessibility Modified' :
-                               pollingData.accessibility_code== "A" ? 'Alternate Entrance' :
-                               pollingData.accessibility_code== "R" ? 'Building Accessible With Ramp' :
-                               pollingData.accessibility_code== "N" ? 'Building Not Accessible' :
-                              'Information not available';
+                  pollingData.accessibility_code== "B" ? 'Building Substantially Accessible' :
+                    pollingData.accessibility_code== "M" ? 'Building Accessibility Modified' :
+                      pollingData.accessibility_code== "A" ? 'Alternate Entrance' :
+                        pollingData.accessibility_code== "R" ? 'Building Accessible With Ramp' :
+                          pollingData.accessibility_code== "N" ? 'Building Not Accessible' :
+                            'Information not available';
                 return '<a href="//www.philadelphiavotes.com/en/voters/polling-place-accessibility"\
                         target="_blank">'+answer+'</a>';
               }
@@ -100,14 +100,14 @@ export default {
               if (state.sources.pollingPlaces.data) {
                 const pollingData = state.sources.pollingPlaces.data;
                 const parking = pollingData.parking_code == "N" ? 'No Parking' :
-                                pollingData.parking_code == "G" ? 'General Parking' :
-                                pollingData.parking_code == "L" ? 'Loading Zone' :
-                                'Information not available';
+                  pollingData.parking_code == "G" ? 'General Parking' :
+                    pollingData.parking_code == "L" ? 'Loading Zone' :
+                      'Information not available';
                 return parking;
               }
             },
           },
-        ]
+        ],
       },
     },
     {
@@ -120,8 +120,8 @@ export default {
           },
           href: function(state) {
             return '//www.philadelphiavotes.com/en/voters/elected-officials';
-          }
-        }
+          },
+        },
       },
 
       slots: {
@@ -130,7 +130,9 @@ export default {
           {
             label: 'District Council Member',
             value: function(state) {
-              const council = state.sources.electedOfficials.data.rows.filter( function(item) {return item.office_label == "City Council";});
+              const council = state.sources.electedOfficials.data.rows.filter( function(item) {
+                return item.office_label == "City Council";
+              });
               return '<a href="http://' + council[0].website + '" target="_blank">' +
                 council[0].first_name +" " +council[0].last_name + " - " + nth(state.geocode.data.properties.council_district_2016) + " Council District </a>";
             },
@@ -138,7 +140,9 @@ export default {
           {
             label: 'City Hall Office',
             value: function(state) {
-              const council = state.sources.electedOfficials.data.rows.filter( function(item) {return item.office_label == "City Council";});
+              const council = state.sources.electedOfficials.data.rows.filter( function(item) {
+                return item.office_label == "City Council";
+              });
               return council[0].main_contact_address_2 + '<br>' +
                      phone(council[0].main_contact_phone_1) + ", " + phone(council[0].main_contact_phone_2) + '<br>\
                       F: '+ phone(council[0].main_contact_fax) + ' <br>\
@@ -148,18 +152,20 @@ export default {
           {
             label: 'Current Term',
             value: function(state) {
-              const council = state.sources.electedOfficials.data.rows.filter( function(item) {return item.office_label == "City Council";});
-              return council[0].next_election - 4 + ' - ' + council[0].next_election
+              const council = state.sources.electedOfficials.data.rows.filter( function(item) {
+                return item.office_label == "City Council";
+              });
+              return council[0].next_election - 4 + ' - ' + council[0].next_election;
             },
           },
-        ]
+        ],
       },
     }, // end table
   ],
-  zoomToShape: ['geojsonForTopic', 'markersForTopic'],
+  zoomToShape: [ 'geojsonForTopic', 'markersForTopic' ],
   geojsonForTopic: {
     data: function(state) {
-      return state.sources.divisions.data
+      return state.sources.divisions.data;
     },
     key: 'id',
     style: {
@@ -167,16 +173,16 @@ export default {
       color: '#9e9ac8',
       weight: 2,
       opacity: 1,
-      fillOpacity: 0.3
-    }
+      fillOpacity: 0.3,
+    },
   },
   markersForTopic: {
     data: function(state) {
       if (state.sources.pollingPlaces.data) {
         return state.sources.pollingPlaces.data.rows[0];
-      } else {
-        return null;
       }
+      return null;
+
     },
     lat: 'lat',
     lng: 'lng',
@@ -187,9 +193,9 @@ export default {
       icon: 'landmark',
       shadow: false,
       size: 35,
-    }
+    },
   },
   basemap: 'pwd',
   identifyFeature: 'address-marker',
-  parcels: 'pwd'
-}
+  parcels: 'pwd',
+};

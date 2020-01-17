@@ -7,15 +7,15 @@ export default {
   dataSources: [
     'zoningOverlay',
     'zoningBase',
-    'zoningAppeals',
-    'rco',
+    // 'zoningAppeals',
+    // 'rco',
   ],
   components: [
     {
       type: 'callout',
       slots: {
-        text: 'Base district zoning maps, associated zoning overlays, and Registered Community Organizations applicable to your search address. Source: Department of Planning and Development'
-      }
+        text: 'Base district zoning maps, associated zoning overlays, and Registered Community Organizations applicable to your search address. Source: Department of Planning and Development',
+      },
     },
     {
       type: 'collection-summary',
@@ -27,29 +27,33 @@ export default {
           return item.properties.STATUS;
         },
         context: {
-          singular: function(list){ return 'There is ' + list + ' at this address.'},
-          plural: function(list){ return 'There are ' + list + ' at this address.'}
+          singular: function(list){
+            return 'There is ' + list + ' at this address.';
+          },
+          plural: function(list){
+            return 'There are ' + list + ' at this address.';
+          },
         },
         types: [
           {
             value: 1,
-            label: 'active parcel'
+            label: 'active parcel',
           },
           {
             value: 2,
-            label: 'inactive parcel'
+            label: 'inactive parcel',
           },
           {
             value: 3,
-            label: 'remainder parcel'
-          }
-        ]
+            label: 'remainder parcel',
+          },
+        ],
       },
       slots: {
         items: function(state) {
           return state.parcels.dor.data;
-        }
-      }
+        },
+      },
     },
     {
       type: 'tab-group',
@@ -61,7 +65,7 @@ export default {
           return item.properties.MAPREG;
         },
         getAddress: function(item) {
-          var address = hf.concatDorAddress(item);
+          var address = helpers.concatDorAddress(item);
           return address;
         },
         activeItem: function(state) {
@@ -92,8 +96,8 @@ export default {
                         },
                         transforms: [
                           'nowrap',
-                          'bold'
-                        ]
+                          'bold',
+                        ],
                       },
                       {
                         label: 'Description',
@@ -109,18 +113,18 @@ export default {
                       // console.log('state.sources:', state.sources['zoningBase'].data.rows);
                       const id = item.properties.OBJECTID;
                       const target = state.sources.zoningBase.targets[id] || {};
-                      const { data={} } = target;
-                      const { rows=[] } = data;
+                      const { data={}} = target;
+                      const { rows=[]} = data;
 
                       // get unique zoning codes
                       const longCodes = rows.map(row => row.long_code);
                       const longCodesUniqueSet = new Set(longCodes);
-                      let longCodesUnique = []
+                      let longCodesUnique = [];
                       // const longCodesUnique = Array.from(longCodesUniqueSet);
                       for (let code of longCodesUniqueSet) {
                         longCodesUnique.push(
-                          { 'code': code }
-                        )
+                          { 'code': code },
+                        );
                       }
                       return longCodesUnique;
                     },
@@ -132,37 +136,6 @@ export default {
               title: 'Base District',
             },
           }, // end of badge-custom
-          {
-            type: 'horizontal-table',
-            options: {
-              topicKey: 'zoning',
-              id: 'zoningOverlay',
-              fields: [
-                {
-                  label: 'Name',
-                  value: function (state, item) {
-                    return item.overlay_name
-                  }
-                },
-                {
-                  label: 'Code Section',
-                  value: function (state, item) {
-                    return "<a target='_blank' href='"+item.code_section_link+"'>"+item.code_section+" <i class='fa fa-external-link-alt'></i></a>"
-                  }
-                },
-              ],
-            },
-            slots: {
-              title: 'Overlays',
-              items: function(state, item) {
-                var id = item.properties.OBJECTID,
-                    target = state.sources.zoningOverlay.targets[id] || {},
-                    data = target.data || {};
-                // console.log('zoningbase target:', target);
-                return data.rows || [];
-              },
-            },
-          },
           {
             type: 'horizontal-table',
             options: {
@@ -189,7 +162,7 @@ export default {
                   label: 'Pending Bill',
                   value: function (state, item) {
                     return `<a target="_blank" href="${item.pendingbillurl}">${item.pendingbill} <i class="fa fa-external-link-alt"></i></a>`;
-                  }
+                  },
                 },
               ], // end fields
             },
@@ -198,11 +171,11 @@ export default {
               items: function(state, item) {
                 // console.log('state.sources:', state.sources['zoningBase'].data.rows);
                 var id = item.properties.OBJECTID,
-                    target = state.sources.zoningBase.targets[id] || {},
-                    data = target.data || {};
+                  target = state.sources.zoningBase.targets[id] || {},
+                  data = target.data || {};
 
                 // include only rows where pending is true
-                const { rows=[] } = data;
+                const { rows=[]} = data;
                 const rowsFiltered = rows.filter(row => row.pending === 'Yes');
 
                 // give each pending zoning bill a type of "zoning"
@@ -234,13 +207,44 @@ export default {
               },
             }, // end slots
           }, // end table
+          {
+            type: 'horizontal-table',
+            options: {
+              topicKey: 'zoning',
+              id: 'zoningOverlay',
+              fields: [
+                {
+                  label: 'Name',
+                  value: function (state, item) {
+                    return item.overlay_name;
+                  },
+                },
+                {
+                  label: 'Code Section',
+                  value: function (state, item) {
+                    return "<a target='_blank' href='"+item.code_section_link+"'>"+item.code_section+" <i class='fa fa-external-link-alt'></i></a>";
+                  },
+                },
+              ],
+            },
+            slots: {
+              title: 'Overlays',
+              items: function(state, item) {
+                var id = item.properties.OBJECTID,
+                  target = state.sources.zoningOverlay.targets[id] || {},
+                  data = target.data || {};
+                // console.log('zoningbase target:', target);
+                return data.rows || [];
+              },
+            },
+          },
         ], // end of tab-group components
       },
       slots: {
         items: function (state) {
           // return state.dorParcels.data;
           return state.parcels.dor.data;
-        }
+        },
       },
     },
     {
@@ -254,22 +258,22 @@ export default {
               return item.processeddate;
             },
             transforms: [
-              'date'
-            ]
+              'date',
+            ],
           },
           {
             label: 'ID',
             value: function(state, item){
               //return item.appeal_key
               // return "<a target='_blank' href='//li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>"
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=appeals&eid="+item.appeal_key+"&key="+item.addresskey+"&address="+item.address+"'>"+item.appealno+"<i class='fa fa-external-link-alt'></i></a>"
-            }
+              return "<a target='_blank' href='http://li.phila.gov/#details?entity=appeals&eid="+item.appeal_key+"&key="+item.addresskey+"&address="+encodeURIComponent(item.address)+"'>"+item.appealno+"<i class='fa fa-external-link-alt'></i></a>";
+            },
           },
           {
             label: 'Description',
             value: function(state, item){
               return item.appealgrounds;
-            }
+            },
           },
           {
             label: 'Scheduled Date',
@@ -277,15 +281,15 @@ export default {
               return item.date_scheduled;
             },
             transforms: [
-              'date'
-            ]
+              'date',
+            ],
           },
           {
             label: 'Status',
             value: function(state, item){
               // return item.properties.CODE_SECTION
-              return item.decision
-            }
+              return item.decision;
+            },
           },
         ],
         sort: {
@@ -294,7 +298,7 @@ export default {
             return item.date_scheduled;
           },
           // asc or desc
-          order: 'desc'
+          order: 'desc',
         },
       },
       slots: {
@@ -330,14 +334,14 @@ export default {
             label: 'RCO',
             value: function(state, item) {
               return '<b>' + item.properties.ORGANIZATION_NAME + '</b><br>'
-              + item.properties.ORGANIZATION_ADDRESS
+              + item.properties.ORGANIZATION_ADDRESS;
             },
           },
           {
             label: 'Meeting Address',
             value: function(state, item) {
-              return item.properties.MEETING_LOCATION_ADDRESS
-            }
+              return item.properties.MEETING_LOCATION_ADDRESS;
+            },
           },
           {
             label: 'Primary Contact',
@@ -346,17 +350,17 @@ export default {
               return item.properties.PRIMARY_NAME + '<br>'
               + item.properties.PRIMARY_PHONE + '<br>'
               // + `<b><a :href="'mailto:' + item.properties.PRIMARY_EMAIL">`
-              + item.properties.PRIMARY_EMAIL// + '</a></b>'
+              + item.properties.PRIMARY_EMAIL;// + '</a></b>'
             },
             transforms: [
-              'rcoPrimaryContact'
-            ]
+              'rcoPrimaryContact',
+            ],
           },
           {
             label: 'Preferred Method',
             value: function(state, item){
-              return item.properties.PREFFERED_CONTACT_METHOD
-            }
+              return item.properties.PREFFERED_CONTACT_METHOD;
+            },
           },
         ],
         externalLink: {
@@ -368,9 +372,10 @@ export default {
           href: function(state) {
             // var address = state.geocode.data.properties.street_address;
             // var addressEncoded = encodeURIComponent(address);
-            return '//www.phila.gov/CityPlanning/projectreviews/RCO%20Related/List_of_RCOs.pdf';
-          }
-        }
+            // return '//www.phila.gov/CityPlanning/projectreviews/RCO%20Related/List_of_RCOs.pdf';
+            return '//www.phila.gov/documents/registered-community-organization-rco-materials/';
+          },
+        },
       },
       slots: {
         title: 'Registered Community Organizations',
@@ -389,8 +394,8 @@ export default {
     },
   ],
   dynamicMapLayers: [
-    'zoning'
+    'zoning',
   ],
   identifyFeature: 'dor-parcel',
-  parcels: 'dor'
-}
+  parcels: 'dor',
+};

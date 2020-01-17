@@ -15,4 +15,4 @@ export default {
   //
   //   return data;
   // }
-}
+};

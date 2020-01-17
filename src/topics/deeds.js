@@ -5,7 +5,7 @@ export default {
   icon: 'book',
   label: 'Deeds',
   // TODO uncommenting this causes the no-content view to show up.
-  dataSources: ['dorDocuments'],
+  // dataSources: ['dorDocuments'],
   components: [
     {
       type: 'callout',
@@ -18,7 +18,7 @@ export default {
           only and should not be used in place of the recorded deeds or \
           land surveys. Source: Department of Records\
         ',
-      }
+      },
     },
     {
       type: 'collection-summary',
@@ -30,33 +30,40 @@ export default {
           return item.properties.STATUS;
         },
         context: {
-          singular: function(list){ return 'There is ' + list + ' at this address.'},
-          plural: function(list){ return 'There are ' + list + ' at this address.'}
+          singular: function(list){
+            return 'There is ' + list + ' at this address.';
+          },
+          plural: function(list){
+            return 'There are ' + list + ' at this address.';
+          },
         },
         types: [
           {
             value: 1,
-            label: 'active parcel'
+            label: 'active parcel',
           },
           {
             value: 2,
-            label: 'inactive parcel'
+            label: 'inactive parcel',
           },
           {
             value: 3,
-            label: 'remainder parcel'
-          }
-        ]
+            label: 'remainder parcel',
+          },
+        ],
       },
       slots: {
         items: function(state) {
           return state.parcels.dor.data;
-        }
-      }
+        },
+      },
     },
     {
       type: 'tab-group',
       options: {
+        map: function(state) {
+          return state.map;
+        },
         getKey: function(item) {
           return item.properties.OBJECTID;
         },
@@ -99,17 +106,17 @@ export default {
                     var status = item.properties.STATUS;
                     var desc;
                     switch(status) {
-                      case 1:
-                        desc = 'Active';
-                        break;
-                      case 2:
-                        desc = 'Inactive';
-                        break;
-                      case 3:
-                        desc = 'Remainder';
-                        break;
-                      default:
-                        break;
+                    case 1:
+                      desc = 'Active';
+                      break;
+                    case 2:
+                      desc = 'Inactive';
+                      break;
+                    case 3:
+                      desc = 'Remainder';
+                      break;
+                    default:
+                      break;
                     }
                     return desc;
                   },
@@ -120,8 +127,8 @@ export default {
                     return item.properties.ORIG_DATE;
                   },
                   transforms: [
-                    'date'
-                  ]
+                    'date',
+                  ],
                 },
                 {
                   label: 'Inactive Date',
@@ -129,8 +136,8 @@ export default {
                     return item.properties.INACTDATE;
                   },
                   transforms: [
-                    'date'
-                  ]
+                    'date',
+                  ],
                 },
                 {
                   label: 'Has Air Rights',
@@ -144,9 +151,9 @@ export default {
                   value: function(state, item) {
                     if (!item.properties.CONDOFLAG) {
                       return 'No';
-                    } else {
-                      return 'Yes';
-                    }
+                    } 
+                    return 'Yes';
+                    
                     // return item.properties.CONDOFLAG ? 'Yes' : 'No';
                   },
                   // fieldFunction: function(state, item) {
@@ -162,7 +169,7 @@ export default {
                     'integer',
                     'prettyNumber',
                     'feet',
-                  ]
+                  ],
                 },
                 {
                   label: 'Area',
@@ -173,10 +180,10 @@ export default {
                     'integer',
                     'prettyNumber',
                     'squareFeet',
-                  ]
+                  ],
                 },
-              ]
-            }  // end slots
+              ],
+            },  // end slots
           },  // end vertical table
           {
             type: 'horizontal-table',
@@ -225,8 +232,8 @@ export default {
                   return item.condounit;
                 },
                 // asc or desc
-                order: 'asc'
-              }
+                order: 'asc',
+              },
             },
             slots: {
               title: 'Deeded Condominiums',
@@ -241,7 +248,7 @@ export default {
                   return [];
                 }
               },
-            } // end slots
+            }, // end slots
           }, // end condos table
 
           {
@@ -254,7 +261,7 @@ export default {
                 shows documents recorded from\
                 December 1999 forward, and may not be a complete history\
                 of title for the parcel.\
-              '
+              ',
             },
           },
 
@@ -281,8 +288,8 @@ export default {
                   },
                   nullValue: 'no date available',
                   transforms: [
-                    'date'
-                  ]
+                    'date',
+                  ],
                 },
                 {
                   label: 'Type',
@@ -315,8 +322,8 @@ export default {
                   // return Date.parse(item.display_date);
                 },
                 // asc or desc
-                order: 'desc'
-              }
+                order: 'desc',
+              },
             },
             slots: {
               title: 'Documents',
@@ -325,19 +332,19 @@ export default {
                 var id = item.properties.OBJECTID;
                 if (state.sources.dorDocuments.targets[id]) {
                   return state.sources.dorDocuments.targets[id].data;
-                } else {
-                  return [];
-                }
+                } 
+                return [];
+                
               },
-            } // end slots
+            }, // end slots
 
           }, // end docs table
-        ] // end parcel tab content comps
+        ], // end parcel tab content comps
       }, // end parcel tab options
       slots: {
         items: function (state) {
           return state.parcels.dor.data;
-        }
+        },
       },
     }, // end dor parcel tab group comp
     {
@@ -361,8 +368,8 @@ export default {
         title: 'Registry Maps',
         items: function(state) {
           return state.sources.regmaps.data;
-        }
-      }
+        },
+      },
     },
     // {
     //   type: 'callout',
@@ -374,4 +381,4 @@ export default {
   identifyFeature: 'dor-parcel',
   parcels: 'dor',
   imageOverlayGroup: 'regmaps',
-}
+};

@@ -24,7 +24,7 @@ export default {
         //          + "select * from total where overlap_area >= 0.01"
         //          // + "select * from zp";
         var mapreg = feature.properties.MAPREG,
-            stmt = "\
+          stmt = "\
               WITH all_zoning AS \
                 ( \
                   SELECT * \
@@ -63,7 +63,7 @@ export default {
               WHERE sum_overlap_area >= 0.01 \
             ";
         return stmt;
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};

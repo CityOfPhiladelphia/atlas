@@ -48,7 +48,7 @@ import crimeIncidents from './data-sources/crime-incidents';
 import divisions from './data-sources/divisions';
 import dorCondoList from './data-sources/dor-condo-list';
 import dorDocuments from './data-sources/dor-documents';
-import electedOfficials from './data-sources/elected-officials'
+import electedOfficials from './data-sources/elected-officials';
 import liBusinessLicenses from './data-sources/li-business-licenses';
 import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
@@ -81,7 +81,7 @@ import voting from './topics/voting';
 // import 'phila-standards/dist/css/phila-app.min.css';
 // import './styles.css';
 
-var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/mapboard-default-base-config@d3ad38f050cf55b4ab0dc2ff68e6f18025690246/config.js';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/mapboard-default-base-config@d664e218cbf7db07cc3ef2382640b54320aefb2b/config.js';
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;
@@ -96,32 +96,35 @@ if (host === 'cityatlas-dev.phila.gov') {
   pictSecretKey = process.env.VUE_APP_PICTOMETRY_SECRET_KEY;
 }
 
+// console.log('atlas main.js about to call mapboard');
+
 mapboard({
   // defaultAddress: '1234 MARKET ST',
   // plugin: true,
   panels: [
     'topics',
-    'map'
+    'map',
   ],
   router: {
-    enabled: true
+    enabled: true,
+    type: 'custom',
   },
   defaultAddressTextPlaceholder: {
     // text: "Search Address or 9-digit OPA Property Number",
     wideStyle: {
       'max-width': '100%',
       'font-size': '24px',
-      'line-height': '28px'
+      'line-height': '28px',
     },
     narrowStyle: {
       'max-width': '100%',
       'font-size': '20px',
-      'line-height': '24px'
-    }
+      'line-height': '24px',
+    },
   },
   geolocation: {
     enabled: true,
-    icon: ['far', 'dot-circle']
+    icon: [ 'far', 'dot-circle' ],
   },
   addressInput: {
     width: 415,
@@ -137,7 +140,7 @@ mapboard({
     left: 0,
     right: 0,
   },
-  gatekeeperKey: helpers.GATEKEEPER_KEY,
+  gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
   map,
   baseConfig: BASE_CONFIG_URL,
   parcels,
@@ -145,6 +148,7 @@ mapboard({
   legendControls,
   cyclomedia: {
     enabled: true,
+    orientation: 'horizontal',
     measurementAllowed: false,
     popoutAble: true,
     recordingsUrl: 'https://atlas.cyclomedia.com/Recordings/wfs',
@@ -154,6 +158,7 @@ mapboard({
   },
   pictometry: {
     enabled: true,
+    orientation: 'horizontal',
     iframeId: 'pictometry-ipa',
     apiKey: pictApiKey,
     secretKey: pictSecretKey,
@@ -201,8 +206,8 @@ mapboard({
     {
       type: 'topic-set',
       options: {
-        defaultTopic: 'property'
-      }
+        defaultTopic: 'property',
+      },
     },
   ],
 });
