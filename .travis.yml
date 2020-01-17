@@ -4,7 +4,7 @@ node_js:
 sudo: required
 addons:
   firefox: latest
-  apt:
+  apt-get:
     sources:
       - google-chrome
     command:
