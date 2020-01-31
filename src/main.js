@@ -30,7 +30,7 @@ import { faBuilding } from '@fortawesome/free-solid-svg-icons/faBuilding';
 library.add(faDotCircle, faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding);
 
 import accounting from 'accounting';
-import mapboard from '@philly/mapboard/src/main.js';
+import mapboard from '@phila/mapboard/src/main.js';
 
 // General Config Modules
 import helpers from './util/helpers';

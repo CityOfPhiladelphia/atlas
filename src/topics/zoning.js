@@ -169,6 +169,7 @@ export default {
             slots: {
               title: 'Pending Bills',
               items: function(state, item) {
+                // console.log('in Pending Bills, state:', state, 'item:', item);
                 // console.log('state.sources:', state.sources['zoningBase'].data.rows);
                 var id = item.properties.OBJECTID,
                   target = state.sources.zoningBase.targets[id] || {},
