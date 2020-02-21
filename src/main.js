@@ -64,6 +64,8 @@ import zoningAppeals from './data-sources/zoning-appeals';
 import zoningBase from './data-sources/zoning-base';
 import zoningDocs from './data-sources/zoning-docs';
 import zoningOverlay from './data-sources/zoning-overlay';
+import streetType from './data-sources/street-type';
+import streetCenterline from './data-sources/street-centerline';
 // import charterSchools from './data-sources/charter-schools';
 // import neighboringProperties from './data-sources/neighboring-properties';
 
@@ -188,6 +190,8 @@ mapboard({
     zoningBase,
     zoningDocs,
     zoningOverlay,
+    streetType,
+    streetCenterline,
     // charterSchools,
     // neighboringProperties,
   },

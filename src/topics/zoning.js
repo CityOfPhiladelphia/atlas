@@ -327,6 +327,41 @@ export default {
       },
     },
     {
+      type: 'vertical-table',
+      slots: {
+        title: 'Street Information',
+        fields: [
+          {
+            label: 'Block',
+            value: function(state) {
+              const lHundred = state.sources.streetCenterline.data.features[0].attributes.L_HUNDRED;
+              const rHundred = state.sources.streetCenterline.data.features[0].attributes.R_HUNDRED;
+              const stName = state.sources.streetCenterline.data.features[0].attributes.STNAME;
+              let value;
+              if (lHundred === 0) {
+                value = rHundred + ' ' + stName;
+              } else {
+                value = lHundred + ' ' + stName;
+              }
+              return value;
+            },
+          },
+          {
+            label: 'Street Type',
+            value: function(state) {
+              return state.sources.streetType.data.features[0].attributes.CLASS1;
+            },
+          },
+          {
+            label: 'Parking',
+            value: function(state) {
+              return state.sources.streetType.data.features[0].attributes.PARKING;
+            },
+          },
+        ],
+      },
+    },
+    {
       type: 'horizontal-table',
       options: {
         id: 'rco',
