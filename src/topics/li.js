@@ -11,6 +11,15 @@ export default {
   ],
   components: [
     {
+      type: 'exclamationCallout',
+      slots: {
+        text: '\
+          Updates to L&I data on Atlas will be temporarily suspended \
+          as of March 13, 2020. For more info see <a target="_blank" href="https://www.phila.gov/li">www.phila.gov/li</a>. \
+        ',
+      },
+    },
+    {
       type: 'callout',
       slots: {
         text: '\

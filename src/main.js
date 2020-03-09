@@ -27,7 +27,8 @@ import { faGavel } from '@fortawesome/free-solid-svg-icons/faGavel';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons/faMapMarkerAlt';
 import { faLandmark } from '@fortawesome/free-solid-svg-icons/faLandmark';
 import { faBuilding } from '@fortawesome/free-solid-svg-icons/faBuilding';
-library.add(faDotCircle, faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding);
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
+library.add(faDotCircle, faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding, faExclamationTriangle);
 
 import accounting from 'accounting';
 import mapboard from '@phila/mapboard/src/main.js';
@@ -78,6 +79,12 @@ import zoning from './topics/zoning';
 import nearby from './topics/nearby';
 import voting from './topics/voting';
 
+import exclamationCallout from './components/ExclamationCallout';
+
+const customComps = {
+  'exclamationCallout': exclamationCallout,
+};
+
 // import 'phila-standards/dist/css/phila-app.min.css';
 // import './styles.css';
 
@@ -101,6 +108,7 @@ if (host === 'cityatlas-dev.phila.gov') {
 mapboard({
   // defaultAddress: '1234 MARKET ST',
   // plugin: true,
+  customComps,
   panels: [
     'topics',
     'map',
