@@ -165,18 +165,39 @@ export default {
         title: 'Zoning Permit Documents',
         subtitle: 'formerly "Zoning Archive"',
         items: function(state) {
+          let combinedRows = [];
+          let data, rows, itemRow;
           if (state.sources['zoningDocs'].data) {
             if (state.sources['zoningDocs'].data.rows) {
-              var data = state.sources['zoningDocs'].data.rows;
-              var rows = data.map(function(row){
-                var itemRow = row;
+              data = state.sources['zoningDocs'].data.rows;
+              rows = data.map(function(row){
+                itemRow = row;
                 // var itemRow = Object.assign({}, row);
                 //itemRow.DISTANCE = 'TODO';
                 return itemRow;
               });
-              return rows;
+              for (let singleRow of rows) {
+                combinedRows.push(singleRow);
+              }
+              // return rows;
             }
           }
+          if (state.sources['zoningDocsEclipse'].data) {
+            if (state.sources['zoningDocsEclipse'].data.rows) {
+              data = state.sources['zoningDocsEclipse'].data.rows;
+              rows = data.map(function(row){
+                itemRow = row;
+                // var itemRow = Object.assign({}, row);
+                //itemRow.DISTANCE = 'TODO';
+                return itemRow;
+              });
+              for (let singleRow of rows) {
+                combinedRows.push(singleRow);
+              }
+              // return rows;
+            }
+          }
+          return combinedRows;
         },
       },
     },
