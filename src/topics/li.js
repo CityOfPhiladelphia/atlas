@@ -125,8 +125,8 @@ export default {
               let permitNumber;
               if (item.permit_number) {
                 permitNumber = item.permit_number;
-              } else if (item.externalfilenum) {
-                permitNumber = item.externalfilenum;
+              } else if (item.permitnumber) {
+                permitNumber = item.permitnumber;
               }
               return permitNumber;
             },
@@ -157,14 +157,17 @@ export default {
                 }
               }
 
-              let docId;
+              let docId, url;
               if (item.doc_id) {
                 docId = item.doc_id;
-              } else if (item.permitnumber) {
-                docId = item.permitnumber;
+                url = '//s3.amazonaws.com/lni-zoning-pdfs/';
+              } else if (item.externalfilenum ) {
+                docId = item.externalfilenum ;
+                url = 'http://s3.amazonaws.com/eclipse-docs-pdfs/zoning/';
               }
 
-              return '<a target="_blank" href="//s3.amazonaws.com/lni-zoning-pdfs/'
+              return '<a target="_blank" href="' //s3.amazonaws.com/lni-zoning-pdfs/'
+                      + url
                       + docId
                       // + item.doc_id
                       + '.pdf">'
