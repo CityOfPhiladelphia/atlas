@@ -106,7 +106,13 @@ export default {
           {
             label: 'Date',
             value: function(state, item){
-              return item.scan_date;
+              let date;
+              if (item.scan_date) {
+                date = item.scan_date;
+              } else if (item.issuedate) {
+                date = item.issuedate;
+              }
+              return date;
             },
             nullValue: 'no date available',
             transforms: [
@@ -116,36 +122,54 @@ export default {
           {
             label: 'Permit Number',
             value: function(state, item){
-              return item.permit_number;
+              let permitNumber;
+              if (item.permit_number) {
+                permitNumber = item.permit_number;
+              } else if (item.externalfilenum) {
+                permitNumber = item.externalfilenum;
+              }
+              return permitNumber;
             },
           },
-          // {
-          //   label: 'Type',
-          //   value: function(state, item){
-          //     return item.doc_type
-          //   }
-          // },
           {
             label: '# Pages',
             value: function(state, item){
-              return item.num_pages;
+              let pages;
+              if (item.num_pages) {
+                pages = item.num_pages;
+              } else if (item.pagesscanned) {
+                pages = item.pagesscanned;
+              }
+              return pages;
             },
           },
           {
             label: 'ID',
             value: function (state, item) {
               // console.log('zoning doc', item);
+              let appId;
 
-              var appId = item.app_id;
+              if (item.app_id) {
+                appId = item.app_id;
 
-              if (appId.length < 3) {
-                appId = '0' + appId;
+                if (appId.length < 3) {
+                  appId = '0' + appId;
+                }
+              }
+
+              let docId;
+              if (item.doc_id) {
+                docId = item.doc_id;
+              } else if (item.permitnumber) {
+                docId = item.permitnumber;
               }
 
               return '<a target="_blank" href="//s3.amazonaws.com/lni-zoning-pdfs/'
-                      + item.doc_id
+                      + docId
+                      // + item.doc_id
                       + '.pdf">'
-                      + item.doc_id
+                      + docId
+                      // + item.doc_id
                       + ' <i class="fa fa-external-link-alt"></i></a>'
                       + '</a>';
               // return item.appid + '-' + item.docid
@@ -172,14 +196,11 @@ export default {
               data = state.sources['zoningDocs'].data.rows;
               rows = data.map(function(row){
                 itemRow = row;
-                // var itemRow = Object.assign({}, row);
-                //itemRow.DISTANCE = 'TODO';
                 return itemRow;
               });
               for (let singleRow of rows) {
                 combinedRows.push(singleRow);
               }
-              // return rows;
             }
           }
           if (state.sources['zoningDocsEclipse'].data) {
@@ -187,14 +208,11 @@ export default {
               data = state.sources['zoningDocsEclipse'].data.rows;
               rows = data.map(function(row){
                 itemRow = row;
-                // var itemRow = Object.assign({}, row);
-                //itemRow.DISTANCE = 'TODO';
                 return itemRow;
               });
               for (let singleRow of rows) {
                 combinedRows.push(singleRow);
               }
-              // return rows;
             }
           }
           return combinedRows;
