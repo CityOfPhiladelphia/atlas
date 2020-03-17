@@ -182,7 +182,13 @@ export default {
         sort: {
           // this should return the val to sort on
           getValue: function(item) {
-            return item.scan_date;
+            let date;
+            if (item.scan_date) {
+              date = item.scan_date;
+            } else if (item.issuedate) {
+              date = item.issuedate;
+            }
+            return date;
           },
           // asc or desc
           order: 'desc',
