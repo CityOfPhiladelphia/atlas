@@ -106,7 +106,13 @@ export default {
           {
             label: 'Date',
             value: function(state, item){
-              return item.scan_date;
+              let date;
+              if (item.scan_date) {
+                date = item.scan_date;
+              } else if (item.issuedate) {
+                date = item.issuedate;
+              }
+              return date;
             },
             nullValue: 'no date available',
             transforms: [
@@ -116,36 +122,57 @@ export default {
           {
             label: 'Permit Number',
             value: function(state, item){
-              return item.permit_number;
+              let permitNumber;
+              if (item.permit_number) {
+                permitNumber = item.permit_number;
+              } else if (item.permitnumber) {
+                permitNumber = item.permitnumber;
+              }
+              return permitNumber;
             },
           },
-          // {
-          //   label: 'Type',
-          //   value: function(state, item){
-          //     return item.doc_type
-          //   }
-          // },
           {
             label: '# Pages',
             value: function(state, item){
-              return item.num_pages;
+              let pages;
+              if (item.num_pages) {
+                pages = item.num_pages;
+              } else if (item.pagesscanned) {
+                pages = item.pagesscanned;
+              }
+              return pages;
             },
           },
           {
             label: 'ID',
             value: function (state, item) {
               // console.log('zoning doc', item);
+              let appId;
 
-              var appId = item.app_id;
+              if (item.app_id) {
+                appId = item.app_id;
 
-              if (appId.length < 3) {
-                appId = '0' + appId;
+                if (appId.length < 3) {
+                  appId = '0' + appId;
+                }
               }
 
-              return '<a target="_blank" href="//s3.amazonaws.com/lni-zoning-pdfs/'
-                      + item.doc_id
+              let docId, url;
+              if (item.doc_id) {
+                docId = item.doc_id;
+                url = '//s3.amazonaws.com/lni-zoning-pdfs/';
+              } else if (item.externalfilenum ) {
+                docId = item.externalfilenum ;
+                url = 'http://s3.amazonaws.com/eclipse-docs-pdfs/zoning/';
+              }
+
+              return '<a target="_blank" href="' //s3.amazonaws.com/lni-zoning-pdfs/'
+                      + url
+                      + docId
+                      // + item.doc_id
                       + '.pdf">'
-                      + item.doc_id
+                      + docId
+                      // + item.doc_id
                       + ' <i class="fa fa-external-link-alt"></i></a>'
                       + '</a>';
               // return item.appid + '-' + item.docid
@@ -155,7 +182,13 @@ export default {
         sort: {
           // this should return the val to sort on
           getValue: function(item) {
-            return item.scan_date;
+            let date;
+            if (item.scan_date) {
+              date = item.scan_date;
+            } else if (item.issuedate) {
+              date = item.issuedate;
+            }
+            return date;
           },
           // asc or desc
           order: 'desc',
@@ -165,18 +198,33 @@ export default {
         title: 'Zoning Permit Documents',
         subtitle: 'formerly "Zoning Archive"',
         items: function(state) {
+          let combinedRows = [];
+          let data, rows, itemRow;
           if (state.sources['zoningDocs'].data) {
             if (state.sources['zoningDocs'].data.rows) {
-              var data = state.sources['zoningDocs'].data.rows;
-              var rows = data.map(function(row){
-                var itemRow = row;
-                // var itemRow = Object.assign({}, row);
-                //itemRow.DISTANCE = 'TODO';
+              data = state.sources['zoningDocs'].data.rows;
+              rows = data.map(function(row){
+                itemRow = row;
                 return itemRow;
               });
-              return rows;
+              for (let singleRow of rows) {
+                combinedRows.push(singleRow);
+              }
             }
           }
+          if (state.sources['zoningDocsEclipse'].data) {
+            if (state.sources['zoningDocsEclipse'].data.rows) {
+              data = state.sources['zoningDocsEclipse'].data.rows;
+              rows = data.map(function(row){
+                itemRow = row;
+                return itemRow;
+              });
+              for (let singleRow of rows) {
+                combinedRows.push(singleRow);
+              }
+            }
+          }
+          return combinedRows;
         },
       },
     },
