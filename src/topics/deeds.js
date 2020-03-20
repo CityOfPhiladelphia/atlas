@@ -151,9 +151,9 @@ export default {
                   value: function(state, item) {
                     if (!item.properties.CONDOFLAG) {
                       return 'No';
-                    } 
+                    }
                     return 'Yes';
-                    
+
                     // return item.properties.CONDOFLAG ? 'Yes' : 'No';
                   },
                   // fieldFunction: function(state, item) {
@@ -276,7 +276,8 @@ export default {
                   value: function (state, item) {
                     // return "<a target='_blank' href='//pdx-app01/recorder/eagleweb/viewDoc.jsp?node=DOCC"+item.attributes.R_NUM+"'>"+item.attributes.R_NUM+"<i class='fa fa-external-link-alt'></i></a>"
                     // return item.document_id;
-                    return item.attributes.DOCUMENT_ID;
+                    // return item.attributes.DOCUMENT_ID;
+                    return "<a target='_blank' href='http://epay.phila-records.com/phillyepay/web/integration/document/?AllDocuments=True&Guest=true&DocumentNumberID="+item.attributes.DOCUMENT_ID+"'>"+item.attributes.DOCUMENT_ID+"<i class='fa fa-external-link-alt'></i></a>";
                   },
                 },
                 {
@@ -332,9 +333,9 @@ export default {
                 var id = item.properties.OBJECTID;
                 if (state.sources.dorDocuments.targets[id]) {
                   return state.sources.dorDocuments.targets[id].data;
-                } 
+                }
                 return [];
-                
+
               },
             }, // end slots
 
