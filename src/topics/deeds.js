@@ -277,7 +277,9 @@ export default {
                     // return "<a target='_blank' href='//pdx-app01/recorder/eagleweb/viewDoc.jsp?node=DOCC"+item.attributes.R_NUM+"'>"+item.attributes.R_NUM+"<i class='fa fa-external-link-alt'></i></a>"
                     // return item.document_id;
                     // return item.attributes.DOCUMENT_ID;
-                    return "<a target='_blank' href='http://epay.phila-records.com/phillyepay/web/integration/document/?AllDocuments=True&Guest=true&DocumentNumberID="+item.attributes.DOCUMENT_ID+"'>"+item.attributes.DOCUMENT_ID+"<i class='fa fa-external-link-alt'></i></a>";
+
+                    // return "<a target='_blank' href='http://epay.phila-records.com/phillyepay/web/integration/document/?AllDocuments=True&Guest=true&DocumentNumberID="+item.attributes.DOCUMENT_ID+"'>"+item.attributes.DOCUMENT_ID+"<i class='fa fa-external-link-alt'></i></a>";
+                    return "<a target='_blank' href='http://epay.phila-records.com/phillyepay/web/integration/document/InstrumentID="+item.attributes.DOCUMENT_ID+"&Guest=true'>"+item.attributes.DOCUMENT_ID+"<i class='fa fa-external-link-alt'></i></a>";
                   },
                 },
                 {
