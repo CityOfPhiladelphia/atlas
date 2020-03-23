@@ -238,7 +238,7 @@ export default {
           {
             label: 'Date',
             value: function(state, item){
-              return item.inspectioncompleted;
+              return item.investigationcompleted;
             },
             nullValue: 'no date available',
             transforms: [
@@ -254,20 +254,21 @@ export default {
           {
             label: 'Description',
             value: function(state, item){
-              return item.inspectiondescription;
+              // return item.inspectiondescription;
+              return item.investigationtype;
             },
           },
           {
             label: 'Status',
             value: function(state, item){
-              return item.inspectionstatus;
+              return item.investigationstatus;
             },
           },
         ],
         sort: {
           // this should return the val to sort on
           getValue: function(item) {
-            return item.inspectioncompleted;
+            return item.investigationcompleted;
           },
           // asc or desc
           order: 'desc',
@@ -309,7 +310,7 @@ export default {
           {
             label: 'Date',
             value: function(state, item){
-              return item.caseaddeddate;
+              return item.casecreateddate;
             },
             nullValue: 'no date available',
             transforms: [
@@ -325,20 +326,20 @@ export default {
           {
             label: 'Description',
             value: function(state, item){
-              return item.violationdescription;
+              return item.violationcodetitle;
             },
           },
           {
             label: 'Status',
             value: function(state, item){
-              return item.status;
+              return item.violationstatus;
             },
           },
         ],
         sort: {
           // this should return the val to sort on
           getValue: function(item) {
-            return item.caseaddeddate;
+            return item.casecreateddate;
           },
           // asc or desc
           order: 'desc',

@@ -49,7 +49,7 @@ deploy:
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: "atlas-dev2.phila.gov"
     on:
-      branch: pvd-merge
+      branch: li-schema-changes
     local_dir: dist
     skip_cleanup: true
   - provider: s3
