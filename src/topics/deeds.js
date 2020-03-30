@@ -254,13 +254,22 @@ export default {
           {
             type: 'callout',
             slots: {
-              text: 'You can access digital copies of the deeds \
-                below by purchasing a subscription to \
-                <a target="_blank" href="http://epay.phila-records.com/phillyepay/web/">PhilaDox <i class="fa fa-external-link-alt"></i></a></a>.\
-                Please note that the following list\
-                shows documents recorded from\
-                December 1999 forward, and may not be a complete history\
-                of title for the parcel.\
+              // text: 'You can access digital copies of the deeds \
+              //   below by purchasing a subscription to \
+              //   <a target="_blank" href="http://epay.phila-records.com/phillyepay/web/">PhilaDox <i class="fa fa-external-link-alt"></i></a></a>.\
+              //   Please note that the following list\
+              //   shows documents recorded from\
+              //   December 1999 forward, and may not be a complete history\
+              //   of title for the parcel.\
+              // ',
+              text: 'You can access a view-only, watermarked unofficial copy \
+              of the deeds below at no cost by clicking on the deeds below. \
+              In order to view and print non-watermarked copies of the deeds below, \
+              you must purchase a subscription to \
+              <a target="_blank" href="http://epay.phila-records.com/phillyepay/web/">PhilaDox <i class="fa fa-external-link-alt"></i></a></a>.\
+              Please note that the following list \
+              shows documents recorded from December 1999 forward, and may not \
+              be a complete history of title for the parcel.\
               ',
             },
           },
