@@ -151,9 +151,9 @@ export default {
                   value: function(state, item) {
                     if (!item.properties.CONDOFLAG) {
                       return 'No';
-                    } 
+                    }
                     return 'Yes';
-                    
+
                     // return item.properties.CONDOFLAG ? 'Yes' : 'No';
                   },
                   // fieldFunction: function(state, item) {
@@ -254,13 +254,22 @@ export default {
           {
             type: 'callout',
             slots: {
-              text: 'You can access digital copies of the deeds \
-                below by purchasing a subscription to \
-                <a target="_blank" href="http://epay.phila-records.com/phillyepay/web/">PhilaDox <i class="fa fa-external-link-alt"></i></a></a>.\
-                Please note that the following list\
-                shows documents recorded from\
-                December 1999 forward, and may not be a complete history\
-                of title for the parcel.\
+              // text: 'You can access digital copies of the deeds \
+              //   below by purchasing a subscription to \
+              //   <a target="_blank" href="http://epay.phila-records.com/phillyepay/web/">PhilaDox <i class="fa fa-external-link-alt"></i></a></a>.\
+              //   Please note that the following list\
+              //   shows documents recorded from\
+              //   December 1999 forward, and may not be a complete history\
+              //   of title for the parcel.\
+              // ',
+              text: 'You can access a view-only, watermarked unofficial copy \
+              of the deeds below at no cost by clicking on the deeds below. \
+              In order to view and print non-watermarked copies of the deeds below, \
+              you must purchase a subscription to \
+              <a target="_blank" href="http://epay.phila-records.com/phillyepay/web/">PhilaDox <i class="fa fa-external-link-alt"></i></a></a>.\
+              Please note that the following list \
+              shows documents recorded from December 1999 forward, and may not \
+              be a complete history of title for the parcel.\
               ',
             },
           },
@@ -276,7 +285,10 @@ export default {
                   value: function (state, item) {
                     // return "<a target='_blank' href='//pdx-app01/recorder/eagleweb/viewDoc.jsp?node=DOCC"+item.attributes.R_NUM+"'>"+item.attributes.R_NUM+"<i class='fa fa-external-link-alt'></i></a>"
                     // return item.document_id;
-                    return item.attributes.DOCUMENT_ID;
+                    // return item.attributes.DOCUMENT_ID;
+
+                    // return "<a target='_blank' href='http://epay.phila-records.com/phillyepay/web/integration/document/?AllDocuments=True&Guest=true&DocumentNumberID="+item.attributes.DOCUMENT_ID+"'>"+item.attributes.DOCUMENT_ID+"<i class='fa fa-external-link-alt'></i></a>";
+                    return "<a target='_blank' href='http://epay.phila-records.com/phillyepay/web/integration/document/InstrumentID="+item.attributes.DOCUMENT_ID+"&Guest=true'>"+item.attributes.DOCUMENT_ID+"<i class='fa fa-external-link-alt'></i></a>";
                   },
                 },
                 {
@@ -332,9 +344,9 @@ export default {
                 var id = item.properties.OBJECTID;
                 if (state.sources.dorDocuments.targets[id]) {
                   return state.sources.dorDocuments.targets[id].data;
-                } 
+                }
                 return [];
-                
+
               },
             }, // end slots
 
