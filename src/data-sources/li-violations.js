@@ -6,7 +6,7 @@ export default {
     params: {
       q: function(feature){
         var eclipseLocId = feature.properties.eclipse_location_id.split('|');
-        var str = "'";
+        var str = "'" + feature.properties.li_address_key + "', '";
         var i;
         for (i = 0; i < eclipseLocId.length; i++) {
           str += eclipseLocId[i];
@@ -14,10 +14,7 @@ export default {
         }
         str = str.slice(0, str.length - 3);
 
-        // return "select * from violations where address = '" + feature.properties.street_address + "' or addressobjectid = '" + feature.properties.li_address_key.toString() + "'";
-        return "select * from violations where address = '" + feature.properties.street_address + "' or (addressobjectid = '" + feature.properties.li_address_key.toString() + "' and systemofrecord = 'HANSEN') or (addressobjectid in (" + str + ")" + " and systemofrecord = 'ECLIPSE')";
-        // return "select * from li_violations where address = '" + feature.properties.street_address + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'";
-        // return "select * from violations where opa_account_num = '" + feature.properties.opa_account_num + "'";
+        return "select * from violations where address = '" + feature.properties.street_address + "' or addressobjectid in (" + str + ")";
       },
     },
   },
