@@ -1,8 +1,8 @@
 {
-  "startTime": "2020-03-09T21:00:25.248Z",
-  "endTime": "2020-03-09T21:01:40.496Z",
+  "startTime": "2020-04-15T19:59:23.221Z",
+  "endTime": "2020-04-15T20:00:43.380Z",
   "userAgents": [
-    "Firefox 72.0.0 / Windows 10.0.0"
+    "Firefox 74.0.0 / Windows 10.0.0"
   ],
   "passed": 5,
   "total": 5,
@@ -17,7 +17,7 @@
           "name": "page landing verification",
           "meta": {},
           "errs": [],
-          "durationMs": 10486,
+          "durationMs": 11879,
           "screenshotPath": null,
           "skipped": false
         }
@@ -32,7 +32,7 @@
           "name": "Building search page verification",
           "meta": {},
           "errs": [],
-          "durationMs": 21801,
+          "durationMs": 17241,
           "screenshotPath": null,
           "skipped": false
         }
@@ -47,7 +47,7 @@
           "name": "Condominiums search page verification",
           "meta": {},
           "errs": [],
-          "durationMs": 15573,
+          "durationMs": 17954,
           "screenshotPath": null,
           "skipped": false
         }
@@ -62,7 +62,7 @@
           "name": "DorNoPwd search page verification",
           "meta": {},
           "errs": [],
-          "durationMs": 12936,
+          "durationMs": 15518,
           "screenshotPath": null,
           "skipped": false
         }
@@ -77,7 +77,7 @@
           "name": "PwdNoDor search page verification",
           "meta": {},
           "errs": [],
-          "durationMs": 14379,
+          "durationMs": 17532,
           "screenshotPath": null,
           "skipped": false
         }

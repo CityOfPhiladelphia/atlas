@@ -262,7 +262,7 @@ export default {
                 str += ",";
               }
               str = str.slice(0, str.length - 1);
-              console.log('str:', str);
+              // console.log('str:', str);
               return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+str+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
           },
