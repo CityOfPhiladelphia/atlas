@@ -248,7 +248,17 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
+              var eclipseLocId = state.geocode.data.properties.eclipse_location_id.split('|');
+              var str = "" + state.geocode.data.properties.li_address_key + ",";
+              var i;
+              for (i = 0; i < eclipseLocId.length; i++) {
+                str += eclipseLocId[i];
+                str += ",";
+              }
+              str = str.slice(0, str.length - 1);
+              console.log('str:', str);
+              return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+str+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
+              // return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
           },
           {
