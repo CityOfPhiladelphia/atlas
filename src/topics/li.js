@@ -260,7 +260,6 @@ export default {
               var li_address_key = state.geocode.data.properties.li_address_key.split('|');
               var j;
               var str = '';
-              // var str = "'";
               for (j = 0; j < li_address_key.length; j++) {
                 str += li_address_key[j];
                 str += ",";
