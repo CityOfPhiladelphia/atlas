@@ -256,7 +256,7 @@ export default {
           {
             label: 'Processed Date',
             value: function(state, item) {
-              return item.processeddate;
+              return item.createddate;
             },
             transforms: [
               'date',
@@ -267,7 +267,7 @@ export default {
             value: function(state, item){
               //return item.appeal_key
               // return "<a target='_blank' href='//li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>"
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=appeals&eid="+item.appeal_key+"&key="+item.addresskey+"&address="+encodeURIComponent(item.address)+"'>"+item.appealno+"<i class='fa fa-external-link-alt'></i></a>";
+              return "<a target='_blank' href='http://li.phila.gov/#details?entity=appeals&eid="+item.internaljobid+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.appealnumber+"<i class='fa fa-external-link-alt'></i></a>";
             },
           },
           {
@@ -279,7 +279,7 @@ export default {
           {
             label: 'Scheduled Date',
             value: function(state, item) {
-              return item.date_scheduled;
+              return item.scheduleddate;
             },
             transforms: [
               'date',
@@ -296,7 +296,7 @@ export default {
         sort: {
           // this should return the val to sort on
           getValue: function(item) {
-            return item.date_scheduled;
+            return item.scheduleddate;
           },
           // asc or desc
           order: 'desc',
