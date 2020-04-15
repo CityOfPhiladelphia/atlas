@@ -248,8 +248,23 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
+              // var eclipseLocId = state.geocode.data.properties.eclipse_location_id.split('|');
+              // var str = "" + state.geocode.data.properties.li_address_key + ",";
+              // var i;
+              // for (i = 0; i < eclipseLocId.length; i++) {
+              //   str += eclipseLocId[i];
+              //   str += ",";
+              // }
+              // str = str.slice(0, str.length - 1);
               var eclipseLocId = state.geocode.data.properties.eclipse_location_id.split('|');
-              var str = "" + state.geocode.data.properties.li_address_key + ",";
+              var li_address_key = state.geocode.data.properties.li_address_key.split('|');
+              var j;
+              var str = '';
+              // var str = "'";
+              for (j = 0; j < li_address_key.length; j++) {
+                str += li_address_key[j];
+                str += ",";
+              }
               var i;
               for (i = 0; i < eclipseLocId.length; i++) {
                 str += eclipseLocId[i];

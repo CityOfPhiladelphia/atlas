@@ -6,7 +6,13 @@ export default {
     params: {
       q: function(feature){
         var eclipseLocId = feature.properties.eclipse_location_id.split('|');
-        var str = "'" + feature.properties.li_address_key + "', '";
+        var li_address_key = feature.properties.li_address_key.split('|');
+        var j;
+        var str = "'";
+        for (j = 0; j < li_address_key.length; j++) {
+          str += li_address_key[j];
+          str += "', '";
+        }
         var i;
         for (i = 0; i < eclipseLocId.length; i++) {
           str += eclipseLocId[i];
