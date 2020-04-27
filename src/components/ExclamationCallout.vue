@@ -1,23 +1,16 @@
 <template>
   <div class="wrapper grid-y">
-    <!-- <div class="callout columns small-24"> -->
     <div :class="'callout topic-header-content ' + calloutClass">
       <font-awesome-icon
         icon="exclamation-triangle"
         class="fa-3x inline-block-class"
       />
-      <!-- <div class="inline-block-class"> -->
       <div
         v-if="message"
         class="topic-header-label-holder"
-        v-html="message"
-      />
-      <!-- class="inline-block-class" -->
-      <!-- </div> -->
-      <!-- <topic-component-group
-        v-if="components"
-        :topic-components="components"
-      /> -->
+      >
+        {{ message }}
+      </div>
     </div>
   </div>
 </template>
@@ -26,9 +19,6 @@
 import TopicComponent from '@phila/vue-comps/src/components/TopicComponent.vue';
 
 export default {
-  // components: {
-  //   TopicComponentGroup: () => import(/* webpackChunkName: "pvc_TopicComponentGroup" */'./TopicComponentGroup.vue'),
-  // },
   mixins: [ TopicComponent ],
   computed: {
     calloutClass() {
