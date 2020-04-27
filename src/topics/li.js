@@ -14,8 +14,8 @@ export default {
       type: 'exclamationCallout',
       slots: {
         text: '\
-          Updates to L&I data on Atlas will be temporarily suspended \
-          as of March 13, 2020. For more info see <a target="_blank" href="https://www.phila.gov/li">www.phila.gov/li</a>. \
+          Daily updates of L&I data on Atlas have resumed.\
+          A data transfer error affecting approximately 5,000 records should be resolved in early May 2020.\
         ',
       },
     },
