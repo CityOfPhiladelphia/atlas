@@ -43,6 +43,8 @@ export default {
           You can confirm your registration and learn about \
           registering to vote<a target="_blank" \
           href="//www.philadelphiavotes.com/en/voters/registering-to-vote"> \
+          here</a>. Request a mail-in ballot <a target="_blank" \
+          href="//www.votespa.com/Voting-in-PA/Pages/Mail-and-Absentee-Ballot.aspx"> \
           here</a>.\
         ',
       },
