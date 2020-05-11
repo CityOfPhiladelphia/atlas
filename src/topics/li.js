@@ -10,15 +10,15 @@ export default {
     'zoningDocs',
   ],
   components: [
-    {
-      type: 'exclamationCallout',
-      slots: {
-        text: '\
-          Daily updates of L&I data on Atlas have resumed.\
-          A data transfer error affecting approximately 5,000 records should be resolved in early May 2020.\
-        ',
-      },
-    },
+    // {
+    //   type: 'exclamationCallout',
+    //   slots: {
+    //     text: '\
+    //       Daily updates of L&I data on Atlas have resumed.\
+    //       A data transfer error affecting approximately 5,000 records should be resolved in early May 2020.\
+    //     ',
+    //   },
+    // },
     {
       type: 'callout',
       slots: {
