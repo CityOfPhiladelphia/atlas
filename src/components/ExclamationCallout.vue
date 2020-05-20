@@ -8,9 +8,8 @@
       <div
         v-if="message"
         class="topic-header-label-holder"
-      >
-        {{ message }}
-      </div>
+        v-html="message"
+      />
     </div>
   </div>
 </template>

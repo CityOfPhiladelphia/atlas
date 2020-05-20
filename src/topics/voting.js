@@ -14,6 +14,18 @@ export default {
   },
   components: [
     {
+      type: 'exclamationCallout',
+      slots: {
+        text: '\
+        <b>COVID19 ALERT</b>: There have been widespread changes to polling place locations due to the pandemic.\
+        Many polling place locations have been changed since the last election and may be located farther from your home address.<br><br>\
+        Mail in ballot applications must be received by your county election office no later than Tuesday, May 26th.<br><br>\
+        Request a mail-in ballot at <a target="_blank" href="//www.votespa.com/Voting-in-PA/Pages/Mail-and-Absentee-Ballot.aspx">www.votespa.com</a>.<br><br>\
+        If you are planning on voting in person, please confirm your polling place and make voting arrangements prior to the election.\
+        ',
+      },
+    },
+    {
       type: 'badge',
       options: {
         externalLink: {
@@ -41,12 +53,13 @@ export default {
           The deadline to register for the next election \
           is 30 days prior to the election. \
           You can confirm your registration and learn about \
-          registering to vote<a target="_blank" \
+          registering to vote at <a target="_blank" \
           href="//www.philadelphiavotes.com/en/voters/registering-to-vote"> \
-          here</a>. Request a mail-in ballot <a target="_blank" \
-          href="//www.votespa.com/Voting-in-PA/Pages/Mail-and-Absentee-Ballot.aspx"> \
-          here</a>.\
+          www.philadelphiavotes.com</a>.\
         ',
+        // Request a mail-in ballot at <a target="_blank" \
+        // href="//www.votespa.com/Voting-in-PA/Pages/Mail-and-Absentee-Ballot.aspx"> \
+        // www.votespa.com</a>.\
       },
     },
     {
