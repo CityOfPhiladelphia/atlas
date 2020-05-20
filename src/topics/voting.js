@@ -20,7 +20,7 @@ export default {
         <b>COVID19 ALERT</b>: There have been widespread changes to polling place locations due to the pandemic.\
         Many polling place locations have been changed since the last election and may be located farther from your home address.<br><br>\
         Mail in ballot applications must be received by your county election office no later than Tuesday, May 26th.<br><br>\
-        Request a mail-in ballot at <a target="_blank" href="//www.votespa.com/Voting-in-PA/Pages/Mail-and-Absentee-Ballot.aspx">www.votespa.com</a>.<br><br>\
+        Request a mail-in ballot at <a target="_blank" href="//apps.philadelphiavotes.com/">https://apps.philadelphiavotes.com</a>.<br><br>\
         If you are planning on voting in person, please confirm your polling place and make voting arrangements prior to the election.\
         ',
       },
