@@ -220,4 +220,77 @@ mapboard({
       },
     },
   ],
+  mbStyle: {
+    version: 8,
+    sources: {
+      pwd: {
+        tiles: [
+          'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer/tile/{z}/{y}/{x}',
+        ],
+        type: 'raster',
+        tileSize: 256,
+      },
+    },
+    layers: [
+      {
+        id: 'pwd',
+        type: 'raster',
+        source: 'pwd',
+      },
+    ],
+  },
+  basemapSources: {
+    pwd: {
+      source: {
+        tiles: [
+          'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer/tile/{z}/{y}/{x}',
+          // '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer/tile/{z}/{y}/{x}'
+        ],
+        type: 'raster',
+        tileSize: 256,
+      },
+      layer: {
+        id: 'pwd',
+        type: 'raster',
+      },
+    },
+    imagery2019: {
+      source: {
+        tiles: [
+          'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2019_3in/MapServer/tile/{z}/{y}/{x}',
+          // '//tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer/tile/{z}/{y}/{x}'
+        ],
+        type: 'raster',
+        tileSize: 256,
+      },
+      layer: {
+        id: 'imagery2019',
+        type: 'raster',
+      },
+    },
+  },
+  basemapLabelSources:{
+    cityBasemapLabels: {
+      source: {
+        tiles: [ 'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer/tile/{z}/{y}/{x}' ],
+        type: 'raster',
+        tileSize: 256,
+      },
+      layer: {
+        id: 'cityBasemapLabels',
+        type: 'raster',
+      },
+    },
+    imageryBasemapLabels: {
+      source: {
+        tiles: [ 'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_Labels/MapServer/tile/{z}/{y}/{x}' ],
+        type: 'raster',
+        tileSize: 256,
+      },
+      layer: {
+        id: 'imageryBasemapLabels',
+        type: 'raster',
+      },
+    },
+  },
 });
