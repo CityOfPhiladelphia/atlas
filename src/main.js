@@ -487,28 +487,17 @@ mapboard({
       },
     },
   },
-  overlaySources: {
-    stormwater: {
-      source: {
-        tiles: [ '//stormwater.phila.gov/arcgis/rest/services/parcel_viewer/pv_data/MapServer' ],
-        type: 'raster',
-        tileSize: 256,
-      },
-      layer: {
-        id: 'stormwater',
-        type: 'raster',
-      },
-    },
-    zoning: {
-      source: {
-        tiles: [ '//gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/ZoningMap/MapServer' ],
-        type: 'raster',
-        tileSize: 256,
-      },
-      layer: {
-        id: 'zoning',
-        type: 'raster',
-      },
-    },
-  },
+  // queriedLayerSources: {
+  //   testSource: {
+  //     type: 'circle',
+  //     source: {
+  //       type: 'geojson',
+  //       // data: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Farmers_Markets/FeatureServer/0/query?where=1=1&f=pgeojson',
+  //       // data: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Political_Divisions/FeatureServer/0/query?where=1=1&f=pgeojson',
+  //       // data: 'https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/ZoningMap/MapServer/0/query?where=1=1&f=geojson',
+  //       // data: 'http://services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/DOR_Parcel/FeatureServer/0/query?where=1=1&f=pgeojson',
+  //       data: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/BUSINESS_LICENSES/FeatureServer/0/query?where=1=1&f=geojson',
+  //     },
+  //   },
+  // },
 });

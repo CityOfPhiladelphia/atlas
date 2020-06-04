@@ -1,5 +1,6 @@
 export default {
   // possibly should move to base config
+  // type: 'leaflet',
   type: 'mapbox',
   defaultBasemap: 'pwd',
   defaultIdentifyFeature: 'address-marker',
