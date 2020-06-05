@@ -239,6 +239,18 @@ mapboard({
       },
     ],
   },
+  // featureSources: {
+  //   dorParcels: {
+  //     type: 'fill',
+  //     source: {
+  //       type: 'geojson',
+  //       data: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/DOR_Parcel/FeatureServer/0/query?where=1=1&f=pgeojson',
+  //     },
+  //   },
+  // pwdParcels: {
+  //   url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/PWD_PARCELS/FeatureServer/0',
+  // },
+  // },
   basemapSources: {
     pwd: {
       source: {
