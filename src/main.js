@@ -254,6 +254,19 @@ mapboard({
         type: 'raster',
       },
     },
+    dor: {
+      source: {
+        tiles: [
+          'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap/MapServer/tile/{z}/{y}/{x}',
+        ],
+        type: 'raster',
+        tileSize: 256,
+      },
+      layer: {
+        id: 'dor',
+        type: 'raster',
+      },
+    },
     imagery2019: {
       source: {
         tiles: [
@@ -472,6 +485,17 @@ mapboard({
       },
       layer: {
         id: 'cityBasemapLabels',
+        type: 'raster',
+      },
+    },
+    dorBasemapLabels: {
+      source: {
+        tiles: [ 'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap_Labels/MapServer/tile/{z}/{y}/{x}' ],
+        type: 'raster',
+        tileSize: 256,
+      },
+      layer: {
+        id: 'dorBasemapLabels',
         type: 'raster',
       },
     },
