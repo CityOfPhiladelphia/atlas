@@ -369,12 +369,12 @@ export default {
         ',
       },
     },
-    {
-      type: 'exclamationCallout',
-      slots: {
-        text: 'Due to a technical issue, regmaps are currently unavailable.  We are working to resolve the issue.',
-      },
-    },
+    // {
+    //   type: 'exclamationCallout',
+    //   slots: {
+    //     text: 'Due to a technical issue, regmaps are currently unavailable.  We are working to resolve the issue.',
+    //   },
+    // },
     {
       type: 'overlay-toggle-group',
       options: {
