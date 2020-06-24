@@ -542,10 +542,14 @@ https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/ZoningMap/MapSer
 &bbox={bbox-epsg-3857}\
 &bboxSR=3857\
 &imageSR=3857\
-&size=256,256\
+&size=500,500\
 &f=image\
-&layers=show%3A8\
         ' ],
+        // &size=1124,1124\
+        // &size=512,512\
+        // &size=256,256\
+        // &mapScale=1128\
+        // &layers=show%3A8\
       },
     },
   },

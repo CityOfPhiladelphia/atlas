@@ -24,10 +24,13 @@ https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/RegMaps/MapServe
 &bbox={bbox-epsg-3857}\
 &bboxSR=3857\
 &imageSR=3857\
-&size=256,256\
+&size=700,700\
 &f=image\
 &layers=show%3A0\
                 ' ],
+                // &size=1024,1024\
+                // &size=512,512\
+                // &size=256,256\
               },
             },
           };
