@@ -220,6 +220,7 @@ mapboard({
       },
     },
   ],
+  // mbStyle: 'mapbox://styles/mapbox/streets-v11',
   mbStyle: {
     version: 8,
     sources: {
@@ -239,6 +240,8 @@ mapboard({
       },
     ],
   },
+
+
   // featureSources: {
   //   dorParcels: {
   //     type: 'fill',
@@ -520,6 +523,29 @@ mapboard({
       layer: {
         id: 'imageryBasemapLabels',
         type: 'raster',
+      },
+    },
+  },
+  overlaySources: {
+    zoning: {
+      layer: {
+        id: 'zoningMap',
+        type: 'raster',
+        minzoom: 0,
+        maxzoom: 22,
+      },
+      source: {
+        tiles: [ '\
+https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/ZoningMap/MapServer/export?dpi=96\
+&transparent=true\
+&format=png36\
+&bbox={bbox-epsg-3857}\
+&bboxSR=3857\
+&imageSR=3857\
+&size=256,256\
+&f=image\
+&layers=show%3A8\
+        ' ],
       },
     },
   },
