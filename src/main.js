@@ -526,33 +526,81 @@ mapboard({
       },
     },
   },
+
+  //   overlaySources: {
+  //     zoning: {
+  //       layer: {
+  //         id: 'zoning',
+  //         type: 'raster',
+  //         minzoom: 0,
+  //         maxzoom: 22,
+  //       },
+  //       source: {
+  //         coordinates: [
+  //           // [ -75.15707130997325, 39.941690461624745 ],
+  //           // [ -75.1559112545743, 39.941690461624745 ],
+  //           // [ -75.1559112545743, 39.9412472963258 ],
+  //           // [ -75.15707130997325, 39.9412472963258 ],
+  //           [ -75.15706460445475, 39.94176500771158 ],
+  //           [ -75.15590454905609, 39.94176500771158 ],
+  //           [ -75.15590454905609, 39.94117274967866 ],
+  //           [ -75.15706460445475, 39.94117274967866 ],
+  //         ],
+  //         url: '\
+  // https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/ZoningMap/MapServer/export?dpi=130\
+  // &transparent=true\
+  // &format=png36\
+  // &bbox=-75.15706460445475,39.94117274967866,-75.15590454905609,39.94176500771158\
+  // &bboxSR=4326\
+  // &imageSR=3857\
+  // &size=865,576\
+  // &f=image\
+  //       ',
+  //       },
+  //     },
+  //   },
+
+  // &bbox=-75.15707130997325,39.9412472963258,-75.1559112545743,39.941690461624745\
+  // &bbox={bbox-epsg-3857}\
+
   overlaySources: {
     zoning: {
       layer: {
-        id: 'zoningMap',
+        id: 'zoning',
         type: 'raster',
         minzoom: 0,
         maxzoom: 22,
       },
       source: {
+        tileSize: 2048,
         tiles: [ '\
-https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/ZoningMap/MapServer/export?dpi=96\
-&transparent=true\
-&format=png36\
-&bbox={bbox-epsg-3857}\
-&bboxSR=3857\
-&imageSR=3857\
-&size=500,500\
-&f=image\
-        ' ],
-        // &size=1124,1124\
-        // &size=512,512\
-        // &size=256,256\
-        // &mapScale=1128\
-        // &layers=show%3A8\
+  https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/ZoningMap/MapServer/export?dpi=110\
+  &transparent=true\
+  &format=png36\
+  &bbox={bbox-epsg-3857}\
+  &bboxSR=3857\
+  &imageSR=3857\
+  &size=2300,2300\
+  &f=image\
+      ' ],
+        //       url: '\
+        // https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/ZoningMap/MapServer/export?dpi=130\
+        // &transparent=true\
+        // &format=png36\
+        // &bbox={bbox-epsg-3857}\
+        // &bboxSR=3857\
+        // &imageSR=3857\
+        // &size=650,650\
+        // &f=image\
+        //     ',
       },
     },
   },
+
+
+
+
+
   // queriedLayerSources: {
   //   testSource: {
   //     type: 'circle',
