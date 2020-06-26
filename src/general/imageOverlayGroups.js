@@ -1,16 +1,16 @@
 export default {
   regmaps: {
     items: function(state) {
-      console.log('main.js imageOverlayGroups, state:', state);
+      // console.log('main.js imageOverlayGroups, state:', state);
       let data = [];
       if (state.sources.regmaps.data) {
         for (let item of state.sources.regmaps.data) {
-          console.log('in loop, item:', item);
+          // console.log('in loop, item:', item);
           let dataItem = {
             data: item,
             source: {
               layer: {
-                id: 'regmap',
+                id: item.properties.RECMAP,
                 type: 'raster',
                 minzoom: 0,
                 maxzoom: 22,
