@@ -117,6 +117,7 @@ mapboard({
   router: {
     enabled: true,
     type: 'custom',
+    // returnToDefaultTopicOnGeocode: false,
   },
   defaultAddressTextPlaceholder: {
     // text: "Search Address or 9-digit OPA Property Number",
