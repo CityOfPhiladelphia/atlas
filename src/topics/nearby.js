@@ -167,6 +167,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
+                  'z-index': 1000,
                 },
                 hoverStyle: {
                   radius: 6,
@@ -175,6 +176,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
+                  'z-index': 10000,
                 },
               },
               fields: [
@@ -199,9 +201,9 @@ export default {
                   value: function(state, item) {
                     if (item.media_url) {
                       return '<a target="_blank" href='+item.media_url+'>'+item.service_name+'</a>';
-                    } 
+                    }
                     return item.service_name;
-                    
+
                   },
                 },
                 {
@@ -293,6 +295,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
+                  'z-index': 1000,
                 },
                 hoverStyle: {
                   radius: 6,
@@ -301,6 +304,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
+                  'z-index': 10000,
                 },
               },
               fields: [
@@ -392,6 +396,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
+                  'z-index': 1000,
                 },
                 hoverStyle: {
                   radius: 6,
@@ -400,6 +405,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
+                  'z-index': 10000,
                 },
               },
               fields: [
@@ -483,6 +489,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
+                  'z-index': 1000,
                 },
                 hoverStyle: {
                   radius: 6,
@@ -491,6 +498,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
+                  'z-index': 10000,
                 },
               },
               fields: [
