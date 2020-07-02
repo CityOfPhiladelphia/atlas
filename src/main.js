@@ -233,8 +233,8 @@ mapboard({
         tileSize: 256,
       },
     },
-    glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
-    // glyphs: 'http://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+    // glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
+    glyphs: 'http://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
     layers: [
       {
         id: 'pwd',
