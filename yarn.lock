@@ -1194,13 +1194,13 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@phila/mapboard@https://github.com/CityOfPhiladelphia/mapboard#8d493fd562b86c4ae96e093216bcb0f69f77a528":
+"@phila/mapboard@https://github.com/CityOfPhiladelphia/mapboard#e0b099e5a2f6760601ab24ff99c3c43be502117c":
   version "4.1.1"
-  resolved "https://github.com/CityOfPhiladelphia/mapboard#8d493fd562b86c4ae96e093216bcb0f69f77a528"
+  resolved "https://github.com/CityOfPhiladelphia/mapboard#e0b099e5a2f6760601ab24ff99c3c43be502117c"
   dependencies:
     "@phila/vue-comps" "2.1.4"
     "@phila/vue-datafetch" "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#2a40f9585e6ba626137b84cabdb519111e3de84b"
-    "@phila/vue-mapping" "https://github.com/CityOfPhiladelphia/phila-vue-mapping#1ca9dff2e5386b5e1d7feec97d81c87ae36b1796"
+    "@phila/vue-mapping" "https://github.com/CityOfPhiladelphia/phila-vue-mapping#562e706023a9355636cecb53c7490ee16f4e3c80"
     vue "^2.6.10"
     vuex "^3.1.2"
 
@@ -1238,9 +1238,9 @@
     vue "^2.6.10"
     vuex "^3.1.2"
 
-"@phila/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#1ca9dff2e5386b5e1d7feec97d81c87ae36b1796":
+"@phila/vue-mapping@https://github.com/CityOfPhiladelphia/phila-vue-mapping#562e706023a9355636cecb53c7490ee16f4e3c80":
   version "2.1.11"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#1ca9dff2e5386b5e1d7feec97d81c87ae36b1796"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-mapping#562e706023a9355636cecb53c7490ee16f4e3c80"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"
