@@ -167,7 +167,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
-                  'z-index': 1000,
+                  'z-index': 1,
                 },
                 hoverStyle: {
                   radius: 6,
@@ -176,7 +176,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
-                  'z-index': 10000,
+                  'z-index': 2,
                 },
               },
               fields: [
@@ -295,7 +295,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
-                  'z-index': 1000,
+                  'z-index': 1,
                 },
                 hoverStyle: {
                   radius: 6,
@@ -304,7 +304,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
-                  'z-index': 10000,
+                  'z-index': 2,
                 },
               },
               fields: [
@@ -396,7 +396,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
-                  'z-index': 1000,
+                  'z-index': 1,
                 },
                 hoverStyle: {
                   radius: 6,
@@ -405,7 +405,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
-                  'z-index': 10000,
+                  'z-index': 2,
                 },
               },
               fields: [
@@ -489,7 +489,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
-                  'z-index': 1000,
+                  'z-index': 1,
                 },
                 hoverStyle: {
                   radius: 6,
@@ -498,7 +498,7 @@ export default {
                   weight: 1,
                   opacity: 1,
                   fillOpacity: 1.0,
-                  'z-index': 10000,
+                  'z-index': 2,
                 },
               },
               fields: [
