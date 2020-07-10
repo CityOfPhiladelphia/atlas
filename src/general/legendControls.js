@@ -1,23 +1,24 @@
 export default {
-  water: {
-    options: {
-      topics: [ 'water' ],
-      showWithBaseMapOnly: false,
-    },
-    // TODO give these an id instead of using the label as a key
-    data: {
-      'Roof': {
-        'background-color': '#FEFF7F',
-      },
-      'Other Impervious Surface': {
-        'background-color': '#F2DCFF',
-      },
-    },
-  },
+  // water: {
+  //   options: {
+  //     topics: [ 'water' ],
+  //     showWithBaseMapOnly: false,
+  //   },
+  //   // TODO give these an id instead of using the label as a key
+  //   data: {
+  //     'Roof': {
+  //       'background-color': '#FEFF7F',
+  //     },
+  //     'Other Impervious Surface': {
+  //       'background-color': '#F2DCFF',
+  //     },
+  //   },
+  // },
   deeds: {
     options: {
       topics: [ 'deeds', 'zoning' ],
       showWithBaseMapOnly: true,
+      marginBottom: '40px',
     },
     data: {
       // TODO give these an id instead of using the label as a key
