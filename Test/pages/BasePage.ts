@@ -5,12 +5,14 @@ export default class BasePage {
   public pageTitle: Selector = Selector(".page-title");
   public feedbackButton: Selector = Selector(".inline-list a");
   public pageGreetings: Selector = Selector(".greeting");
-  public stateImageButton: Selector = Selector(".state-unnamed-state > .button-image");
+  public stateImageButton: Selector = Selector(".top-button-1 .button-image");
+  // public stateImageButton: Selector = Selector(".state-unnamed-state > .button-image");
   public leafLetImageButton: Selector = Selector(
-    ".leaflet-bar:nth-child(2) .button-image",
+    ".top-button-2 .button-image"
+    // ".leaflet-bar:nth-child(2) .button-image",
   );
   public cycloMediaImageButton: Selector = Selector(
-    ".cyclomedia-button .button-image",
+    ".top-button-2 .button-image"
   );
   public yearSelect: Selector = Selector("#year-select");
   public pictoMetry: Selector = Selector("#pictometry-ipa");
