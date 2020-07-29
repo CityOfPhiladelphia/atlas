@@ -207,7 +207,7 @@ export default {
       prefix: 'fas',
       icon: 'landmark',
       shadow: false,
-      size: 35,
+      size: '2x',
     },
   },
   basemap: 'pwd',

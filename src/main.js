@@ -36,6 +36,7 @@ import mapboard from '@phila/mapboard/src/main.js';
 // General Config Modules
 import helpers from './util/helpers';
 import map from './general/map';
+import mbStyle from './general/mbStyle';
 import transforms from './general/transforms';
 import parcels from './general/parcels';
 import legendControls from './general/legendControls';
@@ -117,6 +118,7 @@ mapboard({
   router: {
     enabled: true,
     type: 'custom',
+    // returnToDefaultTopicOnGeocode: false,
   },
   defaultAddressTextPlaceholder: {
     // text: "Search Address or 9-digit OPA Property Number",
@@ -151,6 +153,7 @@ mapboard({
   },
   gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
   map,
+  mbStyle,
   baseConfig: BASE_CONFIG_URL,
   parcels,
   imageOverlayGroups,
