@@ -18,7 +18,8 @@ export default {
     options: {
       topics: [ 'deeds', 'zoning' ],
       showWithBaseMapOnly: true,
-      marginBottom: '40px',
+      marginBottom: '0px',
+      marginRight: '40px',
     },
     data: {
       // TODO give these an id instead of using the label as a key
