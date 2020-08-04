@@ -5,7 +5,8 @@ export default {
   options: {
     params: {
       q: function(feature){
-        return "select * from li_permits where address = '" + feature.properties.street_address + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'";
+        // return "select * from li_permits where address = '" + feature.properties.street_address + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'";
+        return "select * from permits where opa_account_num = '" + feature.properties.opa_account_num + "'";
       },
     },
   },

@@ -28,7 +28,8 @@ import { faGavel } from '@fortawesome/free-solid-svg-icons/faGavel';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons/faMapMarkerAlt';
 import { faLandmark } from '@fortawesome/free-solid-svg-icons/faLandmark';
 import { faBuilding } from '@fortawesome/free-solid-svg-icons/faBuilding';
-library.add(faDotCircle, faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding);
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
+library.add(faDotCircle, faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding, faExclamationTriangle);
 
 import accounting from 'accounting';
 import mapboard from '@phila/mapboard/src/main.js';
@@ -36,6 +37,7 @@ import mapboard from '@phila/mapboard/src/main.js';
 // General Config Modules
 import helpers from './util/helpers';
 import map from './general/map';
+// import mbStyle from './general/mbStyle';
 import transforms from './general/transforms';
 import parcels from './general/parcels';
 import legendControls from './general/legendControls';
@@ -64,6 +66,7 @@ import vacantIndicatorsPoints from './data-sources/vacant-indicator-points';
 import zoningAppeals from './data-sources/zoning-appeals';
 import zoningBase from './data-sources/zoning-base';
 import zoningDocs from './data-sources/zoning-docs';
+import zoningDocsEclipse from './data-sources/zoning-docs-eclipse';
 import zoningOverlay from './data-sources/zoning-overlay';
 import streetType from './data-sources/street-type';
 import streetCenterline from './data-sources/street-centerline';
@@ -81,10 +84,16 @@ import zoning from './topics/zoning';
 import nearby from './topics/nearby';
 import voting from './topics/voting';
 
+import exclamationCallout from './components/ExclamationCallout';
+
+const customComps = {
+  'exclamationCallout': exclamationCallout,
+};
+
 // import 'phila-standards/dist/css/phila-app.min.css';
 // import './styles.css';
 
-var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/mapboard-default-base-config@d664e218cbf7db07cc3ef2382640b54320aefb2b/config.js';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/mapboard-default-base-config@1284f38b676f5588da6754b6f66e821a7a8b026f/config.js';
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;
@@ -104,6 +113,7 @@ if (host === 'cityatlas-dev.phila.gov') {
 mapboard({
   // defaultAddress: '1234 MARKET ST',
   // plugin: true,
+  customComps,
   panels: [
     'topics',
     'map',
@@ -111,6 +121,7 @@ mapboard({
   router: {
     enabled: true,
     type: 'custom',
+    // returnToDefaultTopicOnGeocode: false,
   },
   defaultAddressTextPlaceholder: {
     // text: "Search Address or 9-digit OPA Property Number",
@@ -145,6 +156,7 @@ mapboard({
   },
   gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
   map,
+  // mbStyle,
   baseConfig: BASE_CONFIG_URL,
   parcels,
   imageOverlayGroups,
@@ -190,6 +202,7 @@ mapboard({
     zoningAppeals,
     zoningBase,
     zoningDocs,
+    zoningDocsEclipse,
     zoningOverlay,
     streetType,
     streetCenterline,

@@ -10,6 +10,15 @@ export default {
     'zoningDocs',
   ],
   components: [
+    // {
+    //   type: 'exclamationCallout',
+    //   slots: {
+    //     text: '\
+    //       Daily updates of L&I data on Atlas have resumed.\
+    //       A data transfer error affecting approximately 5,000 records should be resolved in early May 2020.\
+    //     ',
+    //   },
+    // },
     {
       type: 'callout',
       slots: {
@@ -39,7 +48,7 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addresskey+"&address="+encodeURIComponent(item.address)+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
+              return "<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
           },
           {
@@ -97,7 +106,13 @@ export default {
           {
             label: 'Date',
             value: function(state, item){
-              return item.scan_date;
+              let date;
+              if (item.scan_date) {
+                date = item.scan_date;
+              } else if (item.issuedate) {
+                date = item.issuedate;
+              }
+              return date;
             },
             nullValue: 'no date available',
             transforms: [
@@ -107,36 +122,57 @@ export default {
           {
             label: 'Permit Number',
             value: function(state, item){
-              return item.permit_number;
+              let permitNumber;
+              if (item.permit_number) {
+                permitNumber = item.permit_number;
+              } else if (item.permitnumber) {
+                permitNumber = item.permitnumber;
+              }
+              return permitNumber;
             },
           },
-          // {
-          //   label: 'Type',
-          //   value: function(state, item){
-          //     return item.doc_type
-          //   }
-          // },
           {
             label: '# Pages',
             value: function(state, item){
-              return item.num_pages;
+              let pages;
+              if (item.num_pages) {
+                pages = item.num_pages;
+              } else if (item.pagesscanned) {
+                pages = item.pagesscanned;
+              }
+              return pages;
             },
           },
           {
             label: 'ID',
             value: function (state, item) {
               // console.log('zoning doc', item);
+              let appId;
 
-              var appId = item.app_id;
+              if (item.app_id) {
+                appId = item.app_id;
 
-              if (appId.length < 3) {
-                appId = '0' + appId;
+                if (appId.length < 3) {
+                  appId = '0' + appId;
+                }
               }
 
-              return '<a target="_blank" href="//s3.amazonaws.com/lni-zoning-pdfs/'
-                      + item.doc_id
+              let docId, url;
+              if (item.doc_id) {
+                docId = item.doc_id;
+                url = '//s3.amazonaws.com/lni-zoning-pdfs/';
+              } else if (item.externalfilenum ) {
+                docId = item.externalfilenum ;
+                url = 'http://s3.amazonaws.com/eclipse-docs-pdfs/zoning/';
+              }
+
+              return '<a target="_blank" href="' //s3.amazonaws.com/lni-zoning-pdfs/'
+                      + url
+                      + docId
+                      // + item.doc_id
                       + '.pdf">'
-                      + item.doc_id
+                      + docId
+                      // + item.doc_id
                       + ' <i class="fa fa-external-link-alt"></i></a>'
                       + '</a>';
               // return item.appid + '-' + item.docid
@@ -146,7 +182,13 @@ export default {
         sort: {
           // this should return the val to sort on
           getValue: function(item) {
-            return item.scan_date;
+            let date;
+            if (item.scan_date) {
+              date = item.scan_date;
+            } else if (item.issuedate) {
+              date = item.issuedate;
+            }
+            return date;
           },
           // asc or desc
           order: 'desc',
@@ -156,18 +198,33 @@ export default {
         title: 'Zoning Permit Documents',
         subtitle: 'formerly "Zoning Archive"',
         items: function(state) {
+          let combinedRows = [];
+          let data, rows, itemRow;
           if (state.sources['zoningDocs'].data) {
             if (state.sources['zoningDocs'].data.rows) {
-              var data = state.sources['zoningDocs'].data.rows;
-              var rows = data.map(function(row){
-                var itemRow = row;
-                // var itemRow = Object.assign({}, row);
-                //itemRow.DISTANCE = 'TODO';
+              data = state.sources['zoningDocs'].data.rows;
+              rows = data.map(function(row){
+                itemRow = row;
                 return itemRow;
               });
-              return rows;
+              for (let singleRow of rows) {
+                combinedRows.push(singleRow);
+              }
             }
           }
+          if (state.sources['zoningDocsEclipse'].data) {
+            if (state.sources['zoningDocsEclipse'].data.rows) {
+              data = state.sources['zoningDocsEclipse'].data.rows;
+              rows = data.map(function(row){
+                itemRow = row;
+                return itemRow;
+              });
+              for (let singleRow of rows) {
+                combinedRows.push(singleRow);
+              }
+            }
+          }
+          return combinedRows;
         },
       },
     },
@@ -181,7 +238,7 @@ export default {
           {
             label: 'Date',
             value: function(state, item){
-              return item.inspectioncompleted;
+              return item.investigationcompleted;
             },
             nullValue: 'no date available',
             transforms: [
@@ -191,26 +248,42 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
+              var eclipseLocId = state.geocode.data.properties.eclipse_location_id.split('|');
+              var li_address_key = state.geocode.data.properties.li_address_key.split('|');
+              var j;
+              var str = '';
+              for (j = 0; j < li_address_key.length; j++) {
+                str += li_address_key[j];
+                str += ",";
+              }
+              var i;
+              for (i = 0; i < eclipseLocId.length; i++) {
+                str += eclipseLocId[i];
+                str += ",";
+              }
+              str = str.slice(0, str.length - 1);
+              // console.log('str:', str);
+              return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+str+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
           },
           {
             label: 'Description',
             value: function(state, item){
-              return item.inspectiondescription;
+              // return item.inspectiondescription;
+              return item.investigationtype;
             },
           },
           {
             label: 'Status',
             value: function(state, item){
-              return item.inspectionstatus;
+              return item.investigationstatus;
             },
           },
         ],
         sort: {
           // this should return the val to sort on
           getValue: function(item) {
-            return item.inspectioncompleted;
+            return item.investigationcompleted;
           },
           // asc or desc
           order: 'desc',
@@ -252,7 +325,7 @@ export default {
           {
             label: 'Date',
             value: function(state, item){
-              return item.caseaddeddate;
+              return item.casecreateddate;
             },
             nullValue: 'no date available',
             transforms: [
@@ -262,26 +335,26 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
+              return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
           },
           {
             label: 'Description',
             value: function(state, item){
-              return item.violationdescription;
+              return item.violationcodetitle;
             },
           },
           {
             label: 'Status',
             value: function(state, item){
-              return item.status;
+              return item.violationstatus;
             },
           },
         ],
         sort: {
           // this should return the val to sort on
           getValue: function(item) {
-            return item.caseaddeddate;
+            return item.casecreateddate;
           },
           // asc or desc
           order: 'desc',

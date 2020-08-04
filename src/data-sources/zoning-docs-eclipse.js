@@ -1,18 +1,16 @@
 export default {
-  id: 'liViolations',
+  id: 'zoningDocsEclipse',
   type: 'http-get',
   url: 'https://phl.carto.com/api/v2/sql',
   options: {
     params: {
-      q: function(feature){
-        var eclipseLocId = feature.properties.eclipse_location_id.split('|');
-        var li_address_key = feature.properties.li_address_key.split('|');
-        var j;
-        var str = "'";
-        for (j = 0; j < li_address_key.length; j++) {
-          str += li_address_key[j];
-          str += "', '";
+      q: function(feature) {
+
+        if (feature.properties.eclipse_location_id === null || feature.properties.eclipse_location_id === '') {
+          return "select * from li_zoning_docs where addressobjectid in (" + null + ")";
         }
+        var eclipseLocId = feature.properties.eclipse_location_id.split('|');
+        var str = "'";
         var i;
         for (i = 0; i < eclipseLocId.length; i++) {
           str += eclipseLocId[i];
@@ -20,7 +18,7 @@ export default {
         }
         str = str.slice(0, str.length - 3);
 
-        return "select * from violations where address = '" + feature.properties.street_address + "' or addressobjectid in (" + str + ")";
+        return "select * from li_zoning_docs where addressobjectid in (" + str + ")";
       },
     },
   },

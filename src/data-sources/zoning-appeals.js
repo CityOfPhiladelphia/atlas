@@ -5,14 +5,15 @@ export default {
   options: {
     params: {
       q: function(feature) {
-        var stmt = "select * from li_appeals where address = '" + feature.properties.street_address + "'";
-        var addressKey = feature.properties.li_address_key;
-
-        if (addressKey && addressKey.length > 0) {
-          stmt += " or addresskey = '" + feature.properties.li_address_key.toString() + "'";
-        }
-
-        return stmt;
+        // var stmt = "select * from li_appeals where address = '" + feature.properties.street_address + "'";
+        // var addressKey = feature.properties.li_address_key;
+        //
+        // if (addressKey && addressKey.length > 0) {
+        //   stmt += " or addresskey = '" + feature.properties.li_address_key.toString() + "'";
+        // }
+        //
+        // return stmt;
+        return "select * from appeals where opa_account_num = '" + feature.properties.opa_account_num + "'";
       },
     },
   },

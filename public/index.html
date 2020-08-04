@@ -49,25 +49,27 @@
     <!-- Google Tag Manager (noscript) [phila.gov] -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MC6CR2"
       height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  
+
 
     <div class="grid-y medium-grid-frame" id="application">
       <!-- Begin header -->
-      <header class="site-header app group">
-        <div class="row expanded">
-          <div class="columns">
-            <a href="//beta.phila.gov" class="logo">
-              <img src="//standards.phila.gov/img/logo/city-of-philadelphia-yellow-white.png" alt="City of Philadelphia">
-            </a>
-            <div class="app-divide"></div>
-            <div class="page-title-container">
-              <a href="#/">
-                <h1 class="page-title">Atlas</h1>
+      <div class="combo-header">
+        <header class="site-header app group">
+          <div class="row expanded">
+            <div class="columns">
+              <a href="//beta.phila.gov" class="logo">
+                <img src="//standards.phila.gov/img/logo/city-of-philadelphia-yellow-white.png" alt="City of Philadelphia">
               </a>
+              <div class="app-divide"></div>
+              <div class="page-title-container">
+                <a href="#/">
+                  <h1 class="page-title">Atlas</h1>
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
 
       <!-- Mapboard -->
       <div id="mapboard"></div>
@@ -97,12 +99,16 @@
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
     <!-- JS: Cyclomedia -->
-    <script type="text/javascript" src="https://unpkg.com/react@16.4.1/umd/react.production.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/react-dom@16.4.1/umd/react-dom.production.min.js"></script>
+    <!-- <script type="text/javascript" src="https://unpkg.com/react@16.4.1/umd/react.production.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/react-dom@16.4.1/umd/react-dom.production.min.js"></script> -->
+    <script type="text/javascript" src="https://unpkg.com/react@16.12.0/umd/react.production.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.production.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.3.3/ol.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
     <!-- <script src="https://streetsmart.cyclomedia.com/api/v19.12/StreetSmartApi.js"></script> -->
-    <script src="//s3.amazonaws.com/cyclomedia-mapboard/cyclomedia-19-12-mapboard.js"></script>
+    <!-- <script src="https://s3.amazonaws.com/cyclomedia-mapboard/cyclomedia-19-12-mapboard.js"></script> -->
+    <!-- <script src="https://s3.amazonaws.com/cyclomedia-mapboard/cyclomedia-20-06-mapboard.js"></script> -->
+    <script src="https://streetsmart.cyclomedia.com/api/v20.6/StreetSmartApi.js?5c39ff70ceb1412a79ba"></script>
 
   </body>
 </html>
