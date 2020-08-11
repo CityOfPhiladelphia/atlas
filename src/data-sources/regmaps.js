@@ -1,3 +1,5 @@
+import bbox from '@turf/bbox';
+
 export default {
   id: 'regmaps',
   type: 'esri',
@@ -6,7 +8,8 @@ export default {
   deps: [ 'parcels.dor' ],
   options: {
     relationship: 'intersects',
-    targetGeometry: function (state, Leaflet) {
+    targetGeometry: function (state) {
+    // targetGeometry: function (state, Leaflet) {
       // console.log('running regmaps.js')
       // get combined extent of dor parcels
       // var parcels = state.dorParcels.data;
@@ -71,10 +74,14 @@ export default {
       }
 
       // construct geometry
-      var bounds = Leaflet.latLngBounds([
+      var bounds = bbox([
         [ yMin, xMin ],
         [ yMax, xMax ],
       ]);
+      // var bounds = Leaflet.latLngBounds([
+      //   [ yMin, xMin ],
+      //   [ yMax, xMax ],
+      // ]);
 
       // console.log('ending regmaps.js, bounds:', bounds)
       return bounds;
