@@ -49,7 +49,7 @@ deploy:
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: "atlas-dev3.phila.gov"
     on:
-      branch: mapbox
+      branch: no-leaflet
     local_dir: dist
     skip_cleanup: true
   - provider: s3

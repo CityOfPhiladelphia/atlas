@@ -1,4 +1,5 @@
-import bbox from '@turf/bbox';
+// import bbox from '@turf/bbox';
+import bboxPolygon from '@turf/bbox-polygon';
 
 export default {
   id: 'regmaps',
@@ -74,10 +75,9 @@ export default {
       }
 
       // construct geometry
-      var bounds = bbox([
-        [ yMin, xMin ],
-        [ yMax, xMax ],
-      ]);
+      var bbox = [ xMin, yMin, xMax, yMax ];
+      var bounds = bboxPolygon(bbox).geometry;
+
       // var bounds = Leaflet.latLngBounds([
       //   [ yMin, xMin ],
       //   [ yMax, xMax ],
