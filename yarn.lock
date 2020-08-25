@@ -1195,12 +1195,12 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@phila/mapboard@https://github.com/CityOfPhiladelphia/mapboard#bdf4f9a5707f74d8a873f87acd6f092b81540696":
+"@phila/mapboard@https://github.com/CityOfPhiladelphia/mapboard#ffc941e6ddd2769734aaf0185e69a5e89edd6135":
   version "4.1.10"
-  resolved "https://github.com/CityOfPhiladelphia/mapboard#bdf4f9a5707f74d8a873f87acd6f092b81540696"
+  resolved "https://github.com/CityOfPhiladelphia/mapboard#ffc941e6ddd2769734aaf0185e69a5e89edd6135"
   dependencies:
     "@phila/vue-comps" "2.1.6"
-    "@phila/vue-datafetch" "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#8cce8feda4d4a215710b4976489f0512701bd2a8"
+    "@phila/vue-datafetch" "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#9f3737266516effe8946de82a84653311945e0d9"
     "@phila/vue-mapping" "2.1.18"
     vue "^2.6.10"
     vuex "^3.1.2"
@@ -1224,9 +1224,9 @@
     vue "^2.6.11"
     vuex "^3.1.2"
 
-"@phila/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#8cce8feda4d4a215710b4976489f0512701bd2a8":
+"@phila/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#9f3737266516effe8946de82a84653311945e0d9":
   version "1.3.1"
-  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#8cce8feda4d4a215710b4976489f0512701bd2a8"
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#9f3737266516effe8946de82a84653311945e0d9"
   dependencies:
     "@turf/turf" "^5.1.6"
     airtable "^0.8.1"
