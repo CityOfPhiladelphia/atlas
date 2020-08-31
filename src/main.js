@@ -87,7 +87,7 @@ const customComps = {
 // import 'phila-standards/dist/css/phila-app.min.css';
 // import './styles.css';
 
-var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/mapboard-default-base-config@cf7b65f16c5ee23fe76fcd4afaffaeed8d43955f/config.js';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/mapboard-default-base-config@c39230734c9c9ed3bde158a3916cb9309c5f032f/config.js';
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;
@@ -150,6 +150,9 @@ mapboard({
   },
   gatekeeperKey: process.env.VUE_APP_GATEKEEPER_KEY,
   map,
+  mbStyle: {
+    glyphs: '//fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+  },
   // mbStyle,
   baseConfig: BASE_CONFIG_URL,
   parcels,
