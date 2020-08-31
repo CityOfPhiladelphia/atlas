@@ -83,7 +83,7 @@ export default {
       //   [ yMax, xMax ],
       // ]);
 
-      // console.log('ending regmaps.js, bounds:', bounds)
+      console.log('ending regmaps.js, bounds:', bounds);
       return bounds;
     },
   },
