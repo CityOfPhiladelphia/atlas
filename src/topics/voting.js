@@ -20,6 +20,7 @@ export default {
         <b>COVID19 ALERT</b>: There have been widespread changes to polling place locations due to the pandemic.\
         Many polling place locations have been changed since the last election and may be located farther from your home address.<br><br>\
         Mail in ballot applications must be received by your county election office no later than Tuesday, October 27th.<br><br>\
+        Find places you can get and return mail-in ballots in person at <a target="_blank" href="//www.phila.gov/voting/">https://www.phila.gov/voting</a><br><br>\
         Request a mail-in ballot at <a target="_blank" href="//apps.philadelphiavotes.com/">https://apps.philadelphiavotes.com</a>.<br><br>\
         If you are planning on voting in person, please confirm your polling place and make voting arrangements prior to the election.\
         ',
@@ -51,7 +52,7 @@ export default {
       slots: {
         text: '\
           The deadline to register for the next election \
-          is 30 days prior to the election. \
+          is 15 days prior to the election. \
           You can confirm your registration and learn about \
           registering to vote at <a target="_blank" \
           href="//www.philadelphiavotes.com/en/voters/registering-to-vote"> \
