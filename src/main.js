@@ -87,7 +87,7 @@ const customComps = {
 // import 'phila-standards/dist/css/phila-app.min.css';
 // import './styles.css';
 
-var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/mapboard-default-base-config@c39230734c9c9ed3bde158a3916cb9309c5f032f/config.js';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/mapboard-default-base-config@36eae931932f27f59e861178d32846e71259690e/config.js';
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;
