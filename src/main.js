@@ -114,7 +114,8 @@ mapboard({
   ],
   router: {
     enabled: true,
-    type: 'custom',
+    // type: 'custom',
+    type: 'vue',
     // returnToDefaultTopicOnGeocode: false,
   },
   defaultAddressTextPlaceholder: {
