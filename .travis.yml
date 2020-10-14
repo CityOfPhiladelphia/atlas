@@ -31,7 +31,7 @@ deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
-    bucket: "atlas-dev.phila.gov"
+    bucket: "atlas-dev2.phila.gov"
     on:
       branch: develop
     local_dir: dist
@@ -39,7 +39,7 @@ deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
-    bucket: "atlas-dev2.phila.gov"
+    bucket: "atlas-dev.phila.gov"
     on:
       branch: vue-router
     local_dir: dist
