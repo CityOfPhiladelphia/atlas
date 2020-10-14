@@ -3,67 +3,61 @@
     :style="greetingStyle"
     class="columns medium-20 medium-centered greeting"
   >
-    <h2>Voting information on Atlas</h2>
-    <p><b>Find Your Polling Place</b></p>
-    <p>The Office of the City Commissioners has developed the VoterApp
-      as a public service to the citizens of Philadelphia County.
-      The app provides a quick and easy method of determining where
-      the polling place for any particular address within Philadelphia
-      County is located. While all of the information contained in the
-      database is believed to be accurate, the database is not the official
-      registry of voter registration in Philadelphia County. <b>The official
-      registry is maintained at the Philadelphia Voter Registration Office.</b>
-      Changes in the official registry occur periodically, and may not be
-      immediately added to the Database.
-    </p>
-    <p>
-      <b>For up-to-date, official polling place locations in Philadelphia
-      County, contact the Philadelphia Voter Registration Office at
-      215-686-1590.</b>
-    </p>
-
-    <!-- <address-input v-if="shouldShowAddressInput" />
-    <address-candidate-list v-if="addressAutocompleteEnabled && shouldShowAddressInput" /> -->
-
-    <!-- <div
-      v-if="!components && !hasError"
-      class="greeting"
-      v-html="message"
+    <h2>Find your polling place on Atlas</h2>
+    <exclamation-callout
+      :slots="exclamationCalloutSlots"
     >
-    </div> -->
+    </exclamation-callout>
 
-    <!-- <div
-      v-if="!components && hasError"
-      class="greeting greeting-error"
-      v-html="errorMessage"
-    /> -->
+    <p>Check here to confirm the location and more before
+      you head to the polls on election day.
+    </p>
 
-    <!-- <topic-component-group
-      :topic-components="options.components"
-      :item="item"
-    /> -->
+    <p>Enter your home address to find:</p>
+    <div class="callout">
+      <ul>
+        <li>Your polling place address and map location.</li>
+        <li>Accessibility and parking information for the building.</li>
+        <li>A preview of the November 2020 general election ballot.</li>
+        <li>Your elected officials and their contact information.</li>
+      </ul>
+    </div>
 
-    <!-- <component
-      :is="topicComp.type"
-      v-for="(topicComp) in components"
-      v-if="components"
-      :key="topicComp.type"
-      :slots="topicComp.slots"
-      class="topic-comp"
-    /> -->
+    <p><b>Hours:</b> All polling places will be open on election day from 7 a.m. to 8 p.m.</p>
+
+    <p class="border">
+      Changes to the official voter registry may not be reflected here
+      immediately. For up-to-date, official polling place locations in
+      Philadelphia County, contact the Philadelphia Voter Registration
+      Office at (215) 686-1590.
+    </p>
+
+    <div
+      class="section-header"
+      :style="{ 'background-color': '#F0F0F0', 'color': 'black' }"
+    >
+      <b>Related content</b>
+    </div>
+    <div class="custom-section">
+      <ul class="custom-ul">
+        <li><a target="_blank" href="https://www.phila.gov/2020-09-08-general-election-mail-in-ballot-guide-for-philadelphia-voters/">See our mail-in ballot guide for Philadelphia Voters</a></li>
+        <li><a target="_blank" href="https://www.phila.gov/voting">Find where to get and return mail-in ballots in person</a></li>
+        <li><a target="_blank" href="https://www.pavoterservices.pa.gov/pages/ballottracking.aspx">Check the status of your mail-in ballot</a></li>
+        <li><a target="_blank" href="https://www.pavoterservices.pa.gov/Pages/voterregistrationstatus.aspx">Confirm that you're registered to vote</a></li>
+      </ul>
+    </div>
+
   </div>
 </template>
 
 <script>
 
 import TopicComponent from '@phila/vue-comps/src/components/TopicComponent.vue';
+import ExclamationCallout from './ExclamationCallout.vue';
 
 export default {
   components: {
-    // Image_: () => import(/* webpackChunkName: "inGreeting_pvc_Image" */'./Image.vue'),
-    // AddressInput: () => import(/* webpackChunkName: "inGreeting_pvc_AddressInput" */'./AddressInput.vue'),
-    // AddressCandidateList: () => import(/* webpackChunkName: "inGreeting_pvc_AddressCandidateList" */'./AddressCandidateList.vue'),
-    // TopicComponentGroup: () => import(/* webpackChunkName: "inGreeting_pvc_TopicComponentGroup" */'./TopicComponentGroup.vue'),
+    ExclamationCallout,
   },
   mixins: [ TopicComponent ],
   props: {
@@ -81,48 +75,11 @@ export default {
     return data;
   },
   computed: {
-    // shouldShowAddressInput() {
-    //   if (this.$config.addressInputLocation == 'topics') {
-    //     return true;
-    //   }
-    //   return false;
-    // },
-    // addressAutocompleteEnabled() {
-    //   // TODO tidy up the code
-    //   if (this.$config.addressInput) {
-    //     if (this.$config.addressInput.autocompleteEnabled === true) {
-    //       return true;
-    //     }
-    //     return false;
-    //   }
-    //   return false;
-    // },
-    // components() {
-    //   const greetingConfig = this.$config.greeting || {};
-    //   return greetingConfig.components;
-    // },
-    // hasError() {
-    //   return this.$store.state.geocode.status === 'error';
-    // },
-    // errorMessage() {
-    //   const input = this.$store.state.geocode.input;
-    //   return `
-    //       <p>
-    //         We couldn't find
-    //         ${input ? '<strong>' + input + '</strong>' : 'that address'}.
-    //         Are you sure everything was spelled correctly?
-    //       </p>
-    //       <p>
-    //         Here are some examples of things you can search for:
-    //       </p>
-    //       <ul>
-    //         <li>1234 Market St</li>
-    //         <li>1001 Pine Street #201</li>
-    //         <li>12th & Market</li>
-    //         <li>883309050 (an OPA number with no hyphens or other characters)</li>
-    //       </ul>
-    //     `;
-    // },
+    exclamationCalloutSlots() {
+      return {
+        text: 'COVID-19 info: Due to the pandemic, many polling places for the November 2020 general election have changed or have not been finalized.',
+      };
+    },
   },
 };
 </script>
@@ -133,14 +90,33 @@ export default {
   }
 
   .greeting {
-    font-size: 20px;
+    font-size: 16px;
     color: #444;
-    padding: 14px;
+    /* padding: 14px; */
   }
 
   .greeting-error {
     border-left-color: #ff0000;
   }
+
+  .border {
+    border-style: solid;
+    border-width: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+
+  .custom-section {
+    margin-left: 8px;
+    margin-top: 4px;
+  }
+
+  /* .custom-ul {
+    margin-left: 4rem;
+    font-size: 14px;
+  } */
 
   /*medium*/
   @media screen and (min-width: 750px) {

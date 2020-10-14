@@ -20,8 +20,8 @@ export default {
         <b>COVID19 ALERT</b>: There have been widespread changes to polling place locations due to the pandemic.\
         Many polling places for the November 2020 general election have not been finalized and may change before election day.<br><br>\
         Mail in ballot applications must be received by your county election office no later than Tuesday, October 27th.<br><br>\
-        Find places you can get and return mail-in ballots in person at <a target="_blank" href="//www.phila.gov/voting/">https://www.phila.gov/voting</a><br><br>\
-        Request a mail-in ballot at <a target="_blank" href="//apps.philadelphiavotes.com/">https://apps.philadelphiavotes.com</a>.<br><br>\
+        Find places you can <a target="_blank" href="//www.phila.gov/voting/">get and return mail-in ballots</a> in person.<br><br>\
+        <a target="_blank" href="//apps.philadelphiavotes.com/">Request a mail-in ballot</a>.<br><br>\
         If you are planning on voting in person, please confirm your polling place and make voting arrangements prior to the election.\
         ',
       },
