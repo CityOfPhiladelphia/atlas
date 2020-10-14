@@ -1,9 +1,27 @@
 <template>
   <div
     :style="greetingStyle"
-    class="columns medium-20 medium-centered"
+    class="columns medium-20 medium-centered greeting"
   >
-    Test
+    <h2>Voting information on Atlas</h2>
+    <p><b>Find Your Polling Place</b></p>
+    <p>The Office of the City Commissioners has developed the VoterApp
+      as a public service to the citizens of Philadelphia County.
+      The app provides a quick and easy method of determining where
+      the polling place for any particular address within Philadelphia
+      County is located. While all of the information contained in the
+      database is believed to be accurate, the database is not the official
+      registry of voter registration in Philadelphia County. <b>The official
+      registry is maintained at the Philadelphia Voter Registration Office.</b>
+      Changes in the official registry occur periodically, and may not be
+      immediately added to the Database.
+    </p>
+    <p>
+      <b>For up-to-date, official polling place locations in Philadelphia
+      County, contact the Philadelphia Voter Registration Office at
+      215-686-1590.</b>
+    </p>
+
     <!-- <address-input v-if="shouldShowAddressInput" />
     <address-candidate-list v-if="addressAutocompleteEnabled && shouldShowAddressInput" /> -->
 
@@ -56,12 +74,12 @@ export default {
       },
     },
   },
-  // data() {
-  //   let data = {
-  //     greetingStyle: this.$props.options.style || {},
-  //   };
-  //   return data;
-  // },
+  data() {
+    let data = {
+      greetingStyle: this.$props.options.style || {},
+    };
+    return data;
+  },
   computed: {
     // shouldShowAddressInput() {
     //   if (this.$config.addressInputLocation == 'topics') {
