@@ -79,9 +79,11 @@ import nearby from './topics/nearby';
 import voting from './topics/voting';
 
 import exclamationCallout from './components/ExclamationCallout';
+import greetingVoting from './components/GreetingVoting';
 
 const customComps = {
   'exclamationCallout': exclamationCallout,
+  'greetingvoting': greetingVoting,
 };
 
 // import 'phila-standards/dist/css/phila-app.min.css';
