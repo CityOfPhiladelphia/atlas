@@ -1234,14 +1234,15 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@phila/mapboard@https://github.com/CityOfPhiladelphia/mapboard#5a14f0b2eea0ffab3a3c378fb6a7d8ac282bb0a1":
+"@phila/mapboard@https://github.com/CityOfPhiladelphia/mapboard#ff329c1f4c7b420c9ea02362fe13a9d2b5a0a384":
   version "4.2.6"
-  resolved "https://github.com/CityOfPhiladelphia/mapboard#5a14f0b2eea0ffab3a3c378fb6a7d8ac282bb0a1"
+  resolved "https://github.com/CityOfPhiladelphia/mapboard#ff329c1f4c7b420c9ea02362fe13a9d2b5a0a384"
   dependencies:
     "@phila/vue-comps" "https://github.com/CityOfPhiladelphia/phila-vue-comps#d3b7e963ba98d70b3d42aab4c90336d382b7da23"
     "@phila/vue-datafetch" "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#7f36d1677e19357bc6ae87a1a9d2b2448cb57250"
     "@phila/vue-mapping" "2.2.9"
     vue "^2.6.10"
+    vue-i18n "^8.22.0"
     vue-router "^3.4.6"
     vuex "^3.1.2"
 
@@ -14098,6 +14099,11 @@ vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
+
+vue-i18n@^8.22.0:
+  version "8.22.0"
+  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.22.0.tgz#6403381a6eab1d229e515a62addb29b2ff3abfed"
+  integrity sha512-2tYS0bYDPJHKAWPy01aDe5h3wcXDGjhJmboHKOfi2OEYR+6gyXaIzdua1smZCQwOeWdlGsLntwdIgkXWrnLjxg==
 
 vue-jest@^3.0.5:
   version "3.0.7"

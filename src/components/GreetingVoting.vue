@@ -3,47 +3,43 @@
     :style="greetingStyle"
     class="columns medium-20 medium-centered greeting"
   >
-    <h2>Find your polling place on Atlas</h2>
+    <h2>{{ $t('introPage.introTitle') }}</h2>
     <exclamation-callout
       :slots="exclamationCalloutSlots"
     >
     </exclamation-callout>
 
-    <p>Check here to confirm the location and more before
-      you head to the polls on election day.
+    <p>Check here to confirm the location and more before you head to the polls on election day.
     </p>
 
-    <p>Enter your home address to find:</p>
+    <p>{{ $t('introPage.p3') }}</p>
     <div class="custom-section">
       <ul class="custom-ul">
-        <li>Your polling place address and map location.</li>
-        <li>Accessibility and parking information for the building.</li>
-        <li>A preview of the November 2020 general election ballot.</li>
-        <li>Your elected officials and their contact information.</li>
+        <li>{{ $t('introPage.ul1.li1') }}</li>
+        <li>{{ $t('introPage.ul1.li2') }}</li>
+        <li>{{ $t('introPage.ul1.li3') }}</li>
+        <li>{{ $t('introPage.ul1.li4') }}</li>
       </ul>
     </div>
 
-    <p><b>Hours:</b> All polling places will be open on election day from 7 a.m. to 8 p.m.</p>
+    <p><b>{{ $t('introPage.p4_b') }}</b>{{ $t('introPage.p4') }}</p>
 
     <p class="border">
-      Changes to the official voter registry may not be reflected here
-      immediately. For up-to-date, official polling place locations in
-      Philadelphia County, contact the Philadelphia Voter Registration
-      Office at (215) 686-1590.
+      {{ $t('introPage.p5') }}
     </p>
 
     <div
       class="section-header"
       :style="{ 'background-color': '#F0F0F0', 'color': 'black' }"
     >
-      <b>Related content</b>
+      <b>{{ $t('introPage.relatedContent') }}</b>
     </div>
     <div class="custom-section">
       <ul class="custom-ul">
-        <li><a target="_blank" href="https://www.phila.gov/2020-09-08-general-election-mail-in-ballot-guide-for-philadelphia-voters/">See our mail-in ballot guide for Philadelphia Voters</a></li>
-        <li><a target="_blank" href="https://www.phila.gov/voting">Find where to get and return mail-in ballots in person</a></li>
-        <li><a target="_blank" href="https://www.pavoterservices.pa.gov/pages/ballottracking.aspx">Check the status of your mail-in ballot</a></li>
-        <li><a target="_blank" href="https://www.pavoterservices.pa.gov/Pages/voterregistrationstatus.aspx">Confirm that you're registered to vote</a></li>
+        <li><a target="_blank" href="https://www.phila.gov/2020-09-08-general-election-mail-in-ballot-guide-for-philadelphia-voters/">{{ $t('introPage.link1') }}</a></li>
+        <li><a target="_blank" href="https://www.phila.gov/voting">{{ $t('introPage.link2') }}</a></li>
+        <li><a target="_blank" href="https://www.pavoterservices.pa.gov/pages/ballottracking.aspx">{{ $t('introPage.link3') }}</a></li>
+        <li><a target="_blank" href="https://www.pavoterservices.pa.gov/Pages/voterregistrationstatus.aspx">{{ $t('introPage.link4') }}</a></li>
       </ul>
     </div>
 
@@ -77,7 +73,7 @@ export default {
   computed: {
     exclamationCalloutSlots() {
       return {
-        text: 'COVID-19 info: Due to the pandemic, many polling places for the November 2020 general election have changed or have not been finalized.',
+        text: 'introPage.p1',
       };
     },
   },
@@ -119,6 +115,7 @@ export default {
   }
 
   .section-header {
+    margin-top: 26px;
     padding-left: 4px;
   }
 
