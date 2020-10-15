@@ -14,8 +14,8 @@
     </p>
 
     <p>Enter your home address to find:</p>
-    <div class="callout">
-      <ul>
+    <div class="custom-section">
+      <ul class="custom-ul">
         <li>Your polling place address and map location.</li>
         <li>Accessibility and parking information for the building.</li>
         <li>A preview of the November 2020 general election ballot.</li>
@@ -113,10 +113,14 @@ export default {
     margin-top: 4px;
   }
 
-  /* .custom-ul {
-    margin-left: 4rem;
-    font-size: 14px;
-  } */
+  .custom-ul {
+    margin-left: 2rem;
+    /* font-size: 14px; */
+  }
+
+  .section-header {
+    padding-left: 4px;
+  }
 
   /*medium*/
   @media screen and (min-width: 750px) {
