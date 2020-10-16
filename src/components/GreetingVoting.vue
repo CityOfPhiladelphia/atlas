@@ -9,7 +9,7 @@
     >
     </exclamation-callout>
 
-    <p>Check here to confirm the location and more before you head to the polls on election day.</p>
+    <p>{{ $t('voting.introPage.p2') }}</p>
 
     <p>{{ $t('voting.introPage.p3') }}</p>
     <div class="custom-section">
