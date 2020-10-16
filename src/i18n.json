@@ -50,7 +50,7 @@
 								"header": "Next Eligible Election Is",
 								"content": "November 3, 2020"
 							},
-							"previewBallot": "Preview ballot",
+							"previewBallot": "Preview ballot ",
 							"electedRep": "Elected Representatives",
 							"location": "Location",
 							"accessibility": "Accessibility",
@@ -73,14 +73,14 @@
 								"loadingZone": "Loading Zone"
 							},
 							"callout1": {
-								"text": "The deadline to register for the next election is 15 days prior to the election. You can confirm your registration and learn about registering to vote at www.philadelphiavotes.com."
+								"text": "The deadline to register for the next election is 15 days prior to the election. You can confirm your registration and learn about registering to vote at <a target='_blank' href='https://www.philadelphiavotes.com/'>www.philadelphiavotes.com</a>."
 							},
 							"pollingPlace": "Polling Place",
 							"verticalTable1": {
-								"link": "Learn about your voting options if you cannot vote in person on Election Day"
+								"link": "Learn about your voting options if you cannot vote in person on Election Day "
 							},
 							"verticalTable2": {
-								"link": "See all citywide, state, and federal representatives"
+								"link": "See all citywide, state, and federal representatives "
 							}
 						}
 					}
@@ -126,7 +126,7 @@
 								"header": "La próxima elección es el",
 								"content": "3 de noviembre de 2020."
 							},
-							"previewBallot": "Vista previa de la boleta",
+							"previewBallot": "Vista previa de la boleta ",
 							"electedRep": "Representantes elegidos",
 							"location": "Ubicación",
 							"accessibility": "Accesibilidad",
@@ -149,14 +149,14 @@
 								"loadingZone": "Zona de carga"
 							},
 							"callout1": {
-								"text": "La fecha límite para registrarse para la próxima elección es 15 días antes de la elección. Puede confirmar su registro y obtener información sobre cómo registrarse para votar en www.philadelphiavotes.com."
+								"text": "La fecha límite para registrarse para la próxima elección es 15 días antes de la elección. Puede confirmar su registro y obtener información sobre cómo registrarse para votar en <a target='_blank' href='https://www.philadelphiavotes.com/'>www.philadelphiavotes.com</a>."
 							},
 							"pollingPlace": "Lugar de votación",
 							"verticalTable1": {
-								"link": "Obtenga información sobre sus opciones para votar si no puede ir a votar en persona el día de la elección."
+								"link": "Obtenga información sobre sus opciones para votar si no puede ir a votar en persona el día de la elección "
 							},
 							"verticalTable2": {
-								"link": "Vea todos los representantes federales, estatales y de la ciudad."
+								"link": "Vea todos los representantes federales, estatales y de la ciudad "
 							}
 						}
 					}

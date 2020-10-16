@@ -22,31 +22,19 @@ export default {
           },
         ],
       },
-      // slots: {
-      //   text: "\
-      //   <b>$t('voting.topic.exclamationCallout1.p1_b')</b>: There have been widespread changes to polling place locations due to the pandemic.<br><br>\
-      //   Mail in ballot applications must be received by your county election office no later than Tuesday, October 27th.<br><br>\
-      //   Find places you can <a target='_blank' href='//www.phila.gov/voting/'>get and return mail-in ballots</a> in person.<br><br>\
-      //   <a target='_blank' href='//apps.philadelphiavotes.com/'>Request a mail-in ballot</a>.<br><br>\
-      //   If you are planning on voting in person, please confirm your polling place and make voting arrangements prior to the election.\
-      //   ",
-      // },
     },
     {
       type: 'badge',
       options: {
         externalLink: {
-          data: 'Preview ballot',
-          // action: function(state){return 'Preview ballot'},
+          data: 'voting.topic.previewBallot',
           href: function(state) {
-            // var address = state.geocode.data.properties.street_address;
-            // var addressEncoded = encodeURIComponent(address);
             return 'https://files.philadelphiavotes.com/ballot_paper/' + state.sources.electedOfficials.data.rows[0].ballot_file_id + '.pdf';
           },
         },
       },
       slots: {
-        title: 'Next Eligible Election Is',
+        title: 'voting.topic.badge1.header',
         titleBackground: '#2176d2',
         value: function(state) {
           return format(parseISO(state.sources.nextElectionAPI.data.election_date), 'MMMM d, yyyy');
@@ -56,17 +44,7 @@ export default {
     {
       type: 'callout',
       slots: {
-        text: '\
-          The deadline to register for the next election \
-          is 15 days prior to the election. \
-          You can confirm your registration and learn about \
-          registering to vote at <a target="_blank" \
-          href="//www.philadelphiavotes.com/en/voters/registering-to-vote"> \
-          www.philadelphiavotes.com</a>.\
-        ',
-        // Request a mail-in ballot at <a target="_blank" \
-        // href="//www.votespa.com/Voting-in-PA/Pages/Mail-and-Absentee-Ballot.aspx"> \
-        // www.votespa.com</a>.\
+        text: 'voting.topic.callout1.text',
       },
     },
     {
@@ -75,7 +53,7 @@ export default {
         nullValue: 'None',
         externalLink: {
           action: function() {
-            return 'Learn about your voting options if you cannot vote in person on Election Day';
+            return 'voting.topic.verticalTable1.link';
           },
           href: function() {
             return 'https://www.philadelphiavotes.com/en/voters/mail-in-and-absentee-ballots';
@@ -83,10 +61,10 @@ export default {
         },
       },
       slots: {
-        title: 'Polling Place',
+        title: 'voting.topic.pollingPlace',
         fields: [
           {
-            label: 'Location',
+            label: 'voting.topic.location',
             value: function(state) {
               if (state.sources.pollingPlaces.data) {
 
@@ -100,31 +78,32 @@ export default {
             },
           },
           {
-            label: 'Accessibility',
+            label: 'voting.topic.accessibility',
             value: function(state) {
               if (state.sources.pollingPlaces.data) {
                 const pollingData = state.sources.pollingPlaces.data.rows[0];
-                const answer = pollingData.accessibility_code== "F" ? 'Building Fully Accessible' :
-                  pollingData.accessibility_code== "B" ? 'Building Substantially Accessible' :
-                    pollingData.accessibility_code== "M" ? 'Building Accessibility Modified' :
-                      pollingData.accessibility_code== "A" ? 'Alternate Entrance' :
-                        pollingData.accessibility_code== "R" ? 'Building Accessible With Ramp' :
-                          pollingData.accessibility_code== "N" ? 'Building Not Accessible' :
-                            'Information not available';
-                return '<a href="//www.philadelphiavotes.com/en/voters/polling-place-accessibility"\
-                        target="_blank">'+answer+'</a>';
+                const answer = pollingData.accessibility_code== "F" ? 'voting.topic.accessibilityCodes.buildingFullyAccessible' :
+                  pollingData.accessibility_code== "B" ? 'voting.topic.accessibilityCodes.buildingSubstantiallyAccessible' :
+                    pollingData.accessibility_code== "M" ? 'voting.topic.accessibilityCodes.buildingAccessibilityModified' :
+                      pollingData.accessibility_code== "A" ? 'voting.topic.accessibilityCodes.alternateEntrance' :
+                        pollingData.accessibility_code== "R" ? 'voting.topic.accessibilityCodes.buildingAccessibleWithRamp' :
+                          pollingData.accessibility_code== "N" ? 'voting.topic.accessibilityCodes.buildingNotAccessible' :
+                            'voting.topic.accessibilityCodes.informationNotAvailable';
+                return answer;
+                // return '<a href="//www.philadelphiavotes.com/en/voters/polling-place-accessibility"\
+                //         target="_blank">'+answer+'</a>';
               }
             },
           },
           {
-            label: 'Parking',
+            label: 'voting.topic.parking',
             value: function(state) {
               if (state.sources.pollingPlaces.data) {
                 const pollingData = state.sources.pollingPlaces.data;
-                const parking = pollingData.parking_code == "N" ? 'No Parking' :
-                  pollingData.parking_code == "G" ? 'General Parking' :
-                    pollingData.parking_code == "L" ? 'Loading Zone' :
-                      'Information not available';
+                const parking = pollingData.parking_code == "N" ? 'voting.topic.parkingCodes.noParking' :
+                  pollingData.parking_code == "G" ? 'voting.topic.parkingCodes.generalParking' :
+                    pollingData.parking_code == "L" ? 'voting.topic.parkingCodes.loadingZone' :
+                      'voting.topic.accessibilityCodes.informationNotAvailable';
                 return parking;
               }
             },
@@ -138,7 +117,7 @@ export default {
         nullValue: 'None',
         externalLink: {
           action: function() {
-            return 'See all citywide, state, and federal representatives';
+            return 'voting.topic.verticalTable2.link';
           },
           href: function(state) {
             return '//www.philadelphiavotes.com/en/voters/elected-officials';
@@ -147,10 +126,10 @@ export default {
       },
 
       slots: {
-        title: 'Elected Representatives',
+        title: 'voting.topic.electedRep',
         fields: [
           {
-            label: 'District Council Member',
+            label: 'voting.topic.districtCouncilMember',
             value: function(state) {
               const council = state.sources.electedOfficials.data.rows.filter( function(item) {
                 return item.office_label == "City Council";
@@ -160,7 +139,7 @@ export default {
             },
           },
           {
-            label: 'City Hall Office',
+            label: 'voting.topic.cityHallOffice',
             value: function(state) {
               const council = state.sources.electedOfficials.data.rows.filter( function(item) {
                 return item.office_label == "City Council";
@@ -172,7 +151,7 @@ export default {
             },
           },
           {
-            label: 'Current Term',
+            label: 'voting.topic.currentTerm',
             value: function(state) {
               const council = state.sources.electedOfficials.data.rows.filter( function(item) {
                 return item.office_label == "City Council";

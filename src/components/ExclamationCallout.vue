@@ -37,7 +37,7 @@ export default {
   computed: {
     i18nEnabled() {
       let value = this.$config.i18n && this.$config.i18n.enabled;
-      console.log('exclamationCallout i18nEnabled computing, value:', value);
+      // console.log('exclamationCallout i18nEnabled computing, value:', value);
       return value;
     },
     calloutClass() {
