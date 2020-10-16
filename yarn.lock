@@ -1234,20 +1234,21 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@phila/mapboard@https://github.com/CityOfPhiladelphia/mapboard#6ceffe1ae6f86944dad24f9f1c91faef616a6d39":
+"@phila/mapboard@https://github.com/CityOfPhiladelphia/mapboard#45ca95a2ce751908bd4caafbd9d0cd44e3e36e78":
   version "4.2.6"
-  resolved "https://github.com/CityOfPhiladelphia/mapboard#6ceffe1ae6f86944dad24f9f1c91faef616a6d39"
+  resolved "https://github.com/CityOfPhiladelphia/mapboard#45ca95a2ce751908bd4caafbd9d0cd44e3e36e78"
   dependencies:
-    "@phila/vue-comps" "2.1.15"
-    "@phila/vue-datafetch" "1.4.3"
+    "@phila/vue-comps" "https://github.com/CityOfPhiladelphia/phila-vue-comps#6031c7df75672e008206b345b2679575906b29e3"
+    "@phila/vue-datafetch" "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#7f36d1677e19357bc6ae87a1a9d2b2448cb57250"
     "@phila/vue-mapping" "2.2.9"
     vue "^2.6.10"
+    vue-i18n "^8.22.0"
+    vue-router "^3.4.6"
     vuex "^3.1.2"
 
-"@phila/vue-comps@2.1.15":
+"@phila/vue-comps@https://github.com/CityOfPhiladelphia/phila-vue-comps#6031c7df75672e008206b345b2679575906b29e3":
   version "2.1.15"
-  resolved "https://registry.yarnpkg.com/@phila/vue-comps/-/vue-comps-2.1.15.tgz#9105adddaaf7099d7965860bb81e87f98a674dff"
-  integrity sha512-FmMdOTEkV4D0mF3JXSG5OJ3UXC1e8lfeCVn9uJn1/1ZyQpe5yrgdYTR2A1ZmNydcm4ptt0RFDFCSscFj6fijcw==
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-comps#6031c7df75672e008206b345b2679575906b29e3"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.15"
     "@fortawesome/free-regular-svg-icons" "^5.7.2"
@@ -1263,10 +1264,9 @@
     vue "^2.6.11"
     vuex "^3.1.2"
 
-"@phila/vue-datafetch@1.4.3":
+"@phila/vue-datafetch@https://github.com/CityOfPhiladelphia/phila-vue-datafetch#7f36d1677e19357bc6ae87a1a9d2b2448cb57250":
   version "1.4.3"
-  resolved "https://registry.yarnpkg.com/@phila/vue-datafetch/-/vue-datafetch-1.4.3.tgz#8bfa2d8893534c0e070f907b6a2d120f0d0b10f8"
-  integrity sha512-Z6DpFb69fP6GsphernIm/Bz3EizOWhwC3MEbGvAOeMc8o71j3a/WuEGMElw+ASxz7GfyLn/zIGK5huqPoV0fqQ==
+  resolved "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#7f36d1677e19357bc6ae87a1a9d2b2448cb57250"
   dependencies:
     "@turf/turf" "^5.1.6"
     airtable "^0.8.1"
@@ -14484,6 +14484,11 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
 
+vue-i18n@^8.22.0:
+  version "8.22.0"
+  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.22.0.tgz#6403381a6eab1d229e515a62addb29b2ff3abfed"
+  integrity sha512-2tYS0bYDPJHKAWPy01aDe5h3wcXDGjhJmboHKOfi2OEYR+6gyXaIzdua1smZCQwOeWdlGsLntwdIgkXWrnLjxg==
+
 vue-jest@^3.0.5:
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/vue-jest/-/vue-jest-3.0.7.tgz#a6d29758a5cb4d750f5d1242212be39be4296a33"
@@ -14520,6 +14525,11 @@ vue-loader@^15.9.2:
     loader-utils "^1.1.0"
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
+
+vue-router@^3.4.6:
+  version "3.4.7"
+  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.4.7.tgz#bf189bafd16f4e4ef783c4a6250a3090f2c1fa1b"
+  integrity sha512-CbHXue5BLrDivOk5O4eZ0WT4Yj8XwdXa4kCnsEIOzYUPF/07ZukayA2jGxDCJxLc9SgVQX9QX0OuGOwGlVB4Qg==
 
 vue-style-loader@^4.1.0, vue-style-loader@^4.1.2:
   version "4.1.2"
