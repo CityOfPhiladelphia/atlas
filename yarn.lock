@@ -1234,9 +1234,9 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@phila/mapboard@https://github.com/CityOfPhiladelphia/mapboard#5d00f9f507d99fa77deb94f4af21295e36aefd63":
+"@phila/mapboard@https://github.com/CityOfPhiladelphia/mapboard#be7df819a297f64daa4320571eba998e4aa95455":
   version "4.2.6"
-  resolved "https://github.com/CityOfPhiladelphia/mapboard#5d00f9f507d99fa77deb94f4af21295e36aefd63"
+  resolved "https://github.com/CityOfPhiladelphia/mapboard#be7df819a297f64daa4320571eba998e4aa95455"
   dependencies:
     "@phila/vue-comps" "https://github.com/CityOfPhiladelphia/phila-vue-comps#5f331aa7c3b11ef64362d19d530d6282ab8dfc37"
     "@phila/vue-datafetch" "https://github.com/CityOfPhiladelphia/phila-vue-datafetch#9289dc235d3a824cc29695db2c9f9859938b6334"
