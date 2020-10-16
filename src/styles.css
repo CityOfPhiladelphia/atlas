@@ -34,6 +34,10 @@
 	}
 
 	.page-title-container {
-		float: right;
+		/* float: right; */
 	}
+
+  .globe-container {
+    float: right;
+  }
 }

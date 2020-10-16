@@ -1,0 +1,120 @@
+{
+	"i18n": {
+		"header": "i18nBanner",
+		"enabled": true,
+		"languages": ["en-US", "es"],
+		"topics": ["voting"],
+		"expandCollapseTitle": false,
+		"footer": "true",
+		"data": {
+			"locale": "en-US",
+			"messages": {
+				"en-US": {
+					"language": "English",
+					"app": {
+						"title": "Atlas"
+					},
+					"voting": {
+						"introPage": {
+							"introTitle": "Find your polling place on Atlas",
+							"p1": "COVID-19 info: Due to the pandemic, many polling places for the November 2020 general election have changed or have not been finalized.",
+							"p2": "Check here to confirm the location and more before you head to the polls on election day.",
+							"p3": "Search your home address on the map to find:",
+							"ul1": {
+								"li1": "Your polling place address and map location.",
+								"li2": "Accessibility and parking information for the building.",
+								"li3": "A preview of the November 2020 general election ballot.",
+								"li4": "Your elected officials and their contact information."
+							},
+							"p4_b": "Hours: ",
+							"p4": "All polling places will be open on election day from 7 a.m. to 8 p.m.",
+							"p5": "Changes to the official voter registry may not be reflected here immediately. For up-to-date, official polling place locations in Philadelphia County, contact the Philadelphia Voter Registration Office at (215) 686-1590.",
+							"relatedContent": "Related content",
+							"link1": "See our mail-in ballot guide for Philadelphia Voters",
+							"link2": "Find where to get and return mail-in ballots in person",
+							"link3": "Check the status of your mail-in ballot",
+							"link4": "Confirm that you're registered to vote"
+						},
+						"topic": {
+							"exclamationCallout1": {
+								"p1_b": "COVID19 ALERT: ",
+								"p1": "There have been widespread changes to polling place locations due to the pandemic. Many polling places for the November 2020 general election have not been finalized and may change before election day.",
+								"p2": "Mail in ballot applications must be received by your county election office no later than Tuesday, October 27th.",
+								"p3_1": "Find places you can",
+								"p3_a": "get and return mail-in ballots",
+								"p3_2": "in person.",
+								"p4": "Request a mail-in ballot.",
+								"p5": "If you are planning on voting in person, please confirm your polling place and make voting arrangements prior to the election."
+							},
+							"badge1": {
+								"header": "Next Eligible Election Is",
+								"content": "November 3, 2020"
+							},
+							"previewBallot": "Preview ballot",
+							"electedRep": "Elected Representatives",
+							"location": "Location",
+							"accessibility": "Accessibility",
+							"parking": "Parking",
+							"districtCouncilMember": "District Council Member",
+							"cityHallOffice": "City Hall Office",
+							"currentTerm": "Current Term",
+							"accessibilityCodes": {
+								"buildingFullyAccessible": "Building Fully Accessible",
+								"buildingSubstantiallyAccessible": "Building Substantially Accessible",
+								"buildingAccessibilityModified": "Building Accessibility Modified",
+								"alternateEntrance": "Alternate Entrance",
+								"buildingAccessibleWithRamp": "Building Accessible With Ramp",
+								"buildingNotAccessible": "Building Not Accessible",
+								"informationNotAvailable": "Information not available"
+							},
+							"parkingCodes": {
+								"noParking": "No Parking",
+								"generalParking": "General Parking",
+								"loadingZone": "Loading Zone"
+							},
+							"callout1": {
+								"text": "The deadline to register for the next election is 15 days prior to the election. You can confirm your registration and learn about registering to vote at www.philadelphiavotes.com."
+							},
+							"pollingPlace": "Polling Place",
+							"verticalTable1": {
+								"link": "Learn about your voting options if you cannot vote in person on Election Day"
+							},
+							"verticalTable2": {
+								"link": "See all citywide, state, and federal representatives"
+							}
+						}
+					}
+				},
+				"es": {
+					"language": "Español",
+					"app": {
+						"title": "Spanish Atlas"
+					},
+					"voting": {
+						"introPage": {
+							"introTitle": "Spanish Find your polling place on Atlas",
+							"p1": "Spanish COVID-19 info: Due to the pandemic, many polling places for the November 2020 general election have changed or have not been finalized.",
+							"p2": "Spanish Check here to confirm the location and more before you head to the polls on election day.",
+							"p3": "Spanish Search your home address on the map to find:",
+							"ul1": {
+								"li1": "Spanish Your polling place address and map location.",
+								"li2": "Spanish Accessibility and parking information for the building.",
+								"li3": "Spanish A preview of the November 2020 general election ballot.",
+								"li4": "Spanish Your elected officials and their contact information."
+							},
+							"p4_b": "Spanish Hours: ",
+							"p4": "Spanish All polling places will be open on election day from 7 a.m. to 8 p.m.",
+							"p5": "Spanish Changes to the official voter registry may not be reflected here immediately. For up-to-date, official polling place locations in Philadelphia County, contact the Philadelphia Voter Registration Office at (215) 686-1590.",
+							"relatedContent": "Contenido relacionado",
+							"link1": "Spanish See our mail-in ballot guide for Philadelphia Voters",
+							"link2": "Spanish Find where to get and return mail-in ballots in person",
+							"link3": "Spanish Check the status of your mail-in ballot",
+							"link4": "Spanish Confirm that you're registered to vote"
+						},
+						"topic": {}
+					}
+				}
+			}
+		}
+	}
+}

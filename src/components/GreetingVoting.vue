@@ -3,43 +3,42 @@
     :style="greetingStyle"
     class="columns medium-20 medium-centered greeting"
   >
-    <h2>{{ $t('introPage.introTitle') }}</h2>
+    <h2>{{ $t('voting.introPage.introTitle') }}</h2>
     <exclamation-callout
       :slots="exclamationCalloutSlots"
     >
     </exclamation-callout>
 
-    <p>Check here to confirm the location and more before you head to the polls on election day.
-    </p>
+    <p>Check here to confirm the location and more before you head to the polls on election day.</p>
 
-    <p>{{ $t('introPage.p3') }}</p>
+    <p>{{ $t('voting.introPage.p3') }}</p>
     <div class="custom-section">
       <ul class="custom-ul">
-        <li>{{ $t('introPage.ul1.li1') }}</li>
-        <li>{{ $t('introPage.ul1.li2') }}</li>
-        <li>{{ $t('introPage.ul1.li3') }}</li>
-        <li>{{ $t('introPage.ul1.li4') }}</li>
+        <li>{{ $t('voting.introPage.ul1.li1') }}</li>
+        <li>{{ $t('voting.introPage.ul1.li2') }}</li>
+        <li>{{ $t('voting.introPage.ul1.li3') }}</li>
+        <li>{{ $t('voting.introPage.ul1.li4') }}</li>
       </ul>
     </div>
 
-    <p><b>{{ $t('introPage.p4_b') }}</b>{{ $t('introPage.p4') }}</p>
+    <p><b>{{ $t('voting.introPage.p4_b') }}</b>{{ $t('voting.introPage.p4') }}</p>
 
     <p class="border">
-      {{ $t('introPage.p5') }}
+      {{ $t('voting.introPage.p5') }}
     </p>
 
     <div
       class="section-header"
       :style="{ 'background-color': '#F0F0F0', 'color': 'black' }"
     >
-      <b>{{ $t('introPage.relatedContent') }}</b>
+      <b>{{ $t('voting.introPage.relatedContent') }}</b>
     </div>
     <div class="custom-section">
       <ul class="custom-ul">
-        <li><a target="_blank" href="https://www.phila.gov/2020-09-08-general-election-mail-in-ballot-guide-for-philadelphia-voters/">{{ $t('introPage.link1') }}</a></li>
-        <li><a target="_blank" href="https://www.phila.gov/voting">{{ $t('introPage.link2') }}</a></li>
-        <li><a target="_blank" href="https://www.pavoterservices.pa.gov/pages/ballottracking.aspx">{{ $t('introPage.link3') }}</a></li>
-        <li><a target="_blank" href="https://www.pavoterservices.pa.gov/Pages/voterregistrationstatus.aspx">{{ $t('introPage.link4') }}</a></li>
+        <li><a target="_blank" href="https://www.phila.gov/2020-09-08-general-election-mail-in-ballot-guide-for-philadelphia-voters/">{{ $t('voting.introPage.link1') }}</a></li>
+        <li><a target="_blank" href="https://www.phila.gov/voting">{{ $t('voting.introPage.link2') }}</a></li>
+        <li><a target="_blank" href="https://www.pavoterservices.pa.gov/pages/ballottracking.aspx">{{ $t('voting.introPage.link3') }}</a></li>
+        <li><a target="_blank" href="https://www.pavoterservices.pa.gov/Pages/voterregistrationstatus.aspx">{{ $t('voting.introPage.link4') }}</a></li>
       </ul>
     </div>
 
@@ -73,7 +72,7 @@ export default {
   computed: {
     exclamationCalloutSlots() {
       return {
-        text: 'introPage.p1',
+        text: 'voting.introPage.p1',
       };
     },
   },

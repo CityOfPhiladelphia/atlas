@@ -13,6 +13,9 @@ if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
   console.log = console.info = console.debug = console.error = function () {};
 }
 
+import i18n from './i18n.json';
+// console.log('i18n:', i18n);
+
 // Font Awesome Icons
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faDotCircle } from '@fortawesome/free-regular-svg-icons/faDotCircle';
@@ -80,10 +83,12 @@ import voting from './topics/voting';
 
 import exclamationCallout from './components/ExclamationCallout';
 import greetingVoting from './components/GreetingVoting';
+import i18nBanner from '@phila/mapboard/src/components/i18nBanner.vue';
 
 const customComps = {
   'exclamationCallout': exclamationCallout,
   'greetingvoting': greetingVoting,
+  'i18nBanner': i18nBanner,
 };
 
 // import 'phila-standards/dist/css/phila-app.min.css';
@@ -231,157 +236,5 @@ mapboard({
       },
     },
   ],
-  i18n: {
-    header: 'i18nBanner',
-    enabled: true,
-    languages: [ 'en-US', 'es' ],
-    topics: [ 'voting' ],
-    expandCollapseTitle: false,
-    footer: true,
-    data: {
-      locale: 'en-US',
-      messages: {
-        'en-US': {
-          language: 'English',
-          app: {
-            title: 'Mail-in Voting Centers',
-            subtitle: 'Find a vote-by-mail location near you.',
-            // bannerAlert: 'Many sites are closed today. Check specific site details for more information.',
-            noResults: 'No center was found within your search. Please try again.',
-          },
-          introPage: {
-            introTitle: 'Find your polling place on Atlas',
-            p1: 'COVID-19 info: Due to the pandemic, many polling places for the November 2020 general election have changed or have not been finalized.',
-            p2: 'Check here to confirm the location and more before you head to the polls on election day.​',
-            p3: 'Search your home address on the map to find:',
-            ul1: {
-              li1: 'Your polling place address and map location.',
-              li2: 'Accessibility and parking information for the building.',
-              li3: 'A preview of the November 2020 general election ballot.',
-              li4: 'Your elected officials and their contact information.',
-            },
-            p4_b: 'Hours: ',
-            p4: 'All polling places will be open on election day from 7 a.m. to 8 p.m.',
-            p5: 'Changes to the official voter registry may not be reflected here immediately. For up-to-date, official polling place locations in Philadelphia County, contact the Philadelphia Voter Registration Office at (215) 686-1590.',
-            relatedContent: 'Related content',
-            link1: 'See our mail-in ballot guide for Philadelphia Voters',
-            link2: 'Find where to get and return mail-in ballots in person',
-            link3: 'Check the status of your mail-in ballot',
-            link4: 'Confirm that you\'re registered to vote',
-
-          },
-          cityOfPhiladelphia: 'City of Philadelphia',
-          cityCommissioners: 'City Commissioners',
-          ballotGuide: 'General election mail-in ballot guide',
-          siteHours: 'Site hours',
-          details: {
-            details: 'Details',
-            inPerson: 'In-person registration and mail-in voting',
-            ballotDropoff: 'Mail-in ballot drop-off',
-            ballotDropoffLong: 'The Board of Elections should be notified immediately in the event the receptacle is full, not functioning, or is damaged in any fashion, by calling 215-686-3469 or by emailing vote@phila.gov.',
-            interpretationAvailable: 'Telephonic interpretation services available',
-            wheelchair: 'Wheelchair accessible',
-            open24Hours: 'Open 24 hours',
-          },
-          'Election office': 'Election Office',
-          'Official ballot return': 'Official Ballot Return',
-          sections: {
-            'Election office': {
-              header: 'Election Office',
-            },
-            'Official ballot return': {
-              header: 'Official Ballot Return',
-            },
-          },
-          beforeYouGo: 'Before you go',
-          checkSite: 'Eligibility requirements and testing hours vary by site. Be sure to check site details to arrange for testing.',
-          hoursVary: 'Hours and availability varies.',
-          eligibility: 'Details',
-          testingHours: 'Testing hours',
-          daysOfOperation: 'Days of operation',
-          Monday: 'Mon.',
-          Tuesday: 'Tues.',
-          Wednesday: 'Wed.',
-          Thursday: 'Thurs.',
-          Friday: 'Fri.',
-          Saturday: 'Sat.',
-          Sunday: 'Sun.',
-          Yes: 'Yes',
-          No: 'No',
-          Unknown: 'Unknown',
-          website: 'Website',
-        },
-        'es': {
-          language: 'Español',
-          app: {
-            title: 'Centros de votación por correo',
-            subtitle: 'Encuentre un centro de votación por correo cerca de usted.',
-            // bannerAlert: 'Muchos lugares están cerrados hoy. Consulte los detalles específicos del lugar para obtener más información.',
-            noResults: 'No se encontró un lugar donde se realicen pruebas que coincida con su búsqueda.',
-          },
-          introPage: {
-            introTitle: 'Spanish Find your polling place on Atlas',
-            p1: 'Spanish COVID-19 info: Due to the pandemic, many polling places for the November 2020 general election have changed or have not been finalized.',
-            p2: 'Spanish Check here to confirm the location and more before you head to the polls on election day.',
-            p3: 'Spanish Search your home address on the map to find:',
-            ul1: {
-              li1: 'Spanish Your polling place address and map location.',
-              li2: 'Spanish Accessibility and parking information for the building.',
-              li3: 'Spanish A preview of the November 2020 general election ballot.',
-              li4: 'Spanish Your elected officials and their contact information.',
-            },
-            p4_b: 'Spanish Hours: ',
-            p4: 'Spanish All polling places will be open on election day from 7 a.m. to 8 p.m.',
-            p5: 'Spanish Changes to the official voter registry may not be reflected here immediately. For up-to-date, official polling place locations in Philadelphia County, contact the Philadelphia Voter Registration Office at (215) 686-1590.',
-            relatedContent: 'Contenido relacionado',
-            link1: 'Spanish See our mail-in ballot guide for Philadelphia Voters',
-            link2: 'Spanish Find where to get and return mail-in ballots in person',
-            link3: 'Spanish Check the status of your mail-in ballot',
-            link4: 'Spanish Confirm that you\'re registered to vote',
-
-          },
-          cityOfPhiladelphia: 'La Ciudad de Filadelfia',
-          cityCommissioners: 'Los Comisionados de la Ciudad de Filadelfia',
-          ballotGuide: 'Guía de votación por correo para la elección general',
-          siteHours: 'Horas del centro',
-          details: {
-            details: 'Detalles',
-            inPerson: 'Inscripción para votar y votar por correo',
-            ballotDropoff: 'Entrega de boletas por correo',
-            ballotDropoffLong: 'En caso de que el buzón esté lleno, no funcione o esté dañado de alguna manera, se debe notificar inmediatamente a la Junta Electoral, llamando al 215-686-3469 o enviando un correo electrónico a vote@phila.gov.',
-            interpretationAvailable: 'Servicios de intérprete disponibles',
-            wheelchair: 'Local accesible en silla de ruedas',
-            open24Hours: 'Abierto las 24 horas',
-          },
-          'Election office': 'Oficina Electoral',
-          'Official ballot return': 'Sitio oficial para devolver boletas',
-          sections: {
-            'Election office': {
-              header: 'Oficina Electoral',
-            },
-            'Official ballot return': {
-              header: 'Sitio oficial para devolver boletas',
-            },
-          },
-          beforeYouGo: 'Antes de ir',
-          checkSite: 'Revise los detalles específicos del lugar.',
-          hoursVary: 'Los horarios y la disponibilidad pueden variar.',
-          eligibility: 'Detalles',
-          testingHours: 'Horario para las pruebas',
-          daysOfOperation: 'Días de servicio',
-          Monday: 'Lun.',
-          Tuesday: 'Mar.',
-          Wednesday: 'Mié.',
-          Thursday: 'Jue.',
-          Friday: 'Vie.',
-          Saturday: 'Sáb.',
-          Sunday: 'Dom.',
-          Yes: 'Sí',
-          No: 'No',
-          Unknown: 'Desconocido',
-          website: 'Sitio web',
-        },
-      },
-    },
-  },
+  i18n: i18n.i18n,
 });
