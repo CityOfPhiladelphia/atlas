@@ -15,15 +15,25 @@
         class="topic-header-label-holder"
         v-html="$t(message)"
       />
+
+      <topic-component-group
+        :topic-components="options.components"
+        :item="item"
+      />
+
     </div>
   </div>
 </template>
 
 <script>
 import TopicComponent from '@phila/vue-comps/src/components/TopicComponent.vue';
+import TopicComponentGroup from '@phila/vue-comps/src/components/TopicComponentGroup.vue';
 
 export default {
   mixins: [ TopicComponent ],
+  components: {
+    TopicComponentGroup,
+  },
   computed: {
     i18nEnabled() {
       let value = this.$config.i18n && this.$config.i18n.enabled;
@@ -41,11 +51,12 @@ export default {
       return value;
     },
     message() {
+      let value = '';
       if (this.$props.slots) {
-        return this.evaluateSlot(this.$props.slots.text) || '';
+        value = this.evaluateSlot(this.$props.slots.text) || '';
       }
-      return '';
-
+      console.log('exclamationCallout message computed:', value);
+      return value;
     },
     components() {
       if (this.$props.options) {

@@ -38,7 +38,7 @@
 						"topic": {
 							"exclamationCallout1": {
 								"p1_b": "COVID19 ALERT: ",
-								"p1": "There have been widespread changes to polling place locations due to the pandemic. Many polling places for the November 2020 general election have not been finalized and may change before election day.",
+								"p1": "There have been widespread changes to polling place locations due to the pandemic.",
 								"p2": "Mail in ballot applications must be received by your county election office no later than Tuesday, October 27th.",
 								"p3_1": "Find places you can",
 								"p3_a": "get and return mail-in ballots",
@@ -114,7 +114,7 @@
 						"topic": {
 							"exclamationCallout1": {
 								"p1_b": "ADVERTENCIA POR COVID-19: ",
-								"p1": "Hubo cambios generalizados en la ubicación de los lugares de votación debido a la pandemia. Muchos lugares de votación para la elección general de noviembre del 2020 no están preparados y pueden cambiar antes del día de la elección.",
+								"p1": "Hubo cambios generalizados en la ubicación de los lugares de votación debido a la pandemia.",
 								"p2": "Las solicitudes de boletas de voto por correo se recibirán en la oficina electoral de su condado hasta el martes 27 de octubre.",
 								"p3_1": "Encuentre lugares dónde puede:",
 								"p3_a": "Conseguir y entregar las boletas de voto por correo",

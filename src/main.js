@@ -82,11 +82,13 @@ import nearby from './topics/nearby';
 import voting from './topics/voting';
 
 import exclamationCallout from './components/ExclamationCallout';
+import exclamationContent from './components/ExclamationContent';
 import greetingVoting from './components/GreetingVoting';
 import i18nBanner from '@phila/mapboard/src/components/i18nBanner.vue';
 
 const customComps = {
   'exclamationCallout': exclamationCallout,
+  'exclamationContent': exclamationContent,
   'greetingvoting': greetingVoting,
   'i18nBanner': i18nBanner,
 };

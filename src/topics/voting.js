@@ -15,15 +15,22 @@ export default {
   components: [
     {
       type: 'exclamationCallout',
-      slots: {
-        text: '\
-        <b>COVID19 ALERT</b>: There have been widespread changes to polling place locations due to the pandemic.<br><br>\
-        Mail in ballot applications must be received by your county election office no later than Tuesday, October 27th.<br><br>\
-        Find places you can <a target="_blank" href="//www.phila.gov/voting/">get and return mail-in ballots</a> in person.<br><br>\
-        <a target="_blank" href="//apps.philadelphiavotes.com/">Request a mail-in ballot</a>.<br><br>\
-        If you are planning on voting in person, please confirm your polling place and make voting arrangements prior to the election.\
-        ',
+      options: {
+        components: [
+          {
+            type: 'exclamationContent',
+          },
+        ],
       },
+      // slots: {
+      //   text: "\
+      //   <b>$t('voting.topic.exclamationCallout1.p1_b')</b>: There have been widespread changes to polling place locations due to the pandemic.<br><br>\
+      //   Mail in ballot applications must be received by your county election office no later than Tuesday, October 27th.<br><br>\
+      //   Find places you can <a target='_blank' href='//www.phila.gov/voting/'>get and return mail-in ballots</a> in person.<br><br>\
+      //   <a target='_blank' href='//apps.philadelphiavotes.com/'>Request a mail-in ballot</a>.<br><br>\
+      //   If you are planning on voting in person, please confirm your polling place and make voting arrangements prior to the election.\
+      //   ",
+      // },
     },
     {
       type: 'badge',
