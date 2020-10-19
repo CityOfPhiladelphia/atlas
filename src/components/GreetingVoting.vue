@@ -5,8 +5,9 @@
   >
     <h2>{{ $t('voting.introPage.introTitle') }}</h2>
     <exclamation-callout
-      :slots="exclamationCalloutSlots"
+      :options="exclamationCalloutOptions"
     >
+    <!-- :slots="exclamationCalloutSlots" -->
     </exclamation-callout>
 
     <!-- <p>{{ $t('voting.introPage.p2') }}</p> -->
@@ -73,6 +74,15 @@ export default {
     exclamationCalloutSlots() {
       return {
         text: 'voting.introPage.p1',
+      };
+    },
+    exclamationCalloutOptions() {
+      return {
+        components: [
+          {
+            type: 'exclamationContentGreeting',
+          },
+        ],
       };
     },
   },

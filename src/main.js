@@ -82,13 +82,15 @@ import nearby from './topics/nearby';
 import voting from './topics/voting';
 
 import exclamationCallout from './components/ExclamationCallout';
-import exclamationContent from './components/ExclamationContent';
+import exclamationContentTopic from './components/ExclamationContentTopic';
+import exclamationContentGreeting from './components/ExclamationContentGreeting';
 import greetingVoting from './components/GreetingVoting';
 import i18nBanner from '@phila/mapboard/src/components/i18nBanner.vue';
 
 const customComps = {
   'exclamationCallout': exclamationCallout,
-  'exclamationContent': exclamationContent,
+  'exclamationContentTopic': exclamationContentTopic,
+  'exclamationContentGreeting': exclamationContentGreeting,
   'greetingvoting': greetingVoting,
   'i18nBanner': i18nBanner,
 };

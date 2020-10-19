@@ -19,7 +19,7 @@ export default {
       options: {
         components: [
           {
-            type: 'exclamationContent',
+            type: 'exclamationContentTopic',
           },
         ],
       },
