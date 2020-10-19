@@ -17,7 +17,7 @@
 					"voting": {
 						"introPage": {
 							"introTitle": "Find your polling place on Atlas",
-							"p1": "COVID-19 info: Due to the pandemic, many polling places for the November 2020 general election have changed or have not been finalized.",
+							"p1": "COVID-19 info: Many polling places for the November 2020 general election have changed. Check here to confirm the location and more before you head to the polls on election day.",
 							"p2": "Check here to confirm the location and more before you head to the polls on election day.",
 							"p3": "Search your home address on the map to find:",
 							"ul1": {
@@ -94,7 +94,7 @@
 					"voting": {
 						"introPage": {
 							"introTitle": "Encuentre su lugar de votación en Atlas",
-							"p1": "Información sobre la COVID-19: debido a la pandemia, muchos lugares de votación para la elección general de noviembre del 2020 cambiaron o no están preparados.",
+							"p1": "Información sobre la COVID-19: muchos lugares de votación para la elección general de noviembre del 2020 cambiaron. Consulte aquí para confirmar la ubicación y obtener más información antes de acudir a las urnas el día de la elección.",
 							"p2": "Consulte aquí para confirmar la ubicación y obtener más información antes de acudir a las urnas el día de la elección.",
 							"p3": "Busque su dirección en el mapa para averiguar lo siguiente:",
 							"ul1": {
