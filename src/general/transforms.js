@@ -155,4 +155,11 @@ export default {
       return txt.replace(new RegExp(expStr, 'gi'), '');
     },
   },
+  i18nSubstitute: {
+    transform: function(str) {
+      let test = str.split('$t(');
+      console.log('i18nSubstitute is running, str:', str, 'test:', test, 'this.$config.i18n', this.$config.i18n);
+      return voting.topic.accessibilityCodes.informationNotAvailable;
+    },
+  },
 };

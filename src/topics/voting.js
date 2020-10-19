@@ -3,6 +3,7 @@ import { format, parseISO } from 'date-fns';
 const phone = transforms.phoneNumber.transform;
 const titleCase = transforms.titleCase.transform;
 const nth = transforms.nth.transform;
+let $t;
 
 export default {
   key: 'voting',
@@ -37,7 +38,8 @@ export default {
         title: 'voting.topic.badge1.header',
         titleBackground: '#2176d2',
         value: function(state) {
-          return format(parseISO(state.sources.nextElectionAPI.data.election_date), 'MMMM d, yyyy');
+          return 'voting.topic.badge1.content';
+          // return format(parseISO(state.sources.nextElectionAPI.data.election_date), 'MMMM d, yyyy');
         },
       }, // end slots
     }, // end of badge
@@ -73,9 +75,13 @@ export default {
                 ", Division " + pollingData.division + "</b><br>" +
                 titleCase(pollingData.placename) + "<br>" +
                 titleCase(pollingData.street_address) + "<br>\
-                All locations are open on Election Day <br>from 7am to 8pm.";
+                ";
               }
             },
+          },
+          {
+            label: 'voting.topic.hours',
+            value: 'voting.introPage.p4',
           },
           {
             label: 'voting.topic.accessibility',
@@ -94,6 +100,7 @@ export default {
                 //         target="_blank">'+answer+'</a>';
               }
             },
+            link: '//www.philadelphiavotes.com/en/voters/polling-place-accessibility',
           },
           {
             label: 'voting.topic.parking',

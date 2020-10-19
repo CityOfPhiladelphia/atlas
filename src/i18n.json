@@ -50,6 +50,7 @@
 								"header": "Next Eligible Election Is",
 								"content": "November 3, 2020"
 							},
+							"hours": "Hours",
 							"previewBallot": "Preview ballot ",
 							"electedRep": "Elected Representatives",
 							"location": "Location",
@@ -103,7 +104,7 @@
 								"li4": "Sus funcionarios electos y su información de contacto."
 							},
 							"p4_b": "Horario: ",
-							"p4": "Todos los lugares de votación estarán abiertos el día de la elección de 7 a. m a 8 p. m.",
+							"p4": "Todos los lugares de votación estarán abiertos el día de la elección de 7 a.m. a 8 p.m.",
 							"p5": "Es posible que los cambios en el registro oficial de votantes no aparezcan aquí inmediatamente. Para actualizar la ubicación de los lugares de votación oficiales en el condado de Filadelfia, comuníquese con la Oficina de Registro de Votantes de Filadelfia al (215) 686-1590.",
 							"relatedContent": "Contenido relacionado",
 							"link1": "Consulte nuestra guía de votación por correo para los votantes de Filadelfia.",
@@ -124,8 +125,9 @@
 							},
 							"badge1": {
 								"header": "La próxima elección es el",
-								"content": "3 de noviembre de 2020."
+								"content": "3 de noviembre de 2020"
 							},
+							"hours": "Horario",
 							"previewBallot": "Vista previa de la boleta ",
 							"electedRep": "Representantes elegidos",
 							"location": "Ubicación",
