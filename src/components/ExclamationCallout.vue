@@ -6,20 +6,40 @@
         class="fa-3x inline-block-class"
       />
       <div
-        v-if="message"
+        v-if="message && !i18nEnabled"
         class="topic-header-label-holder"
         v-html="message"
       />
+      <div
+        v-if="message && i18nEnabled"
+        class="topic-header-label-holder"
+        v-html="$t(message)"
+      />
+
+      <topic-component-group
+        :topic-components="options.components"
+        :item="item"
+      />
+
     </div>
   </div>
 </template>
 
 <script>
 import TopicComponent from '@phila/vue-comps/src/components/TopicComponent.vue';
+import TopicComponentGroup from '@phila/vue-comps/src/components/TopicComponentGroup.vue';
 
 export default {
   mixins: [ TopicComponent ],
+  components: {
+    TopicComponentGroup,
+  },
   computed: {
+    i18nEnabled() {
+      let value = this.$config.i18n && this.$config.i18n.enabled;
+      // console.log('exclamationCallout i18nEnabled computing, value:', value);
+      return value;
+    },
     calloutClass() {
       let value;
       if (this.$props.options) {
@@ -31,19 +51,22 @@ export default {
       return value;
     },
     message() {
+      let value = '';
       if (this.$props.slots) {
-        return this.evaluateSlot(this.$props.slots.text) || '';
+        value = this.evaluateSlot(this.$props.slots.text) || '';
       }
-      return '';
-
+      console.log('exclamationCallout message computed:', value);
+      return value;
     },
     components() {
       if (this.$props.options) {
         return this.$props.options.components || null;
       }
       return null;
-
     },
+  },
+  mounted() {
+    console.log('exclamationCallout mounted, this.$config:', this.$config);
   },
 };
 </script>

@@ -13,6 +13,9 @@ if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
   console.log = console.info = console.debug = console.error = function () {};
 }
 
+import i18n from './i18n.json';
+// console.log('i18n:', i18n);
+
 // Font Awesome Icons
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faDotCircle } from '@fortawesome/free-regular-svg-icons/faDotCircle';
@@ -79,9 +82,17 @@ import nearby from './topics/nearby';
 import voting from './topics/voting';
 
 import exclamationCallout from './components/ExclamationCallout';
+import exclamationContentTopic from './components/ExclamationContentTopic';
+import exclamationContentGreeting from './components/ExclamationContentGreeting';
+import greetingVoting from './components/GreetingVoting';
+import i18nBanner from '@phila/mapboard/src/components/i18nBanner.vue';
 
 const customComps = {
   'exclamationCallout': exclamationCallout,
+  'exclamationContentTopic': exclamationContentTopic,
+  'exclamationContentGreeting': exclamationContentGreeting,
+  'greetingvoting': greetingVoting,
+  'i18nBanner': i18nBanner,
 };
 
 // import 'phila-standards/dist/css/phila-app.min.css';
@@ -108,13 +119,17 @@ mapboard({
   // defaultAddress: '1234 MARKET ST',
   // plugin: true,
   customComps,
+  header: {
+    enabled: true,
+    text: 'Atlas',
+  },
   panels: [
     'topics',
     'map',
   ],
   router: {
     enabled: true,
-    type: 'custom',
+    type: 'vue',
     // returnToDefaultTopicOnGeocode: false,
   },
   defaultAddressTextPlaceholder: {
@@ -205,6 +220,7 @@ mapboard({
     // neighboringProperties,
   },
   topics: [
+    voting,
     property,
     condos,
     deeds,
@@ -212,15 +228,17 @@ mapboard({
     zoning,
     // polling,
     // rcoTopic,
-    voting,
+    // voting,
     nearby,
   ],
+  defaultTopic: 'voting',
   components: [
     {
       type: 'topic-set',
       options: {
-        defaultTopic: 'property',
+        defaultTopic: 'voting',
       },
     },
   ],
+  i18n: i18n.i18n,
 });
