@@ -129,7 +129,7 @@ mapboard({
   ],
   router: {
     enabled: true,
-    type: 'custom',
+    type: 'vue',
     // returnToDefaultTopicOnGeocode: false,
   },
   defaultAddressTextPlaceholder: {
@@ -220,7 +220,7 @@ mapboard({
     // neighboringProperties,
   },
   topics: [
-    // voting,
+    voting,
     property,
     condos,
     deeds,
@@ -228,16 +228,15 @@ mapboard({
     zoning,
     // polling,
     // rcoTopic,
-    voting,
+    // voting,
     nearby,
   ],
-  // defaultTopic: 'voting',
-  defaultTopic: 'property',
+  defaultTopic: 'voting',
   components: [
     {
       type: 'topic-set',
       options: {
-        defaultTopic: 'property',
+        defaultTopic: 'voting',
       },
     },
   ],
