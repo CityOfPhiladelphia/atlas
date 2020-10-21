@@ -4,6 +4,7 @@ export default {
     <p>Here are some things you can do with Atlas:</p>\
     <div class="callout">\
       <ul>\
+        <li>Find your polling place</li>\
         <li>Get the history of permits, licenses, and inspections at any address</li>\
         <li>Research real estate information including property values, zoning, and document archives</li>\
         <li>Get easy access to a variety of hard-to-find City resources</li>\
