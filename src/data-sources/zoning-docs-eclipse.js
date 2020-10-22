@@ -7,7 +7,7 @@ export default {
       q: function(feature) {
 
         if (feature.properties.eclipse_location_id === null || feature.properties.eclipse_location_id === '') {
-          return "select * from li_zoning_docs where addressobjectid in (" + null + ")";
+          return "select * from li_zoning_docs_test where addressobjectid in (" + null + ")";
         }
         var eclipseLocId = feature.properties.eclipse_location_id.split('|');
         var str = "'";

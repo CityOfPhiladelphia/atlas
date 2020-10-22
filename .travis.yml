@@ -41,7 +41,7 @@ deploy:
     secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: "atlas-dev.phila.gov"
     on:
-      branch: vue-router
+      branch: voting-locations
     local_dir: dist
     skip_cleanup: true
   - provider: s3
