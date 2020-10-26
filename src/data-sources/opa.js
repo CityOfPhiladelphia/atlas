@@ -1,15 +1,15 @@
 export default {
   id: 'opa',
   type: 'http-get',
-  url: 'https://data.phila.gov/resource/w7rb-qrn8.json',
+  url: 'https://phl.carto.com/api/v2/sql',
   options: {
     params: {
-      parcel_number: function(feature) {
-        return feature.properties.opa_account_num; 
+      q: function(feature) {
+        return "select * from opa_properties_public where parcel_number = '" + feature.properties.opa_account_num + "'";
       },
     },
     success: function(data) {
-      return data[0];
+      return data.rows[0];
     },
   },
 };
