@@ -1,3 +1,10 @@
+.small-text {
+  font-size: 14px;
+  background-color: #DAEDFE;
+  padding: 10px;
+  font-style: italic;
+}
+
 .greeting > h2 {
   margin-bottom: 30px;
 }
