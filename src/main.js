@@ -7,6 +7,7 @@
         \/               \/     \/
 */
 
+
 // turn off console logging in production
 const { hostname='' } = location;
 if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
@@ -192,24 +193,24 @@ mapboard({
   transforms,
   greeting,
   dataSources: {
-    threeOneOneCarto,
+    // threeOneOneCarto,
     condoList,
-    crimeIncidents,
+    // crimeIncidents,
     divisions,
     dorCondoList,
     dorDocuments,
     electedOfficials,
-    liBusinessLicenses,
-    liInspections,
-    liPermits,
-    liViolations,
-    nearbyZoningAppeals,
+    // liBusinessLicenses,
+    // liInspections,
+    // liPermits,
+    // liViolations,
+    // nearbyZoningAppeals,
     nextElectionAPI,
     opa,
     pollingPlaces,
     rco,
     regmaps,
-    vacantIndicatorsPoints,
+    // vacantIndicatorsPoints,
     zoningAppeals,
     zoningBase,
     zoningDocs,
@@ -223,12 +224,12 @@ mapboard({
     property,
     condos,
     deeds,
-    li,
+    // li,
     zoning,
     // polling,
     // rcoTopic,
     // voting,
-    nearby,
+    // nearby,
   ],
   defaultTopic: 'voting',
   components: [
