@@ -14,16 +14,16 @@ export default {
     return ' ';
   },
   components: [
-    {
-      type: 'exclamationCallout',
-      options: {
-        components: [
-          {
-            type: 'exclamationContentTopic',
-          },
-        ],
-      },
-    },
+    // {
+    //   type: 'exclamationCallout',
+    //   options: {
+    //     components: [
+    //       {
+    //         type: 'exclamationContentTopic',
+    //       },
+    //     ],
+    //   },
+    // },
     {
       type: 'badge',
       options: {
