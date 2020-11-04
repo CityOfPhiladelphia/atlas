@@ -230,12 +230,12 @@ mapboard({
     voting,
     nearby,
   ],
-  defaultTopic: 'voting',
+  defaultTopic: 'property',
   components: [
     {
       type: 'topic-set',
       options: {
-        defaultTopic: 'voting',
+        defaultTopic: 'property',
       },
     },
   ],
