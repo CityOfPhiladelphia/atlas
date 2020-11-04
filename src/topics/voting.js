@@ -38,8 +38,8 @@ export default {
         title: 'voting.topic.badge1.header',
         titleBackground: '#2176d2',
         value: function(state) {
-          return 'voting.topic.badge1.content';
-          // return format(parseISO(state.sources.nextElectionAPI.data.election_date), 'MMMM d, yyyy');
+          // return 'voting.topic.badge1.content';
+          return format(parseISO(state.sources.nextElectionAPI.data.election_date), 'MMMM d, yyyy');
         },
       }, // end slots
     }, // end of badge
