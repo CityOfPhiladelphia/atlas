@@ -9,9 +9,9 @@ export default {
     enabled: true,
   },
   initialImagery: 'imagery2020',
-  featureLayers: {
-    pwdParcels: {
-      url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS_TEST/FeatureServer/0',
-    },
-  },
+  // featureLayers: {
+  //   pwdParcels: {
+  //     url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS_TEST/FeatureServer/0',
+  //   },
+  // },
 };
