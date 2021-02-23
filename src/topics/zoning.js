@@ -267,7 +267,9 @@ export default {
             value: function(state, item){
               //return item.appeal_key
               // return "<a target='_blank' href='//li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addresskey+"&address="+item.address+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>"
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=appeals&eid="+item.internaljobid+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.appealnumber+"<i class='fa fa-external-link-alt'></i></a>";
+              // return "<a target='_blank' href='http://li.phila.gov/#details?entity=appeals&eid="+item.internaljobid+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.appealnumber+"<i class='fa fa-external-link-alt'></i></a>";
+              return "<a target='_blank' href='https://d3quiycuqnz62y.cloudfront.net/Property-History/search/Appeal-Detail?address="+encodeURIComponent(item.address)+"&Id="+item.appealnumber+"'>"+item.appealnumber+"<i class='fa fa-external-link-alt'></i></a>";
+
             },
           },
           {
