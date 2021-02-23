@@ -80,7 +80,8 @@ export default {
           href: function(state) {
             var address = state.geocode.data.properties.street_address;
             var addressEncoded = encodeURIComponent(address);
-            return 'http://li.phila.gov/#summary?address=' + addressEncoded;
+            return 'https://d3quiycuqnz62y.cloudfront.net/Property-History/search?address=' + addressEncoded;
+            // return 'http://li.phila.gov/#summary?address=' + addressEncoded;
           },
         },
       },
