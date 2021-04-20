@@ -99,7 +99,8 @@ export default {
   },
   nth: {
     transform: function(n) {
-      return n + ([ 'st','nd','rd' ][n%100>>3^1&&n%10]||'th');
+      console.log('nth transform, n:', n, 'n%100>>3^1&&n%10:', n%100>>3^1&&n%10);
+      return n + ([ 'th', 'st','nd','rd' ][n%100>>3^1&&n%10]||'th');
     },
   },
   phoneNumber: {
