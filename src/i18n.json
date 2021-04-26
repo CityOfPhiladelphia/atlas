@@ -18,13 +18,13 @@
 						"introPage": {
 							"introTitle": "Find your polling place on Atlas",
 							"p1_b": "COVID-19 info: ",
-							"p1": "Many polling places for the November 2020 general election have changed. Check here to confirm the location and more before you head to the polls on election day.",
+							"p1": "Many polling places for the May 2021 Municipal Primaryn have changed. Check here to confirm the location and more before you head to the polls on election day.",
 							"p2": "Check here to confirm the location and more before you head to the polls on election day.",
 							"p3": "Search your home address on the map to find:",
 							"ul1": {
 								"li1": "Your polling place address and map location.",
 								"li2": "Accessibility and parking information for the building.",
-								"li3": "A preview of the November 2020 general election ballot.",
+								"li3": "A preview of the May 2021 Municipal Primary ballot.",
 								"li4": "Your elected officials and their contact information."
 							},
 							"p4_b": "Hours: ",
@@ -39,7 +39,7 @@
 						"topic": {
 							"exclamationCallout1": {
 								"p1_b": "COVID-19 info: ",
-								"p1": "Many polling places for the November 2020 general election have changed. Check here to confirm the location and more before you head to the polls on election day.",
+								"p1": "Many polling places for the May 2021 Municipal Primary have changed. Check here to confirm the location and more before you head to the polls on election day.",
 								"p2_b": "Mail in ballots:",
 								"p2_1": "Applications must be received by your county election office no later than Tuesday, October 27th. Find places you can",
 								"p2_a": "get and return mail-in ballots",
@@ -96,13 +96,13 @@
 						"introPage": {
 							"introTitle": "Encuentre su lugar de votación en Atlas",
 							"p1_b": "Información sobre la COVID-19: ",
-							"p1": "muchos lugares de votación para la elección general de noviembre del 2020 cambiaron. Consulte aquí para confirmar la ubicación y obtener más información antes de acudir a las urnas el día de la elección.",
+							"p1": "muchos lugares de votación para la Mayo 2021 Primaria Muncipal cambiaron. Consulte aquí para confirmar la ubicación y obtener más información antes de acudir a las urnas el día de la elección.",
 							"p2": "Consulte aquí para confirmar la ubicación y obtener más información antes de acudir a las urnas el día de la elección.",
 							"p3": "Busque su dirección en el mapa para averiguar lo siguiente:",
 							"ul1": {
 								"li1": "La dirección y la ubicación en el mapa de su lugar de votación.",
 								"li2": "La Información sobre estacionamiento y accesibilidad al edificio.",
-								"li3": "Una vista previa de las boletas de la elección general de noviembre del 2020.",
+								"li3": "Una vista previa de las boletas de la Mayo 2021 Primaria Muncipal.",
 								"li4": "Sus funcionarios electos y su información de contacto."
 							},
 							"p4_b": "Horario: ",
@@ -117,7 +117,7 @@
 						"topic": {
 							"exclamationCallout1": {
 								"p1_b": "Información sobre la COVID-19: ",
-								"p1": "muchos lugares de votación para la elección general de noviembre del 2020 cambiaron. Consulte aquí para confirmar la ubicación y obtener más información antes de acudir a las urnas el día de la elección.",
+								"p1": "muchos lugares de votación para la Mayo 2021 Primaria Muncipal cambiaron. Consulte aquí para confirmar la ubicación y obtener más información antes de acudir a las urnas el día de la elección.",
 								"p2_b": "Boletas de voto por correo: ",
 								"p2_1": "Las solicitudes de boletas de voto por correo se recibirán en la oficina electoral de su condado hasta el martes 27 de octubre. Encuentre lugares dónde puede",
 								"p2_a": "conseguir y entregar las boletas de voto por correo",
