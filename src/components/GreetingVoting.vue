@@ -15,7 +15,6 @@
     <p>{{ $t('voting.introPage.p3') }}</p>
     <div class="custom-section">
       <ul class="custom-ul">
-        <li>{{ $t('voting.introPage.ul1.li1') }}</li>
         <li>{{ $t('voting.introPage.ul1.li2') }}</li>
         <li>{{ $t('voting.introPage.ul1.li3') }}</li>
         <li>{{ $t('voting.introPage.ul1.li4') }}</li>
@@ -36,7 +35,6 @@
     </div>
     <div class="custom-section">
       <ul class="custom-ul">
-        <li><a target="_blank" href="https://www.phila.gov/2020-09-08-general-election-mail-in-ballot-guide-for-philadelphia-voters/">{{ $t('voting.introPage.link1') }}</a></li>
         <li><a target="_blank" href="https://www.phila.gov/voting">{{ $t('voting.introPage.link2') }}</a></li>
         <li><a target="_blank" href="https://www.pavoterservices.pa.gov/pages/ballottracking.aspx">{{ $t('voting.introPage.link3') }}</a></li>
         <!-- <li><a target="_blank" href="https://www.pavoterservices.pa.gov/Pages/voterregistrationstatus.aspx">{{ $t('voting.introPage.link4') }}</a></li> -->
