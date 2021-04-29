@@ -6,7 +6,7 @@ name: dev Push to S3
 on:
   push:
     branches:
-      - dev-parcel-fix
+      - fix-address-encode
 
 jobs:
   build:
