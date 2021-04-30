@@ -69,7 +69,7 @@ export default class SearchPage {
     await t.click(await this.voting);
     await t.click(await this.tableText);
     const votingTables = await this.table.count;
-    await t.expect(votingTables).eql(2);
+    await t.expect(votingTables).eql(3);
   }
 
   public verifyTopicNearby = async (t: TestController) => {
