@@ -49,7 +49,8 @@ export const condoAddressData: SearchData = {
   opaAddressValue: "220 W WASHINGTON SQ APT 100220 W WASHINGTON SQ APT 100",
   parcelId: "002S100096",
   parcelDescription:
-    "CMX-4CMX-4Center City Commercial Mixed-UseCenter City Commercial Mixed-Use",
+    "RM-4RM-4Residential Multi-Family-4Residential Multi-Family-4",
+    // "CMX-4CMX-4Center City Commercial Mixed-UseCenter City Commercial Mixed-Use",
 };
 
 // enter the search data of PwdNoDor Address.

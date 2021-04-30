@@ -42,7 +42,8 @@ export default {
             label: 'Address',
             value: function (state, item) {
               var address = item.properties.street_address;
-              return '<a href="#/' + address + '/property">' + address + '</a>';
+              console.log('address:', address);
+              return '<a href="/' + encodeURIComponent(address) + '/property">' + address + '</a>';
             },
           },
           {
@@ -65,13 +66,13 @@ export default {
       slots: {
         title: 'Condominiums',
         highestPageRetrieved: function(state) {
-          return state.sources['condoList'].data.page; 
+          return state.sources['condoList'].data.page;
         },
         pageCount: function(state) {
-          return state.sources['condoList'].data.page_count; 
+          return state.sources['condoList'].data.page_count;
         },
         totalSize: function(state) {
-          return state.sources['condoList'].data.total_size; 
+          return state.sources['condoList'].data.total_size;
         },
         items: function(state) {
           var data = state.sources['condoList'].data.features;
