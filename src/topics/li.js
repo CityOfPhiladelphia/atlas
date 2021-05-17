@@ -48,7 +48,8 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
+              // return "<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
+              return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Permit-Detail?address="+encodeURIComponent(item.address)+"&Id="+item.permitnumber+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
           },
           {
@@ -80,7 +81,8 @@ export default {
           href: function(state) {
             var address = state.geocode.data.properties.street_address;
             var addressEncoded = encodeURIComponent(address);
-            return 'http://li.phila.gov/#summary?address=' + addressEncoded;
+            return 'https://li.phila.gov/Property-History/search?address=' + addressEncoded;
+            // return 'http://li.phila.gov/#summary?address=' + addressEncoded;
           },
         },
       },
@@ -263,7 +265,8 @@ export default {
               }
               str = str.slice(0, str.length - 1);
               // console.log('str:', str);
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+str+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
+              // return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+str+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
+              return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Violation-Detail?address="+encodeURIComponent(item.address)+"&Id="+item.casenumber+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
           },
           {
@@ -297,7 +300,8 @@ export default {
           href: function(state) {
             var address = state.geocode.data.properties.street_address;
             var addressEncoded = encodeURIComponent(address);
-            return 'http://li.phila.gov/#summary?address=' + addressEncoded;
+            return 'https://li.phila.gov/Property-History/search?address=' + addressEncoded;
+            // return 'http://li.phila.gov/#summary?address=' + addressEncoded;
           },
         },
       },
@@ -335,7 +339,8 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
+              return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Violation-Detail?address="+encodeURIComponent(item.address)+"&Id="+item.casenumber+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
+              // return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
           },
           {
@@ -367,7 +372,8 @@ export default {
           href: function(state) {
             var address = state.geocode.data.properties.street_address;
             var addressEncoded = encodeURIComponent(address);
-            return 'http://li.phila.gov/#summary?address=' + addressEncoded;
+            return 'https://li.phila.gov/Property-History/search?address=' + addressEncoded;
+            // return 'http://li.phila.gov/#summary?address=' + addressEncoded;
           },
         },
       },
@@ -404,7 +410,8 @@ export default {
           {
             label: 'License Number',
             value: function(state, item){
-              return "<a target='_blank' href='http://li.phila.gov/#details?entity=licenses&eid="+item.licensenum+"&key="+encodeURIComponent(item.street_address)+"&address="+encodeURIComponent(item.street_address)+"'>"+item.licensenum+" <i class='fa fa-external-link-alt'></i></a>";
+              return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Business-License-Detail?address="+encodeURIComponent(item.address)+"&Id="+item.licensenum+"'>"+item.licensenum+" <i class='fa fa-external-link-alt'></i></a>";
+              // return "<a target='_blank' href='http://li.phila.gov/#details?entity=licenses&eid="+item.licensenum+"&key="+encodeURIComponent(item.street_address)+"&address="+encodeURIComponent(item.street_address)+"'>"+item.licensenum+" <i class='fa fa-external-link-alt'></i></a>";
               // return item.licensenum;
             },
           },
@@ -443,7 +450,8 @@ export default {
           href: function(state) {
             var address = state.geocode.data.properties.street_address;
             var addressEncoded = encodeURIComponent(address);
-            return 'http://li.phila.gov/#summary?address=' + addressEncoded;
+            return 'https://li.phila.gov/Property-History/search?address=' + addressEncoded;
+            // return 'http://li.phila.gov/#summary?address=' + addressEncoded;
           },
         },
       },
