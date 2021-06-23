@@ -6,17 +6,19 @@ export default {
       if (state.sources.regmaps.data) {
         for (let item of state.sources.regmaps.data) {
           // console.log('in loop, item:', item);
-          let dataItem = {
-            data: item,
-            source: {
-              layer: {
-                id: item.properties.RECMAP,
-                type: 'raster',
-                minzoom: 0,
-                maxzoom: 22,
-              },
+          if (item.properties.RECMAP) {
+
+            let dataItem = {
+              data: item,
               source: {
-                tiles: [ '\
+                layer: {
+                  id: item.properties.RECMAP,
+                  type: 'raster',
+                  minzoom: 0,
+                  maxzoom: 22,
+                },
+                source: {
+                  tiles: [ '\
 https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/RegMaps/MapServer/export?dpi=96\
 &layerDefs=0:NAME=\'g' + item.properties.RECMAP.toLowerCase() + '.tif\'\
 &transparent=true\
@@ -27,14 +29,12 @@ https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/RegMaps/MapServe
 &size=700,700\
 &f=image\
 &layers=show%3A0\
-                ' ],
-                // &size=1024,1024\
-                // &size=512,512\
-                // &size=256,256\
+                  ' ],
+                },
               },
-            },
-          };
-          data.push(dataItem);
+            };
+            data.push(dataItem);
+          } // end of if
         } // end of loop
       } // end of if
       return data;
