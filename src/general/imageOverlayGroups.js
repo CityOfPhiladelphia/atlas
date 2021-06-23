@@ -19,17 +19,29 @@ export default {
                 },
                 source: {
                   tiles: [ '\
-  https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/RegMaps/MapServer/export?dpi=96\
-  &layerDefs=0:NAME=\'g' + item.properties.RECMAP.toLowerCase() + '.tif\'\
-  &transparent=true\
-  &format=png24\
-  &bbox={bbox-epsg-3857}\
-  &bboxSR=3857\
-  &imageSR=3857\
-  &size=700,700\
-  &f=image\
-  &layers=show%3A0\
+https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/RegMaps/MapServer/export?dpi=96\
+&layerDefs=0:NAME=\'g' + item.properties.RECMAP.toLowerCase() + '.tif\'\
+&transparent=true\
+&format=png24\
+&bbox={bbox-epsg-3857}\
+&bboxSR=3857\
+&imageSR=3857\
+&size=700,700\
+&f=image\
+&layers=show%3A0\
                   ' ],
+                  //                 tiles: [ '\
+                  // https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/RegMaps/MapServer/export?dpi=96\
+                  // &layerDefs=0:NAME=\'g' + item.properties.RECMAP.toLowerCase() + '.tif\'\
+                  // &transparent=true\
+                  // &format=png24\
+                  // &bbox={bbox-epsg-3857}\
+                  // &bboxSR=3857\
+                  // &imageSR=3857\
+                  // &size=700,700\
+                  // &f=image\
+                  // &layers=show%3A0\
+                  //                 ' ],
                   // &size=1024,1024\
                   // &size=512,512\
                   // &size=256,256\
