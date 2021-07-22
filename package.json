@@ -17,7 +17,7 @@
     "lintFix": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "@phila/mapboard": "4.3.8",
+    "@phila/mapboard": "https://github.com/CityOfPhiladelphia/mapboard#592da827a316a5b57de533cc61461244667ceac8",
     "accounting": "^0.4.1",
     "vue": "^2.6.10"
   },
@@ -53,5 +53,8 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "engines": {
+    "yarn": "YARN NO LONGER USED - use npm instead."
+  }
 }

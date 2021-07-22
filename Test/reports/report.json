@@ -1,10 +1,10 @@
 {
-  "startTime": "2021-04-30T14:08:26.458Z",
-  "endTime": "2021-04-30T14:09:57.615Z",
+  "startTime": "2021-07-21T17:45:42.099Z",
+  "endTime": "2021-07-21T17:47:09.804Z",
   "userAgents": [
-    "Firefox 88.0.0 / Windows 10.0.0"
+    "Firefox 89.0 / Windows 10"
   ],
-  "passed": 5,
+  "passed": 3,
   "total": 5,
   "skipped": 0,
   "fixtures": [
@@ -17,7 +17,8 @@
           "name": "page landing verification",
           "meta": {},
           "errs": [],
-          "durationMs": 11882,
+          "durationMs": 11867,
+          "unstable": false,
           "screenshotPath": null,
           "skipped": false
         }
@@ -32,7 +33,8 @@
           "name": "Building search page verification",
           "meta": {},
           "errs": [],
-          "durationMs": 21112,
+          "durationMs": 18993,
+          "unstable": false,
           "screenshotPath": null,
           "skipped": false
         }
@@ -46,8 +48,11 @@
         {
           "name": "Condominiums search page verification",
           "meta": {},
-          "errs": [],
-          "durationMs": 18609,
+          "errs": [
+            "AssertionError: expected false to be truthy\n\nBrowser: Firefox 89.0 / Windows 10\n\n   17 |  public tableText: Selector = Selector(\"p:nth-child(1)\");\n   18 |\n   19 |  public verifyTopicCondominiums = async (t: TestController) => {\n   20 |    await t.typeText(await this.searchBar, condoAddressData.address);\n   21 |    await t.click(await this.searchControlButton);\n > 22 |    await t.expect(await this.propertyAssessment.visible).ok();\n   23 |    await t.click(await this.condominiums);\n   24 |    const tableSelected = await this.table;\n   25 |    await t\n   26 |      .expect(tableSelected.textContent)\n   27 |      .contains(condoAddressData.opaAccount);\n\n   at CondominiumsPage.<anonymous> (C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\pages\\CondominiumSearchPage.ts:22:59)\n   at fulfilled (C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\pages\\CondominiumSearchPage.ts:5:58)"
+          ],
+          "durationMs": 18472,
+          "unstable": false,
           "screenshotPath": null,
           "skipped": false
         }
@@ -61,8 +66,11 @@
         {
           "name": "DorNoPwd search page verification",
           "meta": {},
-          "errs": [],
-          "durationMs": 21985,
+          "errs": [
+            "The specified selector does not match any element in the DOM tree.\n\n > | Selector('a[data-topic-key=\"li\"]')\n\nBrowser: Firefox 89.0 / Windows 10\n\n   34 |  }\n   35 |\n   36 |  public verifyTopicLicensesAndInspection = async (t: TestController) => {\n   37 |    await t.typeText(await this.searchBar, dorAddressData.address);\n   38 |    await t.click(await this.searchControlButton)\n > 39 |    await t.click(await this.licensesInspections);\n   40 |    await t.click(await this.tableText);\n   41 |    const tables = await this.table.count;\n   42 |    await t.expect(tables).eql(5);\n   43 |  }\n   44 |\n\n   at CondominiumsPage.<anonymous> (C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\pages\\DorSearchPage.ts:39:13)\n   at fulfilled (C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\pages\\DorSearchPage.ts:5:58)"
+          ],
+          "durationMs": 18919,
+          "unstable": false,
           "screenshotPath": null,
           "skipped": false
         }
@@ -77,7 +85,8 @@
           "name": "PwdNoDor search page verification",
           "meta": {},
           "errs": [],
-          "durationMs": 17520,
+          "durationMs": 19399,
+          "unstable": false,
           "screenshotPath": null,
           "skipped": false
         }
