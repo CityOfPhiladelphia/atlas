@@ -48,6 +48,11 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
+              let address = item.address;
+              if (item.unit_num && item.unit_num != null) {
+                address += ' Unit ' + item.unit_num;
+              }
+              // console.log('li.js adding items, item:', item, 'address:', address);
               // return "<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
               return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Permit-Detail?address="+encodeURIComponent(item.address)+"&Id="+item.permitnumber+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
@@ -251,10 +256,10 @@ export default {
             label: 'ID',
             value: function(state, item){
               let address = item.address;
-              if (item.unit_num) {
+              if (item.unit_num && item.unit_num != null) {
                 address += ' Unit ' + item.unit_num;
               }
-              console.log('li.js adding items, item:', item, 'address:', address);
+              // console.log('li.js adding items, item:', item, 'address:', address);
               var eclipseLocId = state.geocode.data.properties.eclipse_location_id.split('|');
               var li_address_key = state.geocode.data.properties.li_address_key.split('|');
               var j;
@@ -345,7 +350,7 @@ export default {
             label: 'ID',
             value: function(state, item){
               let address = item.address;
-              if (item.unit_num) {
+              if (item.unit_num && item.unit_num != null) {
                 address += ' Unit ' + item.unit_num;
               }
               // console.log('li.js adding items, item:', item, 'address:', address);
@@ -420,7 +425,11 @@ export default {
           {
             label: 'License Number',
             value: function(state, item){
-              return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Business-License-Detail?address="+encodeURIComponent(item.address)+"&Id="+item.licensenum+"'>"+item.licensenum+" <i class='fa fa-external-link-alt'></i></a>";
+              let address = item.address;
+              if (item.unit_num && item.unit_num != null) {
+                address += ' Unit ' + item.unit_num;
+              }
+              return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Business-License-Detail?address="+encodeURIComponent(address)+"&Id="+item.licensenum+"'>"+item.licensenum+" <i class='fa fa-external-link-alt'></i></a>";
               // return "<a target='_blank' href='http://li.phila.gov/#details?entity=licenses&eid="+item.licensenum+"&key="+encodeURIComponent(item.street_address)+"&address="+encodeURIComponent(item.street_address)+"'>"+item.licensenum+" <i class='fa fa-external-link-alt'></i></a>";
               // return item.licensenum;
             },
