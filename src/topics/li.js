@@ -250,6 +250,11 @@ export default {
           {
             label: 'ID',
             value: function(state, item){
+              let address = item.address;
+              if (item.unit_num) {
+                address += ' Unit ' + item.unit_num;
+              }
+              console.log('li.js adding items, item:', item, 'address:', address);
               var eclipseLocId = state.geocode.data.properties.eclipse_location_id.split('|');
               var li_address_key = state.geocode.data.properties.li_address_key.split('|');
               var j;
@@ -266,7 +271,7 @@ export default {
               str = str.slice(0, str.length - 1);
               // console.log('str:', str);
               // return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+str+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
-              return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Violation-Detail?address="+encodeURIComponent(item.address)+"&Id="+item.casenumber+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
+              return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Violation-Detail?address="+encodeURIComponent(address)+"&Id="+item.casenumber+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
           },
           {
@@ -343,7 +348,7 @@ export default {
               if (item.unit_num) {
                 address += ' Unit ' + item.unit_num;
               }
-              console.log('li.js adding items, item:', item, 'address:', address);
+              // console.log('li.js adding items, item:', item, 'address:', address);
               return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Violation-Detail?address="+encodeURIComponent(address)+"&Id="+item.casenumber+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
               // return "<a target='_blank' href='http://li.phila.gov/#details?entity=violationdetails&eid="+item.casenumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.casenumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
