@@ -6,7 +6,7 @@ name: eclipse zoning Push to S3
 on:
   push:
     branches:
-      - atlas-eclipse-zoning
+      - eclipse-zoning
 
 jobs:
   build:
