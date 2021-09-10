@@ -116,8 +116,8 @@ export default {
               let date;
               if (item.scan_date) {
                 date = item.scan_date;
-              } else if (item.issuedate) {
-                date = item.issuedate;
+              } else if (item.issue_date) {
+                date = item.issue_date;
               }
               return date;
             },
@@ -129,12 +129,13 @@ export default {
           {
             label: 'Permit Number',
             value: function(state, item){
-              let permitNumber;
-              if (item.permit_number) {
-                permitNumber = item.permit_number;
-              } else if (item.permitnumber) {
-                permitNumber = item.permitnumber;
-              }
+              // let permitNumber;
+              // if (item.permit_number) {
+              //   permitNumber = item.permit_number;
+              // } else if (item.permitnumber) {
+              //   permitNumber = item.permitnumber;
+              // }
+              let permitNumber = item.permit_number;
               return permitNumber;
             },
           },
@@ -144,8 +145,8 @@ export default {
               let pages;
               if (item.num_pages) {
                 pages = item.num_pages;
-              } else if (item.pagesscanned) {
-                pages = item.pagesscanned;
+              } else if (item.pages_scanned) {
+                pages = item.pages_scanned;
               }
               return pages;
             },
@@ -194,8 +195,8 @@ export default {
             let date;
             if (item.scan_date) {
               date = item.scan_date;
-            } else if (item.issuedate) {
-              date = item.issuedate;
+            } else if (item.issue_date) {
+              date = item.issue_date;
             }
             return date;
           },
