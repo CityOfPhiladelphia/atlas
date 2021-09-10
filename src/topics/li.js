@@ -168,8 +168,10 @@ export default {
               if (item.doc_id) {
                 docId = item.doc_id;
                 url = '//s3.amazonaws.com/lni-zoning-pdfs/';
-              } else if (item.externalfilenum ) {
-                docId = item.externalfilenum ;
+              // } else if (item.externalfilenum ) {
+              //   docId = item.externalfilenum ;
+              } else if (item.permit_number ) {
+                docId = item.permit_number ;
                 url = 'http://s3.amazonaws.com/eclipse-docs-pdfs/zoning/';
               }
 
