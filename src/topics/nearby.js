@@ -412,7 +412,7 @@ export default {
                 {
                   label: 'Date',
                   value: function(state, item) {
-                    return item.sheduleddate;
+                    return item.scheduleddate;
                   },
                   nullValue: 'no date available',
                   transforms: [
