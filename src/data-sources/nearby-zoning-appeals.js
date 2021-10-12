@@ -6,6 +6,6 @@ export default {
     table: 'appeals',
     dateMinNum: 1,
     dateMinType: 'year',
-    dateField: 'decisiondate',
+    dateField: 'scheduleddate',
   },
 };
