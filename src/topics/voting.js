@@ -9,7 +9,8 @@ export default {
   key: 'voting',
   icon: 'gavel',
   label: 'Voting',
-  dataSources: [ 'divisions', 'pollingPlaces', 'electedOfficials', 'nextElectionAPI' ],
+  dataSources: [ 'divisions', 'pollingPlaces', 'nextElectionAPI' ],
+  // dataSources: [ 'divisions', 'pollingPlaces', 'electedOfficials', 'nextElectionAPI' ],
   errorMessage: function() {
     return ' ';
   },
@@ -30,7 +31,11 @@ export default {
         externalLink: {
           data: 'voting.topic.previewBallot',
           href: function(state) {
-            return 'https://files.philadelphiavotes.com/ballot_paper/' + state.sources.electedOfficials.data.rows[0].ballot_file_id + '.pdf';
+            let value;
+            if (state.sources.electedOfficials.data) {
+              value = 'https://files.philadelphiavotes.com/ballot_paper/' + state.sources.electedOfficials.data.rows[0].ballot_file_id + '.pdf';
+            }
+            return value;
           },
         },
       },
@@ -68,9 +73,9 @@ export default {
           {
             label: 'voting.topic.location',
             value: function(state) {
-              if (state.sources.pollingPlaces.data) {
-
+              if (state.sources.pollingPlaces.data && state.sources.pollingPlaces.data.rows.length) {
                 const pollingData = state.sources.pollingPlaces.data.rows[0];
+                // console.log('state.sources.pollingPlaces.data.rows', state.sources.pollingPlaces.data.rows, 'pollingData:', pollingData);
                 return "<b>Ward " + pollingData.ward +
                 ", Division " + pollingData.division + "</b><br>" +
                 titleCase(pollingData.placename) + "<br>" +
@@ -86,7 +91,7 @@ export default {
           {
             label: 'voting.topic.accessibility',
             value: function(state) {
-              if (state.sources.pollingPlaces.data) {
+              if (state.sources.pollingPlaces.data && state.sources.pollingPlaces.data.rows.length) {
                 const pollingData = state.sources.pollingPlaces.data.rows[0];
                 const answer = pollingData.accessibility_code== "F" ? 'voting.topic.accessibilityCodes.buildingFullyAccessible' :
                   pollingData.accessibility_code== "B" ? 'voting.topic.accessibilityCodes.buildingSubstantiallyAccessible' :

@@ -17,7 +17,7 @@
     "lintFix": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "@phila/mapboard": "4.3.8",
+    "@phila/mapboard": "4.3.9",
     "accounting": "^0.4.1",
     "vue": "^2.6.10"
   },
