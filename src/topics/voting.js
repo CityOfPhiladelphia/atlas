@@ -9,10 +9,9 @@ export default {
   key: 'voting',
   icon: 'gavel',
   label: 'Voting',
-  dataSources: [ 'divisions', 'pollingPlaces', 'nextElectionAPI' ],
-  // dataSources: [ 'divisions', 'pollingPlaces', 'electedOfficials', 'nextElectionAPI' ],
+  dataSources: [ 'divisions', 'pollingPlaces', 'electedOfficials', 'nextElectionAPI' ],
   errorMessage: function() {
-    return ' ';
+    return 'No voting assignment found for this address.';
   },
   components: [
     // {
