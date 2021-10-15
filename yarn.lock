@@ -1339,10 +1339,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@phila/mapboard@4.3.9":
-  version "4.3.9"
-  resolved "https://registry.yarnpkg.com/@phila/mapboard/-/mapboard-4.3.9.tgz#54258c90667fa1142c6255daa3f63bf6921c59cf"
-  integrity sha512-33CVLnr74eFMdTnwRjRo5IqJCOydC6an361hHT0aoFFTz5oGrEdjhXAy3ajjGSWTN3SHfAtFwVkc7u7tyWZEdA==
+"@phila/mapboard@4.3.10":
+  version "4.3.10"
+  resolved "https://registry.yarnpkg.com/@phila/mapboard/-/mapboard-4.3.10.tgz#806c38f0c912c030c37fc3a4712a893a05d0f07c"
+  integrity sha512-tlxnxNTkqEjWXqcEa5JgH4+Vh5QLzxf1mAGSNGoj9QaRWmZ989EgVrzezPUHTi29t2cAG33DG+5KWgYlFxxPhA==
   dependencies:
     "@phila/vue-comps" "2.1.22"
     "@phila/vue-datafetch" "1.4.8"

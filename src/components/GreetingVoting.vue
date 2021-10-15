@@ -4,11 +4,10 @@
     class="columns medium-20 medium-centered greeting"
   >
     <h2>{{ $t('voting.introPage.introTitle') }}</h2>
-    <exclamation-callout
+    <!-- <exclamation-callout
       :options="exclamationCalloutOptions"
     >
-    <!-- :slots="exclamationCalloutSlots" -->
-    </exclamation-callout>
+    </exclamation-callout> -->
 
     <!-- <p>{{ $t('voting.introPage.p2') }}</p> -->
 
@@ -47,11 +46,11 @@
 <script>
 
 import TopicComponent from '@phila/vue-comps/src/components/TopicComponent.vue';
-import ExclamationCallout from './ExclamationCallout.vue';
+// import ExclamationCallout from './ExclamationCallout.vue';
 
 export default {
   components: {
-    ExclamationCallout,
+    // ExclamationCallout,
   },
   mixins: [ TopicComponent ],
   props: {
