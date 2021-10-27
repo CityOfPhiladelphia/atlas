@@ -6,12 +6,15 @@
     "dotenv": "^8.0.0"
   },
   "devDependencies": {
-    "testcafe": "^1.4.1"
+    "testcafe": "^1.6.0"
   },
   "scripts": {
     "docker-test": "npm install && docker-compose up --force-recreate",
     "test-local": "testcafe --proxy proxy.phila.gov:8080 --proxy-bypass 127.0.0.1:8080"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "yarn": "YARN NO LONGER USED - use npm instead."
+  }
 }
