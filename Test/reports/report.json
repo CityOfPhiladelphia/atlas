@@ -1,23 +1,23 @@
 {
-  "startTime": "2021-07-21T17:45:42.099Z",
-  "endTime": "2021-07-21T17:47:09.804Z",
+  "startTime": "2021-10-27T17:27:07.162Z",
+  "endTime": "2021-10-27T17:28:40.625Z",
   "userAgents": [
-    "Firefox 89.0 / Windows 10"
+    "Firefox 93.0 / Windows 10"
   ],
-  "passed": 3,
+  "passed": 5,
   "total": 5,
   "skipped": 0,
   "fixtures": [
     {
       "name": "page landing verification",
-      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testBasePage.ts",
+      "path": "C:\\Users\\Andy.Rothwell\\Projects\\atlas\\Test\\tests\\testBasePage.ts",
       "meta": {},
       "tests": [
         {
           "name": "page landing verification",
           "meta": {},
           "errs": [],
-          "durationMs": 11867,
+          "durationMs": 13134,
           "unstable": false,
           "screenshotPath": null,
           "skipped": false
@@ -26,14 +26,14 @@
     },
     {
       "name": "Building search page verification",
-      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testBuildingSearchPage.ts",
+      "path": "C:\\Users\\Andy.Rothwell\\Projects\\atlas\\Test\\tests\\testBuildingSearchPage.ts",
       "meta": {},
       "tests": [
         {
           "name": "Building search page verification",
           "meta": {},
           "errs": [],
-          "durationMs": 18993,
+          "durationMs": 22228,
           "unstable": false,
           "screenshotPath": null,
           "skipped": false
@@ -42,16 +42,14 @@
     },
     {
       "name": "Condominiums search page verification",
-      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testCondominiumSearchPage.ts",
+      "path": "C:\\Users\\Andy.Rothwell\\Projects\\atlas\\Test\\tests\\testCondominiumSearchPage.ts",
       "meta": {},
       "tests": [
         {
           "name": "Condominiums search page verification",
           "meta": {},
-          "errs": [
-            "AssertionError: expected false to be truthy\n\nBrowser: Firefox 89.0 / Windows 10\n\n   17 |  public tableText: Selector = Selector(\"p:nth-child(1)\");\n   18 |\n   19 |  public verifyTopicCondominiums = async (t: TestController) => {\n   20 |    await t.typeText(await this.searchBar, condoAddressData.address);\n   21 |    await t.click(await this.searchControlButton);\n > 22 |    await t.expect(await this.propertyAssessment.visible).ok();\n   23 |    await t.click(await this.condominiums);\n   24 |    const tableSelected = await this.table;\n   25 |    await t\n   26 |      .expect(tableSelected.textContent)\n   27 |      .contains(condoAddressData.opaAccount);\n\n   at CondominiumsPage.<anonymous> (C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\pages\\CondominiumSearchPage.ts:22:59)\n   at fulfilled (C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\pages\\CondominiumSearchPage.ts:5:58)"
-          ],
-          "durationMs": 18472,
+          "errs": [],
+          "durationMs": 20266,
           "unstable": false,
           "screenshotPath": null,
           "skipped": false
@@ -60,16 +58,14 @@
     },
     {
       "name": "DorNoPwd  search page verification",
-      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testDorSearchPage.ts",
+      "path": "C:\\Users\\Andy.Rothwell\\Projects\\atlas\\Test\\tests\\testDorSearchPage.ts",
       "meta": {},
       "tests": [
         {
           "name": "DorNoPwd search page verification",
           "meta": {},
-          "errs": [
-            "The specified selector does not match any element in the DOM tree.\n\n > | Selector('a[data-topic-key=\"li\"]')\n\nBrowser: Firefox 89.0 / Windows 10\n\n   34 |  }\n   35 |\n   36 |  public verifyTopicLicensesAndInspection = async (t: TestController) => {\n   37 |    await t.typeText(await this.searchBar, dorAddressData.address);\n   38 |    await t.click(await this.searchControlButton)\n > 39 |    await t.click(await this.licensesInspections);\n   40 |    await t.click(await this.tableText);\n   41 |    const tables = await this.table.count;\n   42 |    await t.expect(tables).eql(5);\n   43 |  }\n   44 |\n\n   at CondominiumsPage.<anonymous> (C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\pages\\DorSearchPage.ts:39:13)\n   at fulfilled (C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\pages\\DorSearchPage.ts:5:58)"
-          ],
-          "durationMs": 18919,
+          "errs": [],
+          "durationMs": 18743,
           "unstable": false,
           "screenshotPath": null,
           "skipped": false
@@ -78,14 +74,14 @@
     },
     {
       "name": "PwdNoDor search page verification",
-      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testPwdSearchPage.ts",
+      "path": "C:\\Users\\Andy.Rothwell\\Projects\\atlas\\Test\\tests\\testPwdSearchPage.ts",
       "meta": {},
       "tests": [
         {
           "name": "PwdNoDor search page verification",
           "meta": {},
           "errs": [],
-          "durationMs": 19399,
+          "durationMs": 19055,
           "unstable": false,
           "screenshotPath": null,
           "skipped": false
