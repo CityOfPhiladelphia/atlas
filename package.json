@@ -17,7 +17,7 @@
     "lintFix": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "@phila/mapboard": "4.3.10",
+    "@phila/mapboard": "4.4.1",
     "accounting": "^0.4.1",
     "vue": "^2.6.10"
   },
@@ -53,5 +53,8 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "engines": {
+    "yarn": "YARN NO LONGER USED - use npm instead."
+  }
 }

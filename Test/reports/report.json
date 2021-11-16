@@ -1,8 +1,8 @@
 {
-  "startTime": "2021-04-30T14:08:26.458Z",
-  "endTime": "2021-04-30T14:09:57.615Z",
+  "startTime": "2021-11-16T18:22:23.278Z",
+  "endTime": "2021-11-16T18:23:59.236Z",
   "userAgents": [
-    "Firefox 88.0.0 / Windows 10.0.0"
+    "Firefox 93.0 / Windows 10"
   ],
   "passed": 5,
   "total": 5,
@@ -10,14 +10,15 @@
   "fixtures": [
     {
       "name": "page landing verification",
-      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testBasePage.ts",
+      "path": "C:\\Users\\Andy.Rothwell\\Projects\\atlas\\Test\\tests\\testBasePage.ts",
       "meta": {},
       "tests": [
         {
           "name": "page landing verification",
           "meta": {},
           "errs": [],
-          "durationMs": 11882,
+          "durationMs": 12863,
+          "unstable": false,
           "screenshotPath": null,
           "skipped": false
         }
@@ -25,14 +26,15 @@
     },
     {
       "name": "Building search page verification",
-      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testBuildingSearchPage.ts",
+      "path": "C:\\Users\\Andy.Rothwell\\Projects\\atlas\\Test\\tests\\testBuildingSearchPage.ts",
       "meta": {},
       "tests": [
         {
           "name": "Building search page verification",
           "meta": {},
           "errs": [],
-          "durationMs": 21112,
+          "durationMs": 24226,
+          "unstable": false,
           "screenshotPath": null,
           "skipped": false
         }
@@ -40,14 +42,15 @@
     },
     {
       "name": "Condominiums search page verification",
-      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testCondominiumSearchPage.ts",
+      "path": "C:\\Users\\Andy.Rothwell\\Projects\\atlas\\Test\\tests\\testCondominiumSearchPage.ts",
       "meta": {},
       "tests": [
         {
           "name": "Condominiums search page verification",
           "meta": {},
           "errs": [],
-          "durationMs": 18609,
+          "durationMs": 20877,
+          "unstable": false,
           "screenshotPath": null,
           "skipped": false
         }
@@ -55,14 +58,15 @@
     },
     {
       "name": "DorNoPwd  search page verification",
-      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testDorSearchPage.ts",
+      "path": "C:\\Users\\Andy.Rothwell\\Projects\\atlas\\Test\\tests\\testDorSearchPage.ts",
       "meta": {},
       "tests": [
         {
           "name": "DorNoPwd search page verification",
           "meta": {},
           "errs": [],
-          "durationMs": 21985,
+          "durationMs": 18340,
+          "unstable": false,
           "screenshotPath": null,
           "skipped": false
         }
@@ -70,14 +74,15 @@
     },
     {
       "name": "PwdNoDor search page verification",
-      "path": "C:\\Users\\andy.rothwell\\Projects\\atlas\\Test\\tests\\testPwdSearchPage.ts",
+      "path": "C:\\Users\\Andy.Rothwell\\Projects\\atlas\\Test\\tests\\testPwdSearchPage.ts",
       "meta": {},
       "tests": [
         {
           "name": "PwdNoDor search page verification",
           "meta": {},
           "errs": [],
-          "durationMs": 17520,
+          "durationMs": 19628,
+          "unstable": false,
           "screenshotPath": null,
           "skipped": false
         }

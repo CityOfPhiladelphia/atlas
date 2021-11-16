@@ -98,7 +98,7 @@ const customComps = {
 // import 'phila-standards/dist/css/phila-app.min.css';
 // import './styles.css';
 
-var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/mapboard-default-base-config@36eae931932f27f59e861178d32846e71259690e/config.js';
+var BASE_CONFIG_URL = 'https://cdn.jsdelivr.net/gh/cityofphiladelphia/mapboard-default-base-config@1a9e907adb2a3ebac0809d9105b0d433e6af0ef4/config.js';
 
 // configure accounting.js
 accounting.settings.currency.precision = 0;
@@ -118,6 +118,7 @@ if (host === 'cityatlas-dev.phila.gov') {
 mapboard({
   // defaultAddress: '1234 MARKET ST',
   // plugin: true,
+  resetDataOnGeocode: true,
   customComps,
   header: {
     enabled: true,
