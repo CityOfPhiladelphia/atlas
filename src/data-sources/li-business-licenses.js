@@ -9,9 +9,15 @@ export default {
         let opaQuery = feature.properties.opa_account_num && feature.properties.opa_account_num != '' ? ` AND opa_account_num IN ('${ feature.properties.opa_account_num}')` : ``;
         let streetaddress = feature.properties.street_address;
 
-
-        return `SELECT * FROM BUSINESS_LICENSES WHERE (addressobjectid IN ('`+ eclipseLocId +`') OR address = '${streetaddress}')`+ opaQuery+`\
-                ORDER BY licensetype`;
+        let value;
+        if (eclipseLocId) {
+          value = `SELECT * FROM BUSINESS_LICENSES WHERE (addressobjectid IN ('`+ eclipseLocId +`') OR address = '${streetaddress}')`+ opaQuery+`\
+            ORDER BY licensetype`;
+        } else {
+          value = `SELECT * FROM BUSINESS_LICENSES WHERE (address = '${streetaddress}')`+ opaQuery+`\
+            ORDER BY licensetype`;
+        }
+        return value;
       },
     },
   },
