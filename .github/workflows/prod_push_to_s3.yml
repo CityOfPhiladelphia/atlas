@@ -34,11 +34,14 @@ jobs:
         VUE_APP_PICTOMETRY_API_KEY: ${{ secrets.VUE_APP_PICTOMETRY_API_KEY }}
         VUE_APP_PICTOMETRY_SECRET_KEY: ${{ secrets.VUE_APP_PICTOMETRY_SECRET_KEY }}
 
-    - name: Deploy to Prod s3
-      run: |
-        aws s3 sync dist s3://$AWS_S3_BUCKET --region us-east-1 --delete
+    - name: Deploy to Prod s3, Set index headers, and Invalidate Cloudfront
       env:
         AWS_DEFAULT_REGION: 'us-east-1'
         AWS_S3_BUCKET: atlas.phila.gov
+        AWS_CLOUDFRONT_DISTRIBUTION: E226OSZ87TR0MC
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws s3 sync dist s3://$AWS_S3_BUCKET --region us-east-1 --delete
+        aws s3 cp s3://$AWS_S3_BUCKET s3://$AWS_S3_BUCKET --recursive --exclude "*" --include "*.html" --metadata-directive REPLACE --acl public-read --cache-control max-age=0,no-cache,no-store,must-revalidate,proxy-revalidate,public --expires "0" --content-type "text/html; charset=utf-8"
+        aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT_DISTRIBUTION --paths "/*"
