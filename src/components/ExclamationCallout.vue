@@ -2,7 +2,7 @@
   <div class="wrapper grid-y">
     <div :class="'callout topic-header-content ' + calloutClass">
       <font-awesome-icon
-        icon="exclamation-triangle"
+        icon="triangle-exclamation"
         class="fa-3x inline-block-class"
       />
       <div
