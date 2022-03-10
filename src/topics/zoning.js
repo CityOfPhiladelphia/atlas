@@ -2,7 +2,7 @@ import helpers from '../util/helpers';
 
 export default {
   key: 'zoning',
-  icon: 'university',
+  icon: 'building-columns',
   label: 'Zoning',
   dataSources: [
     'zoningOverlay',
