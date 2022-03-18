@@ -1,6 +1,6 @@
 export default {
   key: 'property',
-  icon: 'house',
+  icon: 'home',
   label: 'Property Assessments',
   // REVIEW can these be calculated from vue deps?
   dataSources: [ 'opa' ],

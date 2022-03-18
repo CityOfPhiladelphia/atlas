@@ -19,15 +19,16 @@ import i18n from './i18n.json';
 // Font Awesome Icons
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faDotCircle } from '@fortawesome/free-regular-svg-icons/faDotCircle';
-import { faHouse } from '@fortawesome/free-solid-svg-icons/faHouse';
+import { faHome } from '@fortawesome/free-solid-svg-icons/faHome';
 import { faBook } from '@fortawesome/free-solid-svg-icons/faBook';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
-import { faBuildingColumns } from '@fortawesome/free-solid-svg-icons/faBuildingColumns';
+import { faUniversity } from '@fortawesome/free-solid-svg-icons/faUniversity';
 import { faGavel } from '@fortawesome/free-solid-svg-icons/faGavel';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons/faMapMarkerAlt';
 import { faLandmark } from '@fortawesome/free-solid-svg-icons/faLandmark';
 import { faBuilding } from '@fortawesome/free-solid-svg-icons/faBuilding';
-import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons/faTriangleExclamation';
-library.add(faDotCircle, faHouse, faBook, faWrench, faBuildingColumns, faGavel, faLandmark, faBuilding, faTriangleExclamation);
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
+library.add(faDotCircle, faHome, faBook, faWrench, faUniversity, faGavel, faMapMarkerAlt, faLandmark, faBuilding, faExclamationTriangle);
 
 import accounting from 'accounting';
 import mapboard from '@phila/mapboard/src/main.js';

@@ -1,6 +1,6 @@
 export default {
   key: 'nearby',
-  icon: 'location-dot',
+  icon: 'map-marker-alt',
   label: 'Nearby',
   dataSources: [ 'threeOneOneCarto', 'crimeIncidents', 'nearbyZoningAppeals' ],
   // dataSources: ['311Carto', 'crimeIncidents', 'nearbyZoningAppeals', 'vacantIndicatorsPoints'],
