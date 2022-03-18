@@ -18,7 +18,7 @@ import i18n from './i18n.json';
 
 // Font Awesome Icons
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCircleDot } from '@fortawesome/free-regular-svg-icons/faCircleDot';
+import { faDotCircle } from '@fortawesome/free-regular-svg-icons/faDotCircle';
 import { faHouse } from '@fortawesome/free-solid-svg-icons/faHouse';
 import { faBook } from '@fortawesome/free-solid-svg-icons/faBook';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
@@ -27,7 +27,7 @@ import { faGavel } from '@fortawesome/free-solid-svg-icons/faGavel';
 import { faLandmark } from '@fortawesome/free-solid-svg-icons/faLandmark';
 import { faBuilding } from '@fortawesome/free-solid-svg-icons/faBuilding';
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons/faTriangleExclamation';
-library.add(faCircleDot, faHouse, faBook, faWrench, faBuildingColumns, faGavel, faLandmark, faBuilding, faTriangleExclamation);
+library.add(faDotCircle, faHouse, faBook, faWrench, faBuildingColumns, faGavel, faLandmark, faBuilding, faTriangleExclamation);
 
 import accounting from 'accounting';
 import mapboard from '@phila/mapboard/src/main.js';
