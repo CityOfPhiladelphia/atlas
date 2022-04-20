@@ -32,7 +32,8 @@ export default {
           href: function(state) {
             let value;
             if (state.sources.electedOfficials.data) {
-              value = 'https://files.philadelphiavotes.com/ballot_paper/' + state.sources.electedOfficials.data.rows[0].ballot_file_id + '.pdf';
+              // value = 'https://files.philadelphiavotes.com/ballot_paper/' + state.sources.electedOfficials.data.rows[0].ballot_file_id + '.pdf';
+              value = state.sources.electedOfficials.data.rows[0].ballot_file_id;
             }
             return value;
           },
