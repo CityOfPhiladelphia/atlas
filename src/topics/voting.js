@@ -147,7 +147,7 @@ export default {
                 return item.office_label == "City Council";
               });
               return '<a href="http://' + council[0].website + '" target="_blank">' +
-                council[0].first_name +" " +council[0].last_name + " - " + nth(state.geocode.data.properties.council_district_2016) + " Council District </a>";
+                council[0].first_name +" " +council[0].last_name + " - " + nth(council[0].district) + " Council District </a>";
             },
           },
           {
