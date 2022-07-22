@@ -174,6 +174,125 @@ export default {
         ],
       },
     }, // end table
+    {
+      type: 'vertical-table',
+      options: {
+        subtitle: 'This is the new city council district that will represent this address starting in 2024.  Residents will vote in this district in the 2023 primary and general elections.',
+        nullValue: 'None',
+        externalLink: {
+          action: function() {
+            return 'Read more about the redistricting process ';
+            // return 'voting.topic.verticalTable2.link';
+          },
+          href: function(state) {
+            return '//seventy.org/issues-index/council-redistricting';
+            // return '//www.philadelphiavotes.com/en/voters/elected-officials';
+          },
+        },
+      },
+
+      slots: {
+        title: 'voting.topic.cityCouncilRedistricting',
+        fields: [
+          {
+            label: 'Old City Council District',
+            value: function(state) {
+              const council = state.sources.electedOfficials.data.rows.filter( function(item) {
+                return item.office_label == "City Council";
+              });
+              return '<a href="http://' + council[0].website + '" target="_blank">' +
+                nth(council[0].district) + " Council District </a>";
+            },
+          },
+          {
+            label: 'New City Council District',
+            value: function(state) {
+              const council = state.sources.electedOfficialsFuture.data.rows.filter( function(item) {
+                return item.office_label == "City Council";
+              });
+              return '<a href="http://' + council[0].website + '" target="_blank">' +
+                nth(council[0].district) + " Council District </a>";
+            },
+          },
+          // {
+          //   label: 'voting.topic.currentTerm',
+          //   value: function(state) {
+          //     const council = state.sources.electedOfficials.data.rows.filter( function(item) {
+          //       return item.office_label == "City Council";
+          //     });
+          //     return council[0].next_election - 4 + ' - ' + council[0].next_election;
+          //   },
+          // },
+        ],
+      },
+    }, // end table
+    // {
+    //   type: 'vertical-table',
+    //   options: {
+    //     condition: function(state) {
+    //       console.log('state:', state);
+    //       let og = state.sources.electedOfficials.data.rows.filter( function(item) {
+    //         return item.office_label == "City Council";
+    //       });
+    //       let newVal = state.sources.electedOfficialsFuture.data.rows.filter( function(item) {
+    //         return item.office_label == "City Council";
+    //       });
+    //       console.log('condition test, og:', og, 'newVal:', newVal);
+    //
+    //       let val = false;
+    //       if (og[0].district !== newVal[0].district) {
+    //         val = true;
+    //       }
+    //       return val;
+    //     },
+    //     nullValue: 'None',
+    //     externalLink: {
+    //       action: function() {
+    //         return 'voting.topic.verticalTable2.link';
+    //       },
+    //       href: function(state) {
+    //         return '//www.philadelphiavotes.com/en/voters/elected-officials';
+    //       },
+    //     },
+    //   },
+    //
+    //   slots: {
+    //     title: 'voting.topic.electedRepFuture',
+    //     fields: [
+    //       {
+    //         label: 'voting.topic.districtCouncilMember',
+    //         value: function(state) {
+    //           const council = state.sources.electedOfficialsFuture.data.rows.filter( function(item) {
+    //             return item.office_label == "City Council";
+    //           });
+    //           return '<a href="http://' + council[0].website + '" target="_blank">' +
+    //             council[0].first_name +" " +council[0].last_name + " - " + nth(council[0].district) + " Council District </a>";
+    //         },
+    //       },
+    //       {
+    //         label: 'voting.topic.cityHallOffice',
+    //         value: function(state) {
+    //           const council = state.sources.electedOfficialsFuture.data.rows.filter( function(item) {
+    //             return item.office_label == "City Council";
+    //           });
+    //           return council[0].main_contact_address_2 + '<br>' +
+    //                  phone(council[0].main_contact_phone_1) + ", " + phone(council[0].main_contact_phone_2) + '<br>\
+    //                   F: '+ phone(council[0].main_contact_fax) + ' <br>\
+    //                   <b><a href=mailto:"' + council[0].email + '">' + council[0].email + '</a></b>';
+    //         },
+    //       },
+    //       {
+    //         label: 'voting.topic.term',
+    //         value: function(state) {
+    //           const council = state.sources.electedOfficialsFuture.data.rows.filter( function(item) {
+    //             return item.office_label == "City Council";
+    //           });
+    //           return council[0].next_election - 4 + ' - ' + council[0].next_election;
+    //         },
+    //       },
+    //     ],
+    //   },
+    // }, // end table
   ],
   zoomToShape: [ 'geojsonForTopic', 'markersForTopic' ],
   geojsonForTopic: {

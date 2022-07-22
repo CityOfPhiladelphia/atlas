@@ -53,12 +53,14 @@
 							"hours": "Hours",
 							"previewBallot": "Preview ballot ",
 							"electedRep": "Elected Representatives",
+							"cityCouncilRedistricting": "City Council Redistricting",
 							"location": "Location",
 							"accessibility": "Accessibility",
 							"parking": "Parking",
 							"districtCouncilMember": "District Council Member",
 							"cityHallOffice": "City Hall Office",
 							"currentTerm": "Current Term",
+							"term": "Term",
 							"accessibilityCodes": {
 								"buildingFullyAccessible": "Building Fully Accessible",
 								"buildingSubstantiallyAccessible": "Building Substantially Accessible",
@@ -136,6 +138,7 @@
 							"districtCouncilMember": "Miembro del consejo de distrito",
 							"cityHallOffice": "Oficina del ayuntamiento",
 							"currentTerm": "Mandato actual",
+							"term": "Mandato",
 							"accessibilityCodes": {
 								"buildingFullyAccessible": "Edificio totalmente accesible",
 								"buildingSubstantiallyAccessible": "Edificio considerablemente accesible",
