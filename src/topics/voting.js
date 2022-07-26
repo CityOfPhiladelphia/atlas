@@ -177,7 +177,7 @@ export default {
     {
       type: 'vertical-table',
       options: {
-        subtitle: 'This is the new city council district that will represent this address starting in 2024.  Residents will vote in this district in the 2023 primary and general elections.',
+        subtitle: 'Some addresses will have a new city council district that will represent the address starting in 2024. Residents will vote in the new district in the 2023 primary and general elections.',
         nullValue: 'None',
         externalLink: {
           action: function() {
