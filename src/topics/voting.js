@@ -177,12 +177,13 @@ export default {
     {
       type: 'vertical-table',
       options: {
-        subtitle: 'Some addresses will be represented by a new city council district starting in 2024. Residents will vote in the new district in the 2023 primary and general elections.',
+        subtitle: 'voting.topic.redistrictingSubtitle',
+        // subtitle: 'Some addresses will be represented by a new city council district starting in 2024. Residents will vote in the new district in the 2023 primary and general elections.',
         nullValue: 'None',
         externalLink: {
           action: function() {
-            return 'Read more about the redistricting process ';
-            // return 'voting.topic.verticalTable2.link';
+            // return 'Read more about the redistricting process ';
+            return 'voting.topic.redistrictingProcess';
           },
           href: function(state) {
             return '//seventy.org/issues-index/council-redistricting';
@@ -195,7 +196,7 @@ export default {
         title: 'voting.topic.cityCouncilRedistricting',
         fields: [
           {
-            label: 'Old City Council District',
+            label: 'voting.topic.oldCityCouncilDistrict',
             value: function(state) {
               const council = state.sources.electedOfficials.data.rows.filter( function(item) {
                 return item.office_label == "City Council";
@@ -205,7 +206,7 @@ export default {
             },
           },
           {
-            label: 'New City Council District',
+            label: 'voting.topic.newCityCouncilDistrict',
             value: function(state) {
               const council = state.sources.electedOfficialsFuture.data.rows.filter( function(item) {
                 return item.office_label == "City Council";
