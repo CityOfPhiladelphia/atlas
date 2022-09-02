@@ -63,7 +63,7 @@ export default {
             return 'voting.topic.verticalTable1.link';
           },
           href: function() {
-            return 'https://www.philadelphiavotes.com/en/voters/mail-in-and-absentee-ballots';
+            return '//vote.phila.gov/voting/vote-by-mail/';
           },
         },
       },
@@ -105,7 +105,7 @@ export default {
                 //         target="_blank">'+answer+'</a>';
               }
             },
-            link: '//www.philadelphiavotes.com/en/voters/polling-place-accessibility',
+            link: 'https://vote.phila.gov/voting/voting-at-the-polls/polling-place-accessibility/',
           },
           {
             label: 'voting.topic.parking',
@@ -132,7 +132,7 @@ export default {
             return 'voting.topic.verticalTable2.link';
           },
           href: function(state) {
-            return '//www.philadelphiavotes.com/en/voters/elected-officials';
+            return '//vote.phila.gov/voting/current-elected-officials/';
           },
         },
       },
