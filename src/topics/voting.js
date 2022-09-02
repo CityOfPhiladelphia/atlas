@@ -105,7 +105,7 @@ export default {
                 //         target="_blank">'+answer+'</a>';
               }
             },
-            link: '//www.philadelphiavotes.com/en/voters/polling-place-accessibility',
+            link: 'https://vote.phila.gov/voting/voting-at-the-polls/polling-place-accessibility/',
           },
           {
             label: 'voting.topic.parking',
