@@ -14,7 +14,7 @@ if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
   console.log = console.info = console.debug = console.error = function () {};
 }
 
-import i18n from './i18n.json';
+import i18n from './i18n/i18n.js';
 
 // Font Awesome Icons
 import { library } from '@fortawesome/fontawesome-svg-core';
