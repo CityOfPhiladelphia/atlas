@@ -13,7 +13,7 @@ export default {
         // }
         //
         // return stmt;
-        return "select * from appeals where opa_account_num = '" + feature.properties.opa_account_num + "'";
+        return "select * from appeals where opa_account_num = '" + feature.properties.opa_account_num + "' and appealtype like 'ZBA%'";
       },
     },
   },
