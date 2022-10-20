@@ -6,7 +6,7 @@ name: dev Push to S3
 on:
   push:
     branches:
-      - new-voting-links
+      - li-appeals-fix
 
 jobs:
   build:
