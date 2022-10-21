@@ -79,6 +79,10 @@ export default {
       "verticalTable2": {
         "link": "See all citywide, state, and federal representatives ",
       },
+      "USRep": "United States Representative",
+      "office": "Office",
+      "stateSenator": "State Senator",
+      "stateRepresentative": "State Representative",
     },
   },
 };

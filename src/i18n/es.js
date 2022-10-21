@@ -79,6 +79,10 @@ export default {
       "verticalTable2": {
         "link": "Vea todos los representantes federales, estatales y de la ciudad ",
       },
+      "USRep": "Spanish United States Representative",
+      "office": "Oficina",
+      "stateSenator": "Spanish State Senator",
+      "stateRepresentative": "Spanish State Representative",
     },
   },
 };

@@ -6,7 +6,7 @@ name: dev Push to S3
 on:
   push:
     branches:
-      - li-appeals-fix
+      - add-elected-officials
 
 jobs:
   build:

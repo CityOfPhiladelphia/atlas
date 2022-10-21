@@ -123,22 +123,37 @@ export default {
         ],
       },
     },
+
+    {
+      type: 'externalLink',
+      options: {
+        href: '//vote.phila.gov/voting/current-elected-officials/',
+        target: 'blank',
+        data: 'voting.topic.verticalTable2.link',
+      },
+    },
+    {
+      type: 'paragraph',
+      slots: {
+        text: '',
+      },
+    },
+
     {
       type: 'vertical-table',
-      options: {
-        nullValue: 'None',
-        externalLink: {
-          action: function() {
-            return 'voting.topic.verticalTable2.link';
-          },
-          href: function(state) {
-            return '//vote.phila.gov/voting/current-elected-officials/';
-          },
-        },
-      },
-
+      // options: {
+      //   nullValue: 'None',
+      //   externalLink: {
+      //     action: function() {
+      //       return 'voting.topic.verticalTable2.link';
+      //     },
+      //     href: function(state) {
+      //       return '//vote.phila.gov/voting/current-elected-officials/';
+      //     },
+      //   },
+      // },
       slots: {
-        title: 'voting.topic.electedRep',
+        title: 'voting.topic.districtCouncilMember',
         fields: [
           {
             label: 'voting.topic.districtCouncilMember',
@@ -153,13 +168,18 @@ export default {
           {
             label: 'voting.topic.cityHallOffice',
             value: function(state) {
-              const council = state.sources.electedOfficials.data.rows.filter( function(item) {
+              const row = state.sources.electedOfficials.data.rows.filter( function(item) {
                 return item.office_label == "City Council";
               });
-              return council[0].main_contact_address_2 + '<br>' +
-                     phone(council[0].main_contact_phone_1) + ", " + phone(council[0].main_contact_phone_2) + '<br>\
-                      F: '+ phone(council[0].main_contact_fax) + ' <br>\
-                      <b><a href=mailto:"' + council[0].email + '">' + council[0].email + '</a></b>';
+              let value = row[0].main_contact_address_1 + '<br>' + phone(row[0].main_contact_phone_1);
+              if (row[0].main_contact_phone_2 && row[0].main_contact_phone_2 != "0") {
+                value += ", " + phone(row[0].main_contact_phone_2);
+              }
+              value += '<br>F: '+ phone(row[0].main_contact_fax);
+              if (row[0].email) {
+                value += ' <br><b><a href=mailto:"' + row[0].email + '">' + row[0].email + '</a></b>';
+              }
+              return value;
             },
           },
           {
@@ -174,6 +194,158 @@ export default {
         ],
       },
     }, // end table
+
+    {
+      type: 'vertical-table',
+      slots: {
+        title: 'voting.topic.stateSenator',
+        fields: [
+          {
+            label: 'voting.topic.stateSenator',
+            value: function(state) {
+              const row = state.sources.electedOfficials.data.rows.filter( function(item) {
+                return item.office_label == "State Senator";
+              });
+              return '<a href="http://' + row[0].website + '" target="_blank">' +
+                row[0].first_name +" " +row[0].last_name + " - District " + row[0].district + "</a>";
+            },
+          },
+          {
+            label: 'voting.topic.office',
+            value: function(state) {
+              const row = state.sources.electedOfficials.data.rows.filter( function(item) {
+                return item.office_label == "State Senator";
+              });
+              let value = row[0].main_contact_address_1 + '<br>';
+              if (row[0].main_contact_address_2) {
+                value += row[0].main_contact_address_2 + '<br>';
+              }
+              value += row[0].main_contact_city + ' ' + row[0].main_contact_state + ', ' + row[0].main_contact_zip + '<br>'
+                + phone(row[0].main_contact_phone_1);
+              if (row[0].main_contact_phone_2 && row[0].main_contact_phone_2 != "0") {
+                value += ", " + phone(row[0].main_contact_phone_2);
+              }
+              value += '<br>F: '+ phone(row[0].main_contact_fax);
+              if (row[0].email) {
+                value += ' <br><b><a href=mailto:"' + row[0].email + '">' + row[0].email + '</a></b>';
+              }
+              return value;
+            },
+          },
+          {
+            label: 'voting.topic.currentTerm',
+            value: function(state) {
+              const row = state.sources.electedOfficials.data.rows.filter( function(item) {
+                return item.office_label == "State Senator";
+              });
+              return row[0].next_election - 4 + ' - ' + row[0].next_election;
+            },
+          },
+        ],
+      },
+    }, // end table
+
+    {
+      type: 'vertical-table',
+      slots: {
+        title: 'voting.topic.stateRepresentative',
+        fields: [
+          {
+            label: 'voting.topic.stateRepresentative',
+            value: function(state) {
+              const row = state.sources.electedOfficials.data.rows.filter( function(item) {
+                return item.office_label == "State Representative";
+              });
+              return '<a href="http://' + row[0].website + '" target="_blank">' +
+                row[0].first_name +" " +row[0].last_name + " - District " + row[0].district + "</a>";
+            },
+          },
+          {
+            label: 'voting.topic.office',
+            value: function(state) {
+              const row = state.sources.electedOfficials.data.rows.filter( function(item) {
+                return item.office_label == "State Representative";
+              });
+              let value = row[0].main_contact_address_1 + '<br>';
+              if (row[0].main_contact_address_2) {
+                value += row[0].main_contact_address_2 + '<br>';
+              }
+              value += row[0].main_contact_city + ' ' + row[0].main_contact_state + ', ' + row[0].main_contact_zip + '<br>'
+                + phone(row[0].main_contact_phone_1);
+              if (row[0].main_contact_phone_2 && row[0].main_contact_phone_2 != "0") {
+                value += ", " + phone(row[0].main_contact_phone_2);
+              }
+              value += '<br>F: '+ phone(row[0].main_contact_fax);
+              if (row[0].email) {
+                value += ' <br><b><a href=mailto:"' + row[0].email + '">' + row[0].email + '</a></b>';
+              }
+              return value;
+            },
+          },
+          {
+            label: 'voting.topic.currentTerm',
+            value: function(state) {
+              const row = state.sources.electedOfficials.data.rows.filter( function(item) {
+                return item.office_label == "State Representative";
+              });
+              return row[0].next_election - 2 + ' - ' + row[0].next_election;
+            },
+          },
+        ],
+      },
+    }, // end table
+
+    {
+      type: 'vertical-table',
+      slots: {
+        title: 'voting.topic.USRep',
+        fields: [
+          {
+            label: 'voting.topic.USRep',
+            value: function(state) {
+              const row = state.sources.electedOfficials.data.rows.filter( function(item) {
+                return item.office_label == "U.S. Representative";
+              });
+              return '<a href="http://' + row[0].website + '" target="_blank">' +
+                row[0].first_name +" " +row[0].last_name + " - District " + row[0].district + "</a>";
+            },
+          },
+          {
+            label: 'voting.topic.office',
+            value: function(state) {
+              const row = state.sources.electedOfficials.data.rows.filter( function(item) {
+                return item.office_label == "U.S. Representative";
+              });
+              // let value = row[0].main_contact_address_1 + '<br>' + phone(row[0].main_contact_phone_1);
+              let value = row[0].main_contact_address_1 + '<br>';
+              if (row[0].main_contact_address_2) {
+                value += row[0].main_contact_address_2 + '<br>';
+              }
+              value += row[0].main_contact_city + ' ' + row[0].main_contact_state + ', ' + row[0].main_contact_zip + '<br>'
+                + phone(row[0].main_contact_phone_1);
+              if (row[0].main_contact_phone_2 && row[0].main_contact_phone_2 != "0") {
+                value += ", " + phone(row[0].main_contact_phone_2);
+              }
+              value += '<br>F: '+ phone(row[0].main_contact_fax);
+              if (row[0].email) {
+                value += ' <br><b><a href=mailto:"' + row[0].email + '">' + row[0].email + '</a></b>';
+              }
+              return value;
+            },
+          },
+          {
+            label: 'voting.topic.currentTerm',
+            value: function(state) {
+              const row = state.sources.electedOfficials.data.rows.filter( function(item) {
+                return item.office_label == "U.S. Representative";
+              });
+              return row[0].next_election - 2 + ' - ' + row[0].next_election;
+            },
+          },
+        ],
+      },
+    }, // end table
+
     {
       type: 'vertical-table',
       options: {
