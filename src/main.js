@@ -223,6 +223,7 @@ mapboard({
     // neighboringProperties,
   },
   topics: [
+    voting,
     property,
     condos,
     deeds,
@@ -230,7 +231,7 @@ mapboard({
     zoning,
     // polling,
     // rcoTopic,
-    voting,
+    // voting,
     // nearby,
   ],
   defaultTopic: 'voting',
