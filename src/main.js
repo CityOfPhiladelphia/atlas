@@ -70,6 +70,7 @@ import zoningDocsEclipse from './data-sources/zoning-docs-eclipse';
 import zoningOverlay from './data-sources/zoning-overlay';
 // import charterSchools from './data-sources/charter-schools';
 // import neighboringProperties from './data-sources/neighboring-properties';
+import splits from './data-sources/splits';
 
 // Topics
 import property from './topics/property';
@@ -197,6 +198,7 @@ mapboard({
   greeting,
   dataSources: {
     threeOneOneCarto,
+    splits,
     condoList,
     crimeIncidents,
     divisions,

@@ -1,14 +1,13 @@
 export default {
   id: 'electedOfficials',
   type: 'http-get',
-  dependent: 'none',
   // url: 'https://phl.carto.com/api/v2/sql',
-  url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/ELECTED_OFFICIALS/FeatureServer/0/query',
+  url: '//services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/SPLITS/FeatureServer/0/query',
   options: {
     params: {
       where: function(feature) {
-        console.log('elected-officials function, feature:', feature);
-        return "1=1";
+        console.log('splits function, feature:', feature);
+        return "PRECINCT = '" + feature.properties.election_precinct + "'";
       },
       outfields: '*',
       f: 'json',
@@ -23,6 +22,17 @@ export default {
       //                     OR eo.office = 'us_house' AND eo.district = s.federal_house \
       //           ";
       // },// + "' or addresskey = '" + feature.properties.li_address_key.toString() + "'",
+    },
+    success: function(data) {
+      console.log('splits.js success, data:', data);
+      let features;
+      if (data.features[0]) {
+        // features = data.features[0].attributes;
+        features = data.features[0];
+      } else {
+        features = null;
+      }
+      return features;
     },
   },
 };
