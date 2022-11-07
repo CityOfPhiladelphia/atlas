@@ -1,0 +1,44 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: election-day Push to S3
+
+on:
+  push:
+    branches:
+      - election-day
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js 14.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
+
+    - name: npm install, and build
+      run: |
+        printf "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${FONTAWESOME_NPM_AUTH_TOKEN}" >> ~/.npmrc
+        npm install
+        npm run build
+      env:
+        FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FA_AUTH_TOKEN }}
+        VUE_APP_GATEKEEPER_KEY: ${{ secrets.VUE_APP_GATEKEEPER_KEY }}
+        VUE_APP_CYCLOMEDIA_API_KEY: ${{ secrets.VUE_APP_CYCLOMEDIA_API_KEY }}
+        VUE_APP_CYCLOMEDIA_PASSWORD: ${{ secrets.VUE_APP_CYCLOMEDIA_PASSWORD }}
+        VUE_APP_CYCLOMEDIA_USERNAME: ${{ secrets.VUE_APP_CYCLOMEDIA_USERNAME }}
+        VUE_APP_PICTOMETRY_API_KEY: ${{ secrets.VUE_APP_PICTOMETRY_API_KEY }}
+        VUE_APP_PICTOMETRY_SECRET_KEY: ${{ secrets.VUE_APP_PICTOMETRY_SECRET_KEY }}
+
+    - name: Deploy to Prod s3
+      env:
+        AWS_DEFAULT_REGION: 'us-east-1'
+        AWS_S3_BUCKET: atlas-voting
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws s3 sync dist s3://$AWS_S3_BUCKET --region us-east-1 --delete
