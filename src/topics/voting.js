@@ -73,13 +73,13 @@ export default {
           {
             label: 'voting.topic.location',
             value: function(state) {
-              if (state.sources.pollingPlaces.data && state.sources.pollingPlaces.data.rows.length) {
-                const pollingData = state.sources.pollingPlaces.data.rows[0];
+              if (state.sources.pollingPlaces.data && state.sources.pollingPlaces.data.attributes) {
+                const pollingData = state.sources.pollingPlaces.data.attributes;
                 // console.log('state.sources.pollingPlaces.data.rows', state.sources.pollingPlaces.data.rows, 'pollingData:', pollingData);
-                return "<b>Ward " + pollingData.ward +
-                ", Division " + pollingData.division + "</b><br>" +
-                titleCase(pollingData.placename) + "<br>" +
-                titleCase(pollingData.street_address) + "<br>\
+                return "<b>Ward " + pollingData.WARD +
+                ", Division " + pollingData.DIVISION + "</b><br>" +
+                titleCase(pollingData.PLACENAME) + "<br>" +
+                titleCase(pollingData.STREET_ADDRESS) + "<br>\
                 ";
               }
             },
@@ -91,14 +91,14 @@ export default {
           {
             label: 'voting.topic.accessibility',
             value: function(state) {
-              if (state.sources.pollingPlaces.data && state.sources.pollingPlaces.data.rows.length) {
-                const pollingData = state.sources.pollingPlaces.data.rows[0];
-                const answer = pollingData.accessibility_code== "F" ? 'voting.topic.accessibilityCodes.buildingFullyAccessible' :
-                  pollingData.accessibility_code== "B" ? 'voting.topic.accessibilityCodes.buildingSubstantiallyAccessible' :
-                    pollingData.accessibility_code== "M" ? 'voting.topic.accessibilityCodes.buildingAccessibilityModified' :
-                      pollingData.accessibility_code== "A" ? 'voting.topic.accessibilityCodes.alternateEntrance' :
-                        pollingData.accessibility_code== "R" ? 'voting.topic.accessibilityCodes.buildingAccessibleWithRamp' :
-                          pollingData.accessibility_code== "N" ? 'voting.topic.accessibilityCodes.buildingNotAccessible' :
+              if (state.sources.pollingPlaces.data && state.sources.pollingPlaces.data.attributes) {
+                const pollingData = state.sources.pollingPlaces.data.attributes;
+                const answer = pollingData.ACCESSIBILITY_CODE== "F" ? 'voting.topic.accessibilityCodes.buildingFullyAccessible' :
+                  pollingData.ACCESSIBILITY_CODE== "B" ? 'voting.topic.accessibilityCodes.buildingSubstantiallyAccessible' :
+                    pollingData.ACCESSIBILITY_CODE== "M" ? 'voting.topic.accessibilityCodes.buildingAccessibilityModified' :
+                      pollingData.ACCESSIBILITY_CODE== "A" ? 'voting.topic.accessibilityCodes.alternateEntrance' :
+                        pollingData.ACCESSIBILITY_CODE== "R" ? 'voting.topic.accessibilityCodes.buildingAccessibleWithRamp' :
+                          pollingData.ACCESSIBILITY_CODE== "N" ? 'voting.topic.accessibilityCodes.buildingNotAccessible' :
                             'voting.topic.accessibilityCodes.informationNotAvailable';
                 return answer;
                 // return '<a href="//www.philadelphiavotes.com/en/voters/polling-place-accessibility"\
@@ -143,32 +143,41 @@ export default {
           {
             label: 'voting.topic.districtCouncilMember',
             value: function(state) {
-              const council = state.sources.electedOfficials.data.rows.filter( function(item) {
-                return item.office_label == "City Council";
+              const split = state.sources.splits.data.attributes;
+              console.log('split:', split);
+              const council = state.sources.electedOfficials.data.features.filter( function(item) {
+                console.log('item:', item, 'split:', split);
+                return item.attributes.OFFICE_LABEL == "City Council" && item.attributes.DISTRICT == split.CITY_DISTRICT;
               });
-              return '<a href="http://' + council[0].website + '" target="_blank">' +
-                council[0].first_name +" " +council[0].last_name + " - " + nth(council[0].district) + " Council District </a>";
+              console.log('council:', council);
+              return '<a href="http://' + council[0].attributes.WEBSITE + '" target="_blank">' +
+                council[0].attributes.FIRST_NAME +" " +council[0].attributes.LAST_NAME + " - " + nth(council[0].attributes.DISTRICT) + " Council District </a>";
             },
           },
           {
             label: 'voting.topic.cityHallOffice',
             value: function(state) {
-              const council = state.sources.electedOfficials.data.rows.filter( function(item) {
-                return item.office_label == "City Council";
+              const split = state.sources.splits.data.attributes;
+              const council = state.sources.electedOfficials.data.features.filter( function(item) {
+                // return item.office_label == "City Council";
+                return item.attributes.OFFICE_LABEL == "City Council" && item.attributes.DISTRICT == split.CITY_DISTRICT;
               });
-              return council[0].main_contact_address_2 + '<br>' +
-                     phone(council[0].main_contact_phone_1) + ", " + phone(council[0].main_contact_phone_2) + '<br>\
-                      F: '+ phone(council[0].main_contact_fax) + ' <br>\
-                      <b><a href=mailto:"' + council[0].email + '">' + council[0].email + '</a></b>';
+              return council[0].attributes.MAIN_CONTACT_ADDRESS_2 + '<br>' +
+                     phone(council[0].attributes.MAIN_CONTACT_PHONE_1) + ", " + phone(council[0].attributes.MAIN_CONTACT_PHONE_2) + '<br>\
+                      F: '+ phone(council[0].attributes.MAIN_CONTACT_FAX) + ' <br>\
+                      <b><a href=mailto:"' + council[0].attributes.EMAIL + '">' + council[0].attributes.EMAIL + '</a></b>';
             },
           },
           {
             label: 'voting.topic.currentTerm',
             value: function(state) {
-              const council = state.sources.electedOfficials.data.rows.filter( function(item) {
-                return item.office_label == "City Council";
+              const split = state.sources.splits.data.attributes;
+              const council = state.sources.electedOfficials.data.features.filter( function(item) {
+                // return item.office_label == "City Council";
+                return item.attributes.OFFICE_LABEL == "City Council" && item.attributes.DISTRICT == split.CITY_DISTRICT;
+
               });
-              return council[0].next_election - 4 + ' - ' + council[0].next_election;
+              return council[0].attributes.NEXT_ELECTION - 4 + ' - ' + council[0].attributes.NEXT_ELECTION;
             },
           },
         ],
@@ -198,21 +207,25 @@ export default {
           {
             label: 'voting.topic.oldCityCouncilDistrict',
             value: function(state) {
-              const council = state.sources.electedOfficials.data.rows.filter( function(item) {
-                return item.office_label == "City Council";
+              const split = state.sources.splits.data.attributes;
+              const council = state.sources.electedOfficials.data.features.filter( function(item) {
+                // return item.office_label == "City Council";
+                return item.attributes.OFFICE_LABEL == "City Council" && item.attributes.DISTRICT == split.CITY_DISTRICT;
               });
-              return '<a href="http://' + council[0].website + '" target="_blank">' +
-                nth(council[0].district) + " Council District </a>";
+              return '<a href="http://' + council[0].attributes.WEBSITE + '" target="_blank">' +
+                nth(council[0].attributes.DISTRICT) + " Council District </a>";
             },
           },
           {
             label: 'voting.topic.newCityCouncilDistrict',
             value: function(state) {
-              const council = state.sources.electedOfficialsFuture.data.rows.filter( function(item) {
-                return item.office_label == "City Council";
+              const split = state.sources.splits.data.attributes;
+              const council = state.sources.electedOfficials.data.features.filter( function(item) {
+                // return item.office_label == "City Council";
+                return item.attributes.OFFICE_LABEL == "City Council" && item.attributes.DISTRICT == split.CITY_DISTRICT_NEW;
               });
-              return '<a href="http://' + council[0].website + '" target="_blank">' +
-                nth(council[0].district) + " Council District </a>";
+              return '<a href="http://' + council[0].attributes.WEBSITE + '" target="_blank">' +
+                nth(council[0].attributes.DISTRICT) + " Council District </a>";
             },
           },
           // {
@@ -312,13 +325,13 @@ export default {
   markersForTopic: {
     data: function(state) {
       if (state.sources.pollingPlaces.data) {
-        return state.sources.pollingPlaces.data.rows[0];
+        return state.sources.pollingPlaces.data.geometry;
       }
       return null;
 
     },
-    lat: 'lat',
-    lng: 'lng',
+    lat: 'y',
+    lng: 'x',
     key: 'STREET_ADDRESS',
     color: '#54278f',
     icon: {
