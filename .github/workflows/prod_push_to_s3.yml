@@ -6,7 +6,7 @@ name: prod Push to S3
 on:
   push:
     branches:
-      - master
+      - production
 
 jobs:
   build:
