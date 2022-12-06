@@ -12,9 +12,17 @@ export default {
         let opaQuery = feature.properties.opa_account_num && feature.properties.opa_account_num != '' ? ` AND opa_account_num IN ('${ feature.properties.opa_account_num}')` : ``;
         let streetaddress = feature.properties.street_address;
         let li_address_key = feature.properties.li_address_key.replace(/\|/g, "', '");
-        return `SELECT * FROM case_investigations WHERE (address = '${streetaddress}' or addressobjectid IN ('${li_address_key}')) \
-          AND systemofrecord IN ('HANSEN') `+ opaQuery +` UNION SELECT * FROM case_investigations WHERE \
-          addressobjectid IN ('`+ eclipseLocId +`') AND systemofrecord IN ('ECLIPSE')`+ opaQuery;
+
+        // return `SELECT * FROM case_investigations WHERE (address = '${streetaddress}' or addressobjectid IN ('${li_address_key}')) \
+        //   AND systemofrecord IN ('HANSEN') `+ opaQuery +` UNION SELECT * FROM case_investigations WHERE \
+        //   addressobjectid IN ('`+ eclipseLocId +`') AND systemofrecord IN ('ECLIPSE')`+ opaQuery;
+        
+        return `SELECT * FROM case_investigations WHERE parcel_id_num IN ( '${ feature.properties.pwd_parcel_id }' ) \
+        UNION SELECT * FROM case_investigations WHERE opa_account_num IN ('${ feature.properties.opa_account_num}') \
+        UNION SELECT * FROM case_investigations WHERE ( address = '${ streetaddress }' OR addressobjectid IN ( '${ li_address_key }' ) ) \
+        AND systemofrecord IN ('HANSEN') \
+        UNION SELECT * FROM case_investigations WHERE addressobjectid IN ( '${ eclipseLocId }' ) \
+        AND systemofrecord IN ('ECLIPSE')`;
       },
     },
   },
