@@ -6,16 +6,20 @@ export default {
     params: {
       q: function(feature){
         var eclipseLocId = feature.properties.eclipse_location_id.replace(/\|/g, "', '");
-        let opaQuery = feature.properties.opa_account_num && feature.properties.opa_account_num != '' ? ` AND opa_account_num IN ('${ feature.properties.opa_account_num}')` : ``;
+        var li_address_key = feature.properties.li_address_key.split('|');
         let streetaddress = feature.properties.street_address;
 
         let value;
         if (eclipseLocId) {
-          value = `SELECT * FROM BUSINESS_LICENSES WHERE (addressobjectid IN ('`+ eclipseLocId +`') OR address = '${streetaddress}')`+ opaQuery+`\
-            ORDER BY licensetype`;
+          value = `SELECT * FROM BUSINESS_LICENSES WHERE ( address = '${streetaddress}') OR addressobjectid IN ('`+ eclipseLocId +`')\
+          UNION SELECT * FROM BUSINESS_LICENSES WHERE opa_account_num IN ('${ feature.properties.opa_account_num}')\
+          UNION SELECT * FROM BUSINESS_LICENSES WHERE parcel_id_num IN ( '${ feature.properties.pwd_parcel_id }' )\
+          ORDER BY licensetype`;
         } else {
-          value = `SELECT * FROM BUSINESS_LICENSES WHERE (address = '${streetaddress}')`+ opaQuery+`\
-            ORDER BY licensetype`;
+          value = `SELECT * FROM BUSINESS_LICENSES WHERE (address = '${streetaddress}')\
+          UNION SELECT * FROM BUSINESS_LICENSES WHERE opa_account_num IN ('${ feature.properties.opa_account_num}')\
+          UNION SELECT * FROM BUSINESS_LICENSES WHERE parcel_id_num IN ( '${ feature.properties.pwd_parcel_id }' )\
+          ORDER BY licensetype`;
         }
         return value;
       },

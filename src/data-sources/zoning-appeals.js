@@ -5,15 +5,16 @@ export default {
   options: {
     params: {
       q: function(feature) {
-        // var stmt = "select * from li_appeals where address = '" + feature.properties.street_address + "'";
-        // var addressKey = feature.properties.li_address_key;
-        //
-        // if (addressKey && addressKey.length > 0) {
-        //   stmt += " or addresskey = '" + feature.properties.li_address_key.toString() + "'";
-        // }
-        //
-        // return stmt;
-        return "select * from appeals where opa_account_num = '" + feature.properties.opa_account_num + "' and appealtype like 'ZBA%'";
+        let eclipseLocId = feature.properties.eclipse_location_id.replace(/\|/g, "', '");
+        let streetaddress = feature.properties.street_address;
+        let li_address_key = feature.properties.li_address_key.replace(/\|/g, "', '");
+        
+        return `SELECT * FROM APPEALS WHERE parcel_id_num IN ( '${ feature.properties.pwd_parcel_id }' ) AND ( appealtype like 'ZBA%' or APPLICATIONTYPE = 'RB_ZBA') \
+        UNION SELECT * FROM APPEALS WHERE opa_account_num IN ('${ feature.properties.opa_account_num}') AND ( appealtype like 'ZBA%' or APPLICATIONTYPE = 'RB_ZBA') \
+        UNION SELECT * FROM APPEALS WHERE ( address = '${ streetaddress }' OR addressobjectid IN ( '${ li_address_key }' ) ) \
+        AND systemofrecord IN ('HANSEN') AND ( appealtype like 'ZBA%' or APPLICATIONTYPE = 'RB_ZBA') \
+        UNION SELECT * FROM APPEALS WHERE addressobjectid IN ( '${ eclipseLocId }' ) \
+        AND systemofrecord IN ('ECLIPSE') AND ( appealtype like 'ZBA%' or APPLICATIONTYPE = 'RB_ZBA')`;
       },
     },
   },
