@@ -8,6 +8,7 @@ export default {
     'RSA-3': 'Residential Single Family Attached-3',
     'RSA-4': 'Residential Single Family Attached-4',
     'RSA-5': 'Residential Single Family Attached-5',
+    'RSA-6': 'Residential Single-Family Attached-6',
     'RTA-1': 'Residential Two-Family Attached-1',
     'RM-1': 'Residential Multi-Family-1',
     'RM-2': 'Residential Multi-Family-2',
@@ -37,6 +38,7 @@ export default {
     'SPPOA': 'Recreation',
     'SP-PO-A': 'Recreation',
     'SPPOP': 'Recreation',
+    'SP-CIV': 'SP-CIV, Civic, Educational, and Medical (Special Purpose) District',
   },
 
   cleanDorAttribute(attr) {
