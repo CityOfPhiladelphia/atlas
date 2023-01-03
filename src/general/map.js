@@ -8,7 +8,7 @@ export default {
   imagery: {
     enabled: true,
   },
-  initialImagery: 'imagery2020',
+  initialImagery: 'imagery2022',
   // featureLayers: {
   //   pwdParcels: {
   //     url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/PWD_PARCELS_TEST/FeatureServer/0',
