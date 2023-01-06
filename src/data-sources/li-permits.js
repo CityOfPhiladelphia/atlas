@@ -5,16 +5,17 @@ export default {
   options: {
     params: {
       q: function(feature){
-        let eclipseLocId = feature.properties.eclipse_location_id.replace(/\|/g, "', '");
+        let eclipse_location_id = feature.properties.eclipse_location_id.replace(/\|/g, "', '");
         let streetaddress = feature.properties.street_address;
-        let li_address_key = feature.properties.li_address_key.replace(/\|/g, "', '");
+        let opaQuery = feature.properties.opa_account_num ? ` AND opa_account_num IN ('${ feature.properties.opa_account_num}')` : ``;
+        let pwd_parcel_id = feature.properties.pwd_parcel_id;
+        let addressId = feature.properties.li_address_key.replace(/\|/g, "', '");
 
-        return `SELECT * FROM PERMITS WHERE parcel_id_num IN ( '${ feature.properties.pwd_parcel_id }' ) \
-        UNION SELECT * FROM PERMITS WHERE opa_account_num IN ('${ feature.properties.opa_account_num}') \
-        UNION SELECT * FROM PERMITS WHERE ( address = '${ streetaddress }' OR addressobjectid IN ( '${ li_address_key }' ) ) \
-        AND systemofrecord IN ('HANSEN') \
-        UNION SELECT * FROM PERMITS WHERE addressobjectid IN ( '${ eclipseLocId }' ) \
-        AND systemofrecord IN ('ECLIPSE')`;
+        return `SELECT * FROM PERMITS WHERE address = '${ streetaddress }' or addressobjectid IN ('${ addressId }') \
+          AND systemofrecord IN ('HANSEN') ${ opaQuery } \
+          UNION SELECT * FROM PERMITS WHERE addressobjectid IN ('${ eclipse_location_id }') OR parcel_id_num IN ( '${ pwd_parcel_id }' ) \
+          AND systemofrecord IN ('ECLIPSE')${ opaQuery }\
+          ORDER BY permittype`;
 
       },
     },
