@@ -11,11 +11,22 @@ export default {
         let pwd_parcel_id = feature.properties.pwd_parcel_id;
         let addressId = feature.properties.li_address_key.replace(/\|/g, "', '");
         
-        return `SELECT * FROM APPEALS WHERE (address = '${streetaddress}' or addressobjectid IN ('${addressId}')) \
-          AND systemofrecord IN ('HANSEN') ${ opaQuery } UNION SELECT * FROM APPEALS WHERE \
-          addressobjectid IN ('`+eclipse_location_id+`') OR parcel_id_num IN ( '${ pwd_parcel_id }' ) \
-          AND systemofrecord IN ('ECLIPSE') ${ opaQuery } \
+        return `SELECT * FROM APPEALS WHERE ( address = '${ streetaddress }' \
+          OR addressobjectid IN ('${ addressId }') \
+          OR parcel_id_num IN ( '${ pwd_parcel_id }' ) ) \
+          ${ opaQuery } \
+          AND systemofrecord IN ('HANSEN') \
+          UNION SELECT * FROM APPEALS WHERE ( addressobjectid IN ('${ eclipse_location_id }') \
+          OR parcel_id_num IN ( '${ pwd_parcel_id }' ) ) \
+          ${ opaQuery } \
+          AND systemofrecord IN ('ECLIPSE') \
           ORDER BY scheduleddate DESC`;
+
+        // return `SELECT * FROM APPEALS WHERE (address = '${streetaddress}' or addressobjectid IN ('${addressId}')) \
+        //   AND systemofrecord IN ('HANSEN') ${ opaQuery } UNION SELECT * FROM APPEALS WHERE \
+        //   addressobjectid IN ('`+eclipse_location_id+`') OR parcel_id_num IN ( '${ pwd_parcel_id }' ) \
+        //   AND systemofrecord IN ('ECLIPSE') ${ opaQuery } \
+        //   ORDER BY scheduleddate DESC`;
       },
     },
   },

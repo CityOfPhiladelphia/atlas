@@ -9,19 +9,31 @@ export default {
         let streetaddress = feature.properties.street_address;
         let opaQuery = feature.properties.opa_account_num ? ` AND opa_account_num IN ('${ feature.properties.opa_account_num}')` : ``;
         let pwd_parcel_id = feature.properties.pwd_parcel_id;
-        let addressId = feature.properties.li_address_key.replace(/\|/g, "', '");
+        // let addressId = feature.properties.li_address_key.replace(/\|/g, "', '");
 
         let value;
         if (eclipse_location_id) {
-          value = `SELECT * FROM BUSINESS_LICENSES WHERE (addressobjectid IN ('`+ eclipse_location_id +`') \
-          OR parcel_id_num IN ( '${ pwd_parcel_id }' ) \
-          OR address = '${streetaddress}') ${ opaQuery } \
+          value = `SELECT * FROM BUSINESS_LICENSES WHERE ( addressobjectid IN ('`+ eclipse_location_id +`') \
+          OR address = '${streetaddress}' \
+          OR parcel_id_num IN ( '${ pwd_parcel_id }' ) ) \
+          ${opaQuery } \
           ORDER BY licensetype`;
         } else {
-          value = `SELECT * FROM BUSINESS_LICENSES WHERE (address = '${streetaddress}') ${ opaQuery } \
-            OR addressobjectid IN ('${addressId}')) ${ opaQuery } \
-            ORDER BY licensetype`;
+          value = `SELECT * FROM BUSINESS_LICENSES WHERE ( address = '${streetaddress}' \
+          OR parcel_id_num IN ( '${ pwd_parcel_id }' ) ) \
+          ${opaQuery } \
+          ORDER BY licensetype`;
         }
+        // if (eclipse_location_id) {
+        //   value = `SELECT * FROM BUSINESS_LICENSES WHERE (addressobjectid IN ('`+ eclipse_location_id +`') \
+        //   OR parcel_id_num IN ( '${ pwd_parcel_id }' ) \
+        //   OR address = '${streetaddress}') ${ opaQuery } \
+        //   ORDER BY licensetype`;
+        // } else {
+        //   value = `SELECT * FROM BUSINESS_LICENSES WHERE (address = '${streetaddress}') ${ opaQuery } \
+        //     OR addressobjectid IN ('${addressId}')) ${ opaQuery } \
+        //     ORDER BY licensetype`;
+        // }
         return value;
       },
     },
