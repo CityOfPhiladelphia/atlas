@@ -5,29 +5,28 @@ export default {
   options: {
     params: {
       q: function(feature){
-        var eclipseLocId = feature.properties.eclipse_location_id.split('|');
-        var li_address_key = feature.properties.li_address_key.split('|');
-        var j;
-        var str = "'";
-        for (j = 0; j < li_address_key.length; j++) {
-          str += li_address_key[j];
-          str += "', '";
-        }
-        var i;
-        for (i = 0; i < eclipseLocId.length; i++) {
-          str += eclipseLocId[i];
-          str += "', '";
-        }
-        str = str.slice(0, str.length - 3);
-
-        let opaQuery = feature.properties.opa_account_num && feature.properties.opa_account_num != '' ? ` AND opa_account_num IN ('${ feature.properties.opa_account_num}')` : ``;
+        var eclipse_location_id = feature.properties.eclipse_location_id.replace(/\|/g, "', '");
         let streetaddress = feature.properties.street_address;
+        let opaQuery = feature.properties.opa_account_num ? ` AND opa_account_num IN ('${ feature.properties.opa_account_num}')` : ``;
+        let pwd_parcel_id = feature.properties.pwd_parcel_id;
+        let addressId = feature.properties.li_address_key.replace(/\|/g, "', '");
 
-        return `SELECT * FROM VIOLATIONS WHERE address = '${streetaddress}' or addressobjectid IN ('${li_address_key}') \
-          AND systemofrecord IN ('HANSEN') `+ opaQuery +` UNION SELECT * FROM VIOLATIONS WHERE \
-          addressobjectid IN ('`+ eclipseLocId +`') AND systemofrecord IN ('ECLIPSE')`+ opaQuery+`\
+        return `SELECT * FROM VIOLATIONS WHERE ( address = '${ streetaddress }' \
+          OR addressobjectid IN ('${ addressId }') \
+          OR parcel_id_num IN ( '${ pwd_parcel_id }' ) ) \
+          ${ opaQuery } \
+          AND systemofrecord IN ('HANSEN') \
+          UNION SELECT * FROM VIOLATIONS WHERE ( addressobjectid IN ('${ eclipse_location_id }') \
+          OR parcel_id_num IN ( '${ pwd_parcel_id }' ) ) \
+          ${ opaQuery } \
+          AND systemofrecord IN ('ECLIPSE') \
           ORDER BY casenumber DESC`;
-        // return "select * from violations where address = '" + feature.properties.street_address + "' or addressobjectid in (" + str + ")";
+          
+        // return `SELECT * FROM VIOLATIONS WHERE address = '${ streetaddress }' or addressobjectid IN ('${ addressId }') \
+        //   AND systemofrecord IN ('HANSEN') ${ opaQuery} \
+        //   UNION SELECT * FROM VIOLATIONS WHERE addressobjectid IN ('${ eclipse_location_id }') OR parcel_id_num IN ( '${ pwd_parcel_id }' ) \
+        //   AND systemofrecord IN ('ECLIPSE') ${ opaQuery } \
+        //   ORDER BY casenumber DESC`;
       },
     },
   },
