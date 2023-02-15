@@ -10,7 +10,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "serve-production": "vue-cli-service serve --production",
+    "serve-production": "vue-cli-service serve --mode production",
     "dev-build": "vue-cli-service build --mode development",
     "test": "jest",
     "lint": "vue-cli-service lint",
