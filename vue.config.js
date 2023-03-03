@@ -34,6 +34,7 @@ module.exports = {
       },
     },
   },
+  runtimeCompiler: true,
   // transpileDependencies: [
   //   // can be string or regex
   //   '@mapbox/mapbox-gl-draw',
