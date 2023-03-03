@@ -1,10 +1,12 @@
-const Visualizer = require('webpack-visualizer-plugin');
+// const Visualizer = require('webpack-visualizer-plugin');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 module.exports = {
   publicPath: '/',
   configureWebpack: {
     plugins: [
-      new Visualizer({ filename: './statistics.html' }),
+      new NodePolyfillPlugin()
+    //   new Visualizer({ filename: './statistics.html' }),
     ],
     optimization: {
       splitChunks: {
@@ -34,7 +36,7 @@ module.exports = {
       },
     },
   },
-  runtimeCompiler: true,
+  // runtimeCompiler: true,
   // transpileDependencies: [
   //   // can be string or regex
   //   '@mapbox/mapbox-gl-draw',
