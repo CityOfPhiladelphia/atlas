@@ -9,10 +9,10 @@
 
 
 // turn off console logging in production
-const { hostname='' } = location;
-if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
-  console.log = console.info = console.debug = console.error = function () {};
-}
+// const { hostname='' } = location;
+// if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
+//   console.log = console.info = console.debug = console.error = function () {};
+// }
 
 import i18n from './i18n/i18n.js';
 
@@ -180,7 +180,8 @@ mapboard({
     // orientation: 'horizontal',
     measurementAllowed: false,
     popoutAble: true,
-    recordingsUrl: 'https://atlas.cyclomedia.com/Recordings/wfs',
+    // recordingsUrl: 'https://atlas.cyclomedia.com/Recordings/wfs',
+    recordingsUrl: 'https://atlasapi.cyclomedia.com/api/recording/wfs',
     username: process.env.VUE_APP_CYCLOMEDIA_USERNAME,
     password: process.env.VUE_APP_CYCLOMEDIA_PASSWORD,
     apiKey: process.env.VUE_APP_CYCLOMEDIA_API_KEY,

@@ -1,10 +1,12 @@
-const Visualizer = require('webpack-visualizer-plugin');
+// const Visualizer = require('webpack-visualizer-plugin');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 module.exports = {
   publicPath: '/',
   configureWebpack: {
     plugins: [
-      new Visualizer({ filename: './statistics.html' }),
+      new NodePolyfillPlugin()
+    //   new Visualizer({ filename: './statistics.html' }),
     ],
     optimization: {
       splitChunks: {
@@ -34,13 +36,14 @@ module.exports = {
       },
     },
   },
-  transpileDependencies: [
-    // can be string or regex
-    '@mapbox/mapbox-gl-draw',
-    '@phila/mapboard',
-    '@phila/vue-comps',
-    '@phila/vue-mapping',
-    '@phila/vue-datafetch',
-    // /other-dep/
-  ],
+  // runtimeCompiler: true,
+  // transpileDependencies: [
+  //   // can be string or regex
+  //   '@mapbox/mapbox-gl-draw',
+  //   '@phila/mapboard',
+  //   '@phila/vue-comps',
+  //   '@phila/vue-mapping',
+  //   '@phila/vue-datafetch',
+  //   // /other-dep/
+  // ],
 };
