@@ -9,13 +9,15 @@
     </p>
     <p>
       <b>{{ $t('voting.topic.exclamationCallout1.p2_b') }}</b>
-       {{ $t('voting.topic.exclamationCallout1.p2_1') }}
-      <a target="_blank" href="https://www.phila.gov/voting/#/">{{ $t('voting.topic.exclamationCallout1.p2_a') }}</a>
-       {{ $t('voting.topic.exclamationCallout1.p2_2') }}
+      {{ $t('voting.topic.exclamationCallout1.p2_1') }}
+      <a
+        target="_blank"
+        href="https://www.phila.gov/voting/#/"
+      >{{ $t('voting.topic.exclamationCallout1.p2_a') }}</a>
+      {{ $t('voting.topic.exclamationCallout1.p2_2') }}
     </p>
     <!-- <p><a target="_blank" href="https://apps.philadelphiavotes.com/">{{ $t('voting.topic.exclamationCallout1.p4') }}</a></p>
     <p>{{ $t('voting.topic.exclamationCallout1.p5') }}</p> -->
-
   </div>
 </template>
 

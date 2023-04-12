@@ -20,7 +20,6 @@
         :topic-components="options.components"
         :item="item"
       />
-
     </div>
   </div>
 </template>
@@ -30,10 +29,10 @@ import TopicComponent from '@phila/vue-comps/src/components/TopicComponent.vue';
 import TopicComponentGroup from '@phila/vue-comps/src/components/TopicComponentGroup.vue';
 
 export default {
-  mixins: [ TopicComponent ],
   components: {
     TopicComponentGroup,
   },
+  mixins: [ TopicComponent ],
   computed: {
     i18nEnabled() {
       let value = this.$config.i18n && this.$config.i18n.enabled;

@@ -244,4 +244,7 @@ mapboard({
     },
   ],
   i18n: i18n.i18n,
+  gtag: {
+    category: 'mb-atlas',
+  },
 });

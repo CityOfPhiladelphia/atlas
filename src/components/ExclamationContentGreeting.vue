@@ -7,7 +7,6 @@
       <b>{{ $t('voting.introPage.p1_b') }}</b>
       {{ $t('voting.introPage.p1') }}
     </p>
-
   </div>
 </template>
 

@@ -34,12 +34,21 @@
     </div>
     <div class="custom-section">
       <ul class="custom-ul">
-        <li><a target="_blank" href="https://www.phila.gov/voting">{{ $t('voting.introPage.link2') }}</a></li>
-        <li><a target="_blank" href="https://www.pavoterservices.pa.gov/pages/ballottracking.aspx">{{ $t('voting.introPage.link3') }}</a></li>
+        <li>
+          <a
+            target="_blank"
+            href="https://www.phila.gov/voting"
+          >{{ $t('voting.introPage.link2') }}</a>
+        </li>
+        <li>
+          <a
+            target="_blank"
+            href="https://www.pavoterservices.pa.gov/pages/ballottracking.aspx"
+          >{{ $t('voting.introPage.link3') }}</a>
+        </li>
         <!-- <li><a target="_blank" href="https://www.pavoterservices.pa.gov/Pages/voterregistrationstatus.aspx">{{ $t('voting.introPage.link4') }}</a></li> -->
       </ul>
     </div>
-
   </div>
 </template>
 

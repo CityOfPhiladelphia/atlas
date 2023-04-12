@@ -1,11 +1,11 @@
 // const Visualizer = require('webpack-visualizer-plugin');
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 module.exports = {
   publicPath: '/',
   configureWebpack: {
     plugins: [
-      new NodePolyfillPlugin()
+      new NodePolyfillPlugin(),
     //   new Visualizer({ filename: './statistics.html' }),
     ],
     optimization: {
@@ -20,9 +20,9 @@ module.exports = {
             test: /[\\/]node_modules[\\/](esri-leaflet)[\\/]/,
             name: 'esri-leaflet-chunk',
             chunks: 'all',
-          }
-        }
-      }
+          },
+        },
+      },
     },
   },
   chainWebpack: (config) => {
