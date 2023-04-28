@@ -492,6 +492,69 @@ export default {
         },
       },
     },
+    {
+      type: 'paragraph',
+      slots: {
+        text: "<b>Lead Certification Details</b><br>City law requires that landlords must test and certify rental properties as lead-safe or lead-free, regardless\
+        of a child's age, in order to execute a new or renewed lease or to get or renew a rental license. Check the status of this property here.  Source: Lead\
+        and Healthy Homes Program, Department of Public Health",
+      },
+    },
+    {
+      type: 'vertical-table',
+      slots: {
+        fields: [
+          {
+            label: 'OPA account',
+            value: function(state) {
+              return state.geocode.data.properties.opa_account_num;
+            },
+          },
+          {
+            label: 'Certification status',
+            value: function(state) {
+              // return state.geocode.data.properties.opa_account_num;
+              return 'Certified';
+            },
+          },
+          {
+            label: 'Certification date',
+            value: function(state) {
+              // return state.geocode.data.properties.opa_account_num;
+              return '2/28/2021';
+            },
+          },
+          {
+            label: 'Number of units',
+            value: function(state) {
+              // return state.geocode.data.properties.opa_account_num;
+              return '5';
+            },
+          },
+          {
+            label: 'Rental license',
+            value: function(state) {
+              // return state.geocode.data.properties.opa_account_num;
+              return 'Active (expires 3/30/2024)';
+            },
+          },
+        ],
+      },
+      options: {
+        id: 'leadData',
+        // requiredSources: ['opa'],
+        externalLink: {
+          action: function(count) {
+            return 'Learn more about this regulation';
+          },
+          // name: 'Property Search',
+          href: function(state) {
+            // var id = state.geocode.data.properties.opa_account_num;
+            return 'https://www.phila.gov/services/permits-violations-licenses/apply-for-a-permit/environmental-permits-and-approvals/submit-lead-certification-and-inspection-reports/';
+          },
+        },
+      },
+    },
   ],
   dynamicMapLayers: [
     //'zoning'
