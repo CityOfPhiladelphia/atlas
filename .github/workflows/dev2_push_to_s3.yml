@@ -6,7 +6,7 @@ name: dev Push to S3
 on:
   push:
     branches:
-      - main
+      - election-day-ago
 
 jobs:
   build:
@@ -37,7 +37,7 @@ jobs:
     - name: Deploy to Dev s3, Set index headers, and Invalidate Cloudfront
       env:
         AWS_DEFAULT_REGION: 'us-east-1'
-        AWS_S3_BUCKET: atlas-dev2.phila.gov
+        AWS_S3_BUCKET: atlas-dev3.phila.gov
         AWS_CLOUDFRONT_DISTRIBUTION: E3DWSPDEMV5HQI
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

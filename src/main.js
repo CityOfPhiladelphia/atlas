@@ -51,7 +51,7 @@ import divisions from './data-sources/divisions';
 import dorCondoList from './data-sources/dor-condo-list';
 import dorDocuments from './data-sources/dor-documents';
 import electedOfficials from './data-sources/elected-officials';
-// import electedOfficialsFuture from './data-sources/elected-officials-future';
+import electedOfficialsFuture from './data-sources/elected-officials-future';
 import liBusinessLicenses from './data-sources/li-business-licenses';
 import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
@@ -226,6 +226,7 @@ mapboard({
     // neighboringProperties,
   },
   topics: [
+    voting,
     property,
     condos,
     deeds,
@@ -233,7 +234,6 @@ mapboard({
     zoning,
     // polling,
     // rcoTopic,
-    voting,
     nearby,
   ],
   defaultTopic: 'property',

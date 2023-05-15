@@ -6,7 +6,7 @@ name: election-day Push to S3
 on:
   push:
     branches:
-      - election-day-ago
+      - election-day-ago-block
 
 jobs:
   build:

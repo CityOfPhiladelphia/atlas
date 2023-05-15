@@ -33,7 +33,8 @@ export default {
             let value;
             if (state.sources.electedOfficials.data) {
               // value = 'https://files.philadelphiavotes.com/ballot_paper/' + state.sources.electedOfficials.data.rows[0].ballot_file_id + '.pdf';
-              value = state.sources.electedOfficials.data.rows[0].ballot_file_id;
+              // value = state.sources.electedOfficials.data.features[0].ballot_file_id;
+              value = 'https://vote.phila.gov/files/SampleBallot/2023_Primary/c530030c-0ceb-4aa9-b8b8-b3ba20d5468e.pdf';
             }
             return value;
           },
