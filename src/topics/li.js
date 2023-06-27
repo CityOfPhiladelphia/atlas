@@ -30,6 +30,94 @@ export default {
       },
     },
     {
+      type: 'collection-summary',
+      options: {
+        hide: function(item) {
+          console.log('hide function, item:', item);
+          let value = false;
+          if (item.length == 0) {
+            value = true;
+          }
+          return value;
+        },
+        descriptor: 'building',
+        // this will include zero quantities
+        // includeZeroes: true,
+        getValue: function(item) {
+          // return item.properties.STATUS;
+          return 1;
+        },
+        context: {
+          singular: function(list){
+            return 'There is ' + list + ' at this address.';
+          },
+          plural: function(list){
+            return 'There are ' + list + ' at this address.';
+          },
+        },
+        types: [
+          {
+            value: 1,
+            label: 'building',
+          },
+          // {
+          //   value: 2,
+          //   label: 'inactive parcel',
+          // },
+          // {
+          //   value: 3,
+          //   label: 'remainder parcel',
+          // },
+        ],
+      },
+      slots: {
+        items: function(state) {
+          // return state.parcels.dor.data;
+          return state.sources.liBuildingCerts.data.rows;
+        },
+      },
+    },
+    {
+      type: 'tab-group-buildings',
+      options: {
+        hide: function(item) {
+          console.log('hide function, item:', item);
+          let value = false;
+          if (item.length == 0) {
+            value = true;
+          }
+          return value;
+        },
+        map: function(state) {
+          return state.map;
+        },
+        getKey: function(item) {
+          // return item.properties.OBJECTID;
+          return item.objectid;
+        },
+        getTitle: function(item) {
+          // return item.properties.MAPREG;
+          return item.structure_id;
+        },
+        getAddress: function(item) {
+          var address = helpers.concatDorAddress(item);
+          return address;
+        },
+        activeItem: function(state) {
+          return state.parcels.dor.activeParcel;
+        },
+        // components for the content pane. this essentially a topic body.
+        components: [],
+      }, // end parcel tab options
+      slots: {
+        items: function (state) {
+          // return state.parcels.dor.data;
+          return state.sources.liBuildingCerts.data.rows;
+        },
+      },
+    }, // end tab group comp
+        
+    {
       type: 'horizontal-table',
       options: {
         id: 'liPermits',

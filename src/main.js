@@ -53,6 +53,7 @@ import dorDocuments from './data-sources/dor-documents';
 import electedOfficials from './data-sources/elected-officials';
 import electedOfficialsFuture from './data-sources/elected-officials-future';
 import liBusinessLicenses from './data-sources/li-business-licenses';
+import liBuildingCerts from './data-sources/li-building-certs';
 import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
 import liViolations from './data-sources/li-violations';
@@ -205,6 +206,7 @@ mapboard({
     electedOfficials,
     electedOfficialsFuture,
     liBusinessLicenses,
+    liBuildingCerts,
     liInspections,
     liPermits,
     liViolations,
