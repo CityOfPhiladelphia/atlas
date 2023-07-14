@@ -57,6 +57,7 @@ import liBuildingCerts from './data-sources/li-building-certs';
 import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
 import liViolations from './data-sources/li-violations';
+import liBuildingFootprints from './data-sources/li-building-footprints';
 import nearbyZoningAppeals from './data-sources/nearby-zoning-appeals';
 import nextElectionAPI from './data-sources/election-next';
 import opa from './data-sources/opa';
@@ -210,6 +211,7 @@ mapboard({
     liInspections,
     liPermits,
     liViolations,
+    liBuildingFootprints,
     nearbyZoningAppeals,
     nextElectionAPI,
     opa,

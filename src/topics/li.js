@@ -93,18 +93,20 @@ export default {
         },
         getKey: function(item) {
           // return item.properties.OBJECTID;
-          return item.objectid;
+          // return item.structure_id;
+          return item.attributes.BIN;
         },
         getTitle: function(item) {
           // return item.properties.MAPREG;
-          return item.structure_id;
+          // return item.structure_id;
+          return item.attributes.BIN;
         },
         getAddress: function(item) {
           var address = helpers.concatDorAddress(item);
           return address;
         },
         activeItem: function(state) {
-          return state.parcels.dor.activeParcel;
+          return state.activeLiBuilding;
         },
         // components for the content pane. this essentially a topic body.
         components: [],
@@ -112,7 +114,7 @@ export default {
       slots: {
         items: function (state) {
           // return state.parcels.dor.data;
-          return state.sources.liBuildingCerts.data.rows;
+          return state.sources.liBuildingFootprints.data.features;
         },
       },
     }, // end tab group comp
