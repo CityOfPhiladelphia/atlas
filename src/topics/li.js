@@ -3,6 +3,7 @@ export default {
   icon: 'wrench',
   label: 'Licenses & Inspections',
   dataSources: [
+    'divisions',
     'liPermits',
     'liInspections',
     'liViolations',
@@ -114,7 +115,11 @@ export default {
       slots: {
         items: function (state) {
           // return state.parcels.dor.data;
-          return state.sources.liBuildingFootprints.data.features;
+          let value = [];
+          if (state.sources.liBuildingFootprints.data) {
+            value = state.sources.liBuildingFootprints.data.features;
+          }
+          return value;
         },
       },
     }, // end tab group comp
@@ -586,6 +591,27 @@ export default {
   dynamicMapLayers: [
     //'zoning'
   ],
+  // zoomToShape: [ 'geojson' ],
+  geojsonForTopic: {
+    collection: true,
+    activatable: true,
+    data: function(state) {
+      let value = [];
+      if (state.sources.liBuildingFootprints.data) {
+        value = state.sources.liBuildingFootprints.data.features;
+        return state.sources.liBuildingFootprints.data.features.filter(item => item.attributes.BIN !== state.activeGeojsonForTopic);
+      }
+      return value;
+    },
+    key: 'id',
+    style: {
+      fillColor: '#9e9ac8',
+      color: '#9e9ac8',
+      weight: 2,
+      opacity: 1,
+      fillOpacity: 0.3,
+    },
+  },
   identifyFeature: 'address-marker',
   parcels: 'pwd',
 };
