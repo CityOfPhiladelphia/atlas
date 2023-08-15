@@ -172,9 +172,32 @@ export default {
             },
           },
         ],
+        items: function (state) {
+          if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCerts.data) {
+            // console.log('li.js tab-group-buildings, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
+            return state.sources.liBuildingFootprints.data.features.filter(function(item) {
+              let buildingCerts = [];
+              for (let cert of state.sources.liBuildingCerts.data.rows) {
+                buildingCerts.push(cert.structure_id);
+              }
+              let test = buildingCerts.includes(item.attributes.BIN);
+              return test;
+            });
+          }
+          // console.log('li.js tab-group-buildings, value:', value);
+          return value;
+        },
       },
       options: {
         id: 'buildingCertData',
+        hide: function(item) {
+          console.log('hide function, item:', item);
+          let value = false;
+          if (item.length == 0) {
+            value = true;
+          }
+          return value;
+        },
         // requiredSources: ['opa'],
         // externalLink: {
         //   action: function(count) {
