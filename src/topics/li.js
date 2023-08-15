@@ -114,16 +114,81 @@ export default {
       }, // end parcel tab options
       slots: {
         items: function (state) {
-          // return state.parcels.dor.data;
-          let value = [];
-          if (state.sources.liBuildingFootprints.data) {
-            value = state.sources.liBuildingFootprints.data.features;
+          if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCerts.data) {
+            // console.log('li.js tab-group-buildings, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
+            return state.sources.liBuildingFootprints.data.features.filter(function(item) {
+              let buildingCerts = [];
+              for (let cert of state.sources.liBuildingCerts.data.rows) {
+                buildingCerts.push(cert.structure_id);
+              }
+              let test = buildingCerts.includes(item.attributes.BIN);
+              return test;
+            });
           }
+          // console.log('li.js tab-group-buildings, value:', value);
           return value;
         },
       },
     }, // end tab group comp
-        
+    
+    {
+      type: 'vertical-table',
+      slots: {
+        fields: [
+          {
+            label: 'Building ID',
+            value: function(state) {
+              return state.activeLiBuilding.structure_id;
+            },
+          },
+          {
+            label: 'Parcel Address',
+            value: function(state) {
+              return state.geocode.data.properties.opa_address;
+            },
+          },
+          {
+            label: 'Fire Alarm Cert',
+            value: function(state) {
+              return state.activeLiBuilding.fire_alarm_status;
+            },
+          },
+          {
+            label: 'Facade Cert',
+            value: function(state) {
+              return state.activeLiBuilding.facade_status;
+            },
+          },
+          {
+            label: 'Fire Escape Report',
+            value: function(state) {
+              return state.activeLiBuilding.fire_escape_status;
+            },
+          },
+          {
+            label: 'Sprinkler Cert',
+            value: function(state) {
+              return state.activeLiBuilding.sprinkler_status;
+            },
+          },
+        ],
+      },
+      options: {
+        id: 'buildingCertData',
+        // requiredSources: ['opa'],
+        // externalLink: {
+        //   action: function(count) {
+        //     return 'See more';
+        //   },
+        //   name: 'Property Search',
+        //   href: function(state) {
+        //     var id = state.geocode.data.properties.opa_account_num;
+        //     return 'http://property.phila.gov/?p=' + id;
+        //   },
+        // },
+      },
+    },
+
     {
       type: 'horizontal-table',
       options: {
@@ -597,10 +662,19 @@ export default {
     activatable: true,
     data: function(state) {
       let value = [];
-      if (state.sources.liBuildingFootprints.data) {
-        value = state.sources.liBuildingFootprints.data.features;
-        return state.sources.liBuildingFootprints.data.features.filter(item => item.attributes.BIN !== state.activeGeojsonForTopic);
+      if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCerts.data) {
+        // console.log('li.js geojsonForTopic, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
+        return state.sources.liBuildingFootprints.data.features.filter(function(item) {
+          let firstTest = item.attributes.BIN !== state.activeGeojsonForTopic;
+          let buildingCerts = [];
+          for (let cert of state.sources.liBuildingCerts.data.rows) {
+            buildingCerts.push(cert.structure_id);
+          }
+          let secondTest = buildingCerts.includes(item.attributes.BIN);
+          return firstTest && secondTest;
+        });
       }
+      // console.log('li.js geojsonForTopic, value:', value);
       return value;
     },
     key: 'id',
