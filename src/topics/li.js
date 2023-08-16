@@ -688,13 +688,14 @@ export default {
       if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCerts.data) {
         // console.log('li.js geojsonForTopic, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
         return state.sources.liBuildingFootprints.data.features.filter(function(item) {
-          let firstTest = item.attributes.BIN !== state.activeGeojsonForTopic;
+          // let firstTest = item.attributes.BIN !== state.activeGeojsonForTopic;
           let buildingCerts = [];
           for (let cert of state.sources.liBuildingCerts.data.rows) {
             buildingCerts.push(cert.structure_id);
           }
           let secondTest = buildingCerts.includes(item.attributes.BIN);
-          return firstTest && secondTest;
+          // return firstTest && secondTest;
+          return secondTest;
         });
       }
       // console.log('li.js geojsonForTopic, value:', value);
@@ -702,8 +703,10 @@ export default {
     },
     key: 'id',
     style: {
-      fillColor: '#9e9ac8',
-      color: '#9e9ac8',
+      fillColor: '#bdbadb',
+      color: '#bdbadb',
+      // fillColor: '#9e9ac8',
+      // color: '#9e9ac8',
       weight: 2,
       opacity: 1,
       fillOpacity: 0.3,
