@@ -1,7 +1,7 @@
 export default {
   key: 'nearby',
   icon: 'map-marker-alt',
-  label: 'Nearby',
+  label: 'Nearby Activity',
   zoom: 15,
   dataSources: [ 'threeOneOneCarto', 'crimeIncidents', 'nearbyZoningAppeals' ],
   // dataSources: ['311Carto', 'crimeIncidents', 'nearbyZoningAppeals', 'vacantIndicatorsPoints'],
@@ -153,7 +153,7 @@ export default {
                 },
               ],
               filterByText: {
-                label: 'Filter by text',
+                label: 'Filter by',
                 fields: [
                   'service_name',
                   'address',
@@ -192,13 +192,13 @@ export default {
                   ],
                 },
                 {
-                  label: 'Address',
+                  label: 'Location',
                   value: function(state, item) {
                     return item.address;
                   },
                 },
                 {
-                  label: 'Subject',
+                  label: 'Type',
                   value: function(state, item) {
                     if (item.media_url) {
                       return '<a target="_blank" href='+item.media_url+'>'+item.service_name+'</a>';
