@@ -135,12 +135,22 @@ export default {
       type: 'horizontal-table',
       options: {
         id: 'liBuildingCerts',
-        limit: 5,
+        limit: 100,
         fields: [
+          {
+            label: 'Inspection Type',
+            value: function(state, item){
+              return item.buildingcerttype;
+            },
+            nullValue: 'no type available',
+            // transforms: [
+            //   'date',
+            // ],
+          },
           {
             label: 'Date Inspected',
             value: function(state, item){
-              return item.permitissuedate;
+              return item.inspectiondate;
             },
             nullValue: 'no date available',
             transforms: [
@@ -148,29 +158,34 @@ export default {
             ],
           },
           {
-            label: 'ID',
+            label: 'Inspection Result',
             value: function(state, item){
-              let address = item.address;
-              if (item.unit_num && item.unit_num != null) {
-                address += ' Unit ' + item.unit_num;
-              }
-              // console.log('li.js adding items, item:', item, 'address:', address);
-              // return "<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
-              return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Permit-Detail?address="+encodeURIComponent(item.address)+"&Id="+item.permitnumber+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
+              return item.inspectionresult;
+              // let address = item.address;
+              // if (item.unit_num && item.unit_num != null) {
+              //   address += ' Unit ' + item.unit_num;
+              // }
+              // // console.log('li.js adding items, item:', item, 'address:', address);
+              // // return "<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
+              // return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Permit-Detail?address="+encodeURIComponent(item.address)+"&Id="+item.permitnumber+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
             },
           },
           {
-            label: 'Description',
+            label: 'Expiration Date',
             value: function(state, item){
-              return item.permitdescription;
+              return item.expirationdate;
             },
+            nullValue: 'no date available',
+            transforms: [
+              'date',
+            ],
           },
-          {
-            label: 'Status',
-            value: function(state, item){
-              return item.status;
-            },
-          },
+          // {
+          //   label: 'Status',
+          //   value: function(state, item){
+          //     return item.status;
+          //   },
+          // },
         ],
         // sort: {
         //   // this should return the val to sort on
@@ -196,13 +211,13 @@ export default {
       slots: {
         title: 'Building Certs',
         items: function(state) {
-          var data = state.activeLiBuilding;
+          var data = state.activeLiBuildingCert;
           // var rows = data.map(function(row){
           //   var itemRow = row;
           //   return itemRow;
           // });
           // return rows;
-          return [ data ];
+          return data;
         },
       },
     },
@@ -761,12 +776,12 @@ export default {
     activatable: true,
     data: function(state) {
       let value = [];
-      if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCerts.data) {
+      if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCertSummary.data) {
         // console.log('li.js geojsonForTopic, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
         return state.sources.liBuildingFootprints.data.features.filter(function(item) {
           // let firstTest = item.attributes.BIN !== state.activeGeojsonForTopic;
           let buildingCerts = [];
-          for (let cert of state.sources.liBuildingCerts.data.rows) {
+          for (let cert of state.sources.liBuildingCertSummary.data.rows) {
             buildingCerts.push(cert.structure_id);
           }
           let secondTest = buildingCerts.includes(item.attributes.BIN);
