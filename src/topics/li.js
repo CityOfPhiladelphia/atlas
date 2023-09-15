@@ -134,6 +134,14 @@ export default {
     {
       type: 'horizontal-table',
       options: {
+        hide: function(item) {
+          console.log('hide function, item:', item);
+          let value = false;
+          if (item.length == 0) {
+            value = true;
+          }
+          return value;
+        },
         id: 'liBuildingCerts',
         limit: 100,
         fields: [

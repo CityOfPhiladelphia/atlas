@@ -123,6 +123,10 @@ mapboard({
   // defaultAddress: '1234 MARKET ST',
   // plugin: true,
   resetDataOnGeocode: true,
+  resetDataExtra: {
+    'ActiveLiBuilding': {},
+    'ActiveLiBuildingCert': [],
+  },
   customComps,
   header: {
     enabled: true,
