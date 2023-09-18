@@ -130,13 +130,13 @@ export default {
                 {
                   label: 'Height',
                   value: function(state) {
-                    return state.activeLiBuildingFootprint.attributes.APPROX_HGT;
+                    return state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft';
                   },
                 },
                 {
-                  label: 'Square Footage',
+                  label: 'Building Footprint',
                   value: function(state) {
-                    return state.activeLiBuildingFootprint.attributes.Shape__Area;
+                    return Math.round(state.activeLiBuildingFootprint.attributes.Shape__Area) + ' sq ft';
                   },
                 },
               ],
