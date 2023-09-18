@@ -110,7 +110,174 @@ export default {
           return state.activeLiBuilding;
         },
         // components for the content pane. this essentially a topic body.
-        components: [],
+        components: [
+          {
+            type: 'vertical-table',
+            slots: {
+              fields: [
+                {
+                  label: 'Building ID',
+                  value: function(state) {
+                    return state.activeLiBuilding.structure_id;
+                  },
+                },
+                {
+                  label: 'Parcel Address',
+                  value: function(state) {
+                    return state.geocode.data.properties.opa_address;
+                  },
+                },
+                {
+                  label: 'Height',
+                  value: function(state) {
+                    return state.activeLiBuildingFootprint.attributes.APPROX_HGT;
+                  },
+                },
+                {
+                  label: 'Square Footage',
+                  value: function(state) {
+                    return state.activeLiBuildingFootprint.attributes.Shape__Area;
+                  },
+                },
+              ],
+              items: function (state) {
+                if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCertSummary.data) {
+                  console.log('li.js vertical table buildings, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
+                  return state.sources.liBuildingFootprints.data.features.filter(function(item) {
+                    let buildingCerts = [];
+                    for (let cert of state.sources.liBuildingCertSummary.data.rows) {
+                      buildingCerts.push(cert.structure_id);
+                    }
+                    let test = buildingCerts.includes(item.attributes.BIN);
+                    return test;
+                  });
+                }
+                // console.log('li.js tab-group-buildings, value:', value);
+                return [];
+              },
+            },
+            options: {
+              id: 'buildingCertData',
+              hide: function(item) {
+                console.log('vert table hide function, item:', item);
+                let value = false;
+                if (item.length == 0) {
+                  value = true;
+                }
+                return value;
+              },
+              // requiredSources: ['opa'],
+              // externalLink: {
+              //   action: function(count) {
+              //     return 'See more';
+              //   },
+              //   name: 'Property Search',
+              //   href: function(state) {
+              //     var id = state.geocode.data.properties.opa_account_num;
+              //     return 'http://property.phila.gov/?p=' + id;
+              //   },
+              // },
+            },
+          },
+          {
+            type: 'horizontal-table',
+            options: {
+              hide: function(item) {
+                console.log('hide function, item:', item);
+                let value = false;
+                if (item.length == 0) {
+                  value = true;
+                }
+                return value;
+              },
+              id: 'liBuildingCerts',
+              limit: 100,
+              fields: [
+                {
+                  label: 'Inspection Type',
+                  value: function(state, item){
+                    return item.buildingcerttype;
+                  },
+                  nullValue: 'no type available',
+                  // transforms: [
+                  //   'date',
+                  // ],
+                },
+                {
+                  label: 'Date Inspected',
+                  value: function(state, item){
+                    return item.inspectiondate;
+                  },
+                  nullValue: 'no date available',
+                  transforms: [
+                    'date',
+                  ],
+                },
+                {
+                  label: 'Inspection Result',
+                  value: function(state, item){
+                    return item.inspectionresult;
+                    // let address = item.address;
+                    // if (item.unit_num && item.unit_num != null) {
+                    //   address += ' Unit ' + item.unit_num;
+                    // }
+                    // // console.log('li.js adding items, item:', item, 'address:', address);
+                    // // return "<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
+                    // return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Permit-Detail?address="+encodeURIComponent(item.address)+"&Id="+item.permitnumber+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
+                  },
+                },
+                {
+                  label: 'Expiration Date',
+                  value: function(state, item){
+                    return item.expirationdate;
+                  },
+                  nullValue: 'no date available',
+                  transforms: [
+                    'date',
+                  ],
+                },
+                // {
+                //   label: 'Status',
+                //   value: function(state, item){
+                //     return item.status;
+                //   },
+                // },
+              ],
+              // sort: {
+              //   // this should return the val to sort on
+              //   getValue: function(item) {
+              //     return item.permitissuedate;
+              //   },
+              //   // asc or desc
+              //   order: 'desc',
+              // },
+              // externalLink: {
+              //   action: function(count) {
+              //     return 'See ' + count + ' older permits at L&I Property History';
+              //   },
+              //   name: 'L&I Property History',
+              //   href: function(state) {
+              //     var address = state.geocode.data.properties.street_address;
+              //     var addressEncoded = encodeURIComponent(address);
+              //     return 'https://li.phila.gov/Property-History/search?address=' + addressEncoded;
+              //     // return 'http://li.phila.gov/#summary?address=' + addressEncoded;
+              //   },
+              // },
+            },
+            slots: {
+              title: 'Building Certs',
+              items: function(state) {
+                var data = state.activeLiBuildingCert;
+                // var rows = data.map(function(row){
+                //   var itemRow = row;
+                //   return itemRow;
+                // });
+                // return rows;
+                return data;
+              },
+            },
+          },
+        ],
       }, // end parcel tab options
       slots: {
         items: function (state) {
@@ -130,185 +297,6 @@ export default {
         },
       },
     }, // end tab group comp
-
-    {
-      type: 'vertical-table',
-      slots: {
-        fields: [
-          {
-            label: 'Building ID',
-            value: function(state) {
-              return state.activeLiBuilding.structure_id;
-            },
-          },
-          {
-            label: 'Parcel Address',
-            value: function(state) {
-              return state.geocode.data.properties.opa_address;
-            },
-          },
-          {
-            label: 'Fire Alarm Cert',
-            value: function(state) {
-              return state.activeLiBuilding.fire_alarm_status;
-            },
-          },
-          {
-            label: 'Facade Cert',
-            value: function(state) {
-              return state.activeLiBuilding.facade_status;
-            },
-          },
-          {
-            label: 'Fire Escape Report',
-            value: function(state) {
-              return state.activeLiBuilding.fire_escape_status;
-            },
-          },
-          {
-            label: 'Sprinkler Cert',
-            value: function(state) {
-              return state.activeLiBuilding.sprinkler_status;
-            },
-          },
-        ],
-        items: function (state) {
-          if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCertSummary.data) {
-            console.log('li.js vertical table buildings, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
-            return state.sources.liBuildingFootprints.data.features.filter(function(item) {
-              let buildingCerts = [];
-              for (let cert of state.sources.liBuildingCertSummary.data.rows) {
-                buildingCerts.push(cert.structure_id);
-              }
-              let test = buildingCerts.includes(item.attributes.BIN);
-              return test;
-            });
-          }
-          // console.log('li.js tab-group-buildings, value:', value);
-          return [];
-        },
-      },
-      options: {
-        id: 'buildingCertData',
-        hide: function(item) {
-          console.log('vert table hide function, item:', item);
-          let value = false;
-          if (item.length == 0) {
-            value = true;
-          }
-          return value;
-        },
-        // requiredSources: ['opa'],
-        // externalLink: {
-        //   action: function(count) {
-        //     return 'See more';
-        //   },
-        //   name: 'Property Search',
-        //   href: function(state) {
-        //     var id = state.geocode.data.properties.opa_account_num;
-        //     return 'http://property.phila.gov/?p=' + id;
-        //   },
-        // },
-      },
-    },
-    {
-      type: 'horizontal-table',
-      options: {
-        hide: function(item) {
-          console.log('hide function, item:', item);
-          let value = false;
-          if (item.length == 0) {
-            value = true;
-          }
-          return value;
-        },
-        id: 'liBuildingCerts',
-        limit: 100,
-        fields: [
-          {
-            label: 'Inspection Type',
-            value: function(state, item){
-              return item.buildingcerttype;
-            },
-            nullValue: 'no type available',
-            // transforms: [
-            //   'date',
-            // ],
-          },
-          {
-            label: 'Date Inspected',
-            value: function(state, item){
-              return item.inspectiondate;
-            },
-            nullValue: 'no date available',
-            transforms: [
-              'date',
-            ],
-          },
-          {
-            label: 'Inspection Result',
-            value: function(state, item){
-              return item.inspectionresult;
-              // let address = item.address;
-              // if (item.unit_num && item.unit_num != null) {
-              //   address += ' Unit ' + item.unit_num;
-              // }
-              // // console.log('li.js adding items, item:', item, 'address:', address);
-              // // return "<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
-              // return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Permit-Detail?address="+encodeURIComponent(item.address)+"&Id="+item.permitnumber+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
-            },
-          },
-          {
-            label: 'Expiration Date',
-            value: function(state, item){
-              return item.expirationdate;
-            },
-            nullValue: 'no date available',
-            transforms: [
-              'date',
-            ],
-          },
-          // {
-          //   label: 'Status',
-          //   value: function(state, item){
-          //     return item.status;
-          //   },
-          // },
-        ],
-        // sort: {
-        //   // this should return the val to sort on
-        //   getValue: function(item) {
-        //     return item.permitissuedate;
-        //   },
-        //   // asc or desc
-        //   order: 'desc',
-        // },
-        // externalLink: {
-        //   action: function(count) {
-        //     return 'See ' + count + ' older permits at L&I Property History';
-        //   },
-        //   name: 'L&I Property History',
-        //   href: function(state) {
-        //     var address = state.geocode.data.properties.street_address;
-        //     var addressEncoded = encodeURIComponent(address);
-        //     return 'https://li.phila.gov/Property-History/search?address=' + addressEncoded;
-        //     // return 'http://li.phila.gov/#summary?address=' + addressEncoded;
-        //   },
-        // },
-      },
-      slots: {
-        title: 'Building Certs',
-        items: function(state) {
-          var data = state.activeLiBuildingCert;
-          // var rows = data.map(function(row){
-          //   var itemRow = row;
-          //   return itemRow;
-          // });
-          // return rows;
-          return data;
-        },
-      },
-    },
 
     {
       type: 'horizontal-table',
