@@ -293,7 +293,7 @@ export default {
             });
           }
           // console.log('li.js tab-group-buildings, value:', value);
-          return value;
+          return [];
         },
       },
     }, // end tab group comp
