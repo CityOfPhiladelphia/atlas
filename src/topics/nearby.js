@@ -398,13 +398,13 @@ export default {
                     },
                     {
                       label: 'the last 90 days',
-                      value: '365',
+                      value: '90',
                       unit: 'days',
                       direction: 'subtract',
                     },
                     {
                       label: 'the next 90 days',
-                      value: '30',
+                      value: '90',
                       unit: 'days',
                       direction: 'add',
                     },
