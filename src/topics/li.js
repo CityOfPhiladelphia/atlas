@@ -122,13 +122,19 @@ export default {
                   },
                 },
                 {
+                  label: 'Building Name',
+                  value: function(state) {
+                    return state.activeLiBuildingFootprint.attributes.BUILDING_NAME || 'N/A';
+                  },
+                },
+                {
                   label: 'Parcel Address',
                   value: function(state) {
                     return state.geocode.data.properties.opa_address;
                   },
                 },
                 {
-                  label: 'Height',
+                  label: 'Building Height (approx)',
                   value: function(state) {
                     return state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft';
                   },
