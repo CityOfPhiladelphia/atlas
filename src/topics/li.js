@@ -74,7 +74,8 @@ export default {
       slots: {
         items: function(state) {
           // return state.parcels.dor.data;
-          return state.sources.liBuildingCertSummary.data.rows;
+          // return state.sources.liBuildingCertSummary.data.rows;
+          return state.sources.liBuildingFootprints.data.features;
         },
       },
     },
@@ -107,7 +108,8 @@ export default {
           return address;
         },
         activeItem: function(state) {
-          return state.activeLiBuilding;
+          // return state.activeLiBuilding;
+          return state.activeLiBuildingFootprint;
         },
         // components for the content pane. this essentially a topic body.
         components: [
@@ -118,7 +120,12 @@ export default {
                 {
                   label: 'Building ID',
                   value: function(state) {
-                    return state.activeLiBuilding.structure_id;
+                    return state.activeLiBuildingFootprint.attributes.BIN;
+                    // let value;
+                    // if (state.activeLiBuilding) {
+                    //   value = state.activeLiBuilding.structure_id;
+                    // }
+                    // return value;
                   },
                 },
                 {
@@ -146,32 +153,41 @@ export default {
                   },
                 },
               ],
-              items: function (state) {
-                if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCertSummary.data) {
-                  console.log('li.js vertical table buildings, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
-                  return state.sources.liBuildingFootprints.data.features.filter(function(item) {
-                    let buildingCerts = [];
-                    for (let cert of state.sources.liBuildingCertSummary.data.rows) {
-                      buildingCerts.push(cert.structure_id);
-                    }
-                    let test = buildingCerts.includes(item.attributes.BIN);
-                    return test;
-                  });
-                }
-                // console.log('li.js tab-group-buildings, value:', value);
-                return [];
-              },
+              // items: function (state) {
+              //   return state.activeLiBuildingFootprint;
+              //   // if (state.sources.liBuildingFootprints.data) {
+              //   //   return state.sources.liBuildingFootprints.data.features.filter(function(item) {
+              //   //     console.log('item.attributes.BIN:', item.attributes.BIN);
+              //   //     console.log('state.activeLiBuildingFootprint.attributes.BIN:', state.activeLiBuildingFootprint.attributes.BIN);
+              //   //     return item.attributes.BIN == state.activeLiBuildingFootprint.attributes.BIN;
+              //   //   });
+              //   // }
+                
+              //   // if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCertSummary.data) {
+              //   //   console.log('li.js vertical table buildings, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
+              //   //   return state.sources.liBuildingFootprints.data.features.filter(function(item) {
+              //   //     let buildingCerts = [];
+              //   //     for (let cert of state.sources.liBuildingCertSummary.data.rows) {
+              //   //       buildingCerts.push(cert.structure_id);
+              //   //     }
+              //   //     let test = buildingCerts.includes(item.attributes.BIN);
+              //   //     return test;
+              //   //   });
+              //   // }
+              //   // console.log('li.js tab-group-buildings, value:', value);
+              //   // return [];
+              // },
             },
             options: {
               id: 'buildingCertData',
-              hide: function(item) {
-                console.log('vert table hide function, item:', item);
-                let value = false;
-                if (item.length == 0) {
-                  value = true;
-                }
-                return value;
-              },
+              // hide: function(item) {
+              //   console.log('vert table hide function, item:', item);
+              //   let value = false;
+              //   if (item.length == 0) {
+              //     value = true;
+              //   }
+              //   return value;
+              // },
               // requiredSources: ['opa'],
               // externalLink: {
               //   action: function(count) {
@@ -188,14 +204,14 @@ export default {
           {
             type: 'horizontal-table',
             options: {
-              hide: function(item) {
-                console.log('hide function, item:', item);
-                let value = false;
-                if (item.length == 0) {
-                  value = true;
-                }
-                return value;
-              },
+              // hide: function(item) {
+              //   console.log('hide function, item:', item);
+              //   let value = false;
+              //   if (item.length == 0) {
+              //     value = true;
+              //   }
+              //   return value;
+              // },
               id: 'liBuildingCerts',
               limit: 100,
               fields: [
@@ -287,17 +303,20 @@ export default {
       }, // end parcel tab options
       slots: {
         items: function (state) {
-          if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCerts.data) {
-            // console.log('li.js tab-group-buildings, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
-            return state.sources.liBuildingFootprints.data.features.filter(function(item) {
-              let buildingCerts = [];
-              for (let cert of state.sources.liBuildingCertSummary.data.rows) {
-                buildingCerts.push(cert.structure_id);
-              }
-              let test = buildingCerts.includes(item.attributes.BIN);
-              return test;
-            });
+          if (state.sources.liBuildingFootprints.data && state.sources.liBuildingFootprints.data.features) {
+            return state.sources.liBuildingFootprints.data.features;
           }
+          // if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCerts.data) {
+          //   // console.log('li.js tab-group-buildings, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
+          //   return state.sources.liBuildingFootprints.data.features.filter(function(item) {
+          //     let buildingCerts = [];
+          //     for (let cert of state.sources.liBuildingCertSummary.data.rows) {
+          //       buildingCerts.push(cert.structure_id);
+          //     }
+          //     let test = buildingCerts.includes(item.attributes.BIN);
+          //     return test;
+          //   });
+          // }
           // console.log('li.js tab-group-buildings, value:', value);
           return [];
         },
@@ -777,19 +796,25 @@ export default {
     activatable: true,
     data: function(state) {
       let value = [];
-      if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCertSummary.data) {
-        // console.log('li.js geojsonForTopic, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
-        return state.sources.liBuildingFootprints.data.features.filter(function(item) {
-          // let firstTest = item.attributes.BIN !== state.activeGeojsonForTopic;
-          let buildingCerts = [];
-          for (let cert of state.sources.liBuildingCertSummary.data.rows) {
-            buildingCerts.push(cert.structure_id);
-          }
-          let secondTest = buildingCerts.includes(item.attributes.BIN);
-          // return firstTest && secondTest;
-          return secondTest;
-        });
+
+      if (state.sources.liBuildingFootprints.data && state.sources.liBuildingFootprints.data.features) {
+        return state.sources.liBuildingFootprints.data.features;
       }
+
+      // if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCertSummary.data) {
+      //   // console.log('li.js geojsonForTopic, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
+      //   return state.sources.liBuildingFootprints.data.features.filter(function(item) {
+      //     // let firstTest = item.attributes.BIN !== state.activeGeojsonForTopic;
+      //     let buildingCerts = [];
+      //     for (let cert of state.sources.liBuildingCertSummary.data.rows) {
+      //       buildingCerts.push(cert.structure_id);
+      //     }
+      //     let secondTest = buildingCerts.includes(item.attributes.BIN);
+      //     console.log('secondTest:', secondTest);
+      //     // return firstTest && secondTest;
+      //     return secondTest;
+      //   });
+      // }
       // console.log('li.js geojsonForTopic, value:', value);
       return value;
     },
