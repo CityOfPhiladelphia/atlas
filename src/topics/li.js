@@ -265,14 +265,38 @@ export default {
                 //   },
                 // },
               ],
-              // sort: {
-              //   // this should return the val to sort on
-              //   getValue: function(item) {
-              //     return item.permitissuedate;
-              //   },
-              //   // asc or desc
-              //   order: 'desc',
-              // },
+              sort: {
+                // this should return the val to sort on
+                getValue: function(item) {
+                  return item.buildingcerttype;
+                },
+                // asc or desc
+                order: 'asc',
+                compare: function(a, b) {
+                  // console.log('compare function, a:', a, 'b:', b);
+                  let result;
+                  let typeA = a.buildingcerttype;
+                  let typeB = b.buildingcerttype;
+                  let dateA = a.inspectiondate;
+                  let dateB = b.inspectiondate;
+
+                  if (typeA < typeB) {
+                    result = -1;
+                  } else if (typeB < typeA) {
+                    result = 1;
+                  } else {
+                    // result = 0;
+                    if (dateA < dateB) {
+                      result = 1;
+                    } else if (dateB < dateA) {
+                      result = -1;
+                    } else {
+                      result = 0;
+                    }
+                  }
+                  return result;
+                },
+              },
               // externalLink: {
               //   action: function(count) {
               //     return 'See ' + count + ' older permits at L&I Property History';
