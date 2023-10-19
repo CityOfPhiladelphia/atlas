@@ -36,7 +36,7 @@ export default {
         hide: function(item) {
           console.log('hide function, item:', item);
           let value = false;
-          if (item.length == 0) {
+          if (!item || item && item.length == 0) {
             value = true;
           }
           return value;
@@ -75,7 +75,11 @@ export default {
         items: function(state) {
           // return state.parcels.dor.data;
           // return state.sources.liBuildingCertSummary.data.rows;
-          return state.sources.liBuildingFootprints.data.features;
+          let value;
+          if (state.sources.liBuildingFootprints.data) {
+            value = state.sources.liBuildingFootprints.data.features;
+          }
+          return value;
         },
       },
     },
