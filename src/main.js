@@ -14,6 +14,13 @@ if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
   console.log = console.info = console.debug = console.error = function () {};
 }
 
+console.warn = function(){
+  let warning = '%cWARNING: ' + arguments[0];
+  if (!arguments[0].includes('[vue-i18n]')) {
+    console.log(warning, 'background-color: #FEF3DC;');
+  }
+};
+
 import i18n from './i18n/i18n.js';
 
 // Font Awesome Icons

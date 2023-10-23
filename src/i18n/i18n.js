@@ -8,16 +8,6 @@ let i18n = {
     enabled: true,
     topics: [ 'voting' ],
     languages: [ 'en-US', 'es' ],
-    // languages: [
-    //   {
-    //     language: 'en-US',
-    //     title: 'English',
-    //   },
-    //   {
-    //     language: 'es',
-    //     title: 'Español',
-    //   },
-    // ],
     footer: true,
     data: {
       locale: 'en-US',

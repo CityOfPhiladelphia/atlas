@@ -11,15 +11,6 @@ export default {
     'zoningDocs',
   ],
   components: [
-    // {
-    //   type: 'exclamationCallout',
-    //   slots: {
-    //     text: '\
-    //       Daily updates of L&I data on Atlas have resumed.\
-    //       A data transfer error affecting approximately 5,000 records should be resolved in early May 2020.\
-    //     ',
-    //   },
-    // },
     {
       type: 'callout',
       slots: {
@@ -34,7 +25,7 @@ export default {
       type: 'collection-summary',
       options: {
         hide: function(item) {
-          console.log('hide function, item:', item);
+          // console.log('hide function, item:', item);
           let value = false;
           if (!item || item && item.length == 0) {
             value = true;
@@ -43,9 +34,7 @@ export default {
         },
         descriptor: 'building',
         // this will include zero quantities
-        // includeZeroes: true,
         getValue: function(item) {
-          // return item.properties.STATUS;
           return 1;
         },
         context: {
@@ -61,20 +50,10 @@ export default {
             value: 1,
             label: 'building',
           },
-          // {
-          //   value: 2,
-          //   label: 'inactive parcel',
-          // },
-          // {
-          //   value: 3,
-          //   label: 'remainder parcel',
-          // },
         ],
       },
       slots: {
         items: function(state) {
-          // return state.parcels.dor.data;
-          // return state.sources.liBuildingCertSummary.data.rows;
           let value;
           if (state.sources.liBuildingFootprints.data) {
             value = state.sources.liBuildingFootprints.data.features;
@@ -87,7 +66,7 @@ export default {
       type: 'tab-group-buildings',
       options: {
         hide: function(item) {
-          console.log('hide function, item:', item);
+          // console.log('hide function, item:', item);
           let value = false;
           if (item.length == 0) {
             value = true;
@@ -98,22 +77,14 @@ export default {
           return state.map;
         },
         getKey: function(item) {
-          // return item.properties.OBJECTID;
-          // return item.structure_id;
           return item.attributes.BIN;
         },
         getTitle: function(item) {
-          // return item.properties.MAPREG;
-          // return item.structure_id;
           return item.attributes.BIN;
         },
-        getAddress: function(item) {
-          var address = helpers.concatDorAddress(item);
-          return address;
-        },
         activeItem: function(state) {
-          // return state.activeLiBuilding;
-          return state.activeLiBuildingFootprint;
+          // console.log('activeItem function, state:', state, 'state.activeLiBuildingFootprint.attributes:', state.activeLiBuildingFootprint.attributes);
+          return state.activeGeojsonForTopic;
         },
         // components for the content pane. this essentially a topic body.
         components: [
@@ -124,18 +95,28 @@ export default {
                 {
                   label: 'Building ID',
                   value: function(state) {
-                    return state.activeLiBuildingFootprint.attributes.BIN;
-                    // let value;
-                    // if (state.activeLiBuilding) {
-                    //   value = state.activeLiBuilding.structure_id;
-                    // }
-                    // return value;
+                    let value;
+                    if (state.activeLiBuildingFootprint.attributes) {
+                      value = state.activeLiBuildingFootprint.attributes.BIN || 'N/A';
+                    } else {
+                      value = 'N/A';
+                    }
+                    return value;
                   },
                 },
                 {
                   label: 'Building Name',
                   value: function(state) {
-                    return state.activeLiBuildingFootprint.attributes.BUILDING_NAME || 'N/A';
+                    // if (state.activeLiBuildingFootprint.attributes) {
+                    //   return state.activeLiBuildingFootprint.attributes.BUILDING_NAME || 'N/A';
+                    // }
+                    let value;
+                    if (state.activeLiBuildingFootprint.attributes) {
+                      value = state.activeLiBuildingFootprint.attributes.BUILDING_NAME || 'N/A';
+                    } else {
+                      value = 'N/A';
+                    }
+                    return value;
                   },
                 },
                 {
@@ -147,75 +128,38 @@ export default {
                 {
                   label: 'Building Height (approx)',
                   value: function(state) {
-                    return state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft';
+                    // return state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft';
+                    let value;
+                    if (state.activeLiBuildingFootprint.attributes) {
+                      value = state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft' || 'N/A';
+                    } else {
+                      value = 'N/A';
+                    }
+                    return value;
                   },
                 },
                 {
                   label: 'Building Footprint',
                   value: function(state) {
-                    return Math.round(state.activeLiBuildingFootprint.attributes.Shape__Area) + ' sq ft';
+                    // return Math.round(state.activeLiBuildingFootprint.attributes.Shape__Area) + ' sq ft';
+                    let value;
+                    if (state.activeLiBuildingFootprint.attributes) {
+                      value = Math.round(state.activeLiBuildingFootprint.attributes.Shape__Area * 6.3225) + ' sq ft' || 'N/A';
+                    } else {
+                      value = 'N/A';
+                    }
+                    return value;
                   },
                 },
               ],
-              // items: function (state) {
-              //   return state.activeLiBuildingFootprint;
-              //   // if (state.sources.liBuildingFootprints.data) {
-              //   //   return state.sources.liBuildingFootprints.data.features.filter(function(item) {
-              //   //     console.log('item.attributes.BIN:', item.attributes.BIN);
-              //   //     console.log('state.activeLiBuildingFootprint.attributes.BIN:', state.activeLiBuildingFootprint.attributes.BIN);
-              //   //     return item.attributes.BIN == state.activeLiBuildingFootprint.attributes.BIN;
-              //   //   });
-              //   // }
-                
-              //   // if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCertSummary.data) {
-              //   //   console.log('li.js vertical table buildings, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
-              //   //   return state.sources.liBuildingFootprints.data.features.filter(function(item) {
-              //   //     let buildingCerts = [];
-              //   //     for (let cert of state.sources.liBuildingCertSummary.data.rows) {
-              //   //       buildingCerts.push(cert.structure_id);
-              //   //     }
-              //   //     let test = buildingCerts.includes(item.attributes.BIN);
-              //   //     return test;
-              //   //   });
-              //   // }
-              //   // console.log('li.js tab-group-buildings, value:', value);
-              //   // return [];
-              // },
             },
             options: {
               id: 'buildingCertData',
-              // hide: function(item) {
-              //   console.log('vert table hide function, item:', item);
-              //   let value = false;
-              //   if (item.length == 0) {
-              //     value = true;
-              //   }
-              //   return value;
-              // },
-              // requiredSources: ['opa'],
-              // externalLink: {
-              //   action: function(count) {
-              //     return 'See more';
-              //   },
-              //   name: 'Property Search',
-              //   href: function(state) {
-              //     var id = state.geocode.data.properties.opa_account_num;
-              //     return 'http://property.phila.gov/?p=' + id;
-              //   },
-              // },
             },
           },
           {
             type: 'horizontal-table',
             options: {
-              // hide: function(item) {
-              //   console.log('hide function, item:', item);
-              //   let value = false;
-              //   if (item.length == 0) {
-              //     value = true;
-              //   }
-              //   return value;
-              // },
               id: 'liBuildingCerts',
               limit: 100,
               fields: [
@@ -225,9 +169,6 @@ export default {
                     return item.buildingcerttype;
                   },
                   nullValue: 'no type available',
-                  // transforms: [
-                  //   'date',
-                  // ],
                 },
                 {
                   label: 'Date Inspected',
@@ -243,13 +184,6 @@ export default {
                   label: 'Inspection Result',
                   value: function(state, item){
                     return item.inspectionresult;
-                    // let address = item.address;
-                    // if (item.unit_num && item.unit_num != null) {
-                    //   address += ' Unit ' + item.unit_num;
-                    // }
-                    // // console.log('li.js adding items, item:', item, 'address:', address);
-                    // // return "<a target='_blank' href='http://li.phila.gov/#details?entity=permits&eid="+item.permitnumber+"&key="+item.addressobjectid+"&address="+encodeURIComponent(item.address)+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
-                    // return "<a target='_blank' href='https://li.phila.gov/Property-History/search/Permit-Detail?address="+encodeURIComponent(item.address)+"&Id="+item.permitnumber+"'>"+item.permitnumber+" <i class='fa fa-external-link-alt'></i></a>";
                   },
                 },
                 {
@@ -262,12 +196,6 @@ export default {
                     'date',
                   ],
                 },
-                // {
-                //   label: 'Status',
-                //   value: function(state, item){
-                //     return item.status;
-                //   },
-                // },
               ],
               sort: {
                 // this should return the val to sort on

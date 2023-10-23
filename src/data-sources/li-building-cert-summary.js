@@ -12,8 +12,7 @@ export default {
         } else {
           bin = state.sources.liBuildingFootprints.data.features[0].attributes.BIN;//.replace(/\|/g, "', '");
         }
-        // let bin = feature.properties.bin.replace(/\|/g, "', '");
-        console.log('li-building-cert-summary.js q function, bin:', bin, 'feature:', feature, 'state.sources.liBuildingFootprints.data.features:', state.sources.liBuildingFootprints.data.features);
+        // console.log('li-building-cert-summary.js q function, bin:', bin, 'feature:', feature, 'state.sources.liBuildingFootprints.data.features:', state.sources.liBuildingFootprints.data.features);
         return `SELECT * FROM building_cert_summary WHERE structure_id IN ('${bin}')`;
       },
     },
