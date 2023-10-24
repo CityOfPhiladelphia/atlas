@@ -10,6 +10,8 @@ export default {
     'liBusinessLicenses',
     'zoningDocs',
     'liBuildingFootprints',
+    'liBuildingCertSummary',
+    'liBuildingCerts',
   ],
   components: [
     {
