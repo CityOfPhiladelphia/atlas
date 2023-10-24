@@ -29,11 +29,11 @@ export default {
       options: {
         hide: function(item) {
           // console.log('hide function, item:', item);
-          let value = false;
-          if (!item || item && item.length == 0) {
-            value = true;
-          }
-          return value;
+          // let value = false;
+          // if (!item || item && item.length == 0) {
+          //   value = true;
+          // }
+          // return value;
         },
         descriptor: 'building',
         // this will include zero quantities
