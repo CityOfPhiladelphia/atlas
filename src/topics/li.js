@@ -9,6 +9,7 @@ export default {
     'liViolations',
     'liBusinessLicenses',
     'zoningDocs',
+    'liBuildingFootprints',
   ],
   components: [
     {
@@ -95,6 +96,7 @@ export default {
                 {
                   label: 'Building ID',
                   value: function(state) {
+                    // return state.activeLiBuildingFootprint.attributes.BIN;
                     let value;
                     if (state.activeLiBuildingFootprint.attributes) {
                       value = state.activeLiBuildingFootprint.attributes.BIN || 'N/A';
@@ -107,6 +109,7 @@ export default {
                 {
                   label: 'Building Name',
                   value: function(state) {
+                    // return state.activeLiBuildingFootprint.attributes.BUILDING_NAME || 'N/A';
                     // if (state.activeLiBuildingFootprint.attributes) {
                     //   return state.activeLiBuildingFootprint.attributes.BUILDING_NAME || 'N/A';
                     // }
@@ -129,6 +132,7 @@ export default {
                   label: 'Building Height (approx)',
                   value: function(state) {
                     // return state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft';
+                    // return state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft';
                     let value;
                     if (state.activeLiBuildingFootprint.attributes) {
                       value = state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft' || 'N/A';
@@ -141,7 +145,7 @@ export default {
                 {
                   label: 'Building Footprint',
                   value: function(state) {
-                    // return Math.round(state.activeLiBuildingFootprint.attributes.Shape__Area) + ' sq ft';
+                    // return Math.round(state.activeLiBuildingFootprint.attributes.Shape__Area * 6.3225) + ' sq ft';
                     let value;
                     if (state.activeLiBuildingFootprint.attributes) {
                       value = Math.round(state.activeLiBuildingFootprint.attributes.Shape__Area * 6.3225) + ' sq ft' || 'N/A';

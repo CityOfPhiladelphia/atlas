@@ -9,7 +9,7 @@ export default {
       where: function(feature, state) {
         let data;
         let where;
-        if (feature.properties.bin) {
+        if (feature.properties.bin && feature.properties.bin !== '') {
           data = feature.properties.bin.replace(/\|/g, "', '");
           where = "BIN IN ('" + data + "')";
         } else {

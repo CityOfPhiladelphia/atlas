@@ -6,8 +6,9 @@ export default {
   options: {
     params: {
       q: function(feature, state){
+        console.log('li-building-certs, feature:', feature);
         let bin;
-        if (feature.properties.bin) {
+        if (feature.properties.bin && feature.properties.bin !== '') {
           bin = feature.properties.bin.replace(/\|/g, "', '");
         } else {
           bin = state.sources.liBuildingFootprints.data.features[0].attributes.BIN;//.replace(/\|/g, "', '");
