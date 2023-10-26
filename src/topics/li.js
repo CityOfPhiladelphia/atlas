@@ -128,6 +128,7 @@ export default {
                   label: 'Parcel Address',
                   value: function(state) {
                     return state.geocode.data.properties.opa_address;
+                    //use building footprint address if no AIS opa_address
                   },
                 },
                 {
@@ -145,7 +146,7 @@ export default {
                   },
                 },
                 {
-                  label: 'Building Footprint',
+                  label: 'Building Footprint (approx)',
                   value: function(state) {
                     // return Math.round(state.activeLiBuildingFootprint.attributes.Shape__Area * 6.3225) + ' sq ft';
                     let value;
@@ -235,21 +236,23 @@ export default {
                   return result;
                 },
               },
-              // externalLink: {
-              //   action: function(count) {
-              //     return 'See ' + count + ' older permits at L&I Property History';
-              //   },
-              //   name: 'L&I Property History',
-              //   href: function(state) {
-              //     var address = state.geocode.data.properties.street_address;
-              //     var addressEncoded = encodeURIComponent(address);
-              //     return 'https://li.phila.gov/Property-History/search?address=' + addressEncoded;
-              //     // return 'http://li.phila.gov/#summary?address=' + addressEncoded;
-              //   },
-              // },
+              externalLink: {
+                action: function(count) {
+                  // return 'See all building certifications at L&I Property History';
+                  return 'See all building certifications at L&I Property History';
+                },
+                forceShow: true,
+                name: 'L&I Property History',
+                href: function(state) {
+                  var address = state.geocode.data.properties.street_address;
+                  var addressEncoded = encodeURIComponent(address);
+                  return 'https://li.phila.gov/Property-History/search?address=' + addressEncoded;
+                  // return 'http://li.phila.gov/#summary?address=' + addressEncoded;
+                },
+              },
             },
             slots: {
-              title: 'Building Certs',
+              title: 'Building Certifications',
               items: function(state) {
                 var data = state.activeLiBuildingCert;
                 // var rows = data.map(function(row){
