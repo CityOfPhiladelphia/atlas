@@ -6,7 +6,7 @@ name: dev Push to S3
 on:
   push:
     branches:
-      - add-building-cert-data
+      - add-building-cert-data-4
 
 jobs:
   build:
