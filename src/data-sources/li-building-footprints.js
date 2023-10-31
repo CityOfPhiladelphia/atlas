@@ -1,6 +1,8 @@
 export default {
   id: 'li-building-footprints',
   type: 'http-get',
+  segments: true,
+  splitField: 'bin',
   dependent: 'none',
   resettable: true,
   url: 'https://services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/LI_BUILDING_FOOTPRINTS/FeatureServer/0/query',
@@ -9,9 +11,19 @@ export default {
       where: function(feature, state) {
         let data;
         let where;
-        if (feature.properties.bin && feature.properties.bin !== '') {
-          data = feature.properties.bin.replace(/\|/g, "', '");
-          where = "BIN IN ('" + data + "')";
+        let bin = "";
+        // if (feature.properties.bin && feature.properties.bin !== '') {
+        //   data = feature.properties.bin.replace(/\|/g, "', '");
+        if (feature.length) {
+          for (let i=0;i<feature.length;i++) {
+            bin += feature[i];
+            if (i < feature.length-1) {
+              bin += "', '";
+            }
+          }
+          where = "BIN IN ('" + bin + "')";
+          console.log('after loop, bin:', bin);
+
         } else {
           data = feature.properties.li_parcel_id;
           where = "PARCEL_ID_NUM = '" + data + "'";
@@ -22,6 +34,9 @@ export default {
       outFields: '*',
       outSR: 4326,
       f: 'pjson',
+    },
+    success: function(data) {
+      return data;
     },
   },
 };

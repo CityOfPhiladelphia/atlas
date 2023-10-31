@@ -20,7 +20,7 @@ export default {
               bin += "', '";
             }
           }
-          console.log('after loop, bin:', bin);
+          // console.log('after loop, bin:', bin);
         } else if (state.sources.liBuildingFootprints.data.features.length) {
           bin = state.sources.liBuildingFootprints.data.features[0].attributes.BIN;
         } else {

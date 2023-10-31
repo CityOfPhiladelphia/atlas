@@ -59,8 +59,21 @@ export default {
         items: function(state) {
           let value;
           if (state.sources.liBuildingFootprints.data) {
-            value = state.sources.liBuildingFootprints.data.features;
+            value = state.sources.liBuildingFootprints.data;
           }
+          // let value = [];
+          // let data = state.sources.liBuildingFootprints.data;
+          // // console.log('Array.isArray(data):', Array.isArray(data));
+          // if (data && Array.isArray(data)) {
+          //   value = data[0].features;
+          //   for (let i=1;i<data.length;i++) {
+          //     // console.log('collectionSummary slots value:', value, 'data.length:', data.length, 'data[i]', data[i]);
+          //     value = value.concat(data[i].features);
+          //   }
+          // } else if (data && data.features) {
+          //   value = data.features;
+          // }
+          // // console.log('li.js collectionSummary slots, value:', value);
           return value;
         },
       },
@@ -268,22 +281,23 @@ export default {
       }, // end parcel tab options
       slots: {
         items: function (state) {
-          if (state.sources.liBuildingFootprints.data && state.sources.liBuildingFootprints.data.features) {
-            return state.sources.liBuildingFootprints.data.features;
+          let value = [];
+          if (state.sources.liBuildingFootprints.data) {
+            value = state.sources.liBuildingFootprints.data;
           }
-          // if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCerts.data) {
-          //   // console.log('li.js tab-group-buildings, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
-          //   return state.sources.liBuildingFootprints.data.features.filter(function(item) {
-          //     let buildingCerts = [];
-          //     for (let cert of state.sources.liBuildingCertSummary.data.rows) {
-          //       buildingCerts.push(cert.structure_id);
-          //     }
-          //     let test = buildingCerts.includes(item.attributes.BIN);
-          //     return test;
-          //   });
+          // let data = state.sources.liBuildingFootprints.data;
+          // // console.log('Array.isArray(data):', Array.isArray(data));
+          // if (data && Array.isArray(data)) {
+          //   value = data[0].features;
+          //   for (let i=1;i<data.length;i++) {
+          //     // console.log('tabGroupBuildings slots value:', value, 'data.length:', data.length, 'data[i]', data[i]);
+          //     value = value.concat(data[i].features);
+          //   }
+          // } else if (data && data.features) {
+          //   value = data.features;
           // }
-          // console.log('li.js tab-group-buildings, value:', value);
-          return [];
+          // console.log('li.js tabGroupBuildings slots, value:', value);
+          return value;
         },
       },
     }, // end tab group comp
@@ -761,24 +775,19 @@ export default {
     activatable: true,
     data: function(state) {
       let value = [];
-
-      if (state.sources.liBuildingFootprints.data && state.sources.liBuildingFootprints.data.features) {
-        return state.sources.liBuildingFootprints.data.features;
+      if (state.sources.liBuildingFootprints.data) {
+        value = state.sources.liBuildingFootprints.data;
       }
-
-      // if (state.sources.liBuildingFootprints.data && state.sources.liBuildingCertSummary.data) {
-      //   // console.log('li.js geojsonForTopic, state.sources.liBuildingFootprints.data:', state.sources.liBuildingFootprints.data);
-      //   return state.sources.liBuildingFootprints.data.features.filter(function(item) {
-      //     // let firstTest = item.attributes.BIN !== state.activeGeojsonForTopic;
-      //     let buildingCerts = [];
-      //     for (let cert of state.sources.liBuildingCertSummary.data.rows) {
-      //       buildingCerts.push(cert.structure_id);
-      //     }
-      //     let secondTest = buildingCerts.includes(item.attributes.BIN);
-      //     console.log('secondTest:', secondTest);
-      //     // return firstTest && secondTest;
-      //     return secondTest;
-      //   });
+      // let data = state.sources.liBuildingFootprints.data;
+      // // console.log('Array.isArray(data):', Array.isArray(data));
+      // if (data && Array.isArray(data)) {
+      //   value = data[0].features;
+      //   for (let i=1;i<data.length;i++) {
+      //     // console.log('geojsonForTopic value:', value, 'data.length:', data.length, 'data[i]', data[i]);
+      //     value = value.concat(data[i].features);
+      //   }
+      // } else if (data && data.features) {
+      //   value = data.features;
       // }
       // console.log('li.js geojsonForTopic, value:', value);
       return value;
