@@ -252,7 +252,7 @@ export default {
               externalLink: {
                 action: function(count) {
                   // return 'See all building certifications at L&I Property History';
-                  return 'See all building certifications at L&I Property History';
+                  return 'See all building certifications for this property at L&I Property History';
                 },
                 forceShow: true,
                 name: 'L&I Property History',
