@@ -150,7 +150,7 @@ export default {
                     // return state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft';
                     // return state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft';
                     let value;
-                    if (state.activeLiBuildingFootprint.attributes) {
+                    if (state.activeLiBuildingFootprint.attributes && state.activeLiBuildingFootprint.attributes.APPROX_HGT) {
                       value = state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft' || 'N/A';
                     } else {
                       value = 'N/A';
