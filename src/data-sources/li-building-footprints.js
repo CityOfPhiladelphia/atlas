@@ -12,8 +12,6 @@ export default {
         let data;
         let where;
         let bin = "";
-        // if (feature.properties.bin && feature.properties.bin !== '') {
-        //   data = feature.properties.bin.replace(/\|/g, "', '");
         if (feature.length) {
           for (let i=0;i<feature.length;i++) {
             bin += feature[i];
@@ -22,7 +20,7 @@ export default {
             }
           }
           where = "BIN IN ('" + bin + "')";
-          console.log('after loop, bin:', bin);
+          // console.log('after loop, bin:', bin);
 
         } else {
           data = feature.properties.li_parcel_id;

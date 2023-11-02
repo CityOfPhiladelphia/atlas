@@ -9,9 +9,7 @@ export default {
     params: {
       q: function(feature, state){
         let bin = "";
-        console.log('li-building-cert-summary, feature:', feature);
-        // if (feature.properties.bin && feature.properties.bin !== '') {
-        //   bin = feature.properties.bin.replace(/\|/g, "', '");
+        // console.log('li-building-cert-summary, feature:', feature);
         if (feature.length) {
           for (let i=0;i<feature.length;i++) {
             bin += feature[i];

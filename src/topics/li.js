@@ -250,9 +250,13 @@ export default {
                 },
               },
               externalLink: {
-                action: function(count) {
-                  // return 'See all building certifications at L&I Property History';
-                  return 'See all building certifications for this property at L&I Property History';
+                action: function(count, data) {
+                  // console.log('building certs count:', count, 'data:', data);
+                  return 'See all ' + data + ' building certifications for this property at L&I Property History';
+                },
+                data: function(state) {
+                  // console.log('external link data state.sources.liBuildingCerts.data.length:', state.sources.liBuildingCerts.data.length);
+                  return state.sources.liBuildingCerts.data.length;
                 },
                 forceShow: true,
                 name: 'L&I Property History',
@@ -260,7 +264,6 @@ export default {
                   var address = state.geocode.data.properties.street_address;
                   var addressEncoded = encodeURIComponent(address);
                   return 'https://li.phila.gov/Property-History/search?address=' + addressEncoded;
-                  // return 'http://li.phila.gov/#summary?address=' + addressEncoded;
                 },
               },
             },
@@ -268,11 +271,6 @@ export default {
               title: 'Building Certifications',
               items: function(state) {
                 var data = state.activeLiBuildingCert;
-                // var rows = data.map(function(row){
-                //   var itemRow = row;
-                //   return itemRow;
-                // });
-                // return rows;
                 return data;
               },
             },
@@ -285,18 +283,6 @@ export default {
           if (state.sources.liBuildingFootprints.data) {
             value = state.sources.liBuildingFootprints.data;
           }
-          // let data = state.sources.liBuildingFootprints.data;
-          // // console.log('Array.isArray(data):', Array.isArray(data));
-          // if (data && Array.isArray(data)) {
-          //   value = data[0].features;
-          //   for (let i=1;i<data.length;i++) {
-          //     // console.log('tabGroupBuildings slots value:', value, 'data.length:', data.length, 'data[i]', data[i]);
-          //     value = value.concat(data[i].features);
-          //   }
-          // } else if (data && data.features) {
-          //   value = data.features;
-          // }
-          // console.log('li.js tabGroupBuildings slots, value:', value);
           return value;
         },
       },
