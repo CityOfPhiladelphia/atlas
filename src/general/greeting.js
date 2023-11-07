@@ -1,6 +1,6 @@
 export default {
-  // <p class="small-text">Due to high Election Day traffic, the "Licenses & Inspections" and "Nearby" topics have been temporarily removed. Please check back on November 9th for this information. We apologize for any inconvenience this may cause.</p>\
   message: '\
+    <p class="small-text">Due to high Election Day traffic, the "Licenses & Inspections" and "Nearby" topics have been temporarily removed. Please check back on November 8th for this information. We apologize for any inconvenience this may cause.</p>\
     <h2>Atlas is your front door to the City of Philadelphia.</h2>\
     <p>Here are some things you can do with Atlas:</p>\
     <div class="callout">\
