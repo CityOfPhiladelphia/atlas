@@ -3,22 +3,17 @@ export default {
   icon: 'wrench',
   label: 'Licenses & Inspections',
   dataSources: [
+    'divisions',
     'liPermits',
     'liInspections',
     'liViolations',
     'liBusinessLicenses',
     'zoningDocs',
+    'liBuildingFootprints',
+    'liBuildingCertSummary',
+    'liBuildingCerts',
   ],
   components: [
-    // {
-    //   type: 'exclamationCallout',
-    //   slots: {
-    //     text: '\
-    //       Daily updates of L&I data on Atlas have resumed.\
-    //       A data transfer error affecting approximately 5,000 records should be resolved in early May 2020.\
-    //     ',
-    //   },
-    // },
     {
       type: 'callout',
       slots: {
@@ -29,6 +24,270 @@ export default {
         ',
       },
     },
+    {
+      type: 'collection-summary',
+      options: {
+        hide: function(item) {
+          // console.log('hide function, item:', item);
+          // let value = false;
+          // if (!item || item && item.length == 0) {
+          //   value = true;
+          // }
+          // return value;
+        },
+        descriptor: 'building',
+        // this will include zero quantities
+        getValue: function(item) {
+          return 1;
+        },
+        context: {
+          singular: function(list){
+            return 'There is ' + list + ' at this address.';
+          },
+          plural: function(list){
+            return 'There are ' + list + ' at this address.';
+          },
+        },
+        types: [
+          {
+            value: 1,
+            label: 'building',
+          },
+        ],
+      },
+      slots: {
+        items: function(state) {
+          let value;
+          if (state.sources.liBuildingFootprints.data) {
+            value = state.sources.liBuildingFootprints.data;
+          }
+          // let value = [];
+          // let data = state.sources.liBuildingFootprints.data;
+          // // console.log('Array.isArray(data):', Array.isArray(data));
+          // if (data && Array.isArray(data)) {
+          //   value = data[0].features;
+          //   for (let i=1;i<data.length;i++) {
+          //     // console.log('collectionSummary slots value:', value, 'data.length:', data.length, 'data[i]', data[i]);
+          //     value = value.concat(data[i].features);
+          //   }
+          // } else if (data && data.features) {
+          //   value = data.features;
+          // }
+          // // console.log('li.js collectionSummary slots, value:', value);
+          return value;
+        },
+      },
+    },
+    {
+      type: 'tab-group-buildings',
+      options: {
+        hide: function(item) {
+          // console.log('hide function, item:', item);
+          let value = false;
+          if (item.length == 0) {
+            value = true;
+          }
+          return value;
+        },
+        map: function(state) {
+          return state.map;
+        },
+        getKey: function(item) {
+          return item.attributes.BIN;
+        },
+        getTitle: function(item) {
+          return item.attributes.BIN;
+        },
+        activeItem: function(state) {
+          // console.log('activeItem function, state:', state, 'state.activeLiBuildingFootprint.attributes:', state.activeLiBuildingFootprint.attributes);
+          return state.activeGeojsonForTopic;
+        },
+        // components for the content pane. this essentially a topic body.
+        components: [
+          {
+            type: 'vertical-table',
+            slots: {
+              fields: [
+                {
+                  label: 'Building ID',
+                  value: function(state) {
+                    // return state.activeLiBuildingFootprint.attributes.BIN;
+                    let value;
+                    if (state.activeLiBuildingFootprint.attributes) {
+                      value = state.activeLiBuildingFootprint.attributes.BIN || 'N/A';
+                    } else {
+                      value = 'N/A';
+                    }
+                    return value;
+                  },
+                },
+                {
+                  label: 'Building Name',
+                  value: function(state) {
+                    // return state.activeLiBuildingFootprint.attributes.BUILDING_NAME || 'N/A';
+                    // if (state.activeLiBuildingFootprint.attributes) {
+                    //   return state.activeLiBuildingFootprint.attributes.BUILDING_NAME || 'N/A';
+                    // }
+                    let value;
+                    if (state.activeLiBuildingFootprint.attributes) {
+                      value = state.activeLiBuildingFootprint.attributes.BUILDING_NAME || 'N/A';
+                    } else {
+                      value = 'N/A';
+                    }
+                    return value;
+                  },
+                },
+                {
+                  label: 'Parcel Address',
+                  value: function(state) {
+                    return state.geocode.data.properties.opa_address;
+                    //use building footprint address if no AIS opa_address
+                  },
+                },
+                {
+                  label: 'Building Height (approx)',
+                  value: function(state) {
+                    // return state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft';
+                    // return state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft';
+                    let value;
+                    if (state.activeLiBuildingFootprint.attributes && state.activeLiBuildingFootprint.attributes.APPROX_HGT) {
+                      value = state.activeLiBuildingFootprint.attributes.APPROX_HGT + ' ft' || 'N/A';
+                    } else {
+                      value = 'N/A';
+                    }
+                    return value;
+                  },
+                },
+                {
+                  label: 'Building Footprint (approx)',
+                  value: function(state) {
+                    // return Math.round(state.activeLiBuildingFootprint.attributes.Shape__Area * 6.3225) + ' sq ft';
+                    let value;
+                    if (state.activeLiBuildingFootprint.attributes) {
+                      value = Math.round(state.activeLiBuildingFootprint.attributes.Shape__Area * 6.3225) + ' sq ft' || 'N/A';
+                    } else {
+                      value = 'N/A';
+                    }
+                    return value;
+                  },
+                },
+              ],
+            },
+            options: {
+              id: 'buildingCertData',
+            },
+          },
+          {
+            type: 'horizontal-table',
+            options: {
+              id: 'liBuildingCerts',
+              limit: 100,
+              fields: [
+                {
+                  label: 'Inspection Type',
+                  value: function(state, item){
+                    return item.buildingcerttype;
+                  },
+                  nullValue: 'no type available',
+                },
+                {
+                  label: 'Date Inspected',
+                  value: function(state, item){
+                    return item.inspectiondate;
+                  },
+                  nullValue: 'no date available',
+                  transforms: [
+                    'date',
+                  ],
+                },
+                {
+                  label: 'Inspection Result',
+                  value: function(state, item){
+                    return item.inspectionresult;
+                  },
+                },
+                {
+                  label: 'Expiration Date',
+                  value: function(state, item){
+                    return item.expirationdate;
+                  },
+                  nullValue: 'no date available',
+                  transforms: [
+                    'date',
+                  ],
+                },
+              ],
+              sort: {
+                // this should return the val to sort on
+                getValue: function(item) {
+                  return item.buildingcerttype;
+                },
+                // asc or desc
+                order: 'asc',
+                compare: function(a, b) {
+                  // console.log('compare function, a:', a, 'b:', b);
+                  let result;
+                  let typeA = a.buildingcerttype;
+                  let typeB = b.buildingcerttype;
+                  let dateA = a.inspectiondate;
+                  let dateB = b.inspectiondate;
+
+                  if (typeA < typeB) {
+                    result = -1;
+                  } else if (typeB < typeA) {
+                    result = 1;
+                  } else {
+                    // result = 0;
+                    if (dateA < dateB) {
+                      result = 1;
+                    } else if (dateB < dateA) {
+                      result = -1;
+                    } else {
+                      result = 0;
+                    }
+                  }
+                  return result;
+                },
+              },
+              externalLink: {
+                action: function(count, data) {
+                  // console.log('building certs count:', count, 'data:', data);
+                  return 'See all ' + data + ' building certifications for this property at L&I Property History';
+                },
+                data: function(state) {
+                  // console.log('external link data state.sources.liBuildingCerts.data.length:', state.sources.liBuildingCerts.data.length);
+                  return state.sources.liBuildingCerts.data.length;
+                },
+                forceShow: true,
+                name: 'L&I Property History',
+                href: function(state) {
+                  var address = state.geocode.data.properties.street_address;
+                  var addressEncoded = encodeURIComponent(address);
+                  return 'https://li.phila.gov/Property-History/search?address=' + addressEncoded;
+                },
+              },
+            },
+            slots: {
+              title: 'Building Certifications',
+              items: function(state) {
+                var data = state.activeLiBuildingCert;
+                return data;
+              },
+            },
+          },
+        ],
+      }, // end parcel tab options
+      slots: {
+        items: function (state) {
+          let value = [];
+          if (state.sources.liBuildingFootprints.data) {
+            value = state.sources.liBuildingFootprints.data;
+          }
+          return value;
+        },
+      },
+    }, // end tab group comp
+
     {
       type: 'horizontal-table',
       options: {
@@ -496,6 +755,40 @@ export default {
   dynamicMapLayers: [
     //'zoning'
   ],
+  // zoomToShape: [ 'geojson' ],
+  geojsonForTopic: {
+    collection: true,
+    activatable: true,
+    data: function(state) {
+      let value = [];
+      if (state.sources.liBuildingFootprints.data) {
+        value = state.sources.liBuildingFootprints.data;
+      }
+      // let data = state.sources.liBuildingFootprints.data;
+      // // console.log('Array.isArray(data):', Array.isArray(data));
+      // if (data && Array.isArray(data)) {
+      //   value = data[0].features;
+      //   for (let i=1;i<data.length;i++) {
+      //     // console.log('geojsonForTopic value:', value, 'data.length:', data.length, 'data[i]', data[i]);
+      //     value = value.concat(data[i].features);
+      //   }
+      // } else if (data && data.features) {
+      //   value = data.features;
+      // }
+      // console.log('li.js geojsonForTopic, value:', value);
+      return value;
+    },
+    key: 'id',
+    style: {
+      fillColor: '#bdbadb',
+      color: '#bdbadb',
+      // fillColor: '#9e9ac8',
+      // color: '#9e9ac8',
+      weight: 2,
+      opacity: 1,
+      fillOpacity: 0.3,
+    },
+  },
   identifyFeature: 'address-marker',
   parcels: 'pwd',
 };

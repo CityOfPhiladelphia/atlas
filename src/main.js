@@ -9,10 +9,17 @@
 
 
 // turn off console logging in production
-const { hostname='' } = location;
-if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
-  console.log = console.info = console.debug = console.error = function () {};
-}
+// const { hostname='' } = location;
+// if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
+//   console.log = console.info = console.debug = console.error = function () {};
+// }
+
+console.warn = function(){
+  let warning = '%cWARNING: ' + arguments[0];
+  if (!arguments[0].includes('[vue-i18n]')) {
+    console.log(warning, 'background-color: #FEF3DC;');
+  }
+};
 
 import i18n from './i18n/i18n.js';
 
@@ -53,9 +60,12 @@ import dorDocuments from './data-sources/dor-documents';
 import electedOfficials from './data-sources/elected-officials';
 import electedOfficialsFuture from './data-sources/elected-officials-future';
 import liBusinessLicenses from './data-sources/li-business-licenses';
+import liBuildingCertSummary from './data-sources/li-building-cert-summary';
+import liBuildingCerts from './data-sources/li-building-certs';
 import liInspections from './data-sources/li-inspections';
 import liPermits from './data-sources/li-permits';
 import liViolations from './data-sources/li-violations';
+import liBuildingFootprints from './data-sources/li-building-footprints';
 import nearbyZoningAppeals from './data-sources/nearby-zoning-appeals';
 import nextElectionAPI from './data-sources/election-next';
 import opa from './data-sources/opa';
@@ -119,7 +129,12 @@ if (host === 'cityatlas-dev.phila.gov') {
 mapboard({
   // defaultAddress: '1234 MARKET ST',
   // plugin: true,
+  agoTokenNeeded: false,
   resetDataOnGeocode: true,
+  resetDataExtra: {
+    'ActiveLiBuilding': {},
+    'ActiveLiBuildingCert': [],
+  },
   customComps,
   header: {
     enabled: true,
@@ -205,9 +220,12 @@ mapboard({
     electedOfficials,
     electedOfficialsFuture,
     liBusinessLicenses,
+    liBuildingCertSummary,
+    liBuildingCerts,
     liInspections,
     liPermits,
     liViolations,
+    liBuildingFootprints,
     nearbyZoningAppeals,
     nextElectionAPI,
     opa,
