@@ -9,10 +9,10 @@
 
 
 // turn off console logging in production
-// const { hostname='' } = location;
-// if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
-//   console.log = console.info = console.debug = console.error = function () {};
-// }
+const { hostname='' } = location;
+if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
+  console.log = console.info = console.debug = console.error = function () {};
+}
 
 console.warn = function(){
   let warning = '%cWARNING: ' + arguments[0];
