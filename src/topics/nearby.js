@@ -383,8 +383,13 @@ export default {
                   // var itemRow = Object.assign({}, row);
                   return itemRow;
                 });
-                let rows2 = rows.filter((datum) => datum.typeofwork == 'NEW CONSTRUCTION');
-                // console.log('data:', data, 'rows2:', rows2, 'rows:', rows);
+                // let rows2 = rows.filter((datum) => datum.typeofwork == 'NEW CONSTRUCTION');
+                let rows2 = rows.filter(function(datum) {
+                  let typeOfWorkSplit = datum.typeofwork.split(',');
+                  console.log('typeOfWorkSplit:', typeOfWorkSplit);
+                  return typeOfWorkSplit.includes('NEW CONSTRUCTION');
+                });
+                console.log('data:', data, 'rows2:', rows2, 'rows:', rows);
                 return rows2;
               },
             },

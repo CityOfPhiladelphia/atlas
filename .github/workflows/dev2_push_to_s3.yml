@@ -6,7 +6,7 @@ name: dev Push to S3
 on:
   push:
     branches:
-      - ux-review-nearby
+      - ux-review-nearby-rebase
 
 jobs:
   build:
