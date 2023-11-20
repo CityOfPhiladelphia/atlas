@@ -386,10 +386,10 @@ export default {
                 // let rows2 = rows.filter((datum) => datum.typeofwork == 'NEW CONSTRUCTION');
                 let rows2 = rows.filter(function(datum) {
                   let typeOfWorkSplit = datum.typeofwork.split(',');
-                  console.log('typeOfWorkSplit:', typeOfWorkSplit);
+                  // console.log('typeOfWorkSplit:', typeOfWorkSplit);
                   return typeOfWorkSplit.includes('NEW CONSTRUCTION');
                 });
-                console.log('data:', data, 'rows2:', rows2, 'rows:', rows);
+                // console.log('data:', data, 'rows2:', rows2, 'rows:', rows);
                 return rows2;
               },
             },
@@ -718,6 +718,12 @@ export default {
                       label: '90 days',
                       value: '90',
                       unit: 'days',
+                      direction: 'subtract',
+                    },
+                    {
+                      label: 'year',
+                      value: '1',
+                      unit: 'years',
                       direction: 'subtract',
                     },
                   ],
