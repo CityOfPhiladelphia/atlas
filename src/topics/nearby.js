@@ -382,6 +382,35 @@ export default {
                   return val;
                 },
               },
+              filters: [
+                {
+                  type: 'time',
+                  getValue: function(item) {
+                    return item.scheduleddate;
+                  },
+                  label: 'From',
+                  values: [
+                    {
+                      label: 'any time',
+                      // value: '0',
+                      // unit: 'days',
+                      direction: 'both',
+                    },
+                    {
+                      label: 'the last 90 days',
+                      value: '365',
+                      unit: 'days',
+                      direction: 'subtract',
+                    },
+                    {
+                      label: 'the next 90 days',
+                      value: '30',
+                      unit: 'days',
+                      direction: 'add',
+                    },
+                  ],
+                },
+              ],
               filterByText: {
                 label: 'Filter by',
                 fields: [
