@@ -7,5 +7,6 @@ export default {
     dateMinNum: 1,
     dateMinType: 'year',
     dateField: 'casecreateddate',
+    groupby: 'casenumber, casecreateddate, caseprioritydesc, casestatus, address',
   },
 };

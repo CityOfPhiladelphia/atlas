@@ -375,7 +375,7 @@ export default {
                   return itemRow;
                 });
                 let rows2 = rows.filter((datum) => datum.typeofwork == 'NEW CONSTRUCTION');
-                console.log('data:', data, 'rows2:', rows2, 'rows:', rows);
+                // console.log('data:', data, 'rows2:', rows2, 'rows:', rows);
                 return rows2;
               },
             },
@@ -622,9 +622,10 @@ export default {
                   },
                 },
                 {
-                  label: 'Type',
+                  label: 'Status',
                   value: function(state, item) {
-                    return item.typeofwork;
+                    // return item.casestatus;
+                    return '<a target="_blank" href="https://li.phila.gov/property-history/search/violation-detail?address='+ item.address + '&Id=' + item.casenumber + '">'+item.casestatus+'</a>';
                     // if (item.media_url) {
                     //   return '<a target="_blank" href='+item.media_url+'>'+item.service_name+'</a>';
                     // }
@@ -651,7 +652,7 @@ export default {
                   return itemRow;
                 });
                 let rows2 = rows.filter((datum) => datum.caseprioritydesc == 'IMMINENTLY DANGEROUS');
-                // console.log('data:', data, 'rows2:', rows2, 'rows:', rows);
+                console.log('violations data:', data, 'rows2:', rows2, 'rows:', rows);
                 return rows2;
               },
             },
