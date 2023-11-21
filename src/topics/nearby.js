@@ -666,7 +666,7 @@ export default {
                   return itemRow;
                 });
                 let rows2 = rows.filter((datum) => datum.caseprioritydesc == 'IMMINENTLY DANGEROUS');
-                console.log('violations data:', data, 'rows2:', rows2, 'rows:', rows);
+                // console.log('violations data:', data, 'rows2:', rows2, 'rows:', rows);
                 return rows2;
               },
             },
