@@ -720,12 +720,12 @@ export default {
                       unit: 'days',
                       direction: 'subtract',
                     },
-                    {
-                      label: 'year',
-                      value: '1',
-                      unit: 'years',
-                      direction: 'subtract',
-                    },
+                    // {
+                    //   label: 'year',
+                    //   value: '1',
+                    //   unit: 'years',
+                    //   direction: 'subtract',
+                    // },
                   ],
                 },
               ],
