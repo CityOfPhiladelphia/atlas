@@ -17,7 +17,7 @@
     "lintFix": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "@phila/mapboard": "https://github.com/CityOfPhiladelphia/mapboard#6380066",
+    "@phila/mapboard": "https://github.com/CityOfPhiladelphia/mapboard#b07f96e",
     "accounting": "^0.4.1",
     "vue": "^2.7.10"
   },
@@ -36,7 +36,6 @@
     "jest-serializer-vue": "^2.0.2",
     "jest-transform-stub": "^2.0.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
-    "node-sass": "^4.14.1",
     "sass": "^1.54.9",
     "sass-loader": "^8.0.0",
     "testcafe": "^1.20.1",
