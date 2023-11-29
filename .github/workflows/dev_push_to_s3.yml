@@ -19,7 +19,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '16.x'
-        cache: 'npm'
 
     - name: install npm 6
       run: |
@@ -28,7 +27,7 @@ jobs:
     - name: npm install, and build
       run: |
         printf "@fortawesome:registry=https://npm.fontawesome.com/\n//npm.fontawesome.com/:_authToken=${FONTAWESOME_NPM_AUTH_TOKEN}" >> ~/.npmrc
-        npm ci
+        npm install
         npm run build
       env:
         FONTAWESOME_NPM_AUTH_TOKEN: ${{ secrets.FA_AUTH_TOKEN }}
