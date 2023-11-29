@@ -7,7 +7,6 @@
         \/               \/     \/
 */
 
-
 // turn off console logging in production
 const { hostname='' } = location;
 if (hostname !== 'localhost' && !hostname.match(/(\d+\.){3}\d+/)) {
