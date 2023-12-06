@@ -1,7 +1,17 @@
 export default {
   key: 'nearby',
   icon: 'map-marker-alt',
-  label: 'Nearby',
+  label: 'Nearby Activity',
+  tables: [
+    '311',
+    'crimeIncidents',
+    'nearbyZoningAppeals',
+    'vacantIndicatorsPoints',
+    'nearbyConstructionPermits',
+    'nearbyDemolitionPermits',
+    'nearbyImminentlyDangerous',
+  ],
+  // zoom: 15,
   dataSources: [ 'threeOneOneCarto', 'crimeIncidents', 'nearbyZoningAppeals' ],
   // dataSources: ['311Carto', 'crimeIncidents', 'nearbyZoningAppeals', 'vacantIndicatorsPoints'],
   // dataSources: ['vacantLand', 'vacantBuilding', '311Carto', 'crimeIncidents', 'nearbyZoningAppeals'],
@@ -88,6 +98,18 @@ export default {
                 label: 'Vacant Properties',
                 value: 'vacantIndicatorsPoints',
               },
+              {
+                label: 'Construction Permits',
+                value: 'nearbyConstructionPermits',
+              },
+              {
+                label: 'Demolition Permits',
+                value: 'nearbyDemolitionPermits',
+              },
+              {
+                label: 'Imminently Dangerous',
+                value: 'nearbyImminentlyDangerous',
+              },
             ],
           },
         ],
@@ -152,7 +174,7 @@ export default {
                 },
               ],
               filterByText: {
-                label: 'Filter by text',
+                label: 'Filter by',
                 fields: [
                   'service_name',
                   'address',
@@ -191,13 +213,13 @@ export default {
                   ],
                 },
                 {
-                  label: 'Address',
+                  label: 'Location',
                   value: function(state, item) {
                     return item.address;
                   },
                 },
                 {
-                  label: 'Subject',
+                  label: 'Type',
                   value: function(state, item) {
                     if (item.media_url) {
                       return '<a target="_blank" href='+item.media_url+'>'+item.service_name+'</a>';
@@ -225,6 +247,427 @@ export default {
                   return itemRow;
                 });
                 return rows;
+              },
+            },
+          },
+          {
+            type: 'horizontal-table',
+            options: {
+              id: 'nearbyConstructionPermits',
+              sort: {
+                select: true,
+                sortFields: [
+                  'distance',
+                  'date',
+                ],
+                getValue: function(item, sortField) {
+                  var val;
+                  if (sortField === 'date' || !sortField) {
+                    val = item.permitissuedate;
+                  } else if (sortField === 'distance') {
+                    val = item.distance;
+                  }
+                  return val;
+                },
+                order: function(sortField) {
+                  var val;
+                  if (sortField === 'date') {
+                    val = 'desc';
+                  } else {
+                    val = 'asc';
+                  }
+                  return val;
+                },
+              },
+              filters: [
+                {
+                  type: 'time',
+                  getValue: function(item) {
+                    return item.permitissuedate;
+                  },
+                  label: 'From the last',
+                  values: [
+                    {
+                      label: '30 days',
+                      value: '30',
+                      unit: 'days',
+                      direction: 'subtract',
+                    },
+                    {
+                      label: '90 days',
+                      value: '90',
+                      unit: 'days',
+                      direction: 'subtract',
+                    },
+                    {
+                      label: 'year',
+                      value: '1',
+                      unit: 'years',
+                      direction: 'subtract',
+                    },
+                  ],
+                },
+              ],
+              filterByText: {
+                label: 'Filter by',
+                fields: [
+                  'service_name',
+                  'address',
+                ],
+              },
+              mapOverlay: {
+                marker: 'circle',
+                style: {
+                  radius: 6,
+                  fillColor: '#ff3f3f',
+                  color: '#ff0000',
+                  weight: 1,
+                  opacity: 1,
+                  fillOpacity: 1.0,
+                  'z-index': 1,
+                },
+                hoverStyle: {
+                  radius: 6,
+                  fillColor: 'yellow',
+                  color: '#ff0000',
+                  weight: 1,
+                  opacity: 1,
+                  fillOpacity: 1.0,
+                  'z-index': 2,
+                },
+              },
+              fields: [
+                {
+                  label: 'Date',
+                  value: function(state, item) {
+                    return item.permitissuedate;
+                  },
+                  nullValue: 'no date available',
+                  transforms: [
+                    'date',
+                  ],
+                },
+                {
+                  label: 'Location',
+                  value: function(state, item) {
+                    return item.address;
+                  },
+                },
+                {
+                  label: 'Type',
+                  value: function(state, item) {
+                    return item.typeofwork;
+                    // if (item.media_url) {
+                    //   return '<a target="_blank" href='+item.media_url+'>'+item.service_name+'</a>';
+                    // }
+                    // return item.service_name;
+
+                  },
+                },
+                {
+                  label: 'Distance',
+                  value: function(state, item) {
+                    return parseInt(item.distance) + ' ft';
+                  },
+                },
+              ],
+            },
+            slots: {
+              title: 'Nearby Construction Permits',
+              data: 'nearbyPermits',
+              items: function(state) {
+                var data = state.sources['nearbyPermits'].data || [];
+                // let data2 = data.filter((datum) => datum.typeofwork == 'NEW CONSTRUCTION');
+                var rows = data.map(function(row){
+                  var itemRow = row;
+                  // var itemRow = Object.assign({}, row);
+                  return itemRow;
+                });
+                // let rows2 = rows.filter((datum) => datum.typeofwork == 'NEW CONSTRUCTION');
+                let rows2 = rows.filter(function(datum) {
+                  let typeOfWorkSplit = datum.typeofwork.split(',');
+                  // console.log('typeOfWorkSplit:', typeOfWorkSplit);
+                  return typeOfWorkSplit.includes('NEW CONSTRUCTION');
+                });
+                // console.log('data:', data, 'rows2:', rows2, 'rows:', rows);
+                return rows2;
+              },
+            },
+          },
+          {
+            type: 'horizontal-table',
+            options: {
+              id: 'nearbyDemolitionPermits',
+              sort: {
+                select: true,
+                sortFields: [
+                  'distance',
+                  'date',
+                ],
+                getValue: function(item, sortField) {
+                  var val;
+                  if (sortField === 'date' || !sortField) {
+                    val = item.permitissuedate;
+                  } else if (sortField === 'distance') {
+                    val = item.distance;
+                  }
+                  return val;
+                },
+                order: function(sortField) {
+                  var val;
+                  if (sortField === 'date') {
+                    val = 'desc';
+                  } else {
+                    val = 'asc';
+                  }
+                  return val;
+                },
+              },
+              filters: [
+                {
+                  type: 'time',
+                  getValue: function(item) {
+                    return item.permitissuedate;
+                  },
+                  label: 'From the last',
+                  values: [
+                    {
+                      label: '30 days',
+                      value: '30',
+                      unit: 'days',
+                      direction: 'subtract',
+                    },
+                    {
+                      label: '90 days',
+                      value: '90',
+                      unit: 'days',
+                      direction: 'subtract',
+                    },
+                    {
+                      label: 'year',
+                      value: '1',
+                      unit: 'years',
+                      direction: 'subtract',
+                    },
+                  ],
+                },
+              ],
+              filterByText: {
+                label: 'Filter by',
+                fields: [
+                  'service_name',
+                  'address',
+                ],
+              },
+              mapOverlay: {
+                marker: 'circle',
+                style: {
+                  radius: 6,
+                  fillColor: '#ff3f3f',
+                  color: '#ff0000',
+                  weight: 1,
+                  opacity: 1,
+                  fillOpacity: 1.0,
+                  'z-index': 1,
+                },
+                hoverStyle: {
+                  radius: 6,
+                  fillColor: 'yellow',
+                  color: '#ff0000',
+                  weight: 1,
+                  opacity: 1,
+                  fillOpacity: 1.0,
+                  'z-index': 2,
+                },
+              },
+              fields: [
+                {
+                  label: 'Date',
+                  value: function(state, item) {
+                    return item.permitissuedate;
+                  },
+                  nullValue: 'no date available',
+                  transforms: [
+                    'date',
+                  ],
+                },
+                {
+                  label: 'Location',
+                  value: function(state, item) {
+                    return item.address;
+                  },
+                },
+                {
+                  label: 'Type',
+                  value: function(state, item) {
+                    return item.typeofwork;
+                    // if (item.media_url) {
+                    //   return '<a target="_blank" href='+item.media_url+'>'+item.service_name+'</a>';
+                    // }
+                    // return item.service_name;
+
+                  },
+                },
+                {
+                  label: 'Distance',
+                  value: function(state, item) {
+                    return parseInt(item.distance) + ' ft';
+                  },
+                },
+              ],
+            },
+            slots: {
+              title: 'Demolition Permits',
+              data: 'nearbyPermits',
+              items: function(state) {
+                var data = state.sources['nearbyPermits'].data || [];
+                var rows = data.map(function(row){
+                  var itemRow = row;
+                  // var itemRow = Object.assign({}, row);
+                  return itemRow;
+                });
+                let rows2 = rows.filter((datum) => datum.permitdescription == 'DEMOLITION PERMIT');
+                // console.log('data:', data, 'rows2:', rows2, 'rows:', rows);
+                return rows2;
+              },
+            },
+          },
+          {
+            type: 'horizontal-table',
+            options: {
+              id: 'nearbyImminentlyDangerous',
+              sort: {
+                select: true,
+                sortFields: [
+                  'distance',
+                  'date',
+                ],
+                getValue: function(item, sortField) {
+                  var val;
+                  if (sortField === 'date' || !sortField) {
+                    val = item.casecreateddate;
+                  } else if (sortField === 'distance') {
+                    val = item.distance;
+                  }
+                  return val;
+                },
+                order: function(sortField) {
+                  var val;
+                  if (sortField === 'date') {
+                    val = 'desc';
+                  } else {
+                    val = 'asc';
+                  }
+                  return val;
+                },
+              },
+              filters: [
+                {
+                  type: 'time',
+                  getValue: function(item) {
+                    return item.casecreateddate;
+                  },
+                  label: 'From the last',
+                  values: [
+                    {
+                      label: '30 days',
+                      value: '30',
+                      unit: 'days',
+                      direction: 'subtract',
+                    },
+                    {
+                      label: '90 days',
+                      value: '90',
+                      unit: 'days',
+                      direction: 'subtract',
+                    },
+                    {
+                      label: 'year',
+                      value: '1',
+                      unit: 'years',
+                      direction: 'subtract',
+                    },
+                  ],
+                },
+              ],
+              filterByText: {
+                label: 'Filter by',
+                fields: [
+                  'service_name',
+                  'address',
+                ],
+              },
+              mapOverlay: {
+                marker: 'circle',
+                style: {
+                  radius: 6,
+                  fillColor: '#ff3f3f',
+                  color: '#ff0000',
+                  weight: 1,
+                  opacity: 1,
+                  fillOpacity: 1.0,
+                  'z-index': 1,
+                },
+                hoverStyle: {
+                  radius: 6,
+                  fillColor: 'yellow',
+                  color: '#ff0000',
+                  weight: 1,
+                  opacity: 1,
+                  fillOpacity: 1.0,
+                  'z-index': 2,
+                },
+              },
+              fields: [
+                {
+                  label: 'Date',
+                  value: function(state, item) {
+                    return item.casecreateddate;
+                  },
+                  nullValue: 'no date available',
+                  transforms: [
+                    'date',
+                  ],
+                },
+                {
+                  label: 'Location',
+                  value: function(state, item) {
+                    return item.address;
+                  },
+                },
+                {
+                  label: 'Status',
+                  value: function(state, item) {
+                    // return item.casestatus;
+                    return '<a target="_blank" href="https://li.phila.gov/property-history/search/violation-detail?address='+ item.address + '&Id=' + item.casenumber + '">'+item.casestatus+'</a>';
+                    // if (item.media_url) {
+                    //   return '<a target="_blank" href='+item.media_url+'>'+item.service_name+'</a>';
+                    // }
+                    // return item.service_name;
+
+                  },
+                },
+                {
+                  label: 'Distance',
+                  value: function(state, item) {
+                    return parseInt(item.distance) + ' ft';
+                  },
+                },
+              ],
+            },
+            slots: {
+              title: 'Imminently Dangerous',
+              data: 'nearbyViolations',
+              items: function(state) {
+                var data = state.sources['nearbyViolations'].data || [];
+                var rows = data.map(function(row){
+                  var itemRow = row;
+                  // var itemRow = Object.assign({}, row);
+                  return itemRow;
+                });
+                let rows2 = rows.filter((datum) => datum.caseprioritydesc == 'IMMINENTLY DANGEROUS');
+                // console.log('violations data:', data, 'rows2:', rows2, 'rows:', rows);
+                return rows2;
               },
             },
           },
@@ -277,6 +720,12 @@ export default {
                       unit: 'days',
                       direction: 'subtract',
                     },
+                    // {
+                    //   label: 'year',
+                    //   value: '1',
+                    //   unit: 'years',
+                    //   direction: 'subtract',
+                    // },
                   ],
                 },
               ],
@@ -381,6 +830,35 @@ export default {
                   return val;
                 },
               },
+              filters: [
+                {
+                  type: 'time',
+                  getValue: function(item) {
+                    return item.scheduleddate;
+                  },
+                  label: 'From',
+                  values: [
+                    {
+                      label: 'any time',
+                      // value: '0',
+                      // unit: 'days',
+                      direction: 'both',
+                    },
+                    {
+                      label: 'the last 90 days',
+                      value: '90',
+                      unit: 'days',
+                      direction: 'subtract',
+                    },
+                    {
+                      label: 'the next 90 days',
+                      value: '90',
+                      unit: 'days',
+                      direction: 'add',
+                    },
+                  ],
+                },
+              ],
               filterByText: {
                 label: 'Filter by',
                 fields: [
