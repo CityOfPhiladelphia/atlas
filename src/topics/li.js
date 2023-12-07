@@ -186,69 +186,76 @@ export default {
                 {
                   label: 'Inspection Type',
                   value: function(state, item){
-                    return item.buildingcerttype;
+                    return item.certification;
                   },
                   nullValue: 'no type available',
                 },
                 {
-                  label: 'Date Inspected',
+                  label: 'Status',
                   value: function(state, item){
-                    return item.inspectiondate;
+                    return item.status;
                   },
-                  nullValue: 'no date available',
-                  transforms: [
-                    'date',
-                  ],
+                  nullValue: 'no type available',
                 },
-                {
-                  label: 'Inspection Result',
-                  value: function(state, item){
-                    return item.inspectionresult;
-                  },
-                },
-                {
-                  label: 'Expiration Date',
-                  value: function(state, item){
-                    return item.expirationdate;
-                  },
-                  nullValue: 'no date available',
-                  transforms: [
-                    'date',
-                  ],
-                },
+                // {
+                //   label: 'Date Inspected',
+                //   value: function(state, item){
+                //     return item.inspectiondate;
+                //   },
+                //   nullValue: 'no date available',
+                //   transforms: [
+                //     'date',
+                //   ],
+                // },
+                // {
+                //   label: 'Inspection Result',
+                //   value: function(state, item){
+                //     return item.inspectionresult;
+                //   },
+                // },
+                // {
+                //   label: 'Expiration Date',
+                //   value: function(state, item){
+                //     return item.expirationdate;
+                //   },
+                //   nullValue: 'no date available',
+                //   transforms: [
+                //     'date',
+                //   ],
+                // },
               ],
-              sort: {
-                // this should return the val to sort on
-                getValue: function(item) {
-                  return item.buildingcerttype;
-                },
-                // asc or desc
-                order: 'asc',
-                compare: function(a, b) {
-                  // console.log('compare function, a:', a, 'b:', b);
-                  let result;
-                  let typeA = a.buildingcerttype;
-                  let typeB = b.buildingcerttype;
-                  let dateA = a.inspectiondate;
-                  let dateB = b.inspectiondate;
+              // sort: {
+              //   // this should return the val to sort on
+              //   getValue: function(item) {
+              //     return item.buildingcerttype;
+              //   },
+              //   // asc or desc
+              //   order: 'asc',
+              //   compare: function(a, b) {
+              //     // console.log('compare function, a:', a, 'b:', b);
+              //     let result;
+              //     let typeA = a.buildingcerttype;
+              //     let typeB = b.buildingcerttype;
+              //     let dateA = a.inspectiondate;
+              //     let dateB = b.inspectiondate;
 
-                  if (typeA < typeB) {
-                    result = -1;
-                  } else if (typeB < typeA) {
-                    result = 1;
-                  } else {
-                    // result = 0;
-                    if (dateA < dateB) {
-                      result = 1;
-                    } else if (dateB < dateA) {
-                      result = -1;
-                    } else {
-                      result = 0;
-                    }
-                  }
-                  return result;
-                },
-              },
+              //     if (typeA < typeB) {
+              //       result = -1;
+              //     } else if (typeB < typeA) {
+              //       result = 1;
+              //     } else {
+              //       // result = 0;
+              //       if (dateA < dateB) {
+              //         result = 1;
+              //       } else if (dateB < dateA) {
+              //         result = -1;
+              //       } else {
+              //         result = 0;
+              //       }
+              //     }
+              //     return result;
+              //   },
+              // },
               externalLink: {
                 action: function(count, data) {
                   // console.log('building certs count:', count, 'data:', data);
@@ -268,13 +275,141 @@ export default {
               },
             },
             slots: {
-              title: 'Building Certifications',
+              title: 'Building Certification Status',
               items: function(state) {
-                var data = state.activeLiBuildingCert;
-                return data;
+                let fields = {
+                  'standpipe_status': 'Standpipe Certification',
+                  'damper_status': 'Damper Certification',
+                  'facade_status': 'Facade Report',
+                  'fire_alarm_status': 'Fire Alarm Certification',
+                  'fire_escape_status': 'Fire Escape Certification',
+                  'pier_status': 'Pier Certification',
+                  'private_bridge_status': 'Private Bridge Certification',
+                  'special_hazards_status': 'Special Hazards Certification',
+                  'emer_stdby_pwr_sys_status': 'Emergency Standby Power System Certification',
+                  'smoke_control_status': 'Smoke Control Certification',
+                  'sprinkler_status': 'Sprinkler Certification',
+                };
+                let data = {};
+                let reconfiguredData = [];
+                if (state.activeLiBuilding) {
+                  data = state.activeLiBuilding;
+                  for (let datum of Object.keys(data)) {
+                    let item = {
+                      certification: null,
+                      status: null,
+                    };
+                    if (Object.keys(fields).includes(datum) && data[datum] != null) {
+                      item.certification = fields[datum];
+                      item.status = data[datum];
+                      // console.log('li.js building data item:', item);
+                      reconfiguredData.push(item);
+                    }
+                    console.log('li.js building data:', data, 'item:', item);
+                  }
+                }
+                return reconfiguredData;
               },
             },
           },
+          // {
+          //   type: 'horizontal-table',
+          //   options: {
+          //     id: 'liBuildingCerts',
+          //     limit: 100,
+          //     fields: [
+          //       {
+          //         label: 'Inspection Type',
+          //         value: function(state, item){
+          //           return item.buildingcerttype;
+          //         },
+          //         nullValue: 'no type available',
+          //       },
+          //       {
+          //         label: 'Date Inspected',
+          //         value: function(state, item){
+          //           return item.inspectiondate;
+          //         },
+          //         nullValue: 'no date available',
+          //         transforms: [
+          //           'date',
+          //         ],
+          //       },
+          //       {
+          //         label: 'Inspection Result',
+          //         value: function(state, item){
+          //           return item.inspectionresult;
+          //         },
+          //       },
+          //       {
+          //         label: 'Expiration Date',
+          //         value: function(state, item){
+          //           return item.expirationdate;
+          //         },
+          //         nullValue: 'no date available',
+          //         transforms: [
+          //           'date',
+          //         ],
+          //       },
+          //     ],
+          //     sort: {
+          //       // this should return the val to sort on
+          //       getValue: function(item) {
+          //         return item.buildingcerttype;
+          //       },
+          //       // asc or desc
+          //       order: 'asc',
+          //       compare: function(a, b) {
+          //         // console.log('compare function, a:', a, 'b:', b);
+          //         let result;
+          //         let typeA = a.buildingcerttype;
+          //         let typeB = b.buildingcerttype;
+          //         let dateA = a.inspectiondate;
+          //         let dateB = b.inspectiondate;
+
+          //         if (typeA < typeB) {
+          //           result = -1;
+          //         } else if (typeB < typeA) {
+          //           result = 1;
+          //         } else {
+          //           // result = 0;
+          //           if (dateA < dateB) {
+          //             result = 1;
+          //           } else if (dateB < dateA) {
+          //             result = -1;
+          //           } else {
+          //             result = 0;
+          //           }
+          //         }
+          //         return result;
+          //       },
+          //     },
+          //     externalLink: {
+          //       action: function(count, data) {
+          //         // console.log('building certs count:', count, 'data:', data);
+          //         return 'See all ' + data + ' building certifications for this property at L&I Property History';
+          //       },
+          //       data: function(state) {
+          //         // console.log('external link data state.sources.liBuildingCerts.data.length:', state.sources.liBuildingCerts.data.length);
+          //         return state.sources.liBuildingCerts.data.length;
+          //       },
+          //       forceShow: true,
+          //       name: 'L&I Property History',
+          //       href: function(state) {
+          //         var address = state.geocode.data.properties.street_address;
+          //         var addressEncoded = encodeURIComponent(address);
+          //         return 'https://li.phila.gov/Property-History/search?address=' + addressEncoded;
+          //       },
+          //     },
+          //   },
+          //   slots: {
+          //     title: 'Building Certifications',
+          //     items: function(state) {
+          //       var data = state.activeLiBuildingCert;
+          //       return data;
+          //     },
+          //   },
+          // },
         ],
       }, // end parcel tab options
       slots: {

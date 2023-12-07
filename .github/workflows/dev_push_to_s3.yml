@@ -6,7 +6,7 @@ name: dev Push to S3
 on:
   push:
     branches:
-      - node-cache-2
+      - building-cert-fix
 
 jobs:
   build:
