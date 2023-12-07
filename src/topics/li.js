@@ -186,90 +186,40 @@ export default {
                 {
                   label: 'Inspection Type',
                   value: function(state, item){
-                    return item.certification;
+                    return '<a target="blank" href=' + item.link + '>' + item.certification + '</a>';
                   },
-                  nullValue: 'no type available',
+                  // nullValue: 'no type available',
                 },
                 {
                   label: 'Status',
                   value: function(state, item){
                     return item.status;
                   },
-                  nullValue: 'no type available',
+                  // nullValue: 'no type available',
                 },
-                // {
-                //   label: 'Date Inspected',
-                //   value: function(state, item){
-                //     return item.inspectiondate;
-                //   },
-                //   nullValue: 'no date available',
-                //   transforms: [
-                //     'date',
-                //   ],
-                // },
-                // {
-                //   label: 'Inspection Result',
-                //   value: function(state, item){
-                //     return item.inspectionresult;
-                //   },
-                // },
-                // {
-                //   label: 'Expiration Date',
-                //   value: function(state, item){
-                //     return item.expirationdate;
-                //   },
-                //   nullValue: 'no date available',
-                //   transforms: [
-                //     'date',
-                //   ],
-                // },
               ],
-              // sort: {
-              //   // this should return the val to sort on
-              //   getValue: function(item) {
-              //     return item.buildingcerttype;
-              //   },
-              //   // asc or desc
-              //   order: 'asc',
-              //   compare: function(a, b) {
-              //     // console.log('compare function, a:', a, 'b:', b);
-              //     let result;
-              //     let typeA = a.buildingcerttype;
-              //     let typeB = b.buildingcerttype;
-              //     let dateA = a.inspectiondate;
-              //     let dateB = b.inspectiondate;
-
-              //     if (typeA < typeB) {
-              //       result = -1;
-              //     } else if (typeB < typeA) {
-              //       result = 1;
-              //     } else {
-              //       // result = 0;
-              //       if (dateA < dateB) {
-              //         result = 1;
-              //       } else if (dateB < dateA) {
-              //         result = -1;
-              //       } else {
-              //         result = 0;
-              //       }
-              //     }
-              //     return result;
-              //   },
-              // },
+              sort: {
+                // this should return the val to sort on
+                getValue: function(item) {
+                  return item.certification;
+                },
+                // asc or desc
+                order: 'asc',
+              },
               externalLink: {
-                action: function(count, data) {
+                action: function() {
                   // console.log('building certs count:', count, 'data:', data);
-                  return 'See all ' + data + ' building certifications for this property at L&I Property History';
+                  return 'See all building certifications for this property at L&I Property History';
                 },
-                data: function(state) {
-                  // console.log('external link data state.sources.liBuildingCerts.data.length:', state.sources.liBuildingCerts.data.length);
-                  return state.sources.liBuildingCerts.data.length;
-                },
+                // data: function(state) {
+                //   // console.log('external link data state.sources.liBuildingCerts.data.length:', state.sources.liBuildingCerts.data.length);
+                //   return state.sources.liBuildingCerts.data.length;
+                // },
                 forceShow: true,
                 name: 'L&I Property History',
                 href: function(state) {
-                  var address = state.geocode.data.properties.street_address;
-                  var addressEncoded = encodeURIComponent(address);
+                  let address = state.geocode.data.properties.street_address;
+                  let addressEncoded = encodeURIComponent(address);
                   return 'https://li.phila.gov/Property-History/search?address=' + addressEncoded;
                 },
               },
@@ -282,11 +232,11 @@ export default {
                   'damper_status': 'Damper Certification',
                   'facade_status': 'Facade Report',
                   'fire_alarm_status': 'Fire Alarm Certification',
-                  'fire_escape_status': 'Fire Escape Certification',
-                  'pier_status': 'Pier Certification',
-                  'private_bridge_status': 'Private Bridge Certification',
+                  'fire_escape_status': 'Fire Escape Report',
+                  'pier_status': 'Pier Report',
+                  'private_bridge_status': 'Private Bridge Report',
                   'special_hazards_status': 'Special Hazards Certification',
-                  'emer_stdby_pwr_sys_status': 'Emergency Standby Power System Certification',
+                  'emer_stdby_pwr_sys_status': 'Emergency and Standby Power System Certification',
                   'smoke_control_status': 'Smoke Control Certification',
                   'sprinkler_status': 'Sprinkler Certification',
                 };
@@ -298,14 +248,18 @@ export default {
                     let item = {
                       certification: null,
                       status: null,
+                      link: null,
                     };
                     if (Object.keys(fields).includes(datum) && data[datum] != null) {
                       item.certification = fields[datum];
                       item.status = data[datum];
+                      let address = state.geocode.data.properties.street_address;
+                      let addressEncoded = encodeURIComponent(address);
+                      item.link = 'https://li.phila.gov/property-history/search/building-certification-detail?address=' + addressEncoded + '&Id=' + data.structure_id;
                       // console.log('li.js building data item:', item);
                       reconfiguredData.push(item);
                     }
-                    console.log('li.js building data:', data, 'item:', item);
+                    // console.log('li.js building data:', data, 'item:', item);
                   }
                 }
                 return reconfiguredData;
