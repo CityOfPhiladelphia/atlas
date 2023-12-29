@@ -80,7 +80,7 @@ import zoningOverlay from './data-sources/zoning-overlay';
 import nearbyPermits from './data-sources/nearby-permits.js';
 import nearbyViolations from './data-sources/nearby-violations.js';
 // import charterSchools from './data-sources/charter-schools';
-// import neighboringProperties from './data-sources/neighboring-properties';
+import neighboringProperties from './data-sources/neighboring-properties';
 
 // Topics
 import property from './topics/property';
@@ -89,7 +89,7 @@ import deeds from './topics/deeds';
 import li from './topics/li';
 import zoning from './topics/zoning';
 // import polling from './topics/polling';
-// import rcoTopic from './topics/rco';
+import rcoTopic from './topics/rco';
 import nearby from './topics/nearby';
 import voting from './topics/voting';
 
@@ -242,7 +242,7 @@ mapboard({
     nearbyPermits,
     nearbyViolations,
     // charterSchools,
-    // neighboringProperties,
+    neighboringProperties,
   },
   topics: [
     property,
@@ -251,7 +251,7 @@ mapboard({
     li,
     zoning,
     // polling,
-    // rcoTopic,
+    rcoTopic,
     voting,
     nearby,
   ],

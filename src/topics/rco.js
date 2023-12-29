@@ -137,10 +137,54 @@ export default {
       },
     },
   ],
+  geojsonForTopic: {
+    collection: true,
+    activatable: true,
+    data: function(state) {
+      let value = [];
+      if (state.sources.neighboringProperties.data) {
+        value = state.sources.neighboringProperties.data;
+      }
+      // let data = state.sources.liBuildingFootprints.data;
+      // // console.log('Array.isArray(data):', Array.isArray(data));
+      // if (data && Array.isArray(data)) {
+      //   value = data[0].features;
+      //   for (let i=1;i<data.length;i++) {
+      //     // console.log('geojsonForTopic value:', value, 'data.length:', data.length, 'data[i]', data[i]);
+      //     value = value.concat(data[i].features);
+      //   }
+      // } else if (data && data.features) {
+      //   value = data.features;
+      // }
+      // console.log('li.js geojsonForTopic, value:', value);
+      return value;
+    },
+    key: 'id',
+    style: {
+      fillColor: '#bdbadb',
+      color: '#bdbadb',
+      // fillColor: '#9e9ac8',
+      // color: '#9e9ac8',
+      weight: 2,
+      opacity: 1,
+      fillOpacity: 0.3,
+    },
+  },
   // geojson: {
-  //   path: ['neighboringProperties', 'data'],
-  //   color: 'red',
-  //   key: 'id'
+  //   // path: [ 'neighboringProperties', 'data' ],
+  //   // color: 'red',
+  //   // key: 'id',
+  //   data: function(state) {
+  //     return state.sources.neighboringProperties.data;
+  //   },
+  //   key: 'id',
+  //   style: {
+  //     fillColor: '#9e9ac8',
+  //     color: '#9e9ac8',
+  //     weight: 2,
+  //     opacity: 1,
+  //     fillOpacity: 0.3,
+  //   },
   // },
   basemap: 'pwd',
   identifyFeature: 'address-marker',
