@@ -19,7 +19,7 @@ export default {
                 },
                 source: {
                   tiles: [ '\
-https://gis-svc.databridge.phila.gov/arcgis/rest/services/Atlas/RegMaps/MapServer/export?dpi=96\
+https://ags-regmaps.phila.gov/arcgis/rest/services/RegMaps/MapServer/export?dpi=96\
 &layerDefs=0:NAME=\'g' + item.properties.RECMAP.toLowerCase() + '.tif\'\
 &transparent=true\
 &format=png24\
