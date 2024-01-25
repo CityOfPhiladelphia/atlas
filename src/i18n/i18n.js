@@ -6,6 +6,8 @@ let i18n = {
   i18n: {
     header: 'i18nBanner',
     enabled: true,
+    banner: true,
+    selector: false,
     topics: [ 'voting' ],
     languages: [ 'en-US', 'es' ],
     footer: true,
