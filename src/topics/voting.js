@@ -44,7 +44,7 @@ export default {
         titleBackground: '#2176d2',
         value: function(state) {
           // return 'voting.topic.badge1.content';
-          return format(parseISO(state.sources.nextElectionAPI.data.election_date), 'MMMM d, yyyy');
+          return format(parseISO(state.sources.nextElectionAPI.data.election_count_down_settings.election_day), 'MMMM d, yyyy');
         },
       }, // end slots
     }, // end of badge
