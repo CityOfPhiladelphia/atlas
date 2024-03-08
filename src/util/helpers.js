@@ -63,7 +63,9 @@ export default {
 
   // TODO put this in base config transforms
   concatDorAddress(parcel, includeUnit) {
+    console.log('concatDorAddress1 is running with parcel', parcel, 'includeUnit:', includeUnit);
     includeUnit = !!includeUnit;
+    console.log('concatDorAddress2 is running with parcel', parcel, 'includeUnit:', includeUnit);
     var STREET_FIELDS = [ 'STDIR', 'STNAM', 'STDES', 'STDESSUF' ];
     var props = parcel.properties;
 
@@ -110,6 +112,8 @@ export default {
     if (address === '') {
       address = 'Parcel has no address';
     }
+
+    console.log('concatDorAddress address result:', address);
     return address;
   },
 

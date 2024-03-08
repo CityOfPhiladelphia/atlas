@@ -97,7 +97,7 @@ export default {
                 {
                   label: 'Parcel Address',
                   value: function(state, item) {
-                    return helpers.concatDorAddress(item);
+                    return helpers.concatDorAddress(item, true);
                   },
                 },
                 {
