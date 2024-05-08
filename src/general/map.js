@@ -24,8 +24,7 @@ export default {
       },
       source: {
         tiles: [
-          'https://citygeo-geoserver.databridge.phila.gov/geoserver/wms?service=WMS&version=1.3.0&request=GetMap&layers=atlas_zoning_grouped&bbox={bbox-epsg-3857}&width=1024&height=1024&srs=EPSG%3A3857&format=image/png8&transparent=true
-          ',
+          'https://citygeo-geoserver.databridge.phila.gov/geoserver/wms?service=WMS&version=1.3.0&request=GetMap&layers=atlas_zoning_grouped&bbox={bbox-epsg-3857}&width=1024&height=1024&srs=EPSG%3A3857&format=image/png8&transparent=true',
         ],
         type: 'raster',
         tileSize: 1024,
