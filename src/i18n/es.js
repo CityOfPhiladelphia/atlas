@@ -37,6 +37,9 @@ export default {
         "p5": "Si planea ir a votar en persona, confirme su lugar de votación y haga los arreglos necesarios para la votación antes de la elección.",
       },
       "badge1": {
+        "specialElection": "Próxima Elección Elegible: Elección Especial",
+        "primaryElection": "Próxima Elección Elegible: Elección Primaria",
+        "generalElection": "Próxima Elección Elegible: Elección General",
         "header": "La próxima elección es el",
         "content": "3 de noviembre de 2020",
       },

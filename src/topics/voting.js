@@ -9,7 +9,7 @@ export default {
   key: 'voting',
   icon: 'gavel',
   label: 'Voting',
-  dataSources: [ 'divisions', 'pollingPlaces', 'electedOfficials', 'nextElectionAPI' ],
+  dataSources: [ 'divisions', 'pollingPlaces', 'electedOfficials', 'nextElectionAPI', 'electionSplits' ],
   errorMessage: function() {
     return 'No voting assignment found for this address.';
   },
@@ -40,11 +40,25 @@ export default {
         },
       },
       slots: {
-        title: 'voting.topic.badge1.header',
+        title: function(state) {
+          let value;
+          if (state.sources.electionSplits.data.rows[0].election_type == 0) {
+            value = 'voting.topic.badge1.specialElection';
+          } else if (state.sources.electionSplits.data.rows[0].election_type == 1) {
+            value = 'voting.topic.badge1.primaryElection';
+          } else if (state.sources.electionSplits.data.rows[0].election_type == 2) {
+            value = 'voting.topic.badge1.generalElection';
+          } else {
+            value = 'voting.topic.badge1.header';
+          }
+          return value;
+        },
         titleBackground: '#2176d2',
         value: function(state) {
           // return 'voting.topic.badge1.content';
-          return format(parseISO(state.sources.nextElectionAPI.data.election_count_down_settings.election_day), 'MMMM d, yyyy');
+          // let value;
+          // if (state.sources.electionSplits.data) {
+          return format(parseISO(state.sources.electionSplits.data.rows[0].election_date), 'MMMM d, yyyy');
         },
       }, // end slots
     }, // end of badge

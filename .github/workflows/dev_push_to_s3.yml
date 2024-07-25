@@ -6,7 +6,7 @@ name: dev Push to S3
 on:
   push:
     branches:
-      - feature/new-zoning-tiles
+      - election-dates
 
 jobs:
   build:
