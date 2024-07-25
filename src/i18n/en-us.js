@@ -37,6 +37,9 @@ export default {
         "p5": "If you are planning on voting in person, please confirm your polling place and make voting arrangements prior to the election.",
       },
       "badge1": {
+        "specialElection": "Next Eligible Election: Special Election",
+        "primaryElection": "Next Eligible Election: Primary Election",
+        "generalElection": "Next Eligible Election: General Election",
         "header": "Next Eligible Election Is",
         "content": "November 3, 2020",
       },
