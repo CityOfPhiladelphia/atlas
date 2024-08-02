@@ -5,7 +5,11 @@ export default {
   options: {
     params: {
       q: function(feature){
-        return "select ST_X(the_geom) as lng, ST_Y(the_geom) as lat, * from polling_places where precinct = '" + feature.properties.election_precinct + "'";
+        if (feature.properties.election_precinct) {
+          return "select ST_X(the_geom) as lng, ST_Y(the_geom) as lat, * from polling_places where precinct = '" + feature.properties.election_precinct + "'";
+        } else if (feature.properties.political_division) {
+          return "select ST_X(the_geom) as lng, ST_Y(the_geom) as lat, * from polling_places where precinct = '" + feature.properties.political_division + "'";
+        }
       },
     },
   },
