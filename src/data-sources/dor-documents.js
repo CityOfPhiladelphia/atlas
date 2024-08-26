@@ -52,7 +52,7 @@ export default {
           }
 
           if (geocode.address_low_suffix == '') {
-            where += " AND ADDRESS_LOW_SUFFIX = ''";
+            where += " AND COALESCE(ADDRESS_LOW_SUFFIX, '') = ''";
           }
 
           // this is hardcoded right now to handle DOR address suffixes that are actually fractions
