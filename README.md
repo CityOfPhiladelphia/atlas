@@ -1,5 +1,5 @@
 # atlas
-Configuration for the public version of Atlas
+This repo is deprecated.  The new vue3-atlas repo is [https://github.com/CityOfPhiladelphia/vue3-atlas](https://github.com/CityOfPhiladelphia/vue3-atlas)
 
 ![](https://s3.amazonaws.com/mapboard-images/Atlas/Atlas.JPG)
 
